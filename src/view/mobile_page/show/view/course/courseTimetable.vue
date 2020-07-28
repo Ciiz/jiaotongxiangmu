@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import courseTablemobile from '@/view/components/course_table_mobile'
+import courseTablemobile from '@/view/mobile_page/components/course_table_mobile'
 
 export default {
   components: { courseTablemobile },

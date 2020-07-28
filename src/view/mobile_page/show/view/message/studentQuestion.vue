@@ -55,10 +55,10 @@ export default {
   },
   methods: {
     showProblem () { // 获取单独对话内容
-      // Indicator.open({
-      //   text: '加载中...',
-      //   spinnerType: 'fading-circle'
-      // })
+      Indicator.open({
+        text: '加载中...',
+        spinnerType: 'fading-circle'
+      })
       let uRl = ''
       if (this.userType === 1) {
         uRl = '/index.php/Teacher/TaskQuestion/question_list'
@@ -78,7 +78,7 @@ export default {
             this.chatList.push(res.data.question_list[i])
           }
         }
-        // Indicator.close()
+        Indicator.close()
       })
     },
     showDiscussAbout () { // 话题列表获取
@@ -123,6 +123,7 @@ export default {
       this.$router.push({ name: 'discuss', query: { chatList: item } })
     },
     getData () {
+      this.chatList = []
       this.showProblem()
       this.showDiscussAbout()
       if (this.userType !== 1) {
