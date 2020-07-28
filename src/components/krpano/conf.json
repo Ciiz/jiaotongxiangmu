@@ -1,0 +1,254 @@
+{
+  "scene": [{
+      "url": "http:\/\/zjy.etotest.com\/item\/item20190722105340_5\/..\/panos\/5d35252a97ab9.tiles\/thumb.jpg",
+      "name": "5d35252a97ab9",
+      "scene": "scene_5d35252a97ab9",
+      "hotsopt": [{
+        "name": "test",
+        "ath": "51.84268719051943",
+        "atv": "-0.5079210758073484",
+        "iconurl": "",
+        "type": "switch",
+        "type_url": "",
+        "content": "",
+        "switch_scene": "5d3525324cfe2"
+      }, {
+        "name": "ttt",
+        "ath": "10.059953916346558",
+        "atv": "-8.845163990222833",
+        "iconurl": "",
+        "type": "video",
+        "type_url": "\/Uploads\/pano\/hot_spot_video\/2019-07-23\/5d3672a4306ac.mp3",
+        "content": ""
+      }, {
+        "name": "teteteetetetretetetet",
+        "ath": "172.59488795435027",
+        "atv": "-4.57897395237192",
+        "iconurl": "",
+        "type": "switch",
+        "type_url": "",
+        "content": "",
+        "switch_scene": "5d3525324cfe2"
+      }, {
+        "name": "tawtewtwetewttew",
+        "ath": "108.42200171225264",
+        "atv": "-26.428920740395608",
+        "iconurl": "",
+        "type": "text",
+        "type_url": "",
+        "content": "123123213213123213123213"
+      }],
+      "hlookat": "119.29029967924653",
+      "vlookat": "1.3382633202004526",
+      "special_type": "bigrain",
+      "music_view": {
+        "bgm": {
+          "name": "Rachel Platten - Wonder (From _Wonder Park_).mp3",
+          "url": "\/Uploads\/pano\/music\/2019-07-24\/5d38070c83c00.mp3"
+        }
+      },
+      "radar": {
+        "heading": "190",
+        "x": "-1",
+        "y": "0",
+        "btnx": "40",
+        "btny": "40",
+        "img": "\/Uploads\/pano\/sandbox\/2019-07-24\/5d37cbf7e8d38.jpg"
+      },
+      "is_upload_bgm": "true",
+      "is_upload_commentary": "false"
+    },
+    {
+      "url": "http:\/\/zjy.etotest.com\/item\/item20190722105340_5\/..\/panos\/5d3525324cfe2.tiles\/thumb.jpg",
+      "name": "5d3525324cfe2",
+      "scene": "scene_5d3525324cfe2",
+      "hlookat": "94.4653681325249",
+      "vlookat": "-70.32527893358643",
+      "special_type": "snowballs",
+      "is_upload_bgm": "false",
+      "is_upload_commentary": "false"
+    }
+  ],
+  "islittleplanet": "yes",
+  "autoplay": "yes"
+},
+
+
+
+
+
+
+
+
+{
+  "配置信息": {
+    "starting": "基础信息，包含：全景标题，是否小行星开场，是否自动播放",
+    "scene": "记录场景信息,'hotspot':记录热点信息,每创建一个热点push一个新对象，未创建热点时数组为空",
+    "music_view": "bgm:添加了背景乐存在或者!==null,未添加背景时不存在bgm属性,commentary同bgm",
+    "radar": "未添加沙盘时为空对象"
+  },
+  // "starting": {
+  //   "pano_title": "全景标题",
+  //   "islittleplanet": "是否小行星开场 yes or no",
+  //   "autoplay": "是否自动播放 yes or no"
+  // },
+  "scene": [{
+    "url": "缩略图地址",
+    "name": "场景名称",
+    "scene": "场景跳转名称",
+    "hlookat": "场景视角水平坐标",
+    "vlookat": "场景视角垂直坐标",
+    // "special_type": "特效类型 可选值有 rain|mediumrain|bigrain|defaultsnow|snowballs|snowflakes|hearts|money|smileys|goldenstars , 未设置为空",
+    "special_type": {
+      label: '下红心',
+      value: 'heart',
+      speed: 1,
+      shake: 4,
+      flakes: 4000,
+      imagescale: 1,
+      wind: 0,
+      winddir: 0
+    },
+    "hotsopt": [{
+      "name": "热点名称",
+      "ath": "热点坐标水平 未设置时默认值0 (number)",
+      "atv": "热点坐标垂直 未设置时默认值0 (number)",
+      "iconurl": "热点图标地址",
+      "type": "热点类型 ： switch / text / image / url / video",
+      "type_url": "热点地址/只有type为url,image,video时才有值，其他值为空",
+      "switch_scene": "切换的场景名称/只有type为switch时才有值，其他值为空",
+      "content": "热点内容/只有type为text时才有值，其它值为空"
+    }],
+    //其他插件配置
+    "starting": {
+      "pano_title": "全景标题",
+      "islittleplanet": "是否小行星开场 yes or no",
+      "autoplay": "是否自动播放 yes or no"
+    },
+    "radar": {
+      "img": "沙盘背景图地址",
+      "heading": "雷达初始指向",
+      "x": "x轴坐标 |默认为49 (number)",
+      "y": "y轴坐标 |默认为50 (number)",
+      "btnx": "图标x轴坐标 |默认为90 (number)",
+      "btny": "图标x轴坐标 |默认为90 (number)"
+    },
+    "music_view": {
+      "bgm": {
+        "name": "bgm名称 | 未添加不存在该值",
+        "url": "bgm地址  | 未添加不存在该值"
+      },
+      "commentary": {
+        "name": "commentary名称 | 未添加不存在该值",
+        "url": "commentary地址  | 未添加不存在该值"
+      }
+    }
+  }]
+},
+
+
+{
+  "scene_20170824135621520780": {
+    "title": "校门",
+    "caption_data": {
+      "name": "09-荔湾校区.mp3",
+      "path": "/Source_upload/music/20170824141229299681.mp3"
+    },
+    "hotspot_data": {
+      "hotspot_1503996064335": {
+        "name": "hotspot_1503996064335",
+        "type": "scene",
+        "url": "/item/hotspotimg/h1_xl.png",
+        "icon": "/item/hotspotimg/h1.gif",
+        "ath": 41.47845919881445,
+        "atv": 7.545906083331058,
+        "linkedscene": "scene_20170824135707677812",
+        "scene_img": "/item/panos/20170824135707677812.tiles/thumb.jpg",
+        "scene_title": "鸟瞰",
+        "text": "鸟瞰",
+        "isdisplaytext": 1
+      },
+      "hotspot_1508486426573": {
+        "name": "hotspot_1508486426573",
+        "type": "text",
+        "url": "/item/hotspotimg/h1_xl.png",
+        "icon": "/item/hotspotimg/h1.gif",
+        "ath": 99.64232331209519,
+        "atv": 27.017127002404806,
+        "text": "前方100米是食堂",
+        "textcontent": "前方100米是食堂",
+        "isdisplaytext": 1
+      }
+    },
+    "view_data": {
+      "hlookat": 38.351076359334684,
+      "vlookat": -9.407599734054209,
+      "fov": 120
+    },
+    "special_data": {
+      "name": "special_1527127645263",
+      "specialtype": "smallrain"
+    }
+  },
+  "scene_20170824135707677812": {
+    "title": "鸟瞰",
+    "caption_data": {
+      "name": "09-荔湾校区.mp3",
+      "path": "/Source_upload/music/20170824141229299681.mp3"
+    }
+  },
+  "scene_20170824135548504541": {
+    "title": "校门",
+    "caption_data": {
+      "name": "08-天河校区.mp3",
+      "path": "/Source_upload/music/20170824141243362755.mp3"
+    },
+    "hotspot_data": {
+      "hotspot_1503996088165": {
+        "name": "hotspot_1503996088165",
+        "type": "scene",
+        "url": "/item/hotspotimg/h1_xl.png",
+        "icon": "/item/hotspotimg/h1.gif",
+        "ath": -175.22798961563385,
+        "atv": 10.378156262476992,
+        "linkedscene": "scene_20170824135708510897",
+        "scene_img": "/item/panos/20170824135708510897.tiles/thumb.jpg",
+        "scene_title": "鸟瞰",
+        "text": "鸟瞰",
+        "isdisplaytext": 0
+      },
+      "hotspot_1508486331547": {
+        "name": "hotspot_1508486331547",
+        "type": "text",
+        "url": "/item/hotspotimg/h3_xl.png",
+        "icon": "/item/hotspotimg/h3.gif",
+        "ath": -160.85537901120298,
+        "atv": 7.84378147462913,
+        "text": "向左走是食堂",
+        "textcontent": "向左走是食堂",
+        "isdisplaytext": 0
+      }
+    },
+    "view_data": {
+      "hlookat": -177.72452365381795,
+      "vlookat": 9.268553066073888,
+      "fov": 120
+    }
+  },
+  "scene_20170824135708510897": {
+    "title": "鸟瞰",
+    "caption_data": {
+      "name": "08-天河校区.mp3",
+      "path": "/Source_upload/music/20170824141243362755.mp3"
+    }
+  },
+  "group": [{
+    "grouptitle": "荔湾校区",
+    "scenelist": ["scene_20170824135621520780", "scene_20170824135707677812"]
+  }, {
+    "grouptitle": "天河校区",
+    "scenelist": ["scene_20170824135548504541", "scene_20170824135708510897"]
+  }],
+  "cruise": 2,
+  "planet": 1
+}
