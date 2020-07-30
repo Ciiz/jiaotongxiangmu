@@ -1296,12 +1296,24 @@ export default {
     },
     // 打开考勤班级选择
     openAtten () {
+      let time = new Date()
+      this.axios.request({
+        method: 'post',
+        url: '/home/course/getShcoolTerm',
+        data: {
+        }
+      }).then(res => {
+        for (let i = 0; i < res.data.list.length; i++) {
+          if (res.data.list[i].semester === 1) {
+            if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
+              this.semester = 2
+            } else {
+              this.semester = 1
+            }
+          }
+        }
+      })
       this.year = new Date().getFullYear()
-      if ((new Date().getMonth() + 1) > 8 || (new Date().getMonth() + 1 < 3)) {
-        this.semester = 1
-      } else {
-        this.semester = 2
-      }
       this.axios.request({
         method: 'post',
         url: '/home/course/getDayClassTime',
