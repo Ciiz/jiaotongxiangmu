@@ -684,12 +684,28 @@ const mobileStudent = [
     component: () => import('@/view/mobile_page/show/view/userCenter/homeworkExam/homeworkExamIndex.vue')
   },
   {
-    path: '/mobileCourseware',
-    name: 'mobileCourseware',
+    path: '/mobileCoursewareS',
+    name: 'mobileCoursewareS',
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/course/courseware.vue')
+    component: () => import('@/view/mobile_page/show/view/course/student/courseware.vue')
+  },
+  {
+    path: '/mobileCoursewareT',
+    name: 'mobileCoursewareT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/course/teacher/courseware.vue')
+  },
+  {
+    path: '/mobileProcess',
+    name: 'mobileProcess',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/course/teacher/studentProcess.vue')
   },
   {
     path: '/mobileCoursewareInfo',
@@ -729,7 +745,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/course/chapterInfo.vue')
+    component: () => import('@/view/mobile_page/show/view/course/student/chapterInfo.vue')
   },
   {
     path: '/mobileChapterDetail',

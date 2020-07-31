@@ -62,7 +62,7 @@ export default {
     }) {
       return (
         <div class="m-chapter-class-item" onClick={() => { this.cur_item = data; if (data.child === undefined || data.child.length === 0) { this.showDetail(data, 1) } }}>
-          <div class="item2-title">{ `${data.sort}：${data.title}${data.title}` }</div>
+          <div class="item2-title">{ `${data.sort}：${data.title}` }</div>
           <Progress class="m-progress" v-show={this.userType === 2 && (data.child === undefined || data.child.length === 0)} percent={data.percent} style={{ marginTop: '10px' }}/>
         </div>
       )

@@ -33,6 +33,8 @@
 <script>
 import { Indicator } from 'mint-ui'
 import { my_course } from '@/api/student'
+import { course_detail } from '@/api/common'
+
 export default {
   data () {
     return {
@@ -88,7 +90,18 @@ export default {
       }
     },
     toLink (item) {
-      this.$router.push({ name: 'mobileCourseware', query: { student_course_id: item.student_course_id, id: item.id, teacher_course_id: item.teacher_course_id, course_type: item.course_type } })
+      if (this.userType === 1) {
+        let course_type = ''
+        course_detail(item.id).then(res => {
+          this.loading = false
+          if (res.code === 200) {
+            course_type = res.data.course_type
+            this.$router.push({ name: 'mobileCoursewareT', query: { teacher_course_id: item.teacher_course_id, id: item.id, course_type: course_type, course_name: item.course_name } })
+          }
+        })
+      } else if (this.userType === 2) {
+        this.$router.push({ name: 'mobileCoursewareS', query: { student_course_id: item.student_course_id, id: item.id, teacher_course_id: item.teacher_course_id, course_type: item.course_type } })
+      }
     },
     openTimetable () {
       this.$router.push({ name: 'mobileCourseTimetable' })

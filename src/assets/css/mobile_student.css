@@ -12,6 +12,7 @@
 .flex-contain{
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .m-popup{
@@ -54,10 +55,33 @@
   width: 100%;
   padding: 0.44rem 0.3rem 0.44rem 0.1rem;
 }
+.m-tree>ul>li .m-item2-title{
+  display: inline-block;
+  flex: 1;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+.m-chapterInfo .m-chapter-class-item .item2-title{
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
 .m-tree .m-chapter-class-item{
   padding: 0.34rem 0;
   color: #222222;
   font-size: 0.3rem;
+  border-bottom: 1px solid #E5E5E5;
+}
+.m-chapter-class-item button{
+  color: #3B9BFF;
+  width: 1.53rem;
+  height: 0.5rem;
+  outline: none;
+  border: 1px solid #3B9BFF;
+  background-color: #ffffff;
+  border-radius:0.25rem;
+  text-align: center;
 }
 .m-progress .ivu-progress-bg{
   height: 0.06rem!important;
@@ -66,7 +90,57 @@
   padding-right: 0.3rem;
   margin-right: -0.3rem;
 }
-
+.m-chapterInfoT-contain{
+  margin: 0.3rem 0.28rem;
+  flex: 1;
+  overflow-y: scroll;
+}
+.m-chapterInfoT-name{
+  width: 100%;
+  background-color: #EEEEEE;
+  border-radius: 0.44rem;
+  padding: 0 0.51rem;
+  height: 0.88rem;
+  line-height: 0.88rem;
+  font-size: 0.32rem;
+  color: #444444;
+  font-weight: bold;
+}
+.m-chapterInfoT-contain #myChart{
+  /* width: 100%!important; */
+}
+.m-chapterInfoT-item{
+  display: flex;
+  padding: 0.2rem 0;
+  border-bottom: 1px solid #EEEEEE;
+  line-height: 0.52rem;
+}
+.m-chapterInfoT-item>img{
+  width: 0.62rem;
+  height: 0.62rem;
+  border-radius: 50%;
+  margin-right: 0.34rem;
+}
+.m-chapterInfoT-item>span:nth-of-type(1){
+  color: #000000;
+  font-size: 0.32rem;
+  margin-right: 0.4rem;
+}
+.m-chapterInfoT-item>span:nth-of-type(2){
+  color: #777777;
+  font-size: 0.28rem;
+  flex: 1;
+}
+.m-chapterInfoT-item>span:nth-of-type(3){
+  color: #222222;
+  font-size: 0.28rem;
+}
+.m-chapterInfoT-title{
+  font-size: 0.36rem;
+  color: #000000;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
 
 
 
@@ -1172,8 +1246,106 @@ height: 0.06rem;
 }
 
 
+/*教师端课件*/
+.m-coursewareT{
+  height: 100%;
+}
+.m-coursewareT .mint-tab-container{
+  flex: 1;
+}
+.m-coursewareT .mint-tab-container-wrap{
+  height: 100%;
+}
+.m-coursewareT-header{
+  padding: 0 1.84rem;
+  border-bottom: 1px solid #CCCCCC;
+  position: relative;
+}
+.m-coursewareT-header .mint-tab-item{
+  margin: 0 0.15rem;
+  padding: 0.23rem 0;
+}
+.m-coursewareT-header .mint-tab-item-label{
+  font-size: 0.36rem;
+}
+.m-coursewareT-header .mint-navbar .mint-tab-item.is-selected{
+  margin-bottom: 0;
+}
+.m-coursewareT-header>img{
+  position: absolute;
+}
+.m-coursewareT-header>img:nth-of-type(1){
+  left: 0.3rem;
+  width: 0.2rem;
+  top: 0.2rem;
+}
+.m-coursewareT-header>img:nth-of-type(2){
+  right: 0.3rem;
+  width: 0.36rem;
+  top: 0.26rem;
+}
+.m-coursewareT .mint-tab-container-item{
+  padding: 0 0.28rem;
+  height: 100%;
+  overflow-y: scroll;
+}
+.m-coursewareTItem{
+  display: flex;
+}
+.m-coursewareT-sort{
+  width: 1.91rem;
+  margin: 0.1rem 0;
+}
+.m-coursewareT-info{
+  flex: 1;
+}
+.m-coursewareT-info-b{
+  display: flex;
+  justify-content: space-between;
+  margin-top:0.04rem
+}
+.m-coursewareT-info-b .ivu-icon{
+  font-size: 0.36rem;
+  margin-right: 0.13rem;
+  color: #4A4A4A;
+}
+.m-coursewareTItem{
+  padding: 0.47rem 0 0.35rem 0;
+  border-bottom: 1px solid #CCCCCC;
+  color: #999999;
+  font-size: 0.24rem;
+}
+.m-coursewareT-title{
+  font-size: 0.34rem;
+  color: #000000;
+  font-weight:bold;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin-right: 0.51rem;
+}
+.m-coursewareT-s{
+  font-size: 0.36rem;
+  font-style:italic;
+  font-weight:bold;
+  margin-left: 0.13rem;
+  transform: translateY(0.04rem);
+  display: inline-block;
+}
+.m-coursewareTItem:nth-of-type(1) .m-coursewareT-s{
+  color: #FF0000;
+}
+.m-coursewareTItem:nth-of-type(2) .m-coursewareT-s{
+  color: #FF6600;
+}
+.m-coursewareTItem:nth-of-type(3) .m-coursewareT-s{
+  color: #FFCC00;
+}
 
-/*课件*/
+
+
+/*学生端课件*/
 .m-courseware{
   height: 100%;
 }

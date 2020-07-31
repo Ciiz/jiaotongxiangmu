@@ -13,7 +13,7 @@
           <div :class="item.live_status===0?'m-color-black':(item.live_status===2?'m-color-gray':'m-color-red')">{{item.courseware_name}}</div>
           <div :class="(item.live_status===1||item.live_status===3)?'m-color-red':'m-color-gray9'">上课时间：{{item.class_time}}</div>
         </div>
-        <div v-if="item.live_status===2" class="m-color-gray87">课堂回顾</div>
+        <div v-if="item.live_status===2" class="m-color-gray87">已结束</div>
         <div v-if="item.live_status===1||item.live_status===3" class="m-color-red">正在上课...</div>
         <div v-if="item.live_status===0" class="m-color-blue">未上课</div>
       </div>
