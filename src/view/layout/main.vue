@@ -73,7 +73,7 @@
           </Col>
         </Row>
       </Footer>
-      <div class="login-modal" v-if="showLogin===true" @click="closeModal">
+      <div class="login-modal" v-if="showLogin===true" @mousedown="closeModal">
         <login-form @on-success-valid="handleSubmit"></login-form>
       </div>
     </Layout>
