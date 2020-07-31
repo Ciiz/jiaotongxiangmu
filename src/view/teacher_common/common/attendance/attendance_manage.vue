@@ -61,7 +61,7 @@
     <Spin size="large" v-if="loading" fix></Spin>
   <Modal v-model="modal" footer-hide :title="title" :width="modal_width" @on-visible-change="handleVisiableChange">
     <Position  :lng.sync="lng" :lat.sync="lat" :distance_range.sync="distance_range" v-if="target === 'position'" @position-change="handlePositionChange"></Position>
-    <div id="qrcode" style="display: flex;justify-content: center;" v-show="target === 'qrcode'"></div>
+    <div id="qrcode3" style="display: flex;justify-content: center;" v-show="target === 'qrcode3'"></div>
   </Modal>
 
 </div>
@@ -181,11 +181,11 @@ export default {
     },
     generate_qrcode () {
       // 生成二维码,  5秒刷新一次
-      this.open('qrcode', '', '考勤码', 650)
+      this.open('qrcode3', '', '考勤码', 650)
       this.get_qr_code()
-      this.interval_id = setInterval(() => {
-        this.get_qr_code()
-      }, 5000)
+      // this.interval_id = setInterval(() => {
+      //   this.get_qr_code()
+      // }, 5000)
     },
     get_qr_code () {
       let domain = window.location.protocol + '//' + window.location.host
@@ -193,12 +193,11 @@ export default {
       let expired_at = parseInt(((new Date()).getTime() + 10000) / 1000)
       let url = `${domain}${this.baseUrl}/student/attendance/qrcode_attend?attendance_ids=${attendance_ids}&expired_at=${expired_at}`
       document.getElementById('qrcode').innerHTML = ''
-      console.log(url)
       this.qrcode(url)
     },
     qrcode (url) {
       // eslint-disable-next-line no-new
-      new QRCode('qrcode', {
+      new QRCode('qrcode3', {
         width: 600,
         height: 600,
         text: url, // 二维码地址
@@ -239,7 +238,7 @@ export default {
       }
     },
     handleVisiableChange (visiable) {
-      if (!visiable && this.target === 'qrcode') {
+      if (!visiable && this.target === 'qrcode3') {
         clearInterval(this.interval_id)
       }
     },
