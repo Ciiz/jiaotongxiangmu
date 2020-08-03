@@ -300,15 +300,17 @@ export default {
     // exam_status: 1:考试中，2：交卷
     submit (exam_status) {
       clearInterval(this.interval)
-      let a = ''
-      if (this.seletIn.length > 0) {
-        for (let i = 0; i < this.seletIn.length - 1; i++) {
-          a = a + this.seletIn[i] + ','
+      if (this.objectList.length !== 0) {
+        let a = ''
+        if (this.seletIn.length > 0) {
+          for (let i = 0; i < this.seletIn.length - 1; i++) {
+            a = a + this.seletIn[i] + ','
+          }
+          a = a + this.seletIn[this.seletIn.length - 1]
+          this.objectList[this.selectquestionIndex].student_answer.content = a
+        } else {
+          this.objectList[this.selectquestionIndex].student_answer.content = ''
         }
-        a = a + this.seletIn[this.seletIn.length - 1]
-        this.objectList[this.selectquestionIndex].student_answer.content = a
-      } else {
-        this.objectList[this.selectquestionIndex].student_answer.content = ''
       }
       let _this = this
       let answer_arr = this.getAnswerArr(this.student_exam)
@@ -329,16 +331,18 @@ export default {
     },
     getAnswerArr (student_exam) {
       let answer_arr = []
-      this.objectList.forEach(item => {
-        let { content, examination_detail_id, student_examination_id, video_url } = item.student_answer
-        answer_arr.push({
-          content,
-          examination_detail_id,
-          student_examination_id,
-          video_url,
-          type: 'obj'
+      if (this.objectList.length !== 0) {
+        this.objectList.forEach(item => {
+          let { content, examination_detail_id, student_examination_id, video_url } = item.student_answer
+          answer_arr.push({
+            content,
+            examination_detail_id,
+            student_examination_id,
+            video_url,
+            type: 'obj'
+          })
         })
-      })
+      }
       this.subjectList.forEach(item => {
         item.student_answer.type = 'subj'
         answer_arr.push(item.student_answer)
