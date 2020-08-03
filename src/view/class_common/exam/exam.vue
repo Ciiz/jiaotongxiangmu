@@ -183,10 +183,12 @@ export default {
           this.objectList.push(item.multiple_choice[i])
         }
       }
-      if (this.objectList[this.selectquestionIndex].student_answer.content !== '') {
-        this.seletIn = this.objectList[this.selectquestionIndex].student_answer.content.split(',')
-      } else {
-        this.seletIn = []
+      if (this.objectList.length !== 0) {
+        if (this.objectList[this.selectquestionIndex].student_answer.content !== '') {
+          this.seletIn = this.objectList[this.selectquestionIndex].student_answer.content.split(',')
+        } else {
+          this.seletIn = []
+        }
       }
     },
     getSubjectList (item) { // 处理主观题

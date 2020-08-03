@@ -2,7 +2,7 @@
   <div class="modal-content" style="height: 70vh;">
     <Row style="margin-bottom:20px;">
     <InputNumber v-model="year" style="width: 100px" size="small" @on-change="getCourseTable()"></InputNumber>&nbsp;年&nbsp;
-    <Select v-model="semester" size="small" style="width:100px;" @on-change="getCourseTable()">
+    <Select v-model="semester" size="small" style="width:100px;">
       <Option :value="2">上半年</Option>`
       <Option :value="1">下半年</Option>`
     </Select>
@@ -89,7 +89,7 @@ export default {
       weekData: [], // 当前周的数据
       maxWeek: 30,
       year: (new Date().getMonth() + 1) < 3 ? (new Date().getFullYear() - 1) : new Date().getFullYear(),
-      semester: (new Date().getMonth() + 1) > 8 || (new Date().getMonth() + 1) < 3 ? 1 : 2,
+      semester: '',
       loading: false,
       curDate: this.moment().format('YYYY-M-D'),
       curDay: new Date().getDay(),
@@ -118,6 +118,9 @@ export default {
     teacher_course_id (n, o) {
       this.getCourseTable()
       this.getClassList()
+    },
+    semester (n, o) {
+      this.getCourseTable()
     }
   },
   methods: {
@@ -130,21 +133,6 @@ export default {
     },
     handlecourseTableChange () {
       this.getData(this.formatData(this.course_table, this.timetable_data))
-    },
-    getCourseTable () {
-      let _this = this
-      _this.loading = true
-      get_course_table(this.teacher_course_id, this.year, this.semester, this.class_id).then(res => {
-        if (res.code === 200) {
-          this.course_table = res.data.course_table
-          this.timetable_data = res.data.timetable_data
-          _this.getDateWeek(_this.semester).then(week => {
-            if (_this.is_refresh) { _this.week = week }
-            _this.getData(this.formatData(this.course_table, this.timetable_data))
-            _this.loading = false
-          })
-        }
-      })
     },
     formatData (course_table, timetable_data) {
       let _this = this
@@ -493,9 +481,46 @@ export default {
           }, 1000)
         }
       })
+    },
+    getSemter () { // 获取当前学期
+      let time = new Date()
+      this.axios.request({
+        method: 'post',
+        url: '/home/course/getShcoolTerm',
+        data: {
+        }
+      }).then(res => {
+        for (let i = 0; i < res.data.list.length; i++) {
+          if (res.data.list[i].semester === 1) {
+            if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
+              this.semester = 2
+            } else {
+              this.semester = 1
+            }
+          }
+        }
+      })
+    },
+    getCourseTable () {
+      let _this = this
+      _this.loading = true
+      get_course_table(this.teacher_course_id, this.year, this.semester, this.class_id).then(res => {
+        if (res.code === 200) {
+          this.course_table = res.data.course_table
+          this.timetable_data = res.data.timetable_data
+          _this.getDateWeek(_this.semester).then(week => {
+            if (_this.is_refresh) { _this.week = week }
+            _this.getData(this.formatData(this.course_table, this.timetable_data))
+            _this.loading = false
+          })
+        }
+      })
     }
   },
+  created () {
+  },
   mounted () {
+    this.getSemter()
     this.getCourseTable()
   }
 }

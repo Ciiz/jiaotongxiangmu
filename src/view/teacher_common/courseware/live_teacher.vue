@@ -1312,10 +1312,7 @@ export default {
             }
           }
         }
-        this.getDetail()
       })
-    },
-    getDetail () {
       this.year = new Date().getFullYear()
       this.axios.request({
         method: 'post',

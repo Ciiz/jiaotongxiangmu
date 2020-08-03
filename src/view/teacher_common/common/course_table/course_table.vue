@@ -115,7 +115,7 @@ export default {
       weekData: [], // 当前周的数据
       maxWeek: 30,
       year: (new Date().getMonth() + 1) < 3 ? (new Date().getFullYear() - 1) : new Date().getFullYear(),
-      semester: (new Date().getMonth() + 1) > 8 || (new Date().getMonth() + 1) < 3 ? 1 : 2,
+      semester: '',
       loading: false,
       curDate: this.moment().format('YYYY-M-D'),
       curDay: new Date().getDay(),
@@ -320,6 +320,25 @@ export default {
             reject('获取开学日期失败,默认第一周')
           }
         })
+      })
+    },
+    getSemter () { // 获取当前学期
+      let time = new Date()
+      this.axios.request({
+        method: 'post',
+        url: '/home/course/getShcoolTerm',
+        data: {
+        }
+      }).then(res => {
+        for (let i = 0; i < res.data.list.length; i++) {
+          if (res.data.list[i].semester === 1) {
+            if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
+              this.semester = 2
+            } else {
+              this.semester = 1
+            }
+          }
+        }
       })
     },
     getRowData () { // 生成表格
@@ -536,6 +555,7 @@ export default {
     }
   },
   mounted () {
+    this.getSemter()
     this.getClassList()// 比getCourseTable获取慢会报错
     this.getTeacherCourseList()
   }
