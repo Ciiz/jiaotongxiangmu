@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="m-chapterDetail-bottom">
+    <div class="m-chapterDetail-bottom" v-if="userType===2">
       <input type="text" placeholder="留个言 分享下你的收获..." v-model="writeDiscuss"/>
       <img src="@/assets/images/mobile_student/sendcommand.png" @click="addDiscuss"/>
     </div>
@@ -64,7 +64,8 @@ export default {
       discussInfo: [],
       total: '',
       writeDiscuss: '',
-      showAllCourseDetailEdit: false
+      showAllCourseDetailEdit: false,
+      userType: this.$store.state.user.userInfo.userType
     }
   },
   components: { Krpano, KrpanoVideo },
@@ -166,46 +167,48 @@ export default {
       chapter_class_show(this.id).then(res => {
         if (res.code === 200) {
           this.chapter_class = res.data.chapter_class
-          // this.userType === 2 && this.updateStudyProgress()
+          if (this.userType === 2) {
+            this.updateStudyProgress()
+          }
           // this.t_id = res.data.chapter_class.id
         }
       })
     },
-    getCommand () {
-      // if (this.$store.state.user.userInfo.userType === 1) {
-      //   this.axios
-      //     .request({
-      //       method: 'get',
-      //       url: '/index.php/Teacher/ChapterClass/discuss_list',
-      //       params: {
-      //         page: this.page,
-      //         chapter_class_id: this.chapter_id,
-      //         comment_course_type: this.type
-      //       }
-      //     }).then(res => {
-      //       if (res.code === 200) {
-      //         this.discussInfo = res.data.list
-      //         this.total = res.data.total
-      //       }
-      //     })
-      // } else if (this.$store.state.user.userInfo.userType === 2) {
-      this.axios
-        .request({
-          method: 'get',
-          url: '/index.php/Student/ChapterClass/discuss_list',
-          params: {
-            page: this.page,
-            chapter_class_id: this.id,
-            comment_course_type: this.type
-          }
-        }).then(res => {
-          if (res.code === 200) {
-            this.discussInfo = res.data.list
-            this.total = res.data.total
-          }
-        })
+    getCommand () { // 获取评论
+      if (this.userType === 1) {
+        this.axios
+          .request({
+            method: 'get',
+            url: '/index.php/Teacher/ChapterClass/discuss_list',
+            params: {
+              page: this.page,
+              chapter_class_id: this.id,
+              comment_course_type: this.type
+            }
+          }).then(res => {
+            if (res.code === 200) {
+              this.discussInfo = res.data.list
+              this.total = res.data.total
+            }
+          })
+      } else if (this.userType === 2) {
+        this.axios
+          .request({
+            method: 'get',
+            url: '/index.php/Student/ChapterClass/discuss_list',
+            params: {
+              page: this.page,
+              chapter_class_id: this.id,
+              comment_course_type: this.type
+            }
+          }).then(res => {
+            if (res.code === 200) {
+              this.discussInfo = res.data.list
+              this.total = res.data.total
+            }
+          })
+      }
     }
-    // }
   },
   mounted () {
     this.getInfo()

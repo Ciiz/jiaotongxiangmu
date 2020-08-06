@@ -1,6 +1,6 @@
 <template>
   <div class="m-coursewareTList">
-    <div class="m-coursewareTItem" v-for="(item,index) in list" :key="index">
+    <div class="m-coursewareTItem" v-for="(item,index) in list" :key="index" @click="toLink(item)">
       <div class="m-coursewareT-sort">
         <span style="margin-left:0.32rem">课时</span>
         <span class="m-coursewareT-s">{{item.sort}}</span>
@@ -62,6 +62,10 @@ export default {
         }
         Indicator.close()
       })
+    },
+    toLink (item) {
+      let c_list = JSON.stringify(item.class_list)
+      this.$router.push({ name: 'mobileCoursewareInfo', query: { courseware_name: item.courseware_name, courseware_id: item.id, sort: item.sort, class_list: c_list } })
     }
   },
   mounted () {

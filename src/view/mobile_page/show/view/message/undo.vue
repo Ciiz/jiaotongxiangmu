@@ -32,7 +32,8 @@
 export default {
   data () {
     return {
-      systemInfoList: []
+      systemInfoList: [],
+      userType: this.$store.state.user.userInfo.userType
     }
   },
   watch: {
@@ -40,25 +41,47 @@ export default {
   },
   methods: {
     getData () {
-      this.axios.request({
-        url: '/index.php/Student/User/getNoticeList',
-        method: 'post',
-        data: {
-          read: -1,
-          type: 3,
-          page_size: 10
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          this.systemInfoList = []
-          for (let i = res.data.list.length - 1; i >= 0; i--) {
-            this.systemInfoList.push(res.data.list[i])
+      if (this.userType === 1) {
+        this.axios.request({
+          url: '/index.php/Teacher/notice/index',
+          method: 'post',
+          data: {
+            read: -1,
+            type: 3,
+            pagesize: 10
           }
-          this.$nextTick(function () {
-            document.getElementsByClassName('ab-scroll')[0].scrollTop = 10 / this.systemInfoList.length * document.getElementsByClassName('ab-scroll')[0].scrollHeight
-          })
-        }
-      })
+        }).then(res => {
+          if (res.code === 200) {
+            this.systemInfoList = []
+            for (let i = res.data.notice_list.length - 1; i >= 0; i--) {
+              this.systemInfoList.push(res.data.notice_list[i])
+            }
+            this.$nextTick(function () {
+              document.getElementsByClassName('ab-scroll')[0].scrollTop = 10 / this.systemInfoList.length * document.getElementsByClassName('ab-scroll')[0].scrollHeight
+            })
+          }
+        })
+      } else if (this.userType === 2) {
+        this.axios.request({
+          url: '/index.php/Student/User/getNoticeList',
+          method: 'post',
+          data: {
+            read: -1,
+            type: 3,
+            page_size: 10
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.systemInfoList = []
+            for (let i = res.data.list.length - 1; i >= 0; i--) {
+              this.systemInfoList.push(res.data.list[i])
+            }
+            this.$nextTick(function () {
+              document.getElementsByClassName('ab-scroll')[0].scrollTop = 10 / this.systemInfoList.length * document.getElementsByClassName('ab-scroll')[0].scrollHeight
+            })
+          }
+        })
+      }
     }
   },
   mounted () {

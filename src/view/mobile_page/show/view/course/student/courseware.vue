@@ -79,7 +79,7 @@ export default {
       })
     },
     toLink (item) {
-      this.$router.push({ name: 'mobileCoursewareInfo', query: { id: item.id,student_courseware_id:item.student_courseware_id, courseware_name: item.courseware_name, class_time: item.class_time, live_status: item.live_status } })
+      this.$router.push({ name: 'mobileCoursewareInfoS', query: { id: item.id, student_courseware_id: item.student_courseware_id, courseware_name: item.courseware_name, class_time: item.class_time, live_status: item.live_status } })
     },
     toLinkChapter () {
       this.$router.push({ name: 'mobileChapterInfo', query: { course_id: this.id, teacher_course_id: this.teacher_course_id, course_type: this.course_type } })

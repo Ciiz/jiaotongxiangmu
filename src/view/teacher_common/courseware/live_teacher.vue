@@ -675,7 +675,6 @@ export default {
       isshowAddquestion: false,
       alreadyQuestion: [],
       screenWidth: document.body.clientWidth,
-      t_id: this.$route.query.t_id,
       class_id: this.$route.query.class_id,
       courseware_id: this.$route.query.courseware_id,
       live_status: this.$route.query.live_status,
@@ -2038,7 +2037,6 @@ export default {
     // }
   },
   mounted () {
-    // this.t_id = this.$route.query.t_id
     // this.courseware_id = this.$route.query.courseware_id
     // this.class_id = this.$route.query.class_id
     this.getonlineStudent()

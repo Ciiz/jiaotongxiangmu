@@ -20,8 +20,8 @@
             v-model="userInfo.name">
           </mt-cell>
           <mt-cell
-            title="性别"
-            v-model="userInfo.sex===1?'男':'女'">
+            title="性别">
+            {{userInfo.sex===1?'男':'女'}}
           </mt-cell>
           <mt-cell
             title="所属院校"
@@ -51,29 +51,29 @@
 export default {
   data () {
     return {
-      userInfo:{}
+      userInfo: {}
     }
   },
   computed: {
- 
+
   },
   watch: {
 
   },
   methods: {
-   getUserInfo () {
-    this.axios
-      .request({
-        method: 'get',
-        url: '/index.php/Student/User/getUserInfo'
-      })
-      .then(res => {
-        let data = res.data
-        if (res.code === 200) {
-          this.userInfo = data.user
-        }
-      })
-    },
+    getUserInfo () {
+      this.axios
+        .request({
+          method: 'get',
+          url: '/index.php/Student/User/getUserInfo'
+        })
+        .then(res => {
+          let data = res.data
+          if (res.code === 200) {
+            this.userInfo = data.user
+          }
+        })
+    }
   },
   mounted () {
     this.getUserInfo()

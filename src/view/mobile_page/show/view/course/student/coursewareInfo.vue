@@ -65,7 +65,7 @@ export default {
   computed: {
     student_courseware_id () {
       return this.$route.query.student_courseware_id
-    },
+    }
   },
   watch: {
 
@@ -89,11 +89,11 @@ export default {
         Indicator.close()
       })
     },
-    entryLive(i){
-      if(i===1){
-        this.$router.push({ name: 'mobileLiveStudent',query: { student_courseware_id: this.student_courseware_id, mode:this.live_status === 3 ? 'live' : 'pdf' } })
-      }else if(i===2){
-        this.$router.push({ name: 'mobileLiveStudent',query: { student_courseware_id: this.student_courseware_id, mode: 'pdf' } })
+    entryLive (i) {
+      if (i === 1) {
+        this.$router.push({ name: 'mobileLiveStudent', query: { student_courseware_id: this.student_courseware_id, mode: this.live_status === 3 ? 'live' : 'pdf' } })
+      } else if (i === 2) {
+        this.$router.push({ name: 'mobileLiveStudent', query: { student_courseware_id: this.student_courseware_id, mode: 'pdf' } })
       }
     }
   },

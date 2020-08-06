@@ -703,6 +703,11 @@ height: 0.06rem;
   color: #ffffff;
   font-size: 0.28rem;
 }
+.m-studentItem,.m-teacherItem{
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
 .m-userCenter-sel{
   margin-top: 0.48rem;
   border-radius:0.1rem;

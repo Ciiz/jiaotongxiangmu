@@ -6,9 +6,8 @@
         <mt-tab-item id="1">课件列表</mt-tab-item>
         <mt-tab-item id="2">章节列表</mt-tab-item>
       </mt-navbar>
-      <img src="@/assets/images/mobile_teacher/setting.png"/>
+      <!-- <img src="@/assets/images/mobile_teacher/setting.png"/> -->
     </div>
-    <!-- tab-container -->
     <mt-tab-container v-model="selected">
       <mt-tab-container-item id="1" class="hideScroll">
         <coursewareList :teacher_course_id="teacher_course_id"></coursewareList>

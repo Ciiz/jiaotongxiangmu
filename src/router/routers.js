@@ -545,7 +545,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/task/taskIndex.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/task/taskIndex.vue')
   },
   {
     path: '/taskInfo',
@@ -553,7 +553,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/task/taskInfo.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/task/taskInfo.vue')
   },
   {
     path: '/taskEvaluate',
@@ -561,7 +561,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/task/taskEvaluate.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/task/taskEvaluate.vue')
   },
   {
     path: '/taskAnswer',
@@ -569,7 +569,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/task/taskAnswer.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/task/taskAnswer.vue')
   },
   {
     path: '/examInfo',
@@ -577,7 +577,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/exam/examInfo.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/exam/examInfo.vue')
   },
   {
     path: '/objectQuestion',
@@ -585,7 +585,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/exam/objectQuestion.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/exam/objectQuestion.vue')
   },
   {
     path: '/subjectQuestion',
@@ -593,7 +593,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/exam/subjectQuestion.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/exam/subjectQuestion.vue')
   },
   {
     path: '/membersAnswer',
@@ -601,7 +601,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/task/membersAnswer.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/task/membersAnswer.vue')
   },
   {
     path: '/evaluateMembers',
@@ -609,7 +609,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/task/evaluateMembers.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/task/evaluateMembers.vue')
   },
   {
     path: '/membersAnswerDetail',
@@ -617,7 +617,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/task/membersAnswerDetail.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/task/membersAnswerDetail.vue')
   },
   {
     path: '/evaluate',
@@ -625,7 +625,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/evaluate/evaluate.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/evaluate/evaluate.vue')
   },
   {
     path: '/attendance',
@@ -633,7 +633,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/attendance/attendance.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/attendance/attendance.vue')
   },
   {
     path: '/attendanceDetail',
@@ -641,7 +641,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/attendance/attendanceDetail.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/attendance/attendanceDetail.vue')
   },
   {
     path: '/teacherList',
@@ -649,7 +649,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/teacherList/teacherList.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/teacherList/teacherList.vue')
   },
   {
     path: '/courseList',
@@ -657,7 +657,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/note/courseList.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/note/courseList.vue')
   },
   {
     path: '/noteList',
@@ -665,7 +665,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/note/noteList.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/note/noteList.vue')
   },
   {
     path: '/noteDetail',
@@ -673,7 +673,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/note/noteDetail.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/note/noteDetail.vue')
   },
   {
     path: '/homeworkExamIndex',
@@ -681,7 +681,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/homeworkExam/homeworkExamIndex.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/homeworkExam/homeworkExamIndex.vue')
   },
   {
     path: '/mobileCoursewareS',
@@ -692,28 +692,12 @@ const mobileStudent = [
     component: () => import('@/view/mobile_page/show/view/course/student/courseware.vue')
   },
   {
-    path: '/mobileCoursewareT',
-    name: 'mobileCoursewareT',
+    path: '/mobileCoursewareInfoS',
+    name: 'mobileCoursewareInfoS',
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/course/teacher/courseware.vue')
-  },
-  {
-    path: '/mobileProcess',
-    name: 'mobileProcess',
-    meta: {
-      hideInMenu: true
-    },
-    component: () => import('@/view/mobile_page/show/view/course/teacher/studentProcess.vue')
-  },
-  {
-    path: '/mobileCoursewareInfo',
-    name: 'mobileCoursewareInfo',
-    meta: {
-      hideInMenu: true
-    },
-    component: () => import('@/view/mobile_page/show/view/course/coursewareInfo.vue')
+    component: () => import('@/view/mobile_page/show/view/course/student/coursewareInfo.vue')
   },
   {
     path: '/mobileLiveStudent',
@@ -721,7 +705,7 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/course/live_student.vue')
+    component: () => import('@/view/mobile_page/show/view/course/student/live_student.vue')
   },
   {
     path: '/mobileCourseTimetable',
@@ -761,11 +745,70 @@ const mobileStudent = [
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/mobile_page/show/view/userCenter/userInfo/userInfo.vue')
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/userInfo/userInfo.vue')
   }
 ]
 
-const router = [...common, ...indexRouter, ...mobileStudent]
+const mobileTeacher = [
+  {
+    path: '/mobileCoursewareT',
+    name: 'mobileCoursewareT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/course/teacher/courseware.vue')
+  },
+  {
+    path: '/mobileProcess',
+    name: 'mobileProcess',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/course/teacher/studentProcess.vue')
+  },
+  {
+    path: '/mobileCoursewareInfo',
+    name: 'mobileCoursewareInfo',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/course/teacher/coursewareInfo.vue')
+  },
+  {
+    path: '/mobileLiveTeacher',
+    name: 'mobileLiveTeacher',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/course/teacher/live_teacher.vue')
+  },
+  {
+    path: '/mobileUserInfoT',
+    name: 'mobileUserInfoT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/userInfo/userInfo.vue')
+  },
+  {
+    path: '/mobileCourseManageT',
+    name: 'mobileCourseManageT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/courseManage/index.vue')
+  },
+  {
+    path: '/mobileCourseInfoT',
+    name: 'mobileCourseInfoT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/courseManage/courseInfo.vue')
+  }
+]
+
+const router = [...common, ...indexRouter, ...mobileStudent, ...mobileTeacher]
 export default router
 export { common }
-export { mobileStudent }
+export { mobileStudent, mobileTeacher }

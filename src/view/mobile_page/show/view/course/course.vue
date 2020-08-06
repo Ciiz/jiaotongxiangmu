@@ -14,7 +14,7 @@
         <div>
           <img :src="item.img"/>
         </div>
-        <div class="m-mycourse-list-info">
+        <div class="m-mycourse-list-info-t">
           <div>{{item.course_name}}</div>
           <div v-html="item.description"></div>
           <div style="display:flex;justify-content:space-between" v-if="userType===1">
