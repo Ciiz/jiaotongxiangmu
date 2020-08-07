@@ -1060,6 +1060,7 @@ height: 0.06rem;
   margin: 0.24rem 0.3rem 0.28rem 0.3rem;
   display: flex;
   padding: 0.2rem;
+  border-radius: 0.08rem;
 }
 .m-mycourse-item img{
   width: 2.2rem;

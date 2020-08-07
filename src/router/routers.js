@@ -805,6 +805,46 @@ const mobileTeacher = [
       hideInMenu: true
     },
     component: () => import('@/view/mobile_page/show/view/userCenter/teacher/courseManage/courseInfo.vue')
+  },
+  {
+    path: '/mobileCoursewareManageT',
+    name: 'mobilecCursewareManageT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/coursewareManage/index.vue')
+  },
+  {
+    path: '/mobileCoursewareListT',
+    name: 'mobileCoursewareListT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/coursewareManage/coursewareList.vue')
+  },
+  {
+    path: '/mobileClassListT',
+    name: 'mobileClassListT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/coursewareManage/classList.vue')
+  },
+  {
+    path: '/mobileTaskListT',
+    name: 'mobileTaskListT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/coursewareManage/taskList.vue')
+  },
+  {
+    path: '/mobileTaskDetailT',
+    name: 'mobileTaskDetailT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/coursewareManage/taskDetail.vue')
   }
 ]
 

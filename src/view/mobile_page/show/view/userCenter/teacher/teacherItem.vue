@@ -7,7 +7,7 @@
         </div>
         <div class="m-userCenter-sel-itemN">课程管理</div>
       </div>
-      <div @click="toRouter('')">
+      <div @click="toRouter('mobilecCursewareManageT')">
         <div>
           <img src="@/assets/images/mobile_student/test.png"/>
         </div>
