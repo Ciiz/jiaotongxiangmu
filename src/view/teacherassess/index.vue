@@ -82,7 +82,8 @@ export default {
       this.get_list_info(this.class_choose, '', this.keyword)
     },
     class_choose (newval) {
-      // this.section_choose = ''
+      this.section_choose = ''
+      this.section_list = []
       this.refreshData()
       this.get_list_info(this.class_choose, '', this.keyword)
       for (let i in this.axios_data) {
@@ -91,6 +92,25 @@ export default {
           break
         }
       }
+      this.section_list.unshift({
+        id: 0,
+        sort: '课程总成绩'
+      })
+      // 数组去重
+      let allArr = []
+      for (let i = 0; i < this.section_list.length; i++) {
+        let flag = true
+        for (let j = 0; j < allArr.length; j++) {
+          if (this.section_list[i].id === allArr[j].id) {
+            flag = false
+          }
+        }
+        if (flag) {
+          allArr.push(this.section_list[i])
+        }
+      }
+      this.section_list = allArr
+      this.section_choose = ''
     },
     section_choose (newval) {
       if (newval !== '' && newval !== undefined) {
