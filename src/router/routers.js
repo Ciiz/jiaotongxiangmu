@@ -540,6 +540,14 @@ const mobileStudent = [
     component: () => import('@/view/mobile_page/show/view/message/undo.vue')
   },
   {
+    path: '/mobileAddDiscuss',
+    name: 'mobileAddDiscuss',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/message/addDiscuss.vue')
+  },
+  {
     path: '/taskIndex',
     name: 'taskIndex',
     meta: {

@@ -10,6 +10,7 @@
         <div class="ab-scroll">
           <!-- <div class="userinfo-info-showhistory" @click="getAnwserNum++,getAnwser(getAnwserNum)">查看历史消息>></div> -->
           <!-- <div class="infoModal-t">2020-4-21 10:20</div> -->
+          <!-- table_type 1：小组讨论，2：任务提问，3：话题 -->
           <div v-for="(item,index) in answerList" :key="index">
             <div v-if="userType===1&&chatList.table_type===2" :class="item.type === 1&&userType===1 ? 'userinfo-right' : 'userinfo-left'">
                         <div>

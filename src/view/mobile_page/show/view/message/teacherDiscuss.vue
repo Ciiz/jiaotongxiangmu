@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>创建话题</div>
+    <div class="m-teacherDiscuss-addbtn" @click="toAdd()">创建话题</div>
     <div class="question-item" v-for="(item,index) in chatList" :key="index" @click="toDiscuss(item)">
       <div style="position:relative">
         <img :src="item.icon" class="question-item-icon">
@@ -67,6 +67,9 @@ export default {
     getData () {
       this.chatList = []
       this.showDiscussAbout()
+    },
+    toAdd () {
+      this.$router.push({ name: 'mobileAddDiscuss' })
     }
   },
   mounted () {
@@ -74,3 +77,16 @@ export default {
   }
 }
 </script>
+<style>
+  .m-teacherDiscuss-addbtn{
+    color: rebeccapurple;
+    margin: 0.26rem 0.32rem 0 0.32rem;
+    color: #FFFFFF;
+    font-size: 0.32rem;
+    background: #3C9CFF;
+    text-align: center;
+    height: 0.7rem;
+    line-height: 0.7rem;
+    border-radius: 0.1rem;
+  }
+</style>
