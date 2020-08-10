@@ -34,7 +34,7 @@
       <div style="flex:1;position:relative">
         <ul>
           <li v-for="(item,index) in course_list" class="watcheva-l-li" :key="index" @click="selectStudent($event,item)">
-            <span style="width:106px">{{index}}</span>
+            <span style="width:106px">{{index+1}}</span>
             <span style="width:166px">
               <img :src="item.icon" />{{item.name}}</span>
             <span style="width:144px">{{item.total_score}}分</span>
@@ -278,7 +278,6 @@ export default {
       }
       e.currentTarget.style.background = '#ffffff'
       this.currentStudent = item.name
-      console.log(item)
       this.student_course_id = item.student_course_id
     },
     getData () {

@@ -1,6 +1,6 @@
 <template>
   <div class="flex-contain">
-    <mt-header title="课件管理">
+    <mt-header title="考核与评价">
       <router-link to="/mobile/mobileUserCenter" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
@@ -58,7 +58,7 @@ export default {
       })
     },
     toLink (item) {
-      this.$router.push({ name: 'mobileCoursewareListT', query: { teacher_course_id: item.teacher_course_id } })
+      this.$router.push({ name: 'mobileEvaluateListT', query: { teacher_course_id: item.teacher_course_id } })
     }
   },
   mounted () {

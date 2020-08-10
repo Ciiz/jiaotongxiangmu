@@ -19,7 +19,7 @@
         </div>
         <div class="m-userCenter-sel-itemN">批改</div>
       </div>
-      <div @click="toRouter('')">
+      <div @click="toRouter('mobileEvaluateT')">
         <div>
           <img src="@/assets/images/mobile_student/evaluate.png"/>
         </div>

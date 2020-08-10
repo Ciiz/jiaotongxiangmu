@@ -2,20 +2,14 @@
   <div>
     <div class="question-item" v-for="(item,index) in chatList" :key="index" @click="toDiscuss(item)">
       <div style="position:relative">
-        <img v-if="item.table_type===2" :src="item.userInfo.icon" class="question-item-icon">
-        <img v-if="item.table_type===1||item.table_type===3" :src="item.icon" class="question-item-icon">
+        <img :src="item.userInfo.icon" class="question-item-icon">
         <mt-badge type="error" size="small" style="position:absolute;top:0.08rem;right:0.08rem" class="m-badge-num" v-if="item.unread!==0">{{item.unread}}</mt-badge>
       </div>
       <div class="question-item-l">
         <div class="question-item-info">
-          <div v-if="item.table_type===2">
+          <div>
             <span class="question-item-name">{{item.userInfo.name}}</span>
-          </div>
-          <div v-if="item.table_type===3">
-            <span class="question-item-name">{{item.title}}</span>
-          </div>
-          <div v-if="item.table_type===1">
-            <span class="question-item-name">{{item.task_name}}</span>
+            <span style="font-size:0.24rem" v-if="item.title===undefined">（{{item.userInfo.class_name}}）</span>
           </div>
           <div class="question-item-time">{{moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm')}}</div>
         </div>
@@ -26,7 +20,6 @@
 </template>
 <script>
 
-import { Indicator } from 'mint-ui'
 export default {
   data () {
     return {
@@ -53,12 +46,8 @@ export default {
   },
   methods: {
     showProblem () { // 获取单独对话内容
-      Indicator.open({
-        text: '加载中...',
-        spinnerType: 'fading-circle'
-      })
       this.axios.request({
-        url: '/index.php/Student/Task/question_list',
+        url: '/index.php/Teacher/TaskQuestion/question_list',
         method: 'get',
         params: {
           page: 1,
@@ -70,39 +59,6 @@ export default {
             this.chatList.push(res.data.question_list[i])
           }
         }
-        Indicator.close()
-      })
-    },
-    showDiscussAbout () { // 话题列表获取
-      this.axios.request({
-        url: '/index.php/Student/Topic/topic_list',
-        method: 'get',
-        params: {
-          page: 1,
-          page_size: 10000
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          for (let i = 0; i < res.data.list.length; i++) {
-            this.chatList.push(res.data.list[i])
-          }
-        }
-      })
-    },
-    showDiscussStudent () { // 消息中心学生讨论列表
-      this.axios.request({
-        url: '/index.php/Student/StudentTask/task_list',
-        method: 'get',
-        params: {
-          page_no: 1,
-          page_size: 10000
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          for (let i = 0; i < res.data.list.length; i++) {
-            this.chatList.push(res.data.list[i])
-          }
-        }
       })
     },
     toDiscuss (item) {
@@ -111,8 +67,6 @@ export default {
     getData () {
       this.chatList = []
       this.showProblem()
-      this.showDiscussAbout()
-      this.showDiscussStudent()
     }
   },
   mounted () {

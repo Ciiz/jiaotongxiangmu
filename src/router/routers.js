@@ -845,6 +845,30 @@ const mobileTeacher = [
       hideInMenu: true
     },
     component: () => import('@/view/mobile_page/show/view/userCenter/teacher/coursewareManage/taskDetail.vue')
+  },
+  {
+    path: '/mobileEvaluateT',
+    name: 'mobileEvaluateT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/evaluate/evaluate.vue')
+  },
+  {
+    path: '/mobileEvaluateListT',
+    name: 'mobileEvaluateListT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/evaluate/evaluateList.vue')
+  },
+  {
+    path: '/mobileEvaluateDetailT',
+    name: 'mobileEvaluateDetailT',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/evaluate/evaluateDetail.vue')
   }
 ]
 

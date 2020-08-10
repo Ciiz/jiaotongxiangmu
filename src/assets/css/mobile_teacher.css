@@ -19,6 +19,17 @@
 .m-Collapse .ivu-collapse-content > .ivu-collapse-content-box{
   padding: 0;
 }
+.m-select{
+  font-size: 0.28rem;
+  color: #999999;
+  padding:  0 0.22rem;
+  height: 0.78rem;
+  border: none;
+  outline: none;
+  border-radius: 0.38rem;
+  line-height: 0.86rem;
+  vertical-align: middle;
+}
 
 
 .m-coursewareInfo-liveBtn{
@@ -316,4 +327,88 @@
   width: 0.7rem;
   height: 0.7rem;
   border-radius: 50%;
+}
+
+
+
+/*评价*/
+.m-evaluateList-h{
+  padding: 0.14rem 0.32rem;
+  display: flex;
+  justify-content: space-between;
+  background-color: #F7F7F7;
+}
+.m-evaluateList-list{
+  padding: 0 0.3rem;
+  background-color: #ffffff;
+  font-size: 0.34rem;
+  overflow-y: scroll;
+}
+.m-evaluateList-item{
+  border-bottom: 1px solid #CCCCCC;
+  display: flex;
+  line-height: 1.4rem;
+  height: 1.4rem;
+}
+.m-evaluateList-item-index{
+  width: 0.64rem;
+  margin-left: 0.1rem;
+  font-weight: bold;
+  color: #000000;
+}
+.m-evaluateList-item-name{
+  font-weight: bold;
+  color: #000000;
+  width: 2.36rem;
+}
+.m-evaluateList-item-score{
+  font-size: 0.26rem;
+  color: #222222;
+  flex: 1;
+}
+.m-evaluateList-item-icon{
+  margin-right: 0.2rem;
+}
+.m-evaluateList-item-icon .ivu-icon{
+  font-size: 0.64rem;
+}
+.m-evaluateDetail-contain{
+  flex: 1;
+  overflow-y: scroll;
+  padding: 0 0.3rem;
+}
+.m-evaluateDetail-item{
+  display: flex;
+  border-bottom: 1px solid #CCCCCC;
+  font-size: 0.26rem;
+  padding: 0.4rem 0;
+}
+.m-evaluateDetail-item-sort{
+  width: 0.86rem;
+  font-size: 0.34rem;
+  color: #000000;
+  font-weight: bold;
+  margin: auto 0;
+}
+.m-evaluateDetail-item-name{
+  width:2.98rem;
+  font-size: 0.34rem;
+  color: #000000;
+  font-weight: bold;
+}
+.m-evaluateDetail-item-score{
+  color: #222222;
+}
+.m-evaluateDetail-item-score>span:nth-of-type(2){
+  color:#3C9BFF;
+  font-weight: bold;
+  font-size: 0.34rem;
+}
+.m-evaluateDetail-score-detail{
+  display: flex;
+  color: #9A9A9A;
+  margin-top: 0.14rem;
+}
+.m-evaluateDetail-score-detail>div{
+  width: 2rem;
 }
