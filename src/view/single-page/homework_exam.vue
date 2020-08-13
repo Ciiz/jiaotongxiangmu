@@ -105,13 +105,11 @@
 </div>
 </template>
 <script>
-import Courseware from '@/view/class_common/courseware/courseware_list.vue'
 import Exam from '@/view/class_common/exam/exam'
 // import ExamEvaluate from '@/view/class_common/exam/evaluate'
 import Homework from '@/view/class_common/homework/homework'
 export default {
   components: {
-    Courseware,
     Exam,
     Homework
   },

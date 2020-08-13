@@ -47,29 +47,14 @@
         <Table size="small" class="courseware_list_table" style="width:100%;height:100%" ref="selection" :columns="columns" :data="list"></Table>
       </div>
     </Col>
-    <Modal v-model="modal" :title="title" :width="modal_width" footer-hide>
-      <StudentTaskEvaluate :student_task_id="target_id" v-if="target === 'student_task'"></StudentTaskEvaluate>
-      <StudentHomeworkEvaluate :student_homework_id="target_id" v-if="target === 'student_homework'"></StudentHomeworkEvaluate>
-      <StudentExamEvaluate :student_exam_id="target_id" v-if="target === 'student_exam'"></StudentExamEvaluate>
-    </Modal>
   </Row>
   <Spin fix v-show="loading"> </Spin>
-    <!-- <Modal v-model="modal" :title="title" :width="1000" :footer-hide="footerHide" :fullscreen="fullscreen">
-      <watcheva :teacher_course_id="target_id.teacher_course_id" :course_name="target_id.course_name" v-if="target === 'watcheva' && modal" ></watcheva>
-    </Modal> -->
 </Row>
 </template>
 <script>
 import { student_course_score } from '@/api/data'
-import watcheva from './components/watcheva_assess.vue'
 import modal_mixin from '@/view/mixins/modal_mixin'
-import StudentTaskEvaluate from '@/view/teacher_common/task/student_task_evaluate'
-import StudentHomeworkEvaluate from '@/view/teacher_common/homework/student_homework_evaluate'
-import StudentExamEvaluate from '@/view/teacher_common/exam/student_exam_evaluate'
 export default {
-  components: {
-    watcheva, StudentTaskEvaluate, StudentExamEvaluate, StudentHomeworkEvaluate
-  },
   computed: {
     courseId () {
       return this.$store.state.user.courseData.teacher_course_id

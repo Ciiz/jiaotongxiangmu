@@ -75,7 +75,6 @@ export default {
       onlineStudent: [],
       studentNumber: 1,
       questionContent: '',
-      quiz_id: '',
       questionTime: 180,
       questionContent2: '',
       selectA: '',
@@ -123,7 +122,6 @@ export default {
             this.$Message.error('正在全体作答中')
           } else {
             if (this.studentNumber > this.online_data.online_count) {
-            // if (this.studentNumber > 100) {
               this.$Message.error('提问人数不能大于在线人数')
             } else {
               if (e.target.innerText === '抢答') {

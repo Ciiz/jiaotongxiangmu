@@ -390,7 +390,6 @@ import { fullScreen, getSuffix } from '@/libs/util'
 import live from '@/view/common/live' // 直播群聊相关
 import TaskList from '@/view/class_common/task/task_list_m'
 import modal_mixin from '@/view/mixins/modal_mixin'
-import studentQuestionlist from '@/view/teacher_common/question/student_questionlist'
 import { MESSAGE_TYPE } from 'vue-baberrage'
 import { get_ppt_option } from '@/api/common'
 import Exam from '@/view/class_common/exam/exam'
@@ -399,7 +398,6 @@ export default {
   components: {
     pdf,
     TaskList,
-    studentQuestionlist,
     Exam,
     Evaluate
   },
@@ -893,7 +891,7 @@ export default {
         this.flvPlayer = null
       }
     },
-    handlePageChange (action) {  //切换pdf页码
+    handlePageChange (action) { // 切换pdf页码
       if (action === 'up') {
         if (this.page > 1) {
           this.page--

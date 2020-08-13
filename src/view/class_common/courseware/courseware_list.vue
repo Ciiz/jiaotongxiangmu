@@ -5,10 +5,9 @@
      >
     </Table>
   </div>
-  <Modal class="liveT" v-model="modal" :title="title" :fullscreen="fullscreen" footer-hide :mask-closable='false'>
-    <Courseware :student_courseware_id="target_id" :mode="mode" v-if="modal && target==='courseware'"></Courseware>
+  <!-- <Modal class="liveT" v-model="modal" :title="title" :fullscreen="fullscreen" footer-hide :mask-closable='false'>
     <Evaluate :student_courseware_id="target_id" :mode="mode" v-if="target==='evaluate'" @success="handleSuccess"></Evaluate>
-  </Modal>
+  </Modal> -->
   <Modal v-model="modal2" width='1000' class="homeworkModal" :title="title" :fullscreen="fullscreen" footer-hide :mask-closable='false'>
     <Homework @closeModal='closeModal' :exam_score_status="exam_score_status" :student_homework_id="student_homework_id" v-if="target === 'homework'" @success="handleSuccess"></Homework>
   </Modal>
@@ -19,16 +18,14 @@
 </template>
 
 <script>
-import Courseware from '@/view/class_common/courseware/live'
-import Evaluate from '@/view/class_common/courseware/evaluate'
+// import Evaluate from '@/view/class_common/courseware/evaluate'
 import modal_mixin from '@/view/mixins/modal_mixin'
 import Homework from '@/view/class_common/homework/homework'
 import coursewareVedio from '@/view/teacher_common/courseware/courseware_vedio.vue'
 
 export default {
   components: {
-    Courseware,
-    Evaluate,
+    // Evaluate,
     Homework,
     coursewareVedio
   },
@@ -214,7 +211,6 @@ export default {
                     {'pdf课件'}
                   </button>
                 </div>
-                // <Button size="small" type="primary" onClick={() => { this.$router.push({ name: 'courseware_class', params: { courseware_id: params.row.id } }) }}>任务 / 作业 / 测试</Button>
                 // <Button size="small" type="default"
                 //     onClick={() => { this.open('evaluate', params.row.student_courseware_id, `课件评价 > ${params.row.courseware_name}`, 600) }}
                 //     v-show={status === 2}

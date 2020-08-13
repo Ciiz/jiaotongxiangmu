@@ -30,21 +30,11 @@ export default{
   data () {
     return {
       class_id: []
-      // t_id: []
     }
   },
   methods: {
     confirm () {
-      // this.t_id = []
-      // for (let i = 0; i < this.class_id.length; i++) {
-      //   for (let j = 0; j < this.classList.length; j++) {
-      //     if (this.class_id[i] === this.classList[j].class_id) {
-      //       this.t_id.push(this.classList[j].timetable_id)
-      //     }
-      //   }
-      // }
       this.$router.push({ path: '/live_teacher', query: { courseware_id: this.courseware_id, class_id: this.class_id, live_status: this.live_status, course_status: this.course_status } })
-      // this.open('courseware_live', {}, '课件直播', 1000, true, true)
     },
     handleVisiableChange (isShow) {
       if (!isShow) {
@@ -57,10 +47,6 @@ export default{
     }
   },
   mounted () {
-    // this.t_id = []
-    // for (let i = 0; i < this.classList.length; i++) {
-    //   this.t_id.push(this.classList[i].timetable_id)
-    // }
   }
 }
 </script>

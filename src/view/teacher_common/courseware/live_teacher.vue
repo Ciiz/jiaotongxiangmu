@@ -23,7 +23,6 @@
       <Content style="background:#111113">
         <Row style="background:#373737;height:100%;min-height:700px">
           <Col :span="3" class="live-l">
-            <!-- <div class="live-question-btn" @click="selectMethod"> -->
             <div class="live-question-btn" @click="showListQuestion">
               <img src="@/assets/images/new_img/question.png" style="vertical-align:middle;width:16px;margin-right:10px;"/>提问
             </div>
@@ -211,25 +210,13 @@
                         <img src="@/assets/images/new_img/unbrush.png"  v-show="iscanvas===false" @click="iscanvas = true"/>
                         <img src="@/assets/images/new_img/isbrush.png"  v-show="iscanvas===true" @click="iscanvas = false"/>
                       </Tooltip>
-                      <!-- <Tooltip content="移动" placement="top">
-                        <img src="@/assets/images/new_img/move.png" @mousedown="move($event)" style="cursor: move;"/>
-                      </Tooltip> -->
                     </div>
-                    <!-- <div style="position:fixed;bottom:10px;right:30px">
-                        <button @click="backCanvas">撤销</button>
-                        <button @click="clearCanvas">清空</button>
-                        <span>画笔颜色：<input type="color" id="context.color" /></span>
-                        <span style="margin:0 20px">画笔大小:<input type="number" id="context.size" max="10" value="1" /></span>
-                      <Select v-model="material_choose" style="width:160px" class="select_material" placement="top" placeholder="选择素材预览">
-                       <Option v-for="maitem in material" :value="maitem.file_url" :key="maitem.id" @click.native="option_click(maitem)">{{ maitem.file_name }}</Option>
-                      </Select>
-                    </div> -->
                     <div style="position:fixed;bottom:10px;right:30px;background:rgba(0,0,0,.3);padding:8px 14px">
                         <img src="@/assets/images/new_img/back.png" @click="backCanvas" style="vertical-align:middle;margin-right:10px"/>
                         <img src="@/assets/images/new_img/clearcanvas.png" @click="clearCanvas" style="vertical-align:middle;margin-right:30px"/>
                         <span><span style="vertical-align:middle">画笔颜色</span><input type="color" id="context.color" value="#FF8040" style="width:26px;height:26px;vertical-align:middle;margin-left:6px"/></span>
                         <span style="margin:0 40px 0 20px"><span style="vertical-align:middle">大小 </span><input type="number" id="context.size" max="10" value="3" style="width:53px"/></span>
-                        <Select v-model="material_choose" style="width:160px" class="select_material" placement="top" placeholder="选择素材预览">
+                        <Select style="width:160px" class="select_material" placement="top" placeholder="选择素材预览">
                          <Option v-for="maitem in material" :value="maitem.file_url" :key="maitem.id" @click.native="option_click(maitem)">{{ maitem.file_name }}</Option>
                         </Select>
                     </div>
@@ -258,7 +245,7 @@
                 </Col>
                 <Col :span="8" style="transform:translateY(-3px)">
                   <span>选择课件素材</span>
-                  <Select v-model="material_choose" style="width:160px" class="select_material" placement="top" placeholder="选择素材预览">
+                  <Select style="width:160px" class="select_material" placement="top" placeholder="选择素材预览">
                    <Option v-for="maitem in material" :value="maitem.file_url" :key="maitem.id" @click.native="option_click(maitem)">{{ maitem.file_name }}</Option>
                   </Select>
                 </Col>
@@ -294,7 +281,7 @@
                   <img src="@/assets/images/new_img/qrCode.png" @click="qrModal = true" />
                 </Col>
                 <Col :span="6" style="transform:translateY(-3px)">
-                  <Select v-model="material_choose" style="width:80%" class="select_material" placement="top" placeholder="选择素材预览">
+                  <Select style="width:80%" class="select_material" placement="top" placeholder="选择素材预览">
                    <Option v-for="maitem in material" :value="maitem.file_url" :key="maitem.id" @click.native="option_click(maitem)">{{ maitem.file_name }}</Option>
                   </Select>
                 </Col>
@@ -372,13 +359,6 @@
                         </div>
                         <div class="online-data-name" style="text-align:center">
                           <span>{{item2.name}}</span>
-                          <!-- <span @click="showchangeattenStatusModal" style="cursor:pointer">{{item2.name}}</span> -->
-                          <!-- <span class="atten-r" v-if="course_status===1"></span>
-                          <ul class="changeattenStatus">
-                            <li><span class="atten-g"></span>正常</li>
-                            <li><span class="atten-o"></span>迟到</li>
-                            <li><span class="atten-r"></span>缺勤</li>
-                          </ul> -->
                         </div>
                       </li>
                       <div style="clear:both;"></div>
@@ -416,12 +396,6 @@
             </div>
           </div>
         </Modal>
-            <!-- 新增modal ------------------>
-        <Modal v-model="isshouwMaterial" :width="1000" title="浏览素材">
-          <div v-if="isshouwMaterial">
-             <embed :src="Material_url" width="100%" height="440px" autostart="false">
-          </div>
-        </Modal>
         <!-- 任务发布 -->
         <Modal v-model="show_release" title="发布" :mask-closable='false'  footer-hide>
             <div v-if="show_release"  style="height:150px;">
@@ -449,13 +423,6 @@
         <div v-if="ischangeleader">
           <Modal v-model="ischangeleader"  footer-hide width="1000" title="更换小组组长">
             <changeLeader :task_release_id='release_id'></changeLeader>
-          </Modal>
-        </div>
-
-        <!-- 任务评价 -->
-        <div v-if="isevaluationshow">
-          <Modal v-model="isevaluationshow" width="1000"  :mask-closable='false' title="评价列表" footer-hide>
-            <addevaluation :rowid="release_id"></addevaluation>
           </Modal>
         </div>
 
@@ -512,7 +479,7 @@
 
         <!-- 添加问题 -->
         <Modal v-model="isshowAddquestion" :width="620" footer-hide>
-          <coursewareQuestion :online_data='online_student' :showTime="showTime" :add_type="'call'" :courseware_id='courseware_id' @changeTime='changeTime' @closeQList='closeQList' :group_chat_id='group_chat_id' :studentNumber='studentNumber' :quiz_id='quiz_id'></coursewareQuestion>
+          <coursewareQuestion :online_data='online_student' :courseware_id='courseware_id' :group_chat_id='group_chat_id' :showTime="showTime" :add_type="'call'" @changeTime='changeTime' @closeQList='closeQList'></coursewareQuestion>
         </Modal>
 
         <!-- 显示已有客观题 -->
@@ -613,20 +580,15 @@ import { _debounce, fullScreen } from '@/libs/util'
 import live from '@/view/common/live'
 import CourseTable from '@/view/teacher_common/common/course_table' // 课表
 import Attendance from '@/view/teacher_common/common/attendance' // 考勤
-import addcsscrore from '@/view/publiccomponent_teacher/addscore.vue'//
-import addevaluation from '@/view/publiccomponent_teacher/task/evaluationlist.vue'// 任务评价
-import addtestscore from '@/view/publiccomponent_teacher/test/addtestscore.vue'// 考试评价
 import addtestanalyze from '@/view/publiccomponent_teacher/test/addtestanalyze_testresults.vue'// 考试分析
 import TaskReleaseDetail from '@/view/teacher_common/task/task_release_detail.vue'// 任务详情
 import ExamEdit from '@/view/teacher_common/exam/exam_edit.vue'// 快速命题
 import HomeworkReleaseDetail from '@/view/teacher_common/homework/homework_release_detail.vue'// 作业详情
 import changeLeader from '@/view/teacher_common/task/task_team_leader_change.vue'// 更换小组长
 import StudentExamList from '@/view/teacher_common/exam/student_exam_list.vue'
-import Online from '@/view/teacher_common/courseware/courseware_live_online.vue'
 import coursewareQuestion from '@/view/teacher_common/question/courseware_question.vue'
 import selectquestionAnwser from '@/view/teacher_common/question/selectquestion_anwser.vue'
 import answerList from '@/view/teacher_common/question/anwser_list.vue'
-import questionList from '@/view/teacher_common/question/question_list.vue'
 import { setTimeout } from 'timers'
 import { MESSAGE_TYPE } from 'vue-baberrage'
 import QRCode from 'qrcodejs2'
@@ -636,7 +598,6 @@ export default {
   data () {
     return {
       teacher_course_id: '',
-      showchangeattenStatus: false,
       pdfWidth: '',
       iscanvas: false, // 是否开启画笔
       canvasHistory: [],
@@ -681,19 +642,13 @@ export default {
       course_status: this.$route.query.course_status,
       showdiscuss: true,
       problemAnswer: [],
-      quiz_id: '',
-      quiz_idShow: '',
       mainQuestionContent: '',
       mainAnswer_num: '',
       studentNumber: 1,
-      problem: '',
       reply_timeShow: '',
       topic_typeShow: '',
       topicShow: [],
       contentShow: '',
-      inputProblem: false,
-      isshowStudent: false,
-      showBtn: true,
       loading: false,
       online_data: {
         online_count: 0,
@@ -736,21 +691,13 @@ export default {
       courseware_list_type: '',
       courseware_list_type2: '',
       courseware_list: [],
-      testinLength: '',
-      testafterLength: '',
-      taskinLength: '',
-      taskafterLength: '',
-      homeworkLength: '',
       list_title: '',
       // 点名
       test_type: false,
       test_timer: null,
       test_btn_content: '点名',
       name_list: ['张三', '李四', '王五', '赵六'],
-      Material_url: '', // 预览素材地址
-      isshouwMaterial: false,
       // 弹幕数据
-      getHistory: false, // 检测是否有新消息
       barrageIsShow: true, // 是否显示弹幕
       currentId: 0, // 弹幕消息id
       barrageLoop: false,
@@ -763,21 +710,15 @@ export default {
         { evaluate_type: 4, evaluate_weight: 0 }
       ],
       qrModal: false,
-      qrCode_url: `${window.location.protocol}`,
       timetable_id: 0, // 课表id
       release_teacher: 0, // 老师评权重
       release_leader: 0, // 组长评权重
       release_team: 0, // 组长评组员权重
       sendloading: false, // 发送消息的loading，用于设置发送间隔
-      isshowreply: false, // 是否显示问题列表
       release_type: 0, // 问题类型 ： 1 小组 2 个人
-      isInfo: true, // 判断点击类型是否为详情
       homeworkname: '', // 作业详情弹出显示名称
-      evaid: 0, // xx id
       isshowaddhomework: false,
       isshowaddclass1: false,
-      isshowaddclass2: false,
-      clone_update_info: {}, // 给快速命题或者普通命题传值的数据
       test_name: '', // 测试详情弹出显示名称
       isshowaddtask: false,
       rowid: 0, // xx 发布id
@@ -788,7 +729,6 @@ export default {
       isgetinfo: false, // 判断考试分析数据是否接受完成
       isshowanalyze: false,
       isshowhomeworkcheck: false,
-      isevaluationshow: false,
       release_id: 0, // 发布id
       show_release: false,
       release_for_choose: '', // 发布类型
@@ -797,7 +737,6 @@ export default {
       leader_id: 0, // 组长id
       ischangeleader: false,
       team_list: [], // 更换组长时显示成员列表
-      leaderchoose: '', // 选定的组长
       team: {
         list: [],
         choose: ''
@@ -830,10 +769,6 @@ export default {
         after: []
       },
       homework: [], // 作业列表数据
-      before_choose: 'before_1',
-      in_choose: 'in_1',
-      after_choose: 'after_1',
-      material_choose: '', // 素材选择
       isshare: false,
       chatlist: [],
       courseware_name: '', // 当前课件名称
@@ -848,18 +783,13 @@ export default {
     CourseTable,
     Attendance,
     pdf,
-    addcsscrore,
-    addevaluation,
-    addtestscore,
     addtestanalyze,
     TaskReleaseDetail,
     ExamEdit,
     HomeworkReleaseDetail,
     changeLeader,
     StudentExamList,
-    Online,
     coursewareQuestion,
-    questionList,
     selectquestionAnwser,
     answerList
   },
@@ -1064,7 +994,6 @@ export default {
         this.topicShow = this.alreadyQuestion[i].detail
         this.contentShow = this.alreadyQuestion[i].content
       } else {
-        this.quiz_idShow = this.alreadyQuestion[i].id
         this.mainQuestionContent = this.alreadyQuestion[i].content
         this.mainAnswer_num = this.alreadyQuestion[i].answer_num
         this.isshowMainquestion = true
@@ -1720,7 +1649,6 @@ export default {
       this.handlePageChange()
     }, 100),
     fullScreen (id) {
-      // this.showBtn = false
       fullScreen(id)
     },
     ergeTypeChange () {
@@ -1756,9 +1684,6 @@ export default {
         colorDark: '#000',
         colorLight: '#fff'
       })
-    },
-    selectMethod () {
-      this.inputProblem = true
     },
     closeList (e) {
       if (e.target.className === 'allscreen') {
