@@ -285,24 +285,6 @@ const indexRouter = [
         component: () => import('@/view/teacherassess/index')
       },
       {
-        path: 'assess_for_student',
-        name: 'assess_for_student',
-        meta: {
-          hideInMenu: true
-        },
-        component: () => import('@/view/teacherassess/components/assess_for_student')
-      },
-      {
-        path: 'watcheva_assess',
-        name: 'watcheva_assess',
-        meta: {
-          hideInMenu: true,
-          title: '考核与评价',
-          icon: 'md-list-box'
-        },
-        component: () => import('@/view/teacherassess/components/watcheva_assess')
-      },
-      {
         path: 'teacher_personalinformation',
         name: 'teacher_personalinformation',
         meta: {
@@ -323,16 +305,6 @@ const indexRouter = [
         component: () => import('@/view/single-page/message')
       },
       // 学生
-      {
-        path: 'courseware_class/:courseware_id',
-        name: 'courseware_class',
-        meta: {
-          title: '课时(课前-课中-课后)',
-          hideInMenu: true,
-          icon: 'md-briefcase'
-        },
-        component: () => import('@/view/class_common/courseware/courseware_class')
-      },
       {
         path: 'student_notes',
         name: 'student_notes',
@@ -690,6 +662,30 @@ const mobileStudent = [
       hideInMenu: true
     },
     component: () => import('@/view/mobile_page/show/view/userCenter/student/homeworkExam/homeworkExamIndex.vue')
+  },
+  {
+    path: '/mobileCorrectIndex',
+    name: 'mobileCorrectIndex',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/correct/index.vue')
+  },
+  {
+    path: '/mobileCorrectDetail',
+    name: 'mobileCorrectDetail',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/correct/correctDetail.vue')
+  },
+  {
+    path: '/mobileCorrectStudent',
+    name: 'mobileCorrectStudent',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/correct/studentList.vue')
   },
   {
     path: '/mobileCoursewareS',
