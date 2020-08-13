@@ -37,7 +37,11 @@ export default {
       keyword: '',
       list: [],
       count: 0,
-      course: {},
+      course: {
+        class_hour_progress_info: {
+          is_finish: 0
+        }
+      },
       total_weight: 100,
       columns: [
         {

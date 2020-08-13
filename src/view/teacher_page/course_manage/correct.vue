@@ -14,11 +14,11 @@
         <Col>
           <Select class="new-searchSel" v-model="class_id" placeholder="全部班级" clearable style="margin-right:30px">
             <Option :value="0">所有班级</Option>
-            <Option v-for="item in classLst" :value="item.class_id" :key="item.class_id">{{item.class_name}}</Option>
+            <Option v-for="item in classLst" :value="item.class_id" :key="'class'+item.class_id">{{item.class_name}}</Option>
           </Select>
           <Select class="new-searchSel" v-model="teacher_course_id" placeholder="全部课程" clearable style="margin-right:30px">
             <Option :value="0">所有课程</Option>
-            <Option v-for="item in teacher_course_list" :value="item.id" :key="item.id">{{item.course_name}}</Option>
+            <Option v-for="item in teacher_course_list" :value="item.id" :key="'course'+item.id">{{item.course_name}}</Option>
           </Select>
           <Input class="new-searchSel"  v-model="keyword"  placeholder="请输入课业关键词" style="width:240px;" />
           <button class="orangeRBorder-btn" style="transform:translate(-20px,2px)" @click="changeType()">搜索</button>
@@ -26,7 +26,7 @@
       </Row>
       <div style="width:100%;height:100%;position:relative" v-show="correct_status===0">
         <ul class="correct-list">
-          <li v-for="(item,index) in unreadtasklist" :key="index" style="width:300px;margin:10px 0">
+          <li v-for="(item,index) in unreadtasklist" :key="'task'+index" style="width:300px;margin:10px 0">
             <div class="showdetail" @click="openModal('student_task_list', item.task_release_id)">
               <div class="correct-sjx" style="border-top:40px solid #1170FF"></div>
               <div class="correct-sjx-xz">任务</div>
@@ -41,7 +41,7 @@
             <span style="margin-left:20px">截止时间：{{moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')}}</span>
             <span style="margin-left:20px">提交人数：</span>
           </li>
-          <li v-for="(item,index) in unreadhomeworklist" :key="index" style="width:300px;margin:10px 0">
+          <li v-for="(item,index) in unreadhomeworklist" :key="'homework'+index" style="width:300px;margin:10px 0">
             <div class="showdetail" @click="openModal('student_homework_list', item.homework_release_id)">
               <div class="correct-sjx" style="border-top:40px solid #33CCCC"></div>
               <div class="correct-sjx-xz">作业</div>
@@ -56,7 +56,7 @@
             <span style="margin-left:20px">截止时间：{{moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')}}</span>
             <span style="margin-left:20px">提交人数：</span>
           </li>
-          <li v-for="(item,index) in unreadexamlist" :key="index" style="width:300px;margin:10px 0">
+          <li v-for="(item,index) in unreadexamlist" :key="'exam'+index" style="width:300px;margin:10px 0">
             <div class="showdetail" @click="openModal('student_exam_list', item.exam_release_id)">
               <div class="correct-sjx" style="border-top:40px solid #FF3333"></div>
               <div class="correct-sjx-xz">测试</div>
@@ -76,7 +76,7 @@
       <Tabs size="small" @on-click="changeType" class="correct-tab" value="task" v-if="correct_status===1">
         <TabPane label="任务" name="task">
           <ul class="correct-list">
-            <li v-for="(item,index) in tasklist" :key="index" style="width:300px;margin:10px 0">
+            <li v-for="(item,index) in tasklist" :key="'task'+index" style="width:300px;margin:10px 0">
               <div class="showdetail"  @click="openModal('student_task_list', item.task_release_id)">
                 <div class="correct-sjx" style="border-top:40px solid #1170FF"></div>
                 <div class="correct-sjx-xz">任务</div>
@@ -95,7 +95,7 @@
         </TabPane>
         <TabPane label="作业" name="homework">
           <ul class="correct-list">
-            <li v-for="(item,index) in homeworklist" :key="index" style="width:300px;margin:10px 0">
+            <li v-for="(item,index) in homeworklist" :key="'homework'+index" style="width:300px;margin:10px 0">
               <div class="showdetail" @click="openModal('student_homework_list', item.homework_release_id)">
                 <div class="correct-sjx" style="border-top:40px solid #33CCCC"></div>
                 <div class="correct-sjx-xz">作业</div>
@@ -114,7 +114,7 @@
         </TabPane>
         <TabPane label="测试" name="exam">
           <ul class="correct-list">
-            <li v-for="(item,index) in examlist" :key="index" style="width:20%;margin:10px 0">
+            <li v-for="(item,index) in examlist" :key="'exam'+index" style="width:20%;margin:10px 0">
               <div class="showdetail" @click="openModal('student_exam_list', item.exam_release_id)">
                 <div class="correct-sjx" style="border-top:40px solid #FF3333"></div>
                 <div class="correct-sjx-xz">测试</div>

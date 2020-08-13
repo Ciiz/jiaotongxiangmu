@@ -36,7 +36,8 @@ export default {
     return {
       student_task: {
         submit_content: ' ',
-        task: {}
+        task: {},
+        task_release: {}
       },
       info: '',
       loading: false

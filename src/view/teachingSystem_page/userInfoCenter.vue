@@ -87,11 +87,11 @@
         </Row>
         <FormItem label="推流地址" style="margin-bottom:0">
           <span ref="live_push_url">{{live_push_url}}</span>
-          <Button type="small" style="margin-left:10px;background:#0BA97E;outline:none;color:#ffffff;border-radius: 15px" @click="copyText()">复制</Button>
+          <Button size="small" style="margin-left:10px;background:#0BA97E;outline:none;color:#ffffff;border-radius: 15px" @click="copyText()">复制</Button>
         </FormItem>
         <FormItem label="摄像头地址">
           <span ref="live_push_url2">{{$store.state.user.userInfo.camera_url}}</span>
-          <Button type="small" style="margin-left:10px;background:#0BA97E;outline:none;color:#ffffff;border-radius: 15px" @click="copyText2()">复制</Button>
+          <Button size="small" style="margin-left:10px;background:#0BA97E;outline:none;color:#ffffff;border-radius: 15px" @click="copyText2()">复制</Button>
         </FormItem>
         <Button @click="submit()" style="width:82px;float:right;background:#3B9BFF;outline:none;color:#ffffff;border-radius: 15px;">修改</Button>
     </Form>

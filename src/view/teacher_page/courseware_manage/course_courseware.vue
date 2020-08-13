@@ -44,9 +44,6 @@ export default{
         if (res.code === 200) {
           this.loading = false
           this.teacher_course_list = res.data.course_list
-          if (this.teacher_course_list.length > 0) {
-            this.t_id = this.teacher_course_list[0].teacher_course_id
-          }
         }
       })
     }
