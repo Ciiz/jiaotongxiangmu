@@ -20,7 +20,7 @@
           <div style="border:1px solid #EEEEEE">
             <Row v-for="(item,index) in list" :key="index" style="color:#666666;font-size:14px;line-height:60px;text-align:center">
               <Col :span="1">{{index+1}}</Col>
-              <Col :span="8" v-if="target_type==='student_task_list'">
+              <Col :span="5" v-if="target_type==='student_task_list'">
                 <span v-if="release_type === 2">
                 <img :src="item.icon" style="margin:14px 0;vertical-align:middle;border-radius:50%;display:inline-block;width:32px;height:32px;margin-right:10px"/>
                   {{item.name}}
@@ -35,7 +35,8 @@
                 <span v-if="release_type === 1">小组{{item.team_id}}（组长：{{item.name}}）</span>
               </Col>
               <Col :span="6">学号：{{item.s_no}}</Col>
-              <Col :span="3">{{getexamstatus(item.exam_status)}}</Col>
+              <Col :span="3" v-if="target_type==='student_exam_list'">{{getexamstatus(item.exam_status)}}</Col>
+              <Col :span="3" v-else>{{item.submit_status===1?'已提交':'未提交'}}</Col>
               <Col :span="3">{{getscorestatus(item.score_status)}}</Col>
               <Col :span="3" v-if="target_type==='student_exam_list'">
                 <span v-if="item.total_score!==''">{{item.total_score}}分</span>
@@ -264,7 +265,7 @@ export default{
         })
       }
     },
-    updateCorrectStatus (val) {
+    updateCorrectStatus () {
       let t
       if (this.target_type === 'student_exam_list') {
         t = 'exam'

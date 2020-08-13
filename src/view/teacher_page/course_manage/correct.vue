@@ -195,9 +195,6 @@ export default {
     }
   },
   computed: {
-    uncorrct () {
-      return this.unreadhomeworklisttotal + this.unreadexamlisttotal + this.unreadtasklisttotal
-    },
     toCorrectType () {
       return this.$route.query.toCorrectType
     },
@@ -290,7 +287,6 @@ export default {
       }).then(res => {
         if (res.code === 200) {
           this.unreadtasklist = res.data.list
-          this.unreadtasklisttotal = res.data.count
         }
       })
       get_exam_release_list({
@@ -303,7 +299,6 @@ export default {
       }).then(res => {
         if (res.code === 200) {
           this.unreadexamlist = res.data.list
-          this.unreadexamlisttotal = res.data.count
         }
       })
       get_homework_release_list({
@@ -316,7 +311,6 @@ export default {
       }).then(res => {
         if (res.code === 200) {
           this.unreadhomeworklist = res.data.list
-          this.unreadhomeworklisttotal = res.data.count
         }
       })
       this.showCorrctList = false
