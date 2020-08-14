@@ -159,7 +159,7 @@ export default {
     },
     getData () {
       if (this.$store.state.user.userInfo.userType === 1) {
-        if (this.course_id !== '') {
+        if (this.course_id !== '' && this.course_id !== undefined) {
           course_chapter_class(this.course_id, this.teacher_course_id).then(res => {
             let data = res.data
             if (res.code === 200) {
@@ -167,7 +167,7 @@ export default {
             }
           })
         }
-        if (this.showAllCourseDetailCId !== '') {
+        if (this.showAllCourseDetailCId !== '' && this.showAllCourseDetailCId !== undefined) {
           course_chapter_class(this.showAllCourseDetailCId, this.teacher_course_id).then(res => {
             if (res.code === 200) {
               this.chapter_class_list = res.data.chapter_list
@@ -178,7 +178,7 @@ export default {
           })
         }
       } else if (this.$store.state.user.userInfo.userType === 2) {
-        if (this.course_id !== '') {
+        if (this.course_id !== '' && this.course_id !== undefined) {
           this.axios.request({
             method: 'get',
             url: '/home/course/getChapterClassList',
@@ -192,7 +192,7 @@ export default {
             }
           })
         }
-        if (this.showAllCourseDetailCId !== '') {
+        if (this.showAllCourseDetailCId !== '' && this.showAllCourseDetailCId !== undefined) {
           this.axios.request({
             url: '/home/course/getChapterClassList',
             params: {
