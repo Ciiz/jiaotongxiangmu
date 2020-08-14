@@ -193,6 +193,16 @@
   line-height: 0.97rem;
   border: 1px solid #3599FF;
 }
+.m-greenGray-btn{
+  background-color: #888888;
+  outline: none;
+  font-size: 0.3rem;
+  border: none;
+  width: 100%;
+  height: 0.97rem;
+  line-height: 0.97rem;
+  color: #FFFFFF;
+}
 .m-gray-btn-b{
   background-color: none;
   outline: none;

@@ -13,7 +13,7 @@
         </div>
         <div class="m-userCenter-sel-itemN">课件管理</div>
       </div>
-      <div @click="toRouter('')">
+      <div @click="toRouter('mobileCorrectIndex')">
         <div>
           <img src="@/assets/images/mobile_student/note.png"/>
         </div>
@@ -52,10 +52,10 @@
         <div>购买记录</div>
       </div>
       <div>
-          <div>
-            <img src="@/assets/images/mobile_student/school.png"/>
-          </div>
-          <div>我的学校</div>
+        <div>
+          <img src="@/assets/images/mobile_student/school.png"/>
+        </div>
+        <div>我的学校</div>
       </div>
       <div>
         <div>
@@ -70,10 +70,10 @@
         <div>代办事项</div>
       </div>
       <div @click="toRouter('')">
-          <div>
-            <img src="@/assets/images/mobile_student/attence.png"/>
-          </div>
-          <div>学生考勤</div>
+        <div>
+          <img src="@/assets/images/mobile_student/attence.png"/>
+        </div>
+        <div>学生考勤</div>
       </div>
       <div @click="toRouter('')">
         <div>
