@@ -549,3 +549,66 @@
 /* .m-exam-questionList>div p{
   margin: 0 0 0.2rem 0.2rem;
 } */
+
+.m-answerDetail-contain{
+  background-color: #F7F7F7;
+  flex: 1;
+}
+.m-answerDetail-bottom{
+  display: flex;
+  height: 0.98rem;
+  line-height: 0.98rem;
+}
+.m-answerDetail-bottom-btn{
+  width: 3.4rem;
+  background-color: #3699FF;
+  text-align: center;
+  font-size: 0.3rem;
+  color: #FFFFFF;
+}
+.m-answerDetail-bottom-icon{
+  flex: 1;
+  text-align: center;
+  color: #000000;
+  font-size: 0.64rem;
+}
+.m-answerDetail-content{
+  padding: 0.42rem 0.32rem;
+  font-size: 0.34rem;
+  color: #222222;
+  font-weight: bold;
+  word-break: break-all;
+}
+.m-answerDetail-student{
+  background-color: #ffffff;
+}
+.m-answerDetail-student-content{
+  padding: 0.44rem 0.32rem;
+}
+.m-answerDetail-student-content>div:nth-of-type(1){
+  color:#222222;
+  font-size:0.34rem;
+  font-weight:bold
+}
+.m-answerDetail-student-content>div:nth-of-type(2){
+  margin-top: 0.24rem;
+  color: #444444;
+  font-size: 0.32rem;
+  word-break: break-all;
+}
+.m-answerDetail-evaluate{
+  background-color: #ffffff;
+  margin-top: 0.5rem;
+  padding: 0.44rem 0.32rem;
+  font-size: 0.36rem;
+}
+.m-answerDetail-evaluate-t{
+  color: #222222;
+  font-size: 0.36rem;
+  font-weight: bold;
+}
+.m-answerDetail-evaluate [type='number']{
+  border: none;
+  outline: none;
+  text-align: center;
+}

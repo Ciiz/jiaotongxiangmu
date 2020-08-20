@@ -138,15 +138,6 @@ const indexRouter = [
           keepAlive: true
         },
         component: () => import('@/view/pages/course.vue')
-      },
-      {
-        path: 'live',
-        name: 'live',
-        meta: {
-          title: '直播',
-          hideInMenu: false
-        },
-        component: () => import('@/view/pages/live.vue')
       }
     ]
   },
@@ -678,6 +669,22 @@ const mobileStudent = [
       hideInMenu: true
     },
     component: () => import('@/view/mobile_page/show/view/userCenter/teacher/correct/correctDetail.vue')
+  },
+  {
+    path: '/mobileHomeworkEvaluate',
+    name: 'mobileHomeworkEvaluate',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/correct/homework_evaluate.vue')
+  },
+  {
+    path: '/mobileTaskEvaluate',
+    name: 'mobileTaskEvaluate',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/correct/task_evaluate.vue')
   },
   {
     path: '/mobileCorrectStudent',

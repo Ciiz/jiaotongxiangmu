@@ -13,19 +13,32 @@
       <mt-tab-item id="D">不及格</mt-tab-item>
     </mt-navbar>
     <div class="m-correct-student-contain hideScroll">
-      <div v-for="(item,index) in studentList" :key="index" class="m-correct-student-item">
+      <div v-for="(item,index) in studentList" :key="index" class="m-correct-student-item" @click="toLink(index)">
         <div>
           <img :src="item.icon" />
         </div>
         <div>
           <div class="m-correct-student-name">{{item.name}}</div>
           <div v-if="type==='exam'">{{getexamstatus(item.exam_status)}}</div>
-          <div v-else>{{item.submit_status===1?'已提交':'未提交'}}</div>
+          <div v-else>
+            <span v-if="item.submit_status===1" style="color:#16C2AA">已提交</span>
+            <span v-else>未提交</span>
+          </div>
         </div>
         <div style="flex:1;margin-top:0.04rem">
           <div>学号：{{item.s_no}}</div>
-          <div v-if="type==='exam'">{{item.total_score===''?'未评分':item.total_score+"分"}}</div>
-          <div v-else>{{item.user_score===''?'未评分':item.user_score+"分"}}</div>
+          <div v-if="type==='exam'">
+            <span v-if="item.total_score===''">未评分</span>
+            <span v-else>
+              成绩：<span style="color:#3C9BFF">{{item.total_score}}</span>分
+            </span>
+          </div>
+          <div v-else>
+            <span v-if="item.user_score===''">未评分</span>
+            <span v-else>
+              成绩：<span style="color:#3C9BFF">{{item.user_score}}</span>分
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -47,7 +60,8 @@ export default {
       studentList: [],
       correct_status: '',
       has_correct: '',
-      no_correct: ''
+      no_correct: '',
+      ids: []
     }
   },
   watch: {
@@ -68,6 +82,7 @@ export default {
       window.history.go(-1)
     },
     getData () {
+      this.ids = []
       if (this.type === 'exam') {
         Indicator.open()
         this.axios.request({
@@ -80,6 +95,9 @@ export default {
         }).then(res => {
           if (res.code === 200) {
             this.studentList = res.data.list
+            for (let i = 0; i < res.data.list.length; i++) {
+              this.ids.push(res.data.list[i].id)
+            }
             this.correct_status = res.data.correct_status
             this.has_correct = res.data.exam_info.has_correct
             this.no_correct = res.data.exam_info.no_correct
@@ -98,6 +116,9 @@ export default {
         }).then(res => {
           if (res.code === 200) {
             this.studentList = res.data.list
+            for (let i = 0; i < res.data.list.length; i++) {
+              this.ids.push(res.data.list[i].id)
+            }
             this.correct_status = res.data.correct_status
             this.has_correct = res.data.task_info.has_correct
             this.no_correct = res.data.task_info.no_correct
@@ -116,6 +137,9 @@ export default {
         }).then(res => {
           if (res.code === 200) {
             this.studentList = res.data.list
+            for (let i = 0; i < res.data.list.length; i++) {
+              this.ids.push(res.data.list[i].id)
+            }
             this.correct_status = res.data.correct_status
             this.has_correct = res.data.homework_info.has_correct
             this.no_correct = res.data.homework_info.no_correct
@@ -150,6 +174,15 @@ export default {
       }
       if (i === 4) {
         return '已逾期'
+      }
+    },
+    toLink (index) {
+      if (this.type === 'exam') {
+
+      } else if (this.type === 'task') {
+        this.$router.push({ name: 'mobileTaskEvaluate', query: { listIndex: index, ids: this.ids } })
+      } else {
+        this.$router.push({ name: 'mobileHomeworkEvaluate', query: { listIndex: index, ids: this.ids } })
       }
     }
   },
