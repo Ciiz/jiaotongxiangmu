@@ -17,10 +17,11 @@
       <div class="m-answerDetail-evaluate">
         <div v-for="score_item in score_option" :key="score_item.index">
           <span class="m-answerDetail-evaluate-t">评分：</span>
-          <input type="number" placeholder="请输入分数" :label="score_item.option_name" v-model="score_item.score"/>
+          <input type="number" placeholder="请输入分数" :label="score_item.option_name" v-model="score_item.score" />
         </div>
         <div class="m-answerDetail-evaluate-t" style="margin:0.1rem 0">评语：</div>
-        <Input type="textarea" class="homework-evaluate-textarea" :rows="4" v-model="evaluation" placeholder="对学生的评价："></Input>
+        <Input type="textarea" class="homework-evaluate-textarea" :rows="4" v-model="evaluation"
+          placeholder="对学生的评价："></Input>
       </div>
     </div>
     <div class="m-answerDetail-bottom">

@@ -7,6 +7,7 @@
     </mt-header>
     <div class="m-coursewareInfo-contain hideScroll" style="background:#ffffff">
       <div class="m-coursewareInfo-title">{{sort}} {{courseware_name}}</div>
+
       <div class="m-coursewareInfo-class">
         <div class="m-coursewareInfo-class-h">已绑定班级</div>
         <div v-for="(item,index) in class_list" :key="index" class="m-coursewareInfo-class-item">
@@ -55,6 +56,7 @@ export default {
     },
     getOptions () {
       this.options = []
+      // 去重
       for (let i = 0; i < this.class_list.length; i++) {
         let item = {}
         item.value = this.class_list[i].class_id

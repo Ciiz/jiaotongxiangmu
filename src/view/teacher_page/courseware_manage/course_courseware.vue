@@ -24,6 +24,7 @@ export default{
       this.getTeacherCourseList()
     }
   },
+  // 从vuex仓库获取数据，用computed来监听，可以避免刷新页面时候的异步时间差问题
   computed: {
     t_id () {
       return this.$store.state.user.courseData.teacher_course_id

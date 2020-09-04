@@ -54,3 +54,86 @@ export const getMessage = () => {
     method: 'get'
   })
 }
+// 获取单个教师信息
+export const teacher_message = (teacher_id) => {
+  return axios.request({
+    url: '/Teacher/User/teacher_message',
+    method: 'get',
+    params: {
+      teacher_id
+    }
+  })
+}
+// 获取教师个人信息
+export const teacher_userinfo = () => {
+  return axios.request({
+    url: '/index.php/Teacher/User/info',
+    method: 'get'
+
+  })
+}
+// 修改个人信息
+export const update_info = ({ mobile, alipay_account, sex, email, icon }) => {
+  return axios.request({
+    url: '/index.php/Teacher/User/update_info',
+    method: 'post',
+    data: {
+      mobile,
+      alipay_account,
+      sex,
+      email,
+      icon
+    }
+  })
+}
+// 获取购买记录
+export const get_record = ({ status, page, pagesize }) => {
+  return axios.request({
+    url: '/home/order/index',
+    method: 'post',
+    data: {
+      status,
+      page,
+      pagesize
+    }
+
+  })
+}
+// 获取关注教师列表
+export const get_TeacherAttention = () => {
+  return axios.request({
+    url: '/Teacher/TeacherAttention/index',
+    method: 'get'
+  })
+}
+// 取消教师关注
+export const unfollow_Attention = (id) => {
+  return axios.request({
+    url: '/Teacher/TeacherAttention/unfollow',
+    method: 'get',
+    params: {
+      id
+    }
+  })
+}
+// 获取我关注的课程（教师、学生、校外人员通用）(喜欢)
+export const getMyCourseAttention = ({ page, pagesize }) => {
+  return axios.request({
+    url: '/home/course/getMyCourseAttention',
+    method: 'post',
+    data: {
+      page,
+      pagesize
+    }
+  })
+}
+// 解除微信绑定
+export const updateUserWechatId = ({ id }) => {
+  return axios.request({
+    url: 'home/wechat/updateUserWechatId',
+    method: 'post',
+    data: {
+      id
+    }
+  })
+}

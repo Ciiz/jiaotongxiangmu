@@ -18,15 +18,23 @@ export default {
     unreadCount: 0,
     unreadCount_teacher: 0, // 教师未读消息
     coursework_step: true, // 教师->课件管理新手引导 true：首次进入显示, false：不显示
-    userInfo: {},
+    userInfo: {
+
+    },
+    userInfo_icon: '',
     messageList: [],
     courseData: [],
     bindType: 0,
     currentTab: ''
   },
+  // 同步操作
   mutations: {
     setAvatar (state, avatarPath) {
       state.avatarImgPath = avatarPath
+    },
+    userInfo_icon (state, userInfo_icon) {
+      console.log(userInfo_icon)
+      state.userInfo.icon = userInfo_icon
     },
     setUserId (state, id) {
       state.userId = id
@@ -68,6 +76,7 @@ export default {
   },
   getters: {
   },
+  // 异步操作
   actions: {
     // 登录
     handleLogin ({ commit }, { userName, password, user_type, school }) {

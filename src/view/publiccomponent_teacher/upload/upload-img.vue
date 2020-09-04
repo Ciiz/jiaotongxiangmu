@@ -1,33 +1,20 @@
 <template>
-    <div>
-        <Upload
-          :ref="upload_file"
-          :format="format"
-          :max-size="maxsize"
-          name='file'
-          style="display:inline-block;"
-          :action="action_url"
-          :on-success="success"
-          :on-error="error"
-          :before-upload="beforeupload"
-          :on-remove="onremove"
-          :on-format-error="formaterror"
-          :on-exceeded-size="exceededsize"
-          :show-upload-list="showlist"
-          :data="data_type"
-        >
-            <div v-if="imgsrc !== '' && krpano === false">
-              <img :src="imgsrc" width="100"  />
-            </div>
-            <div v-else-if="imgsrc === '' && krpano === false">
-              <Button icon="ios-cloud-upload-outline">{{btnname}}</Button>
-            </div>
-            <div v-else-if="krpano === true">
-              <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-              <p>{{btnname}}（支持拖拽上传或者点击选择文件上传）</p>
-            </div>
-        </Upload>
-    </div>
+  <div>
+    <Upload :ref="upload_file" :format="format" :max-size="maxsize" name='file' style="display:inline-block;"
+      :action="action_url" :on-success="success" :on-error="error" :before-upload="beforeupload" :on-remove="onremove"
+      :on-format-error="formaterror" :on-exceeded-size="exceededsize" :show-upload-list="showlist" :data="data_type">
+      <div v-if="imgsrc !== '' && krpano === false">
+        <img :src="imgsrc" width="100" />
+      </div>
+      <div v-else-if="imgsrc === '' && krpano === false">
+        <Button icon="ios-cloud-upload-outline">{{btnname}}</Button>
+      </div>
+      <div v-else-if="krpano === true">
+        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+        <p>{{btnname}}（支持拖拽上传或者点击选择文件上传）</p>
+      </div>
+    </Upload>
+  </div>
 </template>
 <script>
 import upload_mixin from '_c/mixins/upload_mixin'

@@ -1,0 +1,19 @@
+{
+  // 配置 @ 路径
+  "compilerOptions": {
+    "target": "esnext", // define to your liking
+    "baseUrl": "./", // 根路径
+    // 配置
+    "paths": {
+      "@/*": [
+        "src/"
+      ],
+      "@views*": [
+        "src/views/"
+      ],
+    }
+  },
+  "exclude": [
+    "node_modules"
+  ] // Optional
+}

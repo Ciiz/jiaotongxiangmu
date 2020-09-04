@@ -9,6 +9,7 @@ import { setToken, getToken, canTurnTo, setTitle } from '@/libs/util'
 Vue.use(Router)
 const router = new Router({
   routes,
+  linkActiveClass: 'personal_active',
   mode: 'hash'
 })
 const LOGIN_PAGE_NAME = 'index'
@@ -20,11 +21,15 @@ const turnTo = (to, access, next) => {
 
 router.beforeEach((to, from, next) => {
   if (to.name === 'news' || to.path === '/news' ||
-  to.name === 'live_public' || to.path === '/live_public' ||
-  to.name === 'live_online' || to.path === '/live_online' ||
-  to.name === 'online_qrcode' || to.path === '/online_qrcode' ||
-  to.name === 'entry' || to.path === '/entry' ||
-  to.name === 'mobileLogin' || to.path === '/mobileLogin') {
+    to.name === 'schoolyard' || to.path === '/schoolyard' ||
+    to.name === 'partner' || to.path === '/partner' ||
+    to.name === 'team' || to.path === '/team' ||
+    to.name === 'index' || to.path === '/index' ||
+    to.name === 'live_public' || to.path === '/live_public' ||
+    to.name === 'live_online' || to.path === '/live_online' ||
+    to.name === 'online_qrcode' || to.path === '/online_qrcode' ||
+    to.name === 'entry' || to.path === '/entry' ||
+    to.name === 'mobileLogin' || to.path === '/mobileLogin') {
     next()
   } else {
     iView.LoadingBar.start()

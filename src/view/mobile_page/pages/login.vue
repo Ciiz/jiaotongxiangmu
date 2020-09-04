@@ -12,9 +12,11 @@
       </div>
       <mt-field class="loginfield" placeholder="请输入您的工号" disableClear v-model="username"></mt-field>
       <div style="position:relative">
-        <mt-field class="loginfield" placeholder="请输入您的密码" :type="showPassword===true?'text':'password'" disableClear v-model="password"></mt-field>
+        <mt-field class="loginfield" placeholder="请输入您的密码" :type="showPassword===true?'text':'password'" disableClear
+          v-model="password"></mt-field>
         <img src="@/assets/images/mobile_student/showPassword.png" v-show="!showPassword" @click="showPassword=true">
-        <img src="@/assets/images/mobile_student/unshowPassword.png" v-show="showPassword" @click="showPassword=false"/>
+        <img src="@/assets/images/mobile_student/unshowPassword.png" v-show="showPassword"
+          @click="showPassword=false" />
       </div>
       <div style="margin-top:1.2rem">
         <button class="login-btn" @click="handleSubmit">立即登录</button>
@@ -25,14 +27,15 @@
       <img src="@/assets/images/mobile_student/wechat.jpg" />
     </div>
     <div id="peopleChorseT" @click="openQuestionType"></div>
-     <mt-popup v-model="popupVisible" v-if="popupVisible===true" popup-transition="popup-fade" closeOnClickModal="true" position="bottom" style="width:100%">
-        <mt-picker :slots="schoolList" @change="onValuesChange" valueKey="school_name" showToolbar>
-          <div class="picker-toolbar-title">
-            <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
-            <div class="">请选择所在学校</div>
-            <div class="usi-btn-sure" @click="popupOk()">确定</div>
-          </div>
-        </mt-picker>
+    <mt-popup v-model="popupVisible" v-if="popupVisible===true" popup-transition="popup-fade" closeOnClickModal="true"
+      position="bottom" style="width:100%">
+      <mt-picker :slots="schoolList" @change="onValuesChange" valueKey="school_name" showToolbar>
+        <div class="picker-toolbar-title">
+          <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
+          <div class="">请选择所在学校</div>
+          <div class="usi-btn-sure" @click="popupOk()">确定</div>
+        </div>
+      </mt-picker>
     </mt-popup>
   </div>
 </template>

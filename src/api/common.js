@@ -26,6 +26,24 @@ export const get_course_table = (teacher_course_id, year, semester, class_id = '
     method: 'get'
   })
 }
+// 教师推荐
+export const get_recommend = () => {
+  return axios.request({
+    url: '/home/index/recommendTeacher',
+    method: 'get'
+    // params: {}
+  })
+}
+
+// 课程推荐
+
+export const get_Course = () => {
+  return axios.request({
+    url: '/home/index/recommendCourse',
+    method: 'get'
+    // params: {}
+  })
+}
 
 export const get_banners = ({ path }) => {
   return axios.request({
@@ -34,6 +52,7 @@ export const get_banners = ({ path }) => {
     method: 'get'
   })
 }
+// 这个是没有登陆的时候
 export const get_bannersIndex = ({ path }) => {
   return axios.request({
     url: '/home/index/getBanner',

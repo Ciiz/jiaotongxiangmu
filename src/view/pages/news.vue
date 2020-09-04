@@ -2,103 +2,87 @@
   <div>
 
     <Row style="background: #424242;">
-      <Col :span="14" :offset='5' >
-        <swiper :options="swiperOption" ref="mySwiper">
-          <!-- slides -->
-          <swiper-slide v-for="banner in banner_list" :key="banner.id" class="swiper-slide-news">
-            <!-- <div class="slide-item" @click="openBanner(banner)"> -->
-            <div class="slide-item">
-              <img :src="banner.img" alt="">
-              <div class="content">
-                <h2>{{banner.title}}</h2>
-                <p>{{banner.desc}}</p>
-              </div>
+      <Col :span="14" :offset='5'>
+      <swiper :options="swiperOption" ref="mySwiper">
+        <!-- slides -->
+        <swiper-slide v-for="banner in banner_list" :key="banner.id" class="swiper-slide-news">
+          <!-- <div class="slide-item" @click="openBanner(banner)"> -->
+          <div class="slide-item">
+            <img :src="banner.img" alt="">
+            <div class="content">
+              <h2>{{banner.title}}</h2>
+              <p>{{banner.desc}}</p>
             </div>
-          </swiper-slide>
-          <!-- Optional controls -->
-          <div class="swiper-pagination"  slot="pagination"></div>
-          <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
-          <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
-        </swiper>
+          </div>
+        </swiper-slide>
+        <!-- Optional controls -->
+        <div class="swiper-pagination" slot="pagination"></div>
+        <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
+        <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
+      </swiper>
       </Col>
     </Row>
 
     <Row>
-      <Col :span="9" :offset="5"  style="margin-right: 10px;">
-        <div class="newsContain">
-          <h2>校内资讯</h2>
-          <div class="newsList">
-            <Spin v-show="loading" fix></Spin>
-            <Tabs value="0" @on-click="changeType">
-              <TabPane label="新闻" name="0">
-                <ul class="news-list">
-                  <li
-                    v-for="(item) in newsList"
-                    :key="item.id"
-                    @click="showContent(item.id)"
-                    class="news-item"
-                  >
-                    <div class="img">
-                      <div v-if="item.cover!==''">
-                        <img :src="item.cover" />
-                      </div>
-                    </div>
-                    <div class="news-item-content">
-                      <h3>{{item.title}}</h3>
-                      <p class="desc">{{item.describe}}</p>
-                      <div class="desc">
-                        <span><Icon type="md-calendar"  class="desc-ico"/>{{getDate(item.created_at)}}</span>
-                        <span style="float:right">
-                          <Icon type="md-eye" :size="16" class="desc-ico" />{{item.views}}
-                        </span>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </TabPane>
-              <TabPane label="公告" name="1">
-                <ul class="news-list">
-                  <li
-                    v-for="(item) in newsList"
-                    :key="item.id"
-                    @click="showContent(item.id)"
-                    class="news-item"
-                  >
-                    <div class="img">
+      <Col :span="9" :offset="5" style="margin-right: 10px;">
+      <div class="newsContain">
+        <h2>校内资讯</h2>
+        <div class="newsList">
+          <Spin v-show="loading" fix></Spin>
+          <Tabs value="0" @on-click="changeType">
+            <TabPane label="新闻" name="0">
+              <ul class="news-list">
+                <li v-for="(item) in newsList" :key="item.id" @click="showContent(item.id)" class="news-item">
+                  <div class="img">
+                    <div v-if="item.cover!==''">
                       <img :src="item.cover" />
                     </div>
-                    <div class="news-item-content">
-                      <h3>{{item.title}}</h3>
-                      <p class="desc">{{item.describe}}</p>
-                      <div class="desc">
-                        <span><Icon type="md-calendar" class="desc-ico" />{{getDate(item.created_at)}}</span>
-                        <span style="float:right">
-                          <Icon type="md-eye" :size="16" class="desc-ico" />{{item.views}}
-                        </span>
-                      </div>
+                  </div>
+                  <div class="news-item-content">
+                    <h3>{{item.title}}</h3>
+                    <p class="desc">{{item.describe}}</p>
+                    <div class="desc">
+                      <span>
+                        <Icon type="md-calendar" class="desc-ico" />{{getDate(item.created_at)}}</span>
+                      <span style="float:right">
+                        <Icon type="md-eye" :size="16" class="desc-ico" />{{item.views}}
+                      </span>
                     </div>
-                  </li>
-                </ul>
-              </TabPane>
-            </Tabs>
-          </div>
-          <Page
-            :total="this.total"
-            :page-size="this.page_size"
-            :current="this.page"
-            @on-change="changePage"
-            @on-page-size-change="changeSize"
-            show-sizer
-            size="small"
-            show-total
-            style="text-align:center;margin:0 0 10px 0"
-          />
+                  </div>
+                </li>
+              </ul>
+            </TabPane>
+            <TabPane label="公告" name="1">
+              <ul class="news-list">
+                <li v-for="(item) in newsList" :key="item.id" @click="showContent(item.id)" class="news-item">
+                  <div class="img">
+                    <img :src="item.cover" />
+                  </div>
+                  <div class="news-item-content">
+                    <h3>{{item.title}}</h3>
+                    <p class="desc">{{item.describe}}</p>
+                    <div class="desc">
+                      <span>
+                        <Icon type="md-calendar" class="desc-ico" />{{getDate(item.created_at)}}</span>
+                      <span style="float:right">
+                        <Icon type="md-eye" :size="16" class="desc-ico" />{{item.views}}
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </TabPane>
+          </Tabs>
         </div>
+        <Page :total="this.total" :page-size="this.page_size" :current="this.page" @on-change="changePage"
+          @on-page-size-change="changeSize" show-sizer size="small" show-total
+          style="text-align:center;margin:0 0 10px 0" />
+      </div>
       </Col>
-      <Col :span="5" >
-        <div  class="newsContain">
-          <h2>最新资讯</h2>
-          <div class="newsList">
+      <Col :span="5">
+      <div class="newsContain">
+        <h2>最新资讯</h2>
+        <div class="newsList">
           <Tabs value="0" @on-click="changeType2">
             <TabPane label="新闻" name="0">
               <ul>
@@ -123,7 +107,7 @@
           </Tabs>
           <Spin v-show="loading2" fix></Spin>
         </div>
-        </div>
+      </div>
       </Col>
     </Row>
     <Modal v-model="modal" :title="title" width="1000" footer-hide :mask-closable="false">
@@ -287,131 +271,134 @@ export default {
 }
 </script>
 <style lang="less">
-  .newsContain {
-    min-height: 522px;
-    background: #fff;
-    padding: 10px;
-  }
-  .showImg {
-    width: 60px;
-    margin-right: 20px;
-  }
-  .newsTitle {
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  .Sdes {
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1;
-  }
-  .Sfr {
-    width: 75px;
-    float: right;
-  }
+.newsContain {
+  min-height: 522px;
+  background: #fff;
+  padding: 10px;
+}
+.showImg {
+  width: 60px;
+  margin-right: 20px;
+}
+.newsTitle {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+}
+.Sdes {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+.Sfr {
+  width: 75px;
+  float: right;
+}
 
-  .news-item {
-    cursor: pointer;
-    margin: 5px;
-    position: relative;
-    padding: 8px;
-    display: flex;
+.news-item {
+  cursor: pointer;
+  margin: 5px;
+  position: relative;
+  padding: 8px;
+  display: flex;
+  transition: all 0.1s;
+  &:hover {
+    color: #1586b1;
     transition: all 0.1s;
-    &:hover {
-      color: #1586b1;
-      transition: all 0.1s;
-      img{
-        transform: scale(1.2);
-      }
+    img {
+      transform: scale(1.2);
     }
-    .img {
-      width: 100px;
-      overflow: hidden;
-      display: inline-block;
-      height: 70px;
-      img {
-        transition: all 0.1s;
-        width: 100%;
-      }
-    }
-    .news-item-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      flex: 1;
-      margin-left: 10px;
-      .desc {
-        color: #999;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        word-wrap: break-word;
-        word-break: break-all;
-        .desc-ico{
-          line-height: 15px;
-          margin-right: 5px;
-        }
-      }
-    }
-
-    // ::after {
-    //   content: "";
-    //   position: absolute;
-    //   bottom: 0;
-    //   left: 120px;
-    //   background: #000;
-    //   width: 100%;
-    //   height: 1px;
-    //   background: #ccc;
-    //   transform: scaleY(0.5);
-    // }
   }
-
-  .swiper-slide-news{
-    width: auto;
-  }
-  .slide-item{
-    height: 300px;
+  .img {
+    width: 100px;
     overflow: hidden;
-    cursor: pointer;
-    margin:5px;
-    position:relative;
-    .content{
-      position: absolute;
-      bottom: 0;
+    display: inline-block;
+    height: 70px;
+    img {
+      transition: all 0.1s;
       width: 100%;
-      padding: 10px;
-      color: #fff;
-      background-image: linear-gradient(to top, rgba(0,0,0,1), rgba(255,255,255,0));
-    }
-    &:hover{
-      box-shadow: 1px 1px 9px #222;
-    }
-    img{
-      height: 100%;
     }
   }
-  .Sdes{
-      display:inline-block;
-      overflow:hidden;
+  .news-item-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 1;
+    margin-left: 10px;
+    .desc {
+      color: #999;
+      overflow: hidden;
       text-overflow: ellipsis;
-      white-space:nowrap;
-      flex:1;
-      cursor: pointer;
-      &:hover{
-        color: #1586b1
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      word-wrap: break-word;
+      word-break: break-all;
+      .desc-ico {
+        line-height: 15px;
+        margin-right: 5px;
       }
     }
-  .schoolnews-item{
-    margin: 15px 0;
-    // border-bottom: 1px solid #e8eaec
   }
-  .swiper-btn{
 
+  // ::after {
+  //   content: "";
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 120px;
+  //   background: #000;
+  //   width: 100%;
+  //   height: 1px;
+  //   background: #ccc;
+  //   transform: scaleY(0.5);
+  // }
+}
+
+.swiper-slide-news {
+  width: auto;
+}
+.slide-item {
+  height: 300px;
+  overflow: hidden;
+  cursor: pointer;
+  margin: 5px;
+  position: relative;
+  .content {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    color: #fff;
+    background-image: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 1),
+      rgba(255, 255, 255, 0)
+    );
   }
+  &:hover {
+    box-shadow: 1px 1px 9px #222;
+  }
+  img {
+    height: 100%;
+  }
+}
+.Sdes {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  cursor: pointer;
+  &:hover {
+    color: #1586b1;
+  }
+}
+.schoolnews-item {
+  margin: 15px 0;
+  // border-bottom: 1px solid #e8eaec
+}
+.swiper-btn {
+}
 </style>

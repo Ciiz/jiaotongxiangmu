@@ -1,14 +1,15 @@
 <template>
   <div style="display:inline-block;margin-left:24px">
     <Dropdown @on-click="handleClick">
-        <span class="ivu-avatar ivu-avatar-circle ivu-avatar-default ivu-avatar-image"  style="width:48px;height:48px;border-radius:50%">
-          <img :src="userAvatar" alt="" :onerror="errorImg01">
-        </span>
+      <span class="ivu-avatar ivu-avatar-circle ivu-avatar-default ivu-avatar-image"
+        style="width:48px;height:48px;border-radius:50%">
+        <img :src="userAvatar" alt="" :onerror="errorImg01">
+      </span>
       <Icon :size="18" type="md-arrow-dropdown" style="color: #fff;"></Icon>
       <DropdownMenu slot="list">
         <DropdownItem name="" @click.native="entrySystem">教务系统</DropdownItem>
-        <DropdownItem name="">我的关注</DropdownItem>
-        <DropdownItem name="">个人中心</DropdownItem>
+        <DropdownItem name="" @click.native="my_attention">我的关注</DropdownItem>
+        <DropdownItem name="" @click.native="personal">个人中心</DropdownItem>
         <DropdownItem name="logout">注销登录</DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -75,9 +76,9 @@ export default {
         this.$router.push({
           name: 'index'
         })
-      //   }
-      // }).catch(err => {
-      //   console.log(err)
+        //   }
+        // }).catch(err => {
+        //   console.log(err)
       })
     },
     message () {
@@ -103,6 +104,22 @@ export default {
       localStorage.setItem('etoTheme', theme)
       location.reload()
     },
+    // 个人中心页面跳转
+    personal () {
+      if (this.userType === 1) {
+        this.$router.push({ path: '/personal' })
+      } else {
+
+      }
+    },
+    // 我的关注页面跳转
+    my_attention () {
+      if (this.userType === 1) {
+        this.$router.push({ path: '/personal/attention' })
+      } else {
+
+      }
+    },
     entrySystem () {
       if (this.userType === 1) {
         this.$router.push({ path: '/teachingSystem/MyCourse/course_courseware' })
@@ -116,7 +133,7 @@ export default {
 <style lang="less" scoped>
 .theme-container {
   display: flex;
-  .theme-item{
+  .theme-item {
     width: 50px;
     height: 50px;
   }

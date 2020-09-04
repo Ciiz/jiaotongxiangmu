@@ -7,7 +7,7 @@
         :title="item.title"
         :value="item.value"
         :key="index"
-        placeholder="搜索">
+        placeholder="搜索课程、教师、院校">
       </mt-cell>
     </mt-search>
   </div>

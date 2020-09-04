@@ -57,6 +57,7 @@ export default {
     get_banners (path) {
       get_bannersIndex({ path: path }).then(res => {
         if (res.code === 200) {
+          // 只要dom或者数据发生变化完成之后才会执行你定义的this.$nextTick方法
           this.$nextTick(function () {
             this.banner_list = res.data.list
           })

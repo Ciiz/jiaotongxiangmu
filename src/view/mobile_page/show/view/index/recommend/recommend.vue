@@ -26,12 +26,19 @@
         <div>问题讨论</div>
       </div>
     </div>
-    <div></div>
+    <div class="recommendTeacher">
+  <div class="recommendTeacher-header">
+    <div class="recommendTeacher-header-left">教师推荐</div>
+    <div class="recommendTeacher-header-right">更多</div>
+  </div>
+  <div class="recommendTeacher-center"></div>
+  <div class="recommendTeacher-footer"></div>
+    </div>
     <div></div>
   </div>
 </template>
 <script>
-
+import { recommendTeacher } from '@/api/common'
 export default {
   data () {
     return {
@@ -42,9 +49,12 @@ export default {
 
   },
   mounted () {
+    recommendTeacher().then(res => {
+      console.log()
+    })
   }
 }
 </script>
-<style>
+<style lang='less' scoped>
 
 </style>

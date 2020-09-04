@@ -11,10 +11,12 @@
         <li class="tab-contain">
           <ul class="main-tab">
             <li>
-               <span style="margin-right:10px" class="ivu-avatar ivu-avatar-circle ivu-avatar-default ivu-avatar-image new-avatar">
-                 <img :src="userAvatar" alt="" :onerror="errorImg01">
-               </span>
-               <span class="header-username">{{$store.state.user.userInfo.name}}&nbsp;{{$store.state.user.userInfo.userType === 1 ? '老师' : '同学'}}</span>
+              <span style="margin-right:10px"
+                class="ivu-avatar ivu-avatar-circle ivu-avatar-default ivu-avatar-image new-avatar">
+                <img :src="userAvatar" alt="" :onerror="errorImg01">
+              </span>
+              <span
+                class="header-username">{{$store.state.user.userInfo.name}}&nbsp;{{$store.state.user.userInfo.userType === 1 ? '老师' : '同学'}}</span>
             </li>
             <li @click="returnHome" style="cursor:pointer">
               <img src="@/assets/images/teachingSystem/backhome.png" alt="" :onerror="errorImg01">
@@ -33,11 +35,13 @@
         <div class="sjx-t2"></div>
         <li class="menu-l">
           <ul class="menu-l-tab">
-            <router-link v-if="userType===1" v-for="(item) in teacher_tab" :key="item.title" :to="{path: item.path}" active-class="allTab-active" class="menuTabtitle" @click.native="changeTab($event)">
+            <router-link v-if="userType===1" v-for="(item) in teacher_tab" :key="item.title" :to="{path: item.path}"
+              active-class="allTab-active" class="menuTabtitle" @click.native="changeTab($event)">
               <img :src="item.imgsrc">
               <span>{{item.title}}</span>
             </router-link>
-            <router-link v-if="userType===2" v-for="(item) in student_tab" :key="item.title" :to="{path: item.path}" active-class="allTab-active" class="menuTabtitle" @click.native="changeTab($event)">
+            <router-link v-if="userType===2" v-for="(item) in student_tab" :key="item.title" :to="{path: item.path}"
+              active-class="allTab-active" class="menuTabtitle" @click.native="changeTab($event)">
               <img :src="item.imgsrc">
               <span>{{item.title}}</span>
             </router-link>
@@ -61,426 +65,464 @@
       </ul>
     </Header>
     <div style="clear:both"></div>
-      <Layout style="height:100%;background:#2E3640;margin-left:4px;position:relative">
-        <div class="infoModal-full" @click="closeInfoCenter($event)">
-          <div class="infoModal">
-            <Spin v-if="infoloading" fix></Spin>
-            <div class="infoModal-l">
-              <div class="infoModal-l-header" v-if="userType===1">
-                <Icon type="ios-search" :size="24" style="right:96px" v-if="infoCenter==='people'"/>
-                <input type="text" v-if="infoCenter==='people'"/>
-                <Icon type="ios-search" :size="24" v-if="infoCenter==='system'"/>
-                <input type="text" v-if="infoCenter==='system'" style="width:254px"/>
-                <button class="blueC-btn" v-if="infoCenter==='people'" @click="showAddDiscuss">添加话题</button>
-              </div>
-              <div class="infoModal-l-list" v-if="infoCenter==='people'">
-                <Row type="flex" v-for="(item,index) in chatList" v-if="item.delete_status===1" :key="index+'chatList'" class="infoModal-l-list-l" @click.native="selectCurrentInfo($event,item)">
-                  <Col>
-                  <Badge :offset=[-4,6] :count="item.unread">
-                    <img v-if="item.table_type===2" :src="item.userInfo.icon" style="width:44px;height:44px;border-radius:5px;margin-right:10px" />
-                    <img v-if="item.table_type===1||item.table_type===3" :src="item.icon" style="width:44px;height:44px;border-radius:5px;margin-right:10px" />
-                  </Badge>
-                  </Col>
-                  <Col style="flex:1">
-                    <Row type="flex" justify="space-between">
-                      <Col class="infoModal-title" v-if="item.table_type===2">{{item.userInfo.name}}<span v-if="userType === 1&&item.title===undefined">({{item.userInfo.class_name}})</span></Col>
-                      <Col class="infoModal-title" v-if="item.table_type===3">{{item.title}}</Col>
-                      <Col class="infoModal-title" v-if="item.table_type===1">{{item.task_name}}</Col>
-                      <Col class="infoModal-time">{{moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm')}}</Col>
-                    </Row>
-                    <Row style="margin-top:5px">
-                      <Col class="infoModal-content">{{item.content}}</Col>
-                    </Row>
-                    <Icon type="md-close" size="20" class="infoModal-content-md-close" @click="showDeleteDiscuss(item)"/>
-                  </Col>
-                </Row>
-              </div>
-              <div class="infoModal-l-list" v-if="infoCenter==='system'">
-                <Row type="flex" class="infoModal-l-list-l" @click.native="selectCurrentSystem2($event)">
-                  <Col>
-                    <Badge :offset=[-4,6] :count="system_unread">
-                      <img src="@/assets/images/teachingSystem/systeminfo.png" style="margin-right:10px;width:44px"/>
-                    </Badge>
-                  </Col>
-                  <Col style="flex:1">
-                    <Row type="flex" justify="space-between" >
-                      <Col class="infoModal-title">系统信息</Col>
-                    </Row>
-                  </Col>
-                </Row>
-                <Row type="flex" class="infoModal-l-list-l" @click.native="selectCurrentSystem2($event)">
-                  <Col>
-                    <Badge :offset=[-4,6] :count="remind_unread">
-                      <img src="@/assets/images/teachingSystem/ring.png" style="margin-right:10px;width:44px" />
-                    </Badge>
-                  </Col>
-                  <Col style="flex:1">
-                    <Row type="flex" justify="space-between" >
-                      <Col class="infoModal-title">上课提醒</Col>
-                    </Row>
-                  </Col>
-                </Row>
-                <Row type="flex" class="infoModal-l-list-l" @click.native="selectCurrentSystem2($event)">
-                  <Col>
-                    <Badge :offset=[-4,6] :count="commission_unread">
-                      <img src="@/assets/images/teachingSystem/infocorrect.png" style="margin-right:10px;width:44px"/>
-                    </Badge>
-                  </Col>
-                  <Col style="flex:1">
-                    <Row type="flex" justify="space-between" >
-                      <Col class="infoModal-title">待办</Col>
-                    </Row>
-                  </Col>
-                </Row>
-              </div>
+    <Layout style="height:100%;background:#2E3640;margin-left:4px;position:relative">
+      <div class="infoModal-full" @click="closeInfoCenter($event)">
+        <div class="infoModal">
+          <Spin v-if="infoloading" fix></Spin>
+          <div class="infoModal-l">
+            <div class="infoModal-l-header" v-if="userType===1">
+              <Icon type="ios-search" :size="24" style="right:96px" v-if="infoCenter==='people'" />
+              <input type="text" v-if="infoCenter==='people'" />
+              <Icon type="ios-search" :size="24" v-if="infoCenter==='system'" />
+              <input type="text" v-if="infoCenter==='system'" style="width:254px" />
+              <button class="blueC-btn" v-if="infoCenter==='people'" @click="showAddDiscuss">添加话题</button>
             </div>
-            <div class="infoModal-r" v-if="infoTitle==='系统信息'">
-              <div class="infoModal-r-title">
-                <span>{{infoTitle}}</span>
-              </div>
-              <div class="infoModal-r-content">
-                <div>
-                  <div>
-                    <div class="ab-scroll">
-                      <div class="userinfo-info-showhistory" @click="getSystemInfo (2,systemHistory);systemHistory++">查看历史消息>></div>
-                      <div class="system-info-row" v-for="(item,index) in systemInfoList" :key="index">
-                        <div class="hd" v-if="item.status===0"></div>
-                        <Row type="flex" justify="space-between">
-                          <Col class="system-info-row-header">{{item.title}}</Col>
-                          <Col style="color:#AAAAAA">{{moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm')}}</Col>
-                        </Row>
-                        <div class="system-info-row-color8" v-html="item.content"> </div>
-                        <div style="margin-top:10px;color:#FF3333"><span style="cursor:pointer" @click="modal3=true,deleteSystemId=item.id">删除</span></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="infoModal-l-list" v-if="infoCenter==='people'">
+              <Row type="flex" v-for="(item,index) in chatList" v-if="item.delete_status===1" :key="index+'chatList'"
+                class="infoModal-l-list-l" @click.native="selectCurrentInfo($event,item)">
+                <Col>
+                <Badge :offset=[-4,6] :count="item.unread">
+                  <img v-if="item.table_type===2" :src="item.userInfo.icon"
+                    style="width:44px;height:44px;border-radius:5px;margin-right:10px" />
+                  <img v-if="item.table_type===1||item.table_type===3" :src="item.icon"
+                    style="width:44px;height:44px;border-radius:5px;margin-right:10px" />
+                </Badge>
+                </Col>
+                <Col style="flex:1">
+                <Row type="flex" justify="space-between">
+                  <Col class="infoModal-title" v-if="item.table_type===2">{{item.userInfo.name}}<span
+                    v-if="userType === 1&&item.title===undefined">({{item.userInfo.class_name}})</span></Col>
+                  <Col class="infoModal-title" v-if="item.table_type===3">{{item.title}}</Col>
+                  <Col class="infoModal-title" v-if="item.table_type===1">{{item.task_name}}</Col>
+                  <Col class="infoModal-time">{{moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm')}}</Col>
+                </Row>
+                <Row style="margin-top:5px">
+                  <Col class="infoModal-content">{{item.content}}</Col>
+                </Row>
+                <Icon type="md-close" size="20" class="infoModal-content-md-close" @click="showDeleteDiscuss(item)" />
+                </Col>
+              </Row>
             </div>
-            <div class="infoModal-r" v-else-if="infoTitle==='上课提醒'">
-              <div class="infoModal-r-title">
-                <span>{{infoTitle}}</span>
-              </div>
-              <div class="infoModal-r-content">
+            <div class="infoModal-l-list" v-if="infoCenter==='system'">
+              <Row type="flex" class="infoModal-l-list-l" @click.native="selectCurrentSystem2($event)">
+                <Col>
+                <Badge :offset=[-4,6] :count="system_unread">
+                  <img src="@/assets/images/teachingSystem/systeminfo.png" style="margin-right:10px;width:44px" />
+                </Badge>
+                </Col>
+                <Col style="flex:1">
+                <Row type="flex" justify="space-between">
+                  <Col class="infoModal-title">系统信息</Col>
+                </Row>
+                </Col>
+              </Row>
+              <Row type="flex" class="infoModal-l-list-l" @click.native="selectCurrentSystem2($event)">
+                <Col>
+                <Badge :offset=[-4,6] :count="remind_unread">
+                  <img src="@/assets/images/teachingSystem/ring.png" style="margin-right:10px;width:44px" />
+                </Badge>
+                </Col>
+                <Col style="flex:1">
+                <Row type="flex" justify="space-between">
+                  <Col class="infoModal-title">上课提醒</Col>
+                </Row>
+                </Col>
+              </Row>
+              <Row type="flex" class="infoModal-l-list-l" @click.native="selectCurrentSystem2($event)">
+                <Col>
+                <Badge :offset=[-4,6] :count="commission_unread">
+                  <img src="@/assets/images/teachingSystem/infocorrect.png" style="margin-right:10px;width:44px" />
+                </Badge>
+                </Col>
+                <Col style="flex:1">
+                <Row type="flex" justify="space-between">
+                  <Col class="infoModal-title">待办</Col>
+                </Row>
+                </Col>
+              </Row>
+            </div>
+          </div>
+          <div class="infoModal-r" v-if="infoTitle==='系统信息'">
+            <div class="infoModal-r-title">
+              <span>{{infoTitle}}</span>
+            </div>
+            <div class="infoModal-r-content">
+              <div>
                 <div>
                   <div class="ab-scroll">
-                    <div class="userinfo-info-showhistory" @click="getSystemInfo(2,classInfoHistory);classInfoHistory++">查看历史消息>></div>
+                    <div class="userinfo-info-showhistory" @click="getSystemInfo (2,systemHistory);systemHistory++">
+                      查看历史消息>></div>
                     <div class="system-info-row" v-for="(item,index) in systemInfoList" :key="index">
+                      <div class="hd" v-if="item.status===0"></div>
                       <Row type="flex" justify="space-between">
                         <Col class="system-info-row-header">{{item.title}}</Col>
                         <Col style="color:#AAAAAA">{{moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm')}}</Col>
                       </Row>
-                      <div class="system-info-row-color8" style="line-height:22px">
+                      <div class="system-info-row-color8" v-html="item.content"> </div>
+                      <div style="margin-top:10px;color:#FF3333"><span style="cursor:pointer"
+                          @click="modal3=true,deleteSystemId=item.id">删除</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="infoModal-r" v-else-if="infoTitle==='上课提醒'">
+            <div class="infoModal-r-title">
+              <span>{{infoTitle}}</span>
+            </div>
+            <div class="infoModal-r-content">
+              <div>
+                <div class="ab-scroll">
+                  <div class="userinfo-info-showhistory" @click="getSystemInfo(2,classInfoHistory);classInfoHistory++">
+                    查看历史消息>></div>
+                  <div class="system-info-row" v-for="(item,index) in systemInfoList" :key="index">
+                    <Row type="flex" justify="space-between">
+                      <Col class="system-info-row-header">{{item.title}}</Col>
+                      <Col style="color:#AAAAAA">{{moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm')}}</Col>
+                    </Row>
+                    <div class="system-info-row-color8" style="line-height:22px">
+                      {{item.content}}
+                    </div>
+                    <div style="margin-top:10px;color:#FF3333"><span style="cursor:pointer"
+                        @click="modal3=true,deleteSystemId=item.id">删除</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="infoModal-r" v-else-if="infoTitle==='待办'">
+            <div class="infoModal-r-title">
+              <span>{{infoTitle}}</span>
+            </div>
+            <div class="infoModal-r-content">
+              <div>
+                <div class="ab-scroll">
+                  <div class="userinfo-info-showhistory" @click="getSystemInfo(2,uncorrectHistory);uncorrectHistory++">
+                    查看历史消息>></div>
+                  <div class="system-info-row" v-for="(item,index) in systemInfoList" :key="index">
+                    <Row type="flex" justify="space-between">
+                      <Col class="system-info-row-header">{{item.title}}</Col>
+                      <Badge dot :count="item.status===0?1:0">
+                        <Col style="color:#AAAAAA;margin-right:10px">
+                        {{moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm')}}</Col>
+                      </Badge>
+                    </Row>
+                    <div>
+                      <span style="color:#222222" v-html="item.content"></span>
+                      <!-- <span class="system-info-row-color8">的课前任务（这是任 务名称生活习性调查）时间已截止，可以去批改啦！</span> -->
+                    </div>
+                    <router-link to @click.native="toCorrect($event,item)" style="display:inline-block;margin-top:12px"
+                      v-if="userType===1">
+                      <span>前往批改>></span>
+                    </router-link>
+                    <router-link to @click.native="toReply($event,item)" style="display:inline-block;margin-top:12px"
+                      v-if="userType===2">
+                      <span>前往作答>></span>
+                    </router-link>
+                    <div style="margin-top:10px;color:#FF3333"><span style="cursor:pointer"
+                        @click="modal3=true,deleteSystemId=item.id">删除</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="infoModal-r" style="position:relative" v-else>
+            <div class="sjx-la" v-if="addInfoModal===true"></div>
+            <div v-if="addInfoModal===true"
+              style="width:100%;height:100%;background:#ffffff;position:absolute;z-index:100;padding:20px">
+              <div style="color:#222222;font-size:14px">添加话题</div>
+              <Input type="text" placeholder="请输入话题标题" v-model="discussAboutTitle" style="margin:14px 0" />
+              <Input type="textarea" placeholder="话题描述" v-model="discussAboutContent" :rows='5' />
+              <div>参与班级：
+                <Select v-model="selectClaaaList" multiple style="width:200px;margin:14px 0">
+                  <Option v-for="item in classList" :value="item.id" :key="item.id">{{ item.class_name }}</Option>
+                </Select>
+              </div>
+              <div>
+                <Button type="primary" style="width:100%;margin:10px 0;padding:10px 0"
+                  @click="addDiscussAbout">确定添加</Button>
+                <Button style="width:100%;padding:10px 0" @click="addInfoModal=false">取消</Button>
+              </div>
+            </div>
+            <div class="infoModal-r-title">
+              <span>{{infoTitle}}</span>
+            </div>
+            <div class="infoModal-r-content">
+              <div>
+                <div class="ab-scroll">
+                  <div class="userinfo-info-showhistory" @click="getAnwserNum++,getAnwser(getAnwserNum)">查看历史消息>></div>
+                  <!-- <div class="infoModal-t">2020-4-21 10:20</div> -->
+                  <div v-for="(item,index) in answerList" :key="index">
+                    <div v-if="userType===1&&table_type===2"
+                      :class="item.type === 1&&userType===1 ? 'userinfo-right' : 'userinfo-left'">
+                      <div>
+                        <img :src="item.userInfo.icon" />
+                      </div>
+                      <div>
+                        <div></div>
                         {{item.content}}
                       </div>
-                      <div style="margin-top:10px;color:#FF3333"><span style="cursor:pointer" @click="modal3=true,deleteSystemId=item.id">删除</span></div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="infoModal-r" v-else-if="infoTitle==='待办'">
-              <div class="infoModal-r-title">
-                <span>{{infoTitle}}</span>
-              </div>
-              <div class="infoModal-r-content">
-                <div>
-                  <div class="ab-scroll">
-                    <div class="userinfo-info-showhistory" @click="getSystemInfo(2,uncorrectHistory);uncorrectHistory++">查看历史消息>></div>
-                    <div class="system-info-row" v-for="(item,index) in systemInfoList" :key="index">
-                      <Row type="flex" justify="space-between">
-                        <Col class="system-info-row-header">{{item.title}}</Col>
-                        <Badge dot :count="item.status===0?1:0">
-                          <Col style="color:#AAAAAA;margin-right:10px">{{moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm')}}</Col>
-                        </Badge>
-                      </Row>
+                    <div v-if="userType===1&&table_type===3"
+                      :class="item.type === 1&&userType===1 ? 'userinfo-right' : 'userinfo-left'">
+                      <div v-if="item.content">
+                        <img :src="item.object.icon" />
+                      </div>
+                      <div v-if="item.content">
+                        <div></div>
+                        {{item.content}}
+                      </div>
+                    </div>
+                    <div v-if="userType===2&&table_type===2"
+                      :class="item.type === 2&&userType===2 ? 'userinfo-right' : 'userinfo-left'">
                       <div>
-                        <span style="color:#222222" v-html="item.content"></span>
-                        <!-- <span class="system-info-row-color8">的课前任务（这是任 务名称生活习性调查）时间已截止，可以去批改啦！</span> -->
+                        <img :src="item.userInfo.icon" />
                       </div>
-                      <router-link to @click.native="toCorrect($event,item)" style="display:inline-block;margin-top:12px" v-if="userType===1">
-                        <span>前往批改>></span>
-                      </router-link>
-                      <router-link to @click.native="toReply($event,item)" style="display:inline-block;margin-top:12px" v-if="userType===2">
-                        <span>前往作答>></span>
-                      </router-link>
-                      <div style="margin-top:10px;color:#FF3333"><span style="cursor:pointer" @click="modal3=true,deleteSystemId=item.id">删除</span></div>
+                      <div>
+                        <div></div>
+                        {{item.content}}
+                      </div>
                     </div>
+                    <div v-if="userType===2&&table_type===1"
+                      :class="item.object_id===userId&&userType===2 ? 'userinfo-right' : 'userinfo-left'">
+                      <div>
+                        <img :src="item.userInfo.icon" />
+                      </div>
+                      <div>
+                        <div></div>
+                        {{item.content}}
+                      </div>
+                    </div>
+                    <div v-if="userType===2&&table_type===3"
+                      :class="item.type === 2&&userType===2&&item.object_id===userId ? 'userinfo-right' : 'userinfo-left'">
+                      <div v-if="item.content">
+                        <img :src="item.object.icon" />
+                      </div>
+                      <div v-if="item.content">
+                        <div></div>
+                        {{item.content}}
+                      </div>
+                    </div>
+                    <div style="clear:both"></div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="infoModal-r" style="position:relative" v-else>
-              <div class="sjx-la" v-if="addInfoModal===true"></div>
-              <div v-if="addInfoModal===true" style="width:100%;height:100%;background:#ffffff;position:absolute;z-index:100;padding:20px">
-                <div style="color:#222222;font-size:14px">添加话题</div>
-                <Input type="text" placeholder="请输入话题标题" v-model="discussAboutTitle" style="margin:14px 0"/>
-                <Input type="textarea" placeholder="话题描述" v-model="discussAboutContent" :rows='5' />
-                <div>参与班级：
-                  <Select v-model="selectClaaaList" multiple style="width:200px;margin:14px 0">
-                    <Option v-for="item in classList" :value="item.id" :key="item.id">{{ item.class_name }}</Option>
-                  </Select>
-                </div>
-                <div>
-                  <Button type="primary" style="width:100%;margin:10px 0;padding:10px 0" @click="addDiscussAbout">确定添加</Button>
-                  <Button style="width:100%;padding:10px 0" @click="addInfoModal=false">取消</Button>
-                </div>
-              </div>
-              <div class="infoModal-r-title">
-                <span>{{infoTitle}}</span>
-              </div>
-              <div class="infoModal-r-content">
-                <div>
-                  <div class="ab-scroll">
-                    <div class="userinfo-info-showhistory" @click="getAnwserNum++,getAnwser(getAnwserNum)">查看历史消息>></div>
-                    <!-- <div class="infoModal-t">2020-4-21 10:20</div> -->
-                    <div v-for="(item,index) in answerList" :key="index">
-                      <div v-if="userType===1&&table_type===2" :class="item.type === 1&&userType===1 ? 'userinfo-right' : 'userinfo-left'">
-                        <div>
-                          <img :src="item.userInfo.icon" />
-                        </div>
-                        <div>
-                          <div></div>
-                          {{item.content}}
-                        </div>
-                      </div>
-                      <div v-if="userType===1&&table_type===3" :class="item.type === 1&&userType===1 ? 'userinfo-right' : 'userinfo-left'">
-                        <div v-if="item.content">
-                          <img :src="item.object.icon" />
-                        </div>
-                        <div v-if="item.content">
-                          <div></div>
-                          {{item.content}}
-                        </div>
-                      </div>
-                      <div v-if="userType===2&&table_type===2" :class="item.type === 2&&userType===2 ? 'userinfo-right' : 'userinfo-left'">
-                        <div>
-                          <img :src="item.userInfo.icon" />
-                        </div>
-                        <div>
-                          <div></div>
-                          {{item.content}}
-                        </div>
-                      </div>
-                      <div v-if="userType===2&&table_type===1" :class="item.object_id===userId&&userType===2 ? 'userinfo-right' : 'userinfo-left'">
-                        <div>
-                          <img :src="item.userInfo.icon" />
-                        </div>
-                        <div>
-                          <div></div>
-                          {{item.content}}
-                        </div>
-                      </div>
-                      <div v-if="userType===2&&table_type===3" :class="item.type === 2&&userType===2&&item.object_id===userId ? 'userinfo-right' : 'userinfo-left'">
-                        <div v-if="item.content">
-                          <img :src="item.object.icon" />
-                        </div>
-                        <div v-if="item.content">
-                          <div></div>
-                          {{item.content}}
-                        </div>
-                      </div>
-                    <div style="clear:both"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="infoModal-r-bottom">
-                <!-- <div>
+            <div class="infoModal-r-bottom">
+              <!-- <div>
                   <Icon type="ios-happy" size="20"/>
                   <Icon type="md-images" size="20"/>
                   <Icon type="ios-folder" size="20"/>
                 </div> -->
-                <div style="margin-top:6px;flex:1">
-                  <Input class="new-textarea" v-model="discussinfo" @on-enter="sendInfo" type="textarea" style="width:100%;height:100%"/>
-                </div>
-                <div>
-                  <button class="blackBorderC-btn" style="float:right;margin-top:5px" @click="sendInfo">发送</button>
-                </div>
+              <div style="margin-top:6px;flex:1">
+                <Input class="new-textarea" v-model="discussinfo" @on-enter="sendInfo" type="textarea"
+                  style="width:100%;height:100%" />
+              </div>
+              <div>
+                <button class="blackBorderC-btn" style="float:right;margin-top:5px" @click="sendInfo">发送</button>
               </div>
             </div>
           </div>
         </div>
-        <Sider hide-trigger class="myCourse-slider" style="max-width:400px;min-width:0px;width:400px;flex:none;background:#2E3640;" v-show="currentSelect==='course'">
-          <ul class="myCourse-slider-type" v-show="bind_type===1||bind_type===2||bind_type===3||bind_type===4&&showT">
-            <li>
-              <span @click="changType($event,4)" class="ty" v-show="bind_type===4">全部</span>
-              <span @click="changType($event,4)" v-show="bind_type!==4">全部</span>
-            </li>
-            <li>
-              <span @click="changType($event,1)" class="ty" v-show="bind_type===1">被分配</span>
-              <span @click="changType($event,1)" v-show="bind_type!==1">被分配</span>
-            </li>
-            <li>
-              <span @click="changType($event,2)" class="ty" v-show="bind_type===2">自选</span>
-              <span @click="changType($event,2)" v-show="bind_type!==2">自选</span>
-            </li>
-            <li>
-              <span @click="changType($event,3)" class="ty" v-show="bind_type===3">自建</span>
-              <span @click="changType($event,3)" v-show="bind_type!==3">自建</span>
-            </li>
-          </ul>
-          <Row type="flex" justify="space-between" class="courswaretable" v-if="userType===1">
-            <Col style="flex:1">
-              <span class="tabSearch">
-                <input placeholder="输入关键词" v-model="keyword"  @keyup.enter="getData()"/>
-                <img src="@/assets/images/teachingSystem/search.png" style="cursor:pointer" @click="getData()"/>
-              </span>
-            </Col>
-            <Col>
-              <span @click="open('course_table','','课程表编辑',1100)" v-show="bind_type === 0" class="timetable-btn">
-                <img src="@/assets/images/teachingSystem/coursewaretable.png" style="margin-right:10px;vertical-align:text-top" />
-                课程表
-              </span>
-              <span @click="showSelectCourseModal" v-show="bind_type === 2" class="selectcourse">
-                添加课程
-              </span>
-              <span @click="showAddCourseModal('')" v-show="bind_type === 3" class="addcourse">
-                添加课程
-              </span>
-            </Col>
-          </Row>
-          <Row type="flex" justify="space-between" class="courswaretable" v-if="userType===2&&showClassTable === true">
-            <Col>
-              <span class="white-f" style="line-height:30px">
-                课程列表
-              </span>
-            </Col>
-            <Col>
-              <span @click="open('school_course','','课程')" class="timetable-btn" style="background:#3B9BFF">
-                <img src="@/assets/images/teachingSystem/myCourse.png" style="margin-right:10px;vertical-align:middle;transform:translateY(-1px)" />
-                选课
-              </span>
-              <span @click="open('course_table_student','','课表')" class="timetable-btn">
-                <img src="@/assets/images/teachingSystem/coursewaretable.png" style="margin-right:10px;vertical-align:middle;transform:translateY(-1px)" />
-                课程表
-              </span>
-            </Col>
-          </Row>
-          <vue-scroll :ops="ops" style="width:100%;height:100%">
-            <div style="height:100%;width:100%">
-              <ul class="mycourse-slider">
-                <li v-for="(item,index) in list" class="mycourse" :class="$store.state.user.courseData.id===item.id?'mycourse-slider-active':''" v-if="userType===1" :key="item.id" @click="selectCourse(item,index)">
-                  <span>{{index+1}}</span>
-                  <img :src="item.img"/>
-                  <span class="mycourse-slider-title-d">
-                    <p style="font-size:16px">{{item.course_name}}</p>
-                    <p style="color:#73787F">专业：{{item.major_name}}</p>
-                  </span>
-                </li>
-                <li v-for="(item,index) in list" class="mycourse" :class="$store.state.user.courseData.id===item.id?'mycourse-slider-active':''" v-if="userType===2" :key="item.id" @click="selectCourse(item,index)">
-                  <span>{{index+1}}</span>
-                  <img :src="item.img"/>
-                  <span class="mycourse-slider-title-m">
-                    <p style="font-size:16px">{{item.course_name}}</p>
-                  </span>
-                  <span style="color:#ffffff;line-height:60px" v-if="showScore===true">
-                    <span style="font-size:24px">{{item.course_score}}</span>
-                    <span style="font-size:14px">分</span>
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </vue-scroll>
-          <img src="@/assets/images/teachingSystem/packup.png" @click="closeSlider" class="packupImg"/>
-        </Sider>
-        <Content class="ii-content" style="overflow:hidden;flex-direction:column;display:flex">
-          <div style="background:#f2f2f2;height:100%;margin:4px 4px 4px 0;display:flex">
-            <selectCourse  v-if="showSelectCourse===true"  @closeSelect="unshowSelectCourseModal" @bind-success="getData()" @changeNameT="changeNameT"></selectCourse>
-            <addCourse v-if="showAddCourse===true" :course_id="changeCourseId" @success="getData()" @closeSelect="unshowSelectCourseModal"></addCourse>
-            <img src="@/assets/images/teachingSystem/openSlider.png" @click="openSlider" class="openSlider"/>
-            <!--教师端及学生端当导航栏为课程类型且课程不为空时-->
-            <div v-if="$store.state.user.courseData.length!==0&&course_namet !=='userInfoCenter'&&course_namet!=='studentUserCenter'&&course_namet!=='task'&&course_namet!=='homeworkExam'&&course_namet!=='inCourseDetail'&&course_namet!=='correct'&&course_namet!=='addCourseware'&&showSelectCourse===false&&showAddCourse===false" style="padding:0 30px;height:100%;width:100%;flex-direction: column;display: flex;position:relative;z-index:1001">
-              <h1 style="color:#666666；font-size:26px;margin:20px 0">{{course_namet}}</h1>
-              <keep-alive>
-                <router-view @openSlider="openSlider" @showAddCourseModal='showAddCourseModal' @showCourseDetail="showCourseDetail" @showAllCourseDetail="showAllCourseDetail" @showAddCourseware='showAddCourseware' @closeAddCourseware='closeAddCourseware' @refreshData="refreshData" @reback="reback" @bind-success="regetData()" :courdetail="courdetail" v-if="$route.meta.keepAlive"></router-view>
-              </keep-alive>
-              <router-view v-if="!$route.meta.keepAlive"></router-view>
-            </div>
-            <!--教师端及学生端当导航栏为课程类型且课程为空时-->
-            <div v-if="$store.state.user.courseData.length===0&&course_namet !=='userInfoCenter'&&course_namet!=='studentUserCenter'&&course_namet!=='task'&&course_namet!=='homeworkExam'&&course_namet!=='inCourseDetail'&&course_namet!=='correct'&&course_namet!=='addCourseware'&&showSelectCourse===false&&showAddCourse===false" style="height:100%;width:100%;background:#ffffff;position:relative">
-              <div style="text-align:center;position:relative;top:50%;transform:translate(-50%,-50%);left:50%;position:absolute">
-                <div><img src="@/assets/images/teachingSystem/mycourse-gb.png" /></div>
-                <div><span style="color:#AFAFAF;font-size:14px">请选择一门课程</span></div>
-              </div>
-            </div>
-            <!--教师端当导航栏为个人中心时-->
-            <div v-if="course_namet ==='userInfoCenter'" style="height:100%;width:100%;background:#ffffff">
-              <userInfoCenter></userInfoCenter>
-            </div>
-            <!--教师端当导航栏为批改时-->
-            <div v-if="course_namet ==='correct'" style="height:100%;width:100%;background:#ffffff">
-              <correct></correct>
-            </div>
-            <!--教师端新增课件-->
-            <div v-if="course_namet ==='addCourseware'" style="height:100%;width:100%;background:#ffffff">
-              <addCourseware @closeAddCourseware='closeAddCourseware' :type="type" :teacher_course_id="teacher_course_id" :courseware_id="courseware_id" :timet_id = "timet_id" :courseware_name="courseware_name" :exam_release_id="exam_release_id" :action_type="action_type"></addCourseware>
-            </div>
-            <!--课程章节详细内容-->
-            <div v-if="course_namet ==='inCourseDetail'" style="height:100%;width:100%;background:#ffffff">
-              <inCourseDetail @closeCourseDetail="closeCourseDetail" :course_id="courseId" :showAllCourseDetailCId='showAllCourseDetailCId' :showAllCourseDetailEdit='showAllCourseDetailEdit' :showAllCourseDetailType='showAllCourseDetailType' :showAllCourseDetailId="showAllCourseDetailId" :id='coursedetail_id'></inCourseDetail>
-            </div>
-            <!--学生端当导航栏为个人中心时-->
-            <div v-if="course_namet ==='studentUserCenter'" style="height:100%;width:100%;background:#ffffff">
-              <studentUserCenter></studentUserCenter>
-            </div>
-            <!--学生端当导航栏为我的任务时-->
-            <div v-if="course_namet ==='task'" style="height:100%;width:100%;background:#ffffff">
-              <task :type="0" :teacher_course_id="0" :show_filter_option="true" :toTasktId="toTasktId" :toIsLeader="toIsLeader" @sendInfoStudent="sendInfoStudent" @showUserDiscuss="showUserDiscuss"></task>
-            </div>
-            <!--学生端当导航栏为作业测试时-->
-            <div v-if="course_namet ==='homeworkExam'" style="height:100%;width:100%;background:#ffffff">
-              <homeworkExam @unshowTab="unshowTab" :toCorrectType="toCorrectType" :toCorrectId="toCorrectId"></homeworkExam>
+      </div>
+      <Sider hide-trigger class="myCourse-slider"
+        style="max-width:400px;min-width:0px;width:400px;flex:none;background:#2E3640;"
+        v-show="currentSelect==='course'">
+        <ul class="myCourse-slider-type" v-show="bind_type===1||bind_type===2||bind_type===3||bind_type===4&&showT">
+          <li>
+            <span @click="changType($event,4)" class="ty" v-show="bind_type===4">全部</span>
+            <span @click="changType($event,4)" v-show="bind_type!==4">全部</span>
+          </li>
+          <li>
+            <span @click="changType($event,1)" class="ty" v-show="bind_type===1">被分配</span>
+            <span @click="changType($event,1)" v-show="bind_type!==1">被分配</span>
+          </li>
+          <li>
+            <span @click="changType($event,2)" class="ty" v-show="bind_type===2">自选</span>
+            <span @click="changType($event,2)" v-show="bind_type!==2">自选</span>
+          </li>
+          <li>
+            <span @click="changType($event,3)" class="ty" v-show="bind_type===3">自建</span>
+            <span @click="changType($event,3)" v-show="bind_type!==3">自建</span>
+          </li>
+        </ul>
+        <Row type="flex" justify="space-between" class="courswaretable" v-if="userType===1">
+          <Col style="flex:1">
+          <span class="tabSearch">
+            <input placeholder="输入关键词" v-model="keyword" @keyup.enter="getData()" />
+            <img src="@/assets/images/teachingSystem/search.png" style="cursor:pointer" @click="getData()" />
+          </span>
+          </Col>
+          <Col>
+          <span @click="open('course_table','','课程表编辑',1100)" v-show="bind_type === 0" class="timetable-btn">
+            <img src="@/assets/images/teachingSystem/coursewaretable.png"
+              style="margin-right:10px;vertical-align:text-top" />
+            课程表
+          </span>
+          <span @click="showSelectCourseModal" v-show="bind_type === 2" class="selectcourse">
+            添加课程
+          </span>
+          <span @click="showAddCourseModal('')" v-show="bind_type === 3" class="addcourse">
+            添加课程
+          </span>
+          </Col>
+        </Row>
+        <Row type="flex" justify="space-between" class="courswaretable" v-if="userType===2&&showClassTable === true">
+          <Col>
+          <span class="white-f" style="line-height:30px">
+            课程列表
+          </span>
+          </Col>
+          <Col>
+          <span @click="open('school_course','','课程')" class="timetable-btn" style="background:#3B9BFF">
+            <img src="@/assets/images/teachingSystem/myCourse.png"
+              style="margin-right:10px;vertical-align:middle;transform:translateY(-1px)" />
+            选课
+          </span>
+          <span @click="open('course_table_student','','课表')" class="timetable-btn">
+            <img src="@/assets/images/teachingSystem/coursewaretable.png"
+              style="margin-right:10px;vertical-align:middle;transform:translateY(-1px)" />
+            课程表
+          </span>
+          </Col>
+        </Row>
+        <vue-scroll :ops="ops" style="width:100%;height:100%">
+          <div style="height:100%;width:100%">
+            <ul class="mycourse-slider">
+              <li v-for="(item,index) in list" class="mycourse"
+                :class="$store.state.user.courseData.id===item.id?'mycourse-slider-active':''" v-if="userType===1"
+                :key="item.id" @click="selectCourse(item,index)">
+                <span>{{index+1}}</span>
+                <img :src="item.img" />
+                <span class="mycourse-slider-title-d">
+                  <p style="font-size:16px">{{item.course_name}}</p>
+                  <p style="color:#73787F">专业：{{item.major_name}}</p>
+                </span>
+              </li>
+              <li v-for="(item,index) in list" class="mycourse"
+                :class="$store.state.user.courseData.id===item.id?'mycourse-slider-active':''" v-if="userType===2"
+                :key="item.id" @click="selectCourse(item,index)">
+                <span>{{index+1}}</span>
+                <img :src="item.img" />
+                <span class="mycourse-slider-title-m">
+                  <p style="font-size:16px">{{item.course_name}}</p>
+                </span>
+                <span style="color:#ffffff;line-height:60px" v-if="showScore===true">
+                  <span style="font-size:24px">{{item.course_score}}</span>
+                  <span style="font-size:14px">分</span>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </vue-scroll>
+        <img src="@/assets/images/teachingSystem/packup.png" @click="closeSlider" class="packupImg" />
+      </Sider>
+      <Content class="ii-content" style="overflow:hidden;flex-direction:column;display:flex">
+        <div style="background:#f2f2f2;height:100%;margin:4px 4px 4px 0;display:flex">
+          <selectCourse v-if="showSelectCourse===true" @closeSelect="unshowSelectCourseModal" @bind-success="getData()"
+            @changeNameT="changeNameT"></selectCourse>
+          <addCourse v-if="showAddCourse===true" :course_id="changeCourseId" @success="getData()"
+            @closeSelect="unshowSelectCourseModal"></addCourse>
+          <img src="@/assets/images/teachingSystem/openSlider.png" @click="openSlider" class="openSlider" />
+          <!--教师端及学生端当导航栏为课程类型且课程不为空时-->
+          <div
+            v-if="$store.state.user.courseData.length!==0&&course_namet !=='userInfoCenter'&&course_namet!=='studentUserCenter'&&course_namet!=='task'&&course_namet!=='homeworkExam'&&course_namet!=='inCourseDetail'&&course_namet!=='correct'&&course_namet!=='addCourseware'&&showSelectCourse===false&&showAddCourse===false"
+            style="padding:0 30px;height:100%;width:100%;flex-direction: column;display: flex;position:relative;z-index:1001">
+            <h1 style="color:#666666；font-size:26px;margin:20px 0">{{course_namet}}</h1>
+            <keep-alive>
+              <router-view @openSlider="openSlider" @showAddCourseModal='showAddCourseModal'
+                @showCourseDetail="showCourseDetail" @showAllCourseDetail="showAllCourseDetail"
+                @showAddCourseware='showAddCourseware' @closeAddCourseware='closeAddCourseware'
+                @refreshData="refreshData" @reback="reback" @bind-success="regetData()" :courdetail="courdetail"
+                v-if="$route.meta.keepAlive"></router-view>
+            </keep-alive>
+            <router-view v-if="!$route.meta.keepAlive"></router-view>
+          </div>
+          <!--教师端及学生端当导航栏为课程类型且课程为空时-->
+          <div
+            v-if="$store.state.user.courseData.length===0&&course_namet !=='userInfoCenter'&&course_namet!=='studentUserCenter'&&course_namet!=='task'&&course_namet!=='homeworkExam'&&course_namet!=='inCourseDetail'&&course_namet!=='correct'&&course_namet!=='addCourseware'&&showSelectCourse===false&&showAddCourse===false"
+            style="height:100%;width:100%;background:#ffffff;position:relative">
+            <div
+              style="text-align:center;position:relative;top:50%;transform:translate(-50%,-50%);left:50%;position:absolute">
+              <div><img src="@/assets/images/teachingSystem/mycourse-gb.png" /></div>
+              <div><span style="color:#AFAFAF;font-size:14px">请选择一门课程</span></div>
             </div>
           </div>
-          <Modal v-model="modal" :title="title" width="1100px"  footer-hide>
-            <!-- <courseTimetable :teacher_course_id="target_id" v-if="target === 'course_timetable' && modal" @error="modal = false"></courseTimetable> -->
-            <!-- <courseChooseList :course_id="target_id" v-if="target === 'course_choose_list' && modal" @bind-success="getData()"></courseChooseList> -->
-            <courseDetailEdit :course_id="target_id" v-if="target === 'course_detail_edit' && modal" @success="getData()"></courseDetailEdit>
-            <SchoolCourse v-if="target === 'school_course'" @bind-course="getData()"></SchoolCourse>
-            <CourseTable :teacher_course_id="target_id" v-if="target === 'course_table' && modal" ></CourseTable>
-            <CourseTableStudent :teacher_course_id="target_id" v-if="target === 'course_table_student' && modal" ></CourseTableStudent>
-          </Modal>
-        </Content>
-      </Layout>
-      <Modal
-          v-model="modal1"
-          title="跳转"
-          @on-ok="ok">
-          <p>是否离开添加课程页面</p>
-      </Modal>
-      <Modal
-        v-model="modal2"
-        title="跳转"
-        @on-ok="deleteDiscuss">
-        <p>是否删除当前聊天内容</p>
-      </Modal>
-      <Modal
-        v-model="modal3"
-        title="跳转"
-        @on-ok="deleteSystem">
-        <p>是否确定删除当前消息</p>
-      </Modal>
-      <Modal
-        v-model="isshowclass"
-        title="上课"
-        @on-ok="entryClass">
-        <p>当前正在上课，是否进入直播间</p>
-      </Modal>
+          <!--教师端当导航栏为个人中心时-->
+          <div v-if="course_namet ==='userInfoCenter'" style="height:100%;width:100%;background:#ffffff">
+            <userInfoCenter></userInfoCenter>
+          </div>
+          <!--教师端当导航栏为批改时-->
+          <div v-if="course_namet ==='correct'" style="height:100%;width:100%;background:#ffffff">
+            <correct></correct>
+          </div>
+          <!--教师端新增课件-->
+          <div v-if="course_namet ==='addCourseware'" style="height:100%;width:100%;background:#ffffff">
+            <addCourseware @closeAddCourseware='closeAddCourseware' :type="type" :teacher_course_id="teacher_course_id"
+              :courseware_id="courseware_id" :timet_id="timet_id" :courseware_name="courseware_name"
+              :exam_release_id="exam_release_id" :action_type="action_type"></addCourseware>
+          </div>
+          <!--课程章节详细内容-->
+          <div v-if="course_namet ==='inCourseDetail'" style="height:100%;width:100%;background:#ffffff">
+            <inCourseDetail @closeCourseDetail="closeCourseDetail" :course_id="courseId"
+              :showAllCourseDetailCId='showAllCourseDetailCId' :showAllCourseDetailEdit='showAllCourseDetailEdit'
+              :showAllCourseDetailType='showAllCourseDetailType' :showAllCourseDetailId="showAllCourseDetailId"
+              :id='coursedetail_id'></inCourseDetail>
+          </div>
+          <!--学生端当导航栏为个人中心时-->
+          <div v-if="course_namet ==='studentUserCenter'" style="height:100%;width:100%;background:#ffffff">
+            <studentUserCenter></studentUserCenter>
+          </div>
+          <!--学生端当导航栏为我的任务时-->
+          <div v-if="course_namet ==='task'" style="height:100%;width:100%;background:#ffffff">
+            <task :type="0" :teacher_course_id="0" :show_filter_option="true" :toTasktId="toTasktId"
+              :toIsLeader="toIsLeader" @sendInfoStudent="sendInfoStudent" @showUserDiscuss="showUserDiscuss"></task>
+          </div>
+          <!--学生端当导航栏为作业测试时-->
+          <div v-if="course_namet ==='homeworkExam'" style="height:100%;width:100%;background:#ffffff">
+            <homeworkExam @unshowTab="unshowTab" :toCorrectType="toCorrectType" :toCorrectId="toCorrectId">
+            </homeworkExam>
+          </div>
+        </div>
+        <Modal v-model="modal" :title="title" width="1100px" footer-hide>
+          <!-- <courseTimetable :teacher_course_id="target_id" v-if="target === 'course_timetable' && modal" @error="modal = false"></courseTimetable> -->
+          <!-- <courseChooseList :course_id="target_id" v-if="target === 'course_choose_list' && modal" @bind-success="getData()"></courseChooseList> -->
+          <courseDetailEdit :course_id="target_id" v-if="target === 'course_detail_edit' && modal" @success="getData()">
+          </courseDetailEdit>
+          <SchoolCourse v-if="target === 'school_course'" @bind-course="getData()"></SchoolCourse>
+          <CourseTable :teacher_course_id="target_id" v-if="target === 'course_table' && modal"></CourseTable>
+          <CourseTableStudent :teacher_course_id="target_id" v-if="target === 'course_table_student' && modal">
+          </CourseTableStudent>
+        </Modal>
+      </Content>
+    </Layout>
+    <Modal v-model="modal1" title="跳转" @on-ok="ok">
+      <p>是否离开添加课程页面</p>
+    </Modal>
+    <Modal v-model="modal2" title="跳转" @on-ok="deleteDiscuss">
+      <p>是否删除当前聊天内容</p>
+    </Modal>
+    <Modal v-model="modal3" title="跳转" @on-ok="deleteSystem">
+      <p>是否确定删除当前消息</p>
+    </Modal>
+    <Modal v-model="isshowclass" title="上课" @on-ok="entryClass">
+      <p>当前正在上课，是否进入直播间</p>
+    </Modal>
     <Footer class="teachingSystem-footer">
       <Row>
         <Col :span="13" style="margin-top:6px">
-          <Row type="flex" justify="space-between">
-            <Col>由英途信息提供技术支持Copyright©2019 Mobild Inc.</Col>
-            <Col>版权所有：广州市英途信息软件股份有限公司</Col>
-            <Col>粤ICP备10231381号-3号</Col>
-          </Row>
+        <Row type="flex" justify="space-between">
+          <Col>由英途信息提供技术支持Copyright©2019 Mobild Inc.</Col>
+          <Col>版权所有：广州市英途信息软件股份有限公司</Col>
+          <Col>粤ICP备10231381号-3号</Col>
+        </Row>
         </Col>
         <Col :span="11">
-          <span class="callme-btn">
-            <img src="@/assets/images/teachingSystem/callme.png" style="margin-right:2px"/>
-            <span>联系我们</span>
-          </span>
+        <span class="callme-btn">
+          <img src="@/assets/images/teachingSystem/callme.png" style="margin-right:2px" />
+          <span>联系我们</span>
+        </span>
         </Col>
       </Row>
     </Footer>
@@ -1296,7 +1338,7 @@ export default {
       })
     },
     showDeleteDiscuss (item) {
-    // table_type 1：小组讨论，2：任务提问，3：话题
+      // table_type 1：小组讨论，2：任务提问，3：话题
       if (item.table_type === 1 || item.table_type === 2) {
         this.deltaskgroup = item.taskgroup
         this.delId = ''
@@ -1308,7 +1350,7 @@ export default {
       this.modal2 = true
     },
     deleteDiscuss () { // 删除聊天
-    // table_type 1：小组讨论，2：任务提问，3：话题
+      // table_type 1：小组讨论，2：任务提问，3：话题
       if (this.userType === 1) {
         if (this.deltable_type === 2) {
           this.axios.request({
@@ -1410,7 +1452,7 @@ export default {
       this.axios.request({
         url: uRl,
         method: 'get',
-        params: { }
+        params: {}
       }).then(res => {
         if (res.code === 200) {
           this.commission_unread = res.data.commission_unread
@@ -1921,5 +1963,4 @@ export default {
 }
 </script>
 <style lang="less">
-
 </style>

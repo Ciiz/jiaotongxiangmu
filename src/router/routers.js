@@ -130,6 +130,33 @@ const indexRouter = [
         component: () => import('@/view/pages/news.vue')
       },
       {
+        path: 'schoolyard',
+        name: 'schoolyard',
+        meta: {
+          title: '校园慕课',
+          hideInMenu: false
+        },
+        component: () => import('@/view/pages/schoolyard.vue')
+      },
+      {
+        path: 'partner',
+        name: 'partner',
+        meta: {
+          title: '合作院校',
+          hideInMenu: false
+        },
+        component: () => import('@/view/pages/partner.vue')
+      },
+      {
+        path: 'team',
+        name: 'team',
+        meta: {
+          title: '教师团队',
+          hideInMenu: false
+        },
+        component: () => import('@/view/pages/team.vue')
+      },
+      {
         path: '/index',
         name: 'index',
         meta: {
@@ -138,9 +165,81 @@ const indexRouter = [
           keepAlive: true
         },
         component: () => import('@/view/pages/course.vue')
+      },
+      {
+        path: 'personal',
+        name: 'personal',
+        meta: {
+          title: '个人中心',
+          hideInMenu: false,
+          keepAlive: true
+        },
+        component: () => import('@/view/pages/personal.vue'),
+        children: [
+          {
+            path: '/',
+            redirect: { name: 'personaldata' }
+          },
+          {
+            path: 'personaldata',
+            name: 'personaldata',
+            meta: {
+              title: '个人资料',
+              keepAlive: true
+            },
+            component: () => import('@/view/teacher_personal/personaldata.vue')
+          },
+          {
+            path: 'record',
+            name: 'record',
+            meta: {
+              title: '购买记录',
+              keepAlive: true
+            },
+            component: () => import('@/view/teacher_personal/record.vue')
+          },
+          {
+            path: 'attention',
+            name: 'attention',
+            meta: {
+              title: '关注',
+              keepAlive: true
+            },
+            component: () => import('@/view/teacher_personal/attention.vue')
+          },
+          {
+            path: 'like',
+            name: 'like',
+            meta: {
+              title: '喜欢',
+              keepAlive: true
+            },
+            component: () => import('@/view/teacher_personal/like.vue')
+          },
+          {
+            path: 'fans',
+            name: 'fans',
+            meta: {
+              title: '粉丝',
+              keepAlive: true
+            },
+            component: () => import('@/view/teacher_personal/fans.vue')
+          },
+          {
+            path: 'wallet',
+            name: 'wallet',
+            meta: {
+              title: '钱包',
+              keepAlive: true
+            },
+            component: () => import('@/view/teacher_personal/wallet.vue')
+          }
+        ]
+
       }
     ]
   },
+
   {
     path: '/teachingSystem',
     name: 'teachingSystem',
