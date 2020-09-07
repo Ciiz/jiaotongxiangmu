@@ -347,7 +347,7 @@ export default {
         .then(res => {
           if (res.code === 200) {
             if (res.data.list.length >= 8) {
-              this.schoolList = res.data.list.slice(0, 7)
+              this.schoolList = res.data.list.slice(0, 4)
               console.log(this.schoolList)
             }
             this.DropdownItem_schoolList = res.data.list
@@ -524,12 +524,12 @@ export default {
         .schoolyard_DropdownMenu {
           display: flex;
           flex-wrap: wrap;
-          min-height: 300px;
+          // min-height: 300px;
           justify-content: flex-start;
           /deep/.ivu-dropdown-item {
             padding: 0;
-            margin: 0 10px;
-            height: 50px;
+            margin: 10px 10px;
+            height: 30px;
           }
         }
         /deep/.ivu-select-dropdown {

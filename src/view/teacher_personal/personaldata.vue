@@ -113,12 +113,10 @@ export default {
       if (res.code === 200) {
         this.userInfo.icon = res.data.url
         this.userdata.alipay_account = this.userInfo.alipay_account
-
         this.userdata.sex = this.userInfo.sex
         this.userdata.email = this.userInfo.email
         this.userdata.icon = this.userInfo.icon
         this.userdata.mobile = this.userInfo.mobile
-
         update_info(this.userdata).then(response => {
           console.log(response)
           if (response.code === 200) {
@@ -154,7 +152,7 @@ export default {
     // 解除绑定微信
     handle_wx () {
       // this.userInfo.wx_id = ''
-      updateUserWechatId(this.userInfo.id).then(res => {
+      updateUserWechatId(this.userInfo.wx_id).then(res => {
         console.log(res)
         if (res.code === 200) {
           this.$Message.success('解绑成功')
