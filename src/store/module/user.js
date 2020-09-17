@@ -21,16 +21,21 @@ export default {
     userInfo: {
 
     },
+    wx_id: '',
     userInfo_icon: '',
     messageList: [],
     courseData: [],
     bindType: 0,
     currentTab: ''
+
   },
   // 同步操作
   mutations: {
     setAvatar (state, avatarPath) {
       state.avatarImgPath = avatarPath
+    },
+    setwxId (state, wx_id) {
+      state.wx_id = wx_id
     },
     userInfo_icon (state, userInfo_icon) {
       console.log(userInfo_icon)
@@ -73,6 +78,7 @@ export default {
     setcurrentTab (state, count) {
       state.currentTab = count
     }
+
   },
   getters: {
   },

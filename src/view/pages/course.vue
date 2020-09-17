@@ -25,12 +25,13 @@
     </div>
     <div>
       <Tabs value="allCourse" class="index-tabs" @on-click="changeTabs">
+        <!-- 课程推荐 -->
         <TabPane label="课程推荐" name="allCourse">
           <Row type="flex" justify="space-between" class="new-index-course-header">
             <Col>
             </Col>
             <Col>
-            <RadioGroup>
+            <RadioGroup @on-change='handle_change'>
               <Radio label="全部"></Radio>
               <Radio label="精选课程"></Radio>
               <Radio label="免费课程"></Radio>
@@ -39,24 +40,40 @@
           </Row>
           <ul>
             <div v-if="commandCourseList.length===0" style="height:200px">暂无推荐课程</div>
-            <li v-for="(item,index) in commandCourseList" :key="index" class="index-course-item">
+            <li v-for="(item,index) in commandCourseList" :key="index" class="index-course-item"
+              @click="$router.push({path:`/videojump/${item.id}`})">
               <img :src="item.img" style="width:100%;height:150px" />
               <div class="index-course-name">{{item.course_name}}</div>
+              <div class="index-course-schoolanme">
+                <div class="index-course-schoolanme1">{{item.school_name}}</div>
+                <div class="index-course-schoolanme2">{{item.major_name}}</div>
+              </div>
               <div class="index-course-majorname">{{item.course_label}}</div>
+              <div class="index-course-username">
+                <div class="index-course-username_l">
+                  <div class="index-course-username_l_img">
+                    <img src="" alt="">
+                  </div>
+                  <div class="index-course-username_l_name">{{item.user_name}}</div>
+                </div>
+                <div class="index-course-username_r"></div>
+              </div>
+
             </li>
             <div style="clear:both"></div>
           </ul>
         </TabPane>
+        <!-- 本校课程 -->
         <TabPane label="本校课程" name="schoolCourse" v-if="token!==''&&token!==false&&token!==undefined&&userId!==''">
           <Row type="flex" justify="space-between" class="new-index-course-header">
             <Col>
-            <Select v-model="major" style="width:200px">
+            <Select v-model="major" style="width:200px" @on-change='handle_select'>
               <Option v-for="item in majorList" :value="item.major_id" :key="item.major_id">{{ item.major_name }}
               </Option>
             </Select>
             </Col>
             <Col>
-            <RadioGroup>
+            <RadioGroup @on-change='handle_mychange'>
               <Radio label="全部"></Radio>
               <Radio label="精选课程"></Radio>
               <Radio label="免费课程"></Radio>
@@ -68,6 +85,7 @@
             <li v-for="(item,index) in courseList" :key="index" class="index-course-item">
               <img :src="item.img" style="width:100%;height:150px" />
               <div class="index-course-name">{{item.course_name}}</div>
+
               <div class="index-course-majorname">{{item.major_name}}</div>
             </li>
             <div style="clear:both"></div>
@@ -75,7 +93,7 @@
         </TabPane>
       </Tabs>
       <div style="text-align:center;margin-bottom:51px">
-        <button class="index-course-more-btn">加载更多...</button>
+        <button class="index-course-more-btn" @click="$router.push({name:'schoolyard'})">加载更多...</button>
       </div>
     </div>
     <div class="index-news">
@@ -167,7 +185,7 @@
         <Icon type="ios-arrow-forward" size="60" color="#E1E1E1" @click="scroll(++tItemIndex)" />
       </div>
       <div style="text-align:center;margin-bottom:51px">
-        <button class="index-course-more-btn">教师团队...</button>
+        <button class="index-course-more-btn" @click="$router.push({name:'team'})">教师团队...</button>
       </div>
     </div>
     <Modal v-model="modal2" :title="title" width="800" footer-hide>
@@ -178,8 +196,7 @@
 <script>
 import modal_mixin from '@/view/mixins/modal_mixin'
 import newsContent from '@/view/news/newsContent'
-import { get_bannersIndex, get_majors } from '@/api/common'
-
+import { get_bannersIndex, get_majors, myCourseList, courselist } from '@/api/common'
 export default {
   mixins: [modal_mixin],
   components: {
@@ -192,7 +209,7 @@ export default {
       modal2: false,
       title: '',
       majorList: [],
-      courseList: [],
+      courseList: [], // 本校课程
       commandCourseList: [],
       banner_list: [],
       schoolList: [],
@@ -200,7 +217,12 @@ export default {
       newsList: [{ cover: '' }],
       tItemIndex: 0,
       value2: 0,
-      autoplaySpeed: 2000
+      autoplaySpeed: 2000,
+      newCourse: [], // 精品课程
+      freeCourse: [], // 免费课程
+      animal: '全部', // 单选框
+      mycourerList: [], // 本校的精品课程
+      myfreeCourselist: [] // 本校的免费课程
     }
   },
   watch: {
@@ -233,8 +255,45 @@ export default {
     }
   },
   methods: {
+    // 选中select下拉列表
+    handle_select (value) {
+      console.log(value)
+    },
+    // 课程推荐的单选框的切换
+    handle_change (e) {
+      if (e === '精选课程') {
+        this.commandCourseList = this.newCourse
+      }
+      if (e === '免费课程') {
+        this.commandCourseList = this.freeCourse
+      }
+      if (e === '全部') {
+        courselist().then(res => {
+          this.commandCourseList = res.data.data
+        })
+      }
+    },
+    // 本校课程的单选框的切换
+    handle_mychange (e) {
+      if (e === '精选课程') {
+        this.courseList = this.mycourerList
+      }
+      if (e === '免费课程') {
+        this.courseList = this.myfreeCourselist
+      }
+      if (e === '全部') {
+        var data = {
+          page: 1,
+          page_size: 10,
+          school_id: this.schoolId
+        }
+        myCourseList(data).then(res => {
+          this.courseList = res.data.list
+        })
+      }
+    },
+    // 获取轮播图
     get_banners (path) {
-      // 获取轮播图
       get_bannersIndex({ path: path }).then(res => {
         if (res.code === 200) {
           // nextTick涉及到Vue中DOM的异步更新，将回调延迟到下次 DOM 更新循环之后执行。在修改数据之后立即使用它，然后等待 DOM 更新。
@@ -247,36 +306,60 @@ export default {
         }
       })
     },
+    // 获取本校课程
     getData () {
-      // 获取本校课程
-      this.axios
-        .request({
-          method: 'get',
-          url: '/index.php/home/course/isShowSchoolCourses',
-          params: {
-            page: 1,
-            page_size: 10,
-            school_id: this.schoolId
+      var data = {
+        page: 1,
+        page_size: 10,
+        school_id: this.schoolId
+      }
+      myCourseList(data).then(res => {
+        console.log(res)
+        this.courseList = res.data.list
+        // 获取精品课程 和 获取免费课程
+        res.data.list.forEach((v, i) => {
+          if (v.is_charge === 1) {
+            this.mycourerList.push(v)
+            if (this.mycourerList.length > 10) {
+              this.mycourerList.length = 10
+            }
+          }
+          if (v.is_charge === 0) {
+            this.myfreeCourselist.push(v)
+            if (this.myfreeCourselist.length > 10) {
+              this.myfreeCourselist.length = 10
+            }
           }
         })
-        .then(res => {
-          this.courseList = res.data.list
-        })
+      })
     },
+    // 获取推荐课程
     get_command_course () {
-      // 获取推荐课程
-      this.axios
-        .request({
-          method: 'get',
-          url: '/index.php/home/index/recommendCourse',
-          params: {}
+      courselist().then(res => {
+        console.log(res)
+        this.commandCourseList = res.data.data
+        if (this.commandCourseList.length > 10) {
+          this.commandCourseList.length = 10
+        }
+        // 获取精品课程 和 获取免费课程
+        res.data.data.forEach((v, i) => {
+          if (v.is_charge === 1) {
+            this.newCourse.push(v)
+            if (this.newCourse.length > 10) {
+              this.newCourse.length = 10
+            }
+          }
+          if (v.is_charge === 0) {
+            this.freeCourse.push(v)
+            if (this.freeCourse.length > 10) {
+              this.freeCourse.length = 10
+            }
+          }
         })
-        .then(res => {
-          this.commandCourseList = res.data.data
-        })
+      })
     },
+    // 获取推荐教师
     get_command_teacher () {
-      // 获取推荐教师
       this.axios
         .request({
           method: 'get',
@@ -320,8 +403,8 @@ export default {
       this.title = title
       this.id = target_id
     },
+    // 获取所有学校所有专业信息
     getMajor () {
-      // 获取所有学校所有专业信息
       this.axios
         .request({
           method: 'post',
@@ -332,9 +415,10 @@ export default {
           this.majorList = res.data.list
         })
     },
+    // 获取本校所有专业
     getMajorStudent () {
-      // 获取本校所有专业
       get_majors().then(res => {
+        console.log(res)
         if (res.code === 200) {
           this.majorList = res.data.list
         }
@@ -648,6 +732,26 @@ export default {
   cursor: pointer;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.06);
   margin-bottom: 50px;
+  .index-course-schoolanme {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+
+    font-size: 12px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #adadad;
+  }
+  .index-course-username {
+    .index-course-username_l {
+      display: flex;
+      padding: 0 10px;
+      .index-course-username_l_img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
 }
 .index-course-name {
   margin-left: 10px;

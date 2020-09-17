@@ -3,7 +3,7 @@
     <span class="like_all">共喜欢了{{like_list.length}}个课程:</span>
     <Row>
       <Col class="record">
-      <Row class="record_List" v-for="item in like_list" :key="item.id">
+      <Row class="record_List" v-for="(item,index) in like_list" :key="index">
         <Col>
         <div class="record_List_img">
           <img :src="item.img" alt="">
@@ -23,7 +23,11 @@
 
         </Col>
         <Col class="like_teacher">
-        <div class="like_teacher_name">{{item.user_name}}</div>
+        <div class="like_teacher_name">
+          <div class="like_teacher_name_icon"> <img :src="item.icon" alt=""></div>
+
+          {{item.user_name}}
+        </div>
         <div class="like_teacher_type">{{item.learn_price}}</div>
         </Col>
         <Col>
@@ -127,6 +131,18 @@ export default {
         font-family: SimSun;
         font-weight: 400;
         color: #646464;
+        display: flex;
+        align-items: center;
+        .like_teacher_name_icon {
+          width: 20px;
+          height: 20px;
+          margin-right: 6px;
+          img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+          }
+        }
       }
     }
   }

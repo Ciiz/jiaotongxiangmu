@@ -84,7 +84,7 @@ export const get_departments = () => { // 获取院系
     method: 'get'
   })
 }
-export const get_majors = (department_id) => { // 获取院系
+export const get_majors = (department_id) => { // 本校的课程信息
   return axios.request({
     url: '/home/course/getMajor',
     method: 'get',
@@ -208,5 +208,36 @@ export const chapter_class_show = (id) => {
       id
     },
     method: 'get'
+  })
+}
+
+// 首页视频播放
+export const video_index = (id) => {
+  return axios.request({
+    url: '/home/index/playVideo',
+    data: {
+      id
+    },
+    method: 'post'
+  })
+}
+// 首页的本校课程
+export const myCourseList = ({ page, page_size, school_id }) => {
+  return axios.request({
+    method: 'get',
+    url: '/index.php/home/course/isShowSchoolCourses',
+    params: {
+      page,
+      page_size,
+      school_id
+    }
+  })
+}
+// 首页的推荐课程
+export const courselist = () => {
+  return axios.request({
+    method: 'get',
+    url: '/index.php/home/index/recommendCourse',
+    params: {}
   })
 }

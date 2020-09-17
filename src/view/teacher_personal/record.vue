@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div v-if="recordlist.length===0">没有任何购买记录</div>
     <Row>
       <Col class="record">
       <Row class="record_List" v-for="item in recordlist" :key="item.id">

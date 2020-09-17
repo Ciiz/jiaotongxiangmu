@@ -35,14 +35,13 @@
       </FormItem>
       <FormItem label="账号：">
         <div class="userInfo_password">
-
           <Input v-model="infolist.account" class="userInfo_style Inputaccount" ref="Inputfocus" disabled
             style="background-color:#fff"></Input>
           <div class="changed_password" style="cursor:pointer;">修改密码</div>
         </div>
       </FormItem>
       <FormItem label="微信：">
-        <div class="userInfo_wc" v-if="userInfo.wx_id">
+        <div class="userInfo_wc" v-if="wx_id">
           <div class="userInfo_wc_img"><img src="@/assets/images/wechat.svg" alt=""></div>
           <div class="userInfo_wc_text" style="cursor:pointer;" @click="handle_wx">已绑定（解除绑定）</div>
         </div>
@@ -53,7 +52,6 @@
     </Form>
   </div>
 </template>
-
 <script>
 import { teacher_message, update_info, updateUserWechatId } from '@/api/user'
 import upload_mixin from '_c/mixins/upload_mixin'
@@ -89,8 +87,10 @@ export default {
     },
     userId () {
       return this.$store.state.user.userId
+    },
+    wx_id () {
+      return this.$store.state.user.wx_id
     }
-
   },
   methods: {
     formaterror (file) {
@@ -151,11 +151,12 @@ export default {
     // },
     // 解除绑定微信
     handle_wx () {
-      // this.userInfo.wx_id = ''
+      console.log(this.userInfo.wx_id)
       updateUserWechatId(this.userInfo.wx_id).then(res => {
         console.log(res)
         if (res.code === 200) {
           this.$Message.success('解绑成功')
+          this.$store.commit('setwxId', '')
         }
       })
     },
@@ -164,17 +165,16 @@ export default {
       teacher_message(this.userId).then(res => {
         this.userInfo = res.data.teacher_list
         this.infolist.account = res.data.teacher_list.account
-        console.log(this.userInfo)
+        console.log(this.userInfo.wx_id)
+        this.$store.commit('setwxId', this.userInfo.wx_id)
       })
     }
-
     // 上传图片成功
     // imgsuccess (res) {
     //   if (res.code === 200) {
     //     this.infolist.icon = res.data.url
     //   }
     // },
-
   },
   mounted () {
     // this.getCookie()

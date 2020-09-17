@@ -31,7 +31,7 @@ require(`@/assets/theme/default.less`) // 课件直播样式
 // 实际打包时应该不引入mock
 /* eslint-disable */
 // if (process.env.NODE_ENV !== 'production') require('@/mock')
-import { dateFormat, dealResourceUrl, dealFileUrl,img_width_or_height } from '@/libs/tools';
+import { dateFormat, dealResourceUrl, dealFileUrl, img_width_or_height } from '@/libs/tools';
 import errorImg from '@/assets/images/default.jpg'
 import moment from 'moment'
 import echarts from 'echarts'
@@ -40,10 +40,18 @@ import { vueBaberrage } from 'vue-baberrage' // 弹幕插件
 import Video from 'video.js'
 import 'videojs-contrib-hls'
 import 'video.js/dist/video-js.css'
+import Router from 'vue-router'
+
+const routerPush = Router.prototype.push
+Router.prototype.push = function push (location) {
+  return routerPush.call(this, location).catch(error => error)
+}
+
+
 Vue.use(vueBaberrage)
 require('vue-tour/dist/vue-tour.css')
 //注册全局
-Vue.prototype.echarts = echarts; 
+Vue.prototype.echarts = echarts;
 Vue.prototype.imgtest = img_width_or_height;  // 图片显示处理
 Vue.prototype.dateFormat = dateFormat;
 Vue.prototype.imgUrl = dealResourceUrl;
@@ -57,13 +65,13 @@ moment.locale('zh-cn');
 Vue.prototype.moment = moment;
 Vue.prototype.$video = Video
 Vue.filter('time', function (value, formatString) {
-  if(!value) return 
+  if (!value) return
   formatString = formatString || 'YYYY-MM-DD HH:mm';
-  return moment(value*1000).format(formatString);
+  return moment(value * 1000).format(formatString);
 })
 
 Vue.filter('timeFrom', function (value) {
-  return moment(value*1000).fromNow();
+  return moment(value * 1000).fromNow();
 })
 Vue.use(iView, {
   i18n: (key, value) => i18n.t(key, value)

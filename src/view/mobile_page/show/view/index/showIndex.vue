@@ -1,14 +1,15 @@
 <template>
+
   <div class="m-course flex-contain">
-    <search v-if="showsearch===true" @closemodal="closemodal"></search>
+    <!-- <search v-if="showsearch===true" @closemodal="closemodal"></search> -->
     <div class="m-course-header-bc"></div>
     <div class="m-course-header">
-      <div @click="showsearch=true">
-        <img src="@/assets/images/mobile_student/search.png" class="m-search-icon"/>
-        <input class="mobile-searchInput" placeholder="搜索课程、教师、院校"/>
+      <div @click="$router.push({name:'searchpage'})">
+        <img src="@/assets/images/mobile_student/search.png" class="m-search-icon" />
+        <input class="mobile-searchInput" placeholder="搜索课程、教师、院校" />
       </div>
       <div>
-        <img src="@/assets/images/mobile_student/seachImage.png" class="m-seachImage"/>
+        <img src="@/assets/images/mobile_student/seachImage.png" class="m-seachImage" />
       </div>
     </div>
     <mt-navbar v-model="selected" class="m-mt-navbar">
@@ -21,7 +22,7 @@
     <div style="background:#ffffff">
       <mt-swipe :auto="4000" class="m-swipe">
         <mt-swipe-item v-for="(item,index) in banner_list" id="item.id" :key="index" class="m-swipe-item">
-          <img :src="item.img" style="width:100%;height:100%"/>
+          <img :src="item.img" style="width:100%;height:100%" />
         </mt-swipe-item>
       </mt-swipe>
     </div>
@@ -29,6 +30,7 @@
       <mt-tab-container-item id="recommend">
         <recommend></recommend>
       </mt-tab-container-item>
+
       <mt-tab-container-item id="2">
         2
       </mt-tab-container-item>
@@ -36,6 +38,7 @@
         3
       </mt-tab-container-item>
     </mt-tab-container>
+
   </div>
 </template>
 <script>
@@ -50,10 +53,20 @@ export default {
     return {
       banner_list: [],
       selected: 'recommend',
-      showsearch: false
+      showsearch: false,
+      allLoaded: false
     }
   },
   methods: {
+    // loadTop () {
+    //   // load more data
+    //   this.$refs.loadmore.onTopLoaded();
+    // },
+    // loadBottom () {
+    //   // load more data
+    //   this.allLoaded = true;// if all data are loaded
+    //   this.$refs.loadmore.onBottomLoaded();
+    // },
     get_banners (path) {
       get_bannersIndex({ path: path }).then(res => {
         if (res.code === 200) {
@@ -74,5 +87,4 @@ export default {
 }
 </script>
 <style>
-
 </style>

@@ -1,16 +1,19 @@
 <template>
-  <div class="m-index">
-    <keep-alive>
-      <router-view v-if="$route.meta.keepAlive"></router-view>
-    </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive"></router-view>
-    <mt-tabbar v-model="selected" class="m-tabbar">
-      <mt-tab-item v-for="(item,index) in teacher_tab" :key="index" :id="item.id" style="position:relative">
-        <div class="m-badge" v-show="item.badgeShow"></div>
-        <img slot="icon" :src="selected===item.id?item.imgsrcA:item.imgsrc">
-        {{item.title}}
-      </mt-tab-item>
-    </mt-tabbar>
+  <div class="m-index_b">
+    <div class="m-index">
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+      <!-- 底部tabbar -->
+      <mt-tabbar v-model="selected" class="m-tabbar">
+        <mt-tab-item v-for="(item,index) in teacher_tab" :key="index" :id="item.id" style="position:relative">
+          <div class="m-badge" v-show="item.badgeShow"></div>
+          <img slot="icon" :src="selected===item.id?item.imgsrcA:item.imgsrc">
+          {{item.title}}
+        </mt-tab-item>
+      </mt-tabbar>
+    </div>
   </div>
 </template>
 <script>
@@ -172,6 +175,14 @@ export default {
   }
 }
 </script>
-<style>
+<style lang='less' scoped>
+body {
+}
+// .m-index_b {
+//   overflow: hidden;
+//   width: 7.4rem;
+// }
 
+.m-index {
+}
 </style>

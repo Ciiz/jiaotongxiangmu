@@ -33,13 +33,17 @@ export default {
     local: localRead('local'),
     errorList: [],
     hasReadErrorPage: false,
-    tableHeight: 400
+    tableHeight: 400,
+    searchdata: []
   },
   getters: {
     menuList: (state, getters, rootState) => getMenuByRouter(routers, rootState.user.access),
     errorCount: state => state.errorList.length
   },
   mutations: {
+    setsearchdata (state, count) {
+      state.searchdata = count
+    },
     setBreadCrumb (state, route) {
       state.breadCrumbList = getBreadCrumbList(route, state.homeRoute)
     },

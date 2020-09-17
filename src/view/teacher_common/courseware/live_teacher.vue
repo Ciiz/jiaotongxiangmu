@@ -1,30 +1,32 @@
 <template>
-<div style="height:100%">
-  <Layout style="height:100%">
-    <Header class="live-header">
-      <Row type="flex" justify="space-between" class="code-row-bg">
-        <Col span="4">
-          <img src="@/assets/images/new_img/live-logo.png" style="margin-left:20px;vertical-align:middle"/>
-        </Col>
-        <Col style="color:#ACABAB;">
+  <div style="height:100%">
+    <Layout style="height:100%">
+      <Header class="live-header">
+        <Row type="flex" justify="space-between" class="code-row-bg">
+          <Col span="4">
+          <img src="@/assets/images/new_img/live-logo.png" style="margin-left:20px;vertical-align:middle" />
+          </Col>
+          <Col style="color:#ACABAB;">
           <span class="lvie-coursewarename">{{courseware_name}}</span>
           <span style="font-size:14px;display:none" class="headerShowTime">全体作答中：{{showTime}}秒</span>
-        </Col>
-        <Col span="7" style="color:#888888;padding-right:30px">
+          </Col>
+          <Col span="7" style="color:#888888;padding-right:30px">
           <div style="float:right">
-          <img :src="$store.state.user.userInfo.icon" style="width:34px;vertical-align:middle;border-radius:20px;margin-right:14px"/>
-          <span style="margin-right:60px">{{$store.state.user.userInfo.name}}</span>
-          <span>{{currentdate}}&nbsp;&nbsp;&nbsp;星期{{currentweek}}</span>
+            <img :src="$store.state.user.userInfo.icon"
+              style="width:34px;vertical-align:middle;border-radius:20px;margin-right:14px" />
+            <span style="margin-right:60px">{{$store.state.user.userInfo.name}}</span>
+            <span>{{currentdate}}&nbsp;&nbsp;&nbsp;星期{{currentweek}}</span>
           </div>
-        </Col>
-      </Row>
-    </Header>
-    <Layout class="live-layout">
-      <Content style="background:#111113">
-        <Row style="background:#373737;height:100%;min-height:700px">
-          <Col :span="3" class="live-l">
+          </Col>
+        </Row>
+      </Header>
+      <Layout class="live-layout">
+        <Content style="background:#111113">
+          <Row style="background:#373737;height:100%;min-height:700px">
+            <Col :span="3" class="live-l">
             <div class="live-question-btn" @click="showListQuestion">
-              <img src="@/assets/images/new_img/question.png" style="vertical-align:middle;width:16px;margin-right:10px;"/>提问
+              <img src="@/assets/images/new_img/question.png"
+                style="vertical-align:middle;width:16px;margin-right:10px;" />提问
             </div>
             <ul class="live-btnList">
               <li class="live-btnList-li" @click="showList3">
@@ -32,286 +34,296 @@
                   提问列表({{questionAllQuestionList.length}})
                 </Badge>
               </li>
-              <li class="live-btnList-li"  @click="showList2">附件列表({{material_total.length}})</li>
-              <li v-for="(item,index) in courseware_list_list" :key="index" @click="showList(item,$event)" class="live-btnList-li">
+              <li class="live-btnList-li" @click="showList2">附件列表({{material_total.length}})</li>
+              <li v-for="(item,index) in courseware_list_list" :key="index" @click="showList(item,$event)"
+                class="live-btnList-li">
                 {{item.title}}({{item.listlength}})
               </li>
               <li class="live-btnList-li" @click="openAtten()" v-if="course_status.toString()===1+''">考勤</li>
               <!-- <li class="live-btnList-li" @click="open('course_table','','课程表编辑',1100)" v-if="course_status===1">考勤</li> -->
             </ul>
             <div class="finnish-class" @click="end_live">
-              <img src="@/assets/images/new_img/finnish-class.png" style="vertical-align:middle;width:16px;margin-right:10px"/>下课
+              <img src="@/assets/images/new_img/finnish-class.png"
+                style="vertical-align:middle;width:16px;margin-right:10px" />下课
             </div>
-          </Col>
-          <Col :span="21" class="live-r">
+            </Col>
+            <Col :span="21" class="live-r">
             <div class="allscreen" @click="closeList($event)">
               <div class="show-list">
-              <div>
-                <span style="margin:16px 20px;display:inline-block;font-size:14px;color:#FFFFFF">{{list_title}}</span>
-                <span style="float:right;cursor:pointer" @click="closeDetailList">
-                  <Icon type="ios-close" size="48" color="#FFFFFF" />
-                </span>
-              </div>
-              <div class="list-contain">
-                <p v-if="Object.keys(courseware_list).length==0" style="margin:10px">暂无{{list_title}}</p>
-                <div v-for="in_item in courseware_list" :key="in_item.name + 'in_task_item'" >
-                  <h3 style="margin-left:11px;color:#ffffff;font-size:14px">{{list_title}}名称:  {{in_item.name}}</h3>
-                  <div class="table_flex" style="font-size:14px" v-if="list_title==='课中任务'||list_title==='课后任务'">
-                    <div class="table_item" v-for="(in_task_item) in in_item.array" :key="in_task_item.task_release_id">
-                      <p style="font-size:16px;font-weight:bold">名称：<span @click="taskname = in_task_item.task_name,timetable_id = in_task_item.timetable_id,rowid = in_task_item.task_release_id,tasktype = '3',click_type = 'info',isshowaddtask = true" style="cursor:pointer">{{in_task_item.task_name===undefined?in_item.name:in_task_item.task_name}}</span></p>
-                      <p>班级：{{in_task_item.class_name}}</p>
-                      <div class="w_btn">
-                        <span @click="taskname = in_task_item.task_name,timetable_id = in_task_item.timetable_id,rowid = in_task_item.task_release_id,tasktype = '3',click_type = 'info',isshowaddtask = true">查看</span>
-                        <span v-if="in_task_item.release_status === 0 && in_task_item.task_release_id!==undefined" @click="release_id = in_task_item.task_release_id,release_type='task',release()">发布</span>
-                        <span v-if="in_task_item.release_status === 1 && in_task_item.task_release_id!==undefined" @click="unrelease('task',in_task_item.task_release_id)">撤回</span>
-                        <span v-if="in_task_item.release_status === 0 && in_task_item.exam_release_id!==undefined" @click="release_id = in_task_item.exam_release_id,release_type='test',release()">发布</span>
-                        <span v-if="in_task_item.release_status === 1 && in_task_item.exam_release_id!==undefined" @click="unrelease('test',in_task_item.exam_release_id)">撤回</span>
-                        <span v-if="in_task_item.release_type === 1 && in_task_item.release_status === 1" @click="release_id = in_task_item.task_release_id,changeleader()">更换组长</span>
+                <div>
+                  <span style="margin:16px 20px;display:inline-block;font-size:14px;color:#FFFFFF">{{list_title}}</span>
+                  <span style="float:right;cursor:pointer" @click="closeDetailList">
+                    <Icon type="ios-close" size="48" color="#FFFFFF" />
+                  </span>
+                </div>
+                <div class="list-contain">
+                  <p v-if="Object.keys(courseware_list).length==0" style="margin:10px">暂无{{list_title}}</p>
+                  <div v-for="in_item in courseware_list" :key="in_item.name + 'in_task_item'">
+                    <h3 style="margin-left:11px;color:#ffffff;font-size:14px">{{list_title}}名称: {{in_item.name}}</h3>
+                    <div class="table_flex" style="font-size:14px" v-if="list_title==='课中任务'||list_title==='课后任务'">
+                      <div class="table_item" v-for="(in_task_item) in in_item.array"
+                        :key="in_task_item.task_release_id">
+                        <p style="font-size:16px;font-weight:bold">名称：<span
+                            @click="taskname = in_task_item.task_name,timetable_id = in_task_item.timetable_id,rowid = in_task_item.task_release_id,tasktype = '3',click_type = 'info',isshowaddtask = true"
+                            style="cursor:pointer">{{in_task_item.task_name===undefined?in_item.name:in_task_item.task_name}}</span>
+                        </p>
+                        <p>班级：{{in_task_item.class_name}}</p>
+                        <div class="w_btn">
+                          <span
+                            @click="taskname = in_task_item.task_name,timetable_id = in_task_item.timetable_id,rowid = in_task_item.task_release_id,tasktype = '3',click_type = 'info',isshowaddtask = true">查看</span>
+                          <span v-if="in_task_item.release_status === 0 && in_task_item.task_release_id!==undefined"
+                            @click="release_id = in_task_item.task_release_id,release_type='task',release()">发布</span>
+                          <span v-if="in_task_item.release_status === 1 && in_task_item.task_release_id!==undefined"
+                            @click="unrelease('task',in_task_item.task_release_id)">撤回</span>
+                          <span v-if="in_task_item.release_status === 0 && in_task_item.exam_release_id!==undefined"
+                            @click="release_id = in_task_item.exam_release_id,release_type='test',release()">发布</span>
+                          <span v-if="in_task_item.release_status === 1 && in_task_item.exam_release_id!==undefined"
+                            @click="unrelease('test',in_task_item.exam_release_id)">撤回</span>
+                          <span v-if="in_task_item.release_type === 1 && in_task_item.release_status === 1"
+                            @click="release_id = in_task_item.task_release_id,changeleader()">更换组长</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="table_flex" style="font-size:14px" v-if="list_title==='课中测试'||list_title==='课后测试'">
-                    <div class="table_item" v-for="in_test_item in in_item.array" :key="in_test_item.exam_release_id">
-                      <p style="font-size:16px;font-weight:bold">名称：<span>{{in_test_item.exam_name===undefined?in_item.name:in_test_item.exam_name}}</span></p>
-                      <p>班级：{{in_test_item.class_name}}</p>
-                      <div class="w_btn">
-                        <span v-if="in_test_item.release_status === 0" @click="release_id = in_test_item.exam_release_id,release_type='test',release()">发布</span>
-                        <span v-if="in_test_item.release_status === 1" @click="unrelease('test',in_test_item.exam_release_id)">撤回</span>
-                        <span v-if="in_test_item.release_status === 1" @click="release_id = in_test_item.exam_release_id,isshowhomeworkcheck = true">查询</span>
-                        <span v-if="in_test_item.release_status === 1" @click="analyze(in_test_item)">分析</span>
+                    <div class="table_flex" style="font-size:14px" v-if="list_title==='课中测试'||list_title==='课后测试'">
+                      <div class="table_item" v-for="in_test_item in in_item.array" :key="in_test_item.exam_release_id">
+                        <p style="font-size:16px;font-weight:bold">
+                          名称：<span>{{in_test_item.exam_name===undefined?in_item.name:in_test_item.exam_name}}</span></p>
+                        <p>班级：{{in_test_item.class_name}}</p>
+                        <div class="w_btn">
+                          <span v-if="in_test_item.release_status === 0"
+                            @click="release_id = in_test_item.exam_release_id,release_type='test',release()">发布</span>
+                          <span v-if="in_test_item.release_status === 1"
+                            @click="unrelease('test',in_test_item.exam_release_id)">撤回</span>
+                          <span v-if="in_test_item.release_status === 1"
+                            @click="release_id = in_test_item.exam_release_id,isshowhomeworkcheck = true">查询</span>
+                          <span v-if="in_test_item.release_status === 1" @click="analyze(in_test_item)">分析</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="table_flex" style="font-size:14px" v-if="list_title==='课后作业'">
-                    <div class="table_item" v-for="after_homework_item in in_item.array" :key="after_homework_item.homework_release_id">
-                      <p style="font-size:16px;font-weight:bold">名称：<span style="cursor:pointer" @click="timetable_id = after_homework_item.timetable_id,open_homework_info(after_homework_item)">{{after_homework_item.homework_name===undefined?in_item.name:after_homework_item.homework_name}}</span></p>
-                      <p>班级：{{after_homework_item.class_name}}</p>
-                      <div class="w_btn">
-                        <span v-if="after_homework_item.release_status === 0" @click="release_id = after_homework_item.homework_release_id,release_type='homework',release()">发布</span>
-                        <span v-if="after_homework_item.release_status === 1" @click="unrelease('homework',after_homework_item.homework_release_id)">撤回</span>
-                        <span v-if="after_homework_item.release_status === 1" @click="release_id = after_homework_item.homework_release_id,isshowevalist = true">批改</span>
+                    <div class="table_flex" style="font-size:14px" v-if="list_title==='课后作业'">
+                      <div class="table_item" v-for="after_homework_item in in_item.array"
+                        :key="after_homework_item.homework_release_id">
+                        <p style="font-size:16px;font-weight:bold">名称：<span style="cursor:pointer"
+                            @click="timetable_id = after_homework_item.timetable_id,open_homework_info(after_homework_item)">{{after_homework_item.homework_name===undefined?in_item.name:after_homework_item.homework_name}}</span>
+                        </p>
+                        <p>班级：{{after_homework_item.class_name}}</p>
+                        <div class="w_btn">
+                          <span v-if="after_homework_item.release_status === 0"
+                            @click="release_id = after_homework_item.homework_release_id,release_type='homework',release()">发布</span>
+                          <span v-if="after_homework_item.release_status === 1"
+                            @click="unrelease('homework',after_homework_item.homework_release_id)">撤回</span>
+                          <span v-if="after_homework_item.release_status === 1"
+                            @click="release_id = after_homework_item.homework_release_id,isshowevalist = true">批改</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              </div>
             </div>
             <div class="allscreen" @click="closeList($event)">
               <div class="show-list" style="width:42%">
-              <div>
-                <span style="margin:16px 20px;display:inline-block;font-size:14px;color:#FFFFFF">已有问题：</span>
-                <span style="float:right;cursor:pointer" @click="closeDetailList2">
-                  <Icon type="ios-close" size="48" color="#FFFFFF" />
-                </span>
-              </div>
-              <div class="list-contain">
-                <ul class="teacher-uestionlist">
-                  <li v-for="(item,index) in alreadyQuestion" :key="index" @click="shouDetailQuestion(index)">
-                    <span>{{index+1}}、</span>
-                    <span v-if="item.topic_type===2">主观题</span>
-                    <span v-if="item.topic_type===1" style="color:#7A9AB7">客观题</span>
-                    <span style="word-break:break-all">{{item.content}}</span>
-                  </li>
-                </ul>
-                <button class="add-question" @click="isshowAddquestion=true">+ &nbsp;&nbsp;添加问题</button>
-              </div>
-              </div>
-            </div>
-            <div class="allscreen" @click="closeList($event)">
-              <div class="show-list" style="width:42%">
-              <div>
-                <span style="margin:16px 20px;display:inline-block;font-size:14px;color:#FFFFFF">提问列表：</span>
-                <span style="float:right;cursor:pointer" @click="closeDetailList3">
-                  <Icon type="ios-close" size="48" color="#FFFFFF" />
-                </span>
-              </div>
-              <div class="list-contain">
-                <ul class="teacher-uestionlist">
-                   <li v-for="(item,index) in questionAllQuestionList" class="qL" :key="index" @click="showQuestion(item,index)" style="display:flex">
-                    <span style="flex:1">
+                <div>
+                  <span style="margin:16px 20px;display:inline-block;font-size:14px;color:#FFFFFF">已有问题：</span>
+                  <span style="float:right;cursor:pointer" @click="closeDetailList2">
+                    <Icon type="ios-close" size="48" color="#FFFFFF" />
+                  </span>
+                </div>
+                <div class="list-contain">
+                  <ul class="teacher-uestionlist">
+                    <li v-for="(item,index) in alreadyQuestion" :key="index" @click="shouDetailQuestion(index)">
                       <span>{{index+1}}、</span>
-                      <span v-if="item.topic_type===2" style="margin-right:10px">主观题</span>
-                      <span v-if="item.topic_type===1" style="margin-right:10px;color:#7A9AB7">客观题</span>
-                      <span  style="word-break:break-all">{{item.content}}</span>
-                    </span>
-                    <Icon type="ios-close" size="28" @click="deleteQuestion($event,item.id)"/>
-                  </li>
-                </ul>
+                      <span v-if="item.topic_type===2">主观题</span>
+                      <span v-if="item.topic_type===1" style="color:#7A9AB7">客观题</span>
+                      <span style="word-break:break-all">{{item.content}}</span>
+                    </li>
+                  </ul>
+                  <button class="add-question" @click="isshowAddquestion=true">+ &nbsp;&nbsp;添加问题</button>
+                </div>
               </div>
+            </div>
+            <div class="allscreen" @click="closeList($event)">
+              <div class="show-list" style="width:42%">
+                <div>
+                  <span style="margin:16px 20px;display:inline-block;font-size:14px;color:#FFFFFF">提问列表：</span>
+                  <span style="float:right;cursor:pointer" @click="closeDetailList3">
+                    <Icon type="ios-close" size="48" color="#FFFFFF" />
+                  </span>
+                </div>
+                <div class="list-contain">
+                  <ul class="teacher-uestionlist">
+                    <li v-for="(item,index) in questionAllQuestionList" class="qL" :key="index"
+                      @click="showQuestion(item,index)" style="display:flex">
+                      <span style="flex:1">
+                        <span>{{index+1}}、</span>
+                        <span v-if="item.topic_type===2" style="margin-right:10px">主观题</span>
+                        <span v-if="item.topic_type===1" style="margin-right:10px;color:#7A9AB7">客观题</span>
+                        <span style="word-break:break-all">{{item.content}}</span>
+                      </span>
+                      <Icon type="ios-close" size="28" @click="deleteQuestion($event,item.id)" />
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
             <div class="allscreen" @click="closeList($event)">
               <div class="show-list">
-              <div>
-                <span style="margin:16px 20px;display:inline-block;font-size:14px;color:#FFFFFF">{{list_title}}</span>
-                <span style="float:right;cursor:pointer" @click="closeDetailList4">
-                  <Icon type="ios-close" size="48" color="#FFFFFF" />
-                </span>
-              </div>
-              <div class="list-contain">
-                <div style="color:#ffffff">
-                  <p v-if="Object.keys(material_total).length===0" style="margin:10px">暂无附件</p>
-                  <div v-else>
-                    <Row style="font-size:16px;font-weight:bold" >
-                      <Col :span="7">对应页码</Col>
-                      <Col :span="17">附件名</Col>
-                    </Row>
-                    <Row v-for="item in material_total" :key="item.id" style="margin:6px 0">
-                      <Col :span="6" :offset="1">{{item.page}}</Col>
-                      <Col :span="17" @click.native="option_click(item)">
+                <div>
+                  <span style="margin:16px 20px;display:inline-block;font-size:14px;color:#FFFFFF">{{list_title}}</span>
+                  <span style="float:right;cursor:pointer" @click="closeDetailList4">
+                    <Icon type="ios-close" size="48" color="#FFFFFF" />
+                  </span>
+                </div>
+                <div class="list-contain">
+                  <div style="color:#ffffff">
+                    <p v-if="Object.keys(material_total).length===0" style="margin:10px">暂无附件</p>
+                    <div v-else>
+                      <Row style="font-size:16px;font-weight:bold">
+                        <Col :span="7">对应页码</Col>
+                        <Col :span="17">附件名</Col>
+                      </Row>
+                      <Row v-for="item in material_total" :key="item.id" style="margin:6px 0">
+                        <Col :span="6" :offset="1">{{item.page}}</Col>
+                        <Col :span="17" @click.native="option_click(item)">
                         <span class="maitem_name" style="cursor:pointer">{{item.file_name}}</span>
-                      </Col>
-                    </Row>
+                        </Col>
+                      </Row>
+                    </div>
                   </div>
                 </div>
-              </div>
               </div>
             </div>
             <div class="live-box">
-               <!-- pdf -->
+              <!-- pdf -->
               <div class="live-box-contain">
-                <div class="pdfcard" ref="pdfcard"
-                    @mousedown="mou1"
-                    @mousemove="mou2"
-                    @mouseup="mou3"
-                    @dblclick="fullScreen('pdf')">
-                <div id="pdf" v-if="unpdf" style="align-self:center">
-                  <!-- 弹幕组件：vue-baberrage -->
-                  <vue-baberrage
-                    class="baberrage"
-                    style="z-index:1;height:100px;padding-top:10px;"
-                    :isShow= "barrageIsShow"
-                    :barrageList = "barrageList"
-                    :loop = "barrageLoop"
-                    :boxHeight="100"
-                  >
-                  </vue-baberrage>
-                  <div class="switch_input switch_input_style" style="height:60px" ref="switch_input">
-                    <div style="display:flex;justify-content: space-around;align-items: center;">
-                      <Tooltip content="上一页" placement="top">
-                        <img src="@/assets/images/new_img/last_page.png" @click="last_page"/>
-                      </Tooltip>
-                      <Tooltip content="下一页" placement="top">
-                        <img src="@/assets/images/new_img/next_page.png" @click="next_page" />
-                      </Tooltip>
-                      <Tooltip content="退出全屏" placement="top">
-                        <img src="@/assets/images/new_img/closeFull.png" @click="end_full"/>
-                      </Tooltip>
-                      <Tooltip :content="!isshare ? '取消广播同步' : '开始广播同步课件'" placement="top">
-                        <img src="@/assets/images/new_img/unshare.png" v-show="isshare===false" @click="isshare = true"/>
-                        <img src="@/assets/images/new_img/isshare.png" v-show="isshare===true" @click="isshare = false"/>
-                      </Tooltip>
-                      <Tooltip content="弹幕" placement="top">
-                        <img src="@/assets/images/new_img/unbarrage.png" v-show="barrageIsShow===false" @click="barrageIsShow = true"/>
-                        <img src="@/assets/images/new_img/isbarrage.png" v-show="barrageIsShow===true" @click="barrageIsShow = false"/>
-                      </Tooltip>
-                      <Tooltip content="画笔" placement="top">
-                        <img src="@/assets/images/new_img/unbrush.png"  v-show="iscanvas===false" @click="iscanvas = true"/>
-                        <img src="@/assets/images/new_img/isbrush.png"  v-show="iscanvas===true" @click="iscanvas = false"/>
-                      </Tooltip>
-                    </div>
-                    <div style="position:fixed;bottom:10px;right:30px;background:rgba(0,0,0,.3);padding:8px 14px">
-                        <img src="@/assets/images/new_img/back.png" @click="backCanvas" style="vertical-align:middle;margin-right:10px"/>
-                        <img src="@/assets/images/new_img/clearcanvas.png" @click="clearCanvas" style="vertical-align:middle;margin-right:30px"/>
-                        <span><span style="vertical-align:middle">画笔颜色</span><input type="color" id="context.color" value="#FF8040" style="width:26px;height:26px;vertical-align:middle;margin-left:6px"/></span>
-                        <span style="margin:0 40px 0 20px"><span style="vertical-align:middle">大小 </span><input type="number" id="context.size" max="10" value="3" style="width:53px"/></span>
+                <div class="pdfcard" ref="pdfcard" @mousedown="mou1" @mousemove="mou2" @mouseup="mou3"
+                  @dblclick="fullScreen('pdf')">
+                  <div id="pdf" v-if="unpdf" style="align-self:center">
+                    <!-- 弹幕组件：vue-baberrage -->
+                    <vue-baberrage class="baberrage" style="z-index:1;height:100px;padding-top:10px;"
+                      :isShow="barrageIsShow" :barrageList="barrageList" :loop="barrageLoop" :boxHeight="100">
+                    </vue-baberrage>
+                    <div class="switch_input switch_input_style" style="height:60px" ref="switch_input">
+                      <div style="display:flex;justify-content: space-around;align-items: center;">
+                        <Tooltip content="上一页" placement="top">
+                          <img src="@/assets/images/new_img/last_page.png" @click="last_page" />
+                        </Tooltip>
+                        <Tooltip content="下一页" placement="top">
+                          <img src="@/assets/images/new_img/next_page.png" @click="next_page" />
+                        </Tooltip>
+                        <Tooltip content="退出全屏" placement="top">
+                          <img src="@/assets/images/new_img/closeFull.png" @click="end_full" />
+                        </Tooltip>
+                        <Tooltip :content="!isshare ? '取消广播同步' : '开始广播同步课件'" placement="top">
+                          <img src="@/assets/images/new_img/unshare.png" v-show="isshare===false"
+                            @click="isshare = true" />
+                          <img src="@/assets/images/new_img/isshare.png" v-show="isshare===true"
+                            @click="isshare = false" />
+                        </Tooltip>
+                        <Tooltip content="弹幕" placement="top">
+                          <img src="@/assets/images/new_img/unbarrage.png" v-show="barrageIsShow===false"
+                            @click="barrageIsShow = true" />
+                          <img src="@/assets/images/new_img/isbarrage.png" v-show="barrageIsShow===true"
+                            @click="barrageIsShow = false" />
+                        </Tooltip>
+                        <Tooltip content="画笔" placement="top">
+                          <img src="@/assets/images/new_img/unbrush.png" v-show="iscanvas===false"
+                            @click="iscanvas = true" />
+                          <img src="@/assets/images/new_img/isbrush.png" v-show="iscanvas===true"
+                            @click="iscanvas = false" />
+                        </Tooltip>
+                      </div>
+                      <div style="position:fixed;bottom:10px;right:30px;background:rgba(0,0,0,.3);padding:8px 14px">
+                        <img src="@/assets/images/new_img/back.png" @click="backCanvas"
+                          style="vertical-align:middle;margin-right:10px" />
+                        <img src="@/assets/images/new_img/clearcanvas.png" @click="clearCanvas"
+                          style="vertical-align:middle;margin-right:30px" />
+                        <span><span style="vertical-align:middle">画笔颜色</span><input type="color" id="context.color"
+                            value="#FF8040"
+                            style="width:26px;height:26px;vertical-align:middle;margin-left:6px" /></span>
+                        <span style="margin:0 40px 0 20px"><span style="vertical-align:middle">大小 </span><input
+                            type="number" id="context.size" max="10" value="3" style="width:53px" /></span>
                         <Select style="width:160px" class="select_material" placement="top" placeholder="选择素材预览">
-                         <Option v-for="maitem in material" :value="maitem.file_url" :key="maitem.id" @click.native="option_click(maitem)">{{ maitem.file_name }}</Option>
+                          <Option v-for="maitem in material" :value="maitem.file_url" :key="maitem.id"
+                            @click.native="option_click(maitem)">{{ maitem.file_name }}</Option>
                         </Select>
+                      </div>
                     </div>
-                  </div>
 
-                  <pdf
-                    ref="pdf"
-                    :src="src"
-                    :page="page"
-                    @progress="loadedRatio = $event"
-                    @error="error"
-                    @num-pages="numPages = $event"
-                    @link-clicked="page = $event"
-                    style="width:100%;"
-                  >
-                  </pdf>
+                    <pdf ref="pdf" :src="src" :page="page" @progress="loadedRatio = $event" @error="error"
+                      @num-pages="numPages = $event" @link-clicked="page = $event" style="width:100%;">
+                    </pdf>
+                  </div>
+                  <div v-else style="width:100%;height:444px;overflow-y:auto;margin: 10px auto">
+                    <embed :src="src" width="100%" height="440px" autostart="false">
+                  </div>
                 </div>
-                <div v-else style="width:100%;height:444px;overflow-y:auto;margin: 10px auto">
-                  <embed :src="src" width="100%" height="440px" autostart="false">
-                </div>
-              </div>
-              <Row class="pdfcard-bottom">
-                <Col :span="4">
+                <Row class="pdfcard-bottom">
+                  <Col :span="4">
                   <span>分享直播间</span>
                   <img src="@/assets/images/new_img/qrCode.png" @click="qrModal = true" />
-                </Col>
-                <Col :span="8" style="transform:translateY(-3px)">
+                  </Col>
+                  <Col :span="8" style="transform:translateY(-3px)">
                   <span>选择课件素材</span>
                   <Select style="width:160px" class="select_material" placement="top" placeholder="选择素材预览">
-                   <Option v-for="maitem in material" :value="maitem.file_url" :key="maitem.id" @click.native="option_click(maitem)">{{ maitem.file_name }}</Option>
+                    <Option v-for="maitem in material" :value="maitem.file_url" :key="maitem.id"
+                      @click.native="option_click(maitem)">{{ maitem.file_name }}</Option>
                   </Select>
-                </Col>
-                <Col :span="6">
+                  </Col>
+                  <Col :span="6">
                   <img src="@/assets/images/new_img/beforePage.png" @click="last_page" style="margin-right:20px" />
-                  <InputNumber
-                    v-model.number="page"
-                    type="number"
-                    :max="numPages"
-                    :min="1"
-                    style="width:50px"
-                    size="small"
-                    @on-change="handlePageChange"
-                    class="showcurrentpage"
-                  ></InputNumber>
+                  <InputNumber v-model.number="page" type="number" :max="numPages" :min="1" style="width:50px"
+                    size="small" @on-change="handlePageChange" class="showcurrentpage"></InputNumber>
                   &nbsp;
                   <span style="vertical-align:middle">/{{numPages}}</span>
-                  <img src="@/assets/images/new_img/nextPage.png" @click="next_page" style="margin-left:3px"/>
-                </Col>
-                <Col :span="6">
+                  <img src="@/assets/images/new_img/nextPage.png" @click="next_page" style="margin-left:3px" />
+                  </Col>
+                  <Col :span="6">
                   <div class="pdfcard-bottom-r">
-                    <img src="@/assets/images/new_img/synchronization.png" @click="isshare = true" v-show="!isshare"/>
-                    <img src="@/assets/images/new_img/unsynchronization.png" @click="isshare = false" v-show="isshare"/>
-                    <img src="@/assets/images/new_img/open-barrage.png" @click="barrageIsShow = true" v-show="!barrageIsShow" style="width:23px;padding:0 4px"/>
-                    <img src="@/assets/images/new_img/close-barrage.png" @click="barrageIsShow = false" v-show="barrageIsShow"/>
-                    <img src="@/assets/images/new_img/ergeType.png" @click="ergeTypeChange()"/>
-                    <img src="@/assets/images/new_img/enlarge.png"  @click="fullScreen('pdf')"/>
+                    <img src="@/assets/images/new_img/synchronization.png" @click="isshare = true" v-show="!isshare" />
+                    <img src="@/assets/images/new_img/unsynchronization.png" @click="isshare = false"
+                      v-show="isshare" />
+                    <img src="@/assets/images/new_img/open-barrage.png" @click="barrageIsShow = true"
+                      v-show="!barrageIsShow" style="width:23px;padding:0 4px" />
+                    <img src="@/assets/images/new_img/close-barrage.png" @click="barrageIsShow = false"
+                      v-show="barrageIsShow" />
+                    <img src="@/assets/images/new_img/ergeType.png" @click="ergeTypeChange()" />
+                    <img src="@/assets/images/new_img/enlarge.png" @click="fullScreen('pdf')" />
                   </div>
-                </Col>
-              </Row>
-              <Row class="pdfcard-bottom2">
-                <Col :span="2">
+                  </Col>
+                </Row>
+                <Row class="pdfcard-bottom2">
+                  <Col :span="2">
                   <img src="@/assets/images/new_img/qrCode.png" @click="qrModal = true" />
-                </Col>
-                <Col :span="6" style="transform:translateY(-3px)">
+                  </Col>
+                  <Col :span="6" style="transform:translateY(-3px)">
                   <Select style="width:80%" class="select_material" placement="top" placeholder="选择素材预览">
-                   <Option v-for="maitem in material" :value="maitem.file_url" :key="maitem.id" @click.native="option_click(maitem)">{{ maitem.file_name }}</Option>
+                    <Option v-for="maitem in material" :value="maitem.file_url" :key="maitem.id"
+                      @click.native="option_click(maitem)">{{ maitem.file_name }}</Option>
                   </Select>
-                </Col>
-                <Col :span="7">
+                  </Col>
+                  <Col :span="7">
                   <img src="@/assets/images/new_img/beforePage.png" @click="last_page" style="margin-right:20px" />
-                  <InputNumber
-                    v-model.number="page"
-                    type="number"
-                    :max="numPages"
-                    :min="1"
-                    style="width:50px"
-                    size="small"
-                    @on-change="handlePageChange"
-                    class="showcurrentpage"
-                  ></InputNumber>
+                  <InputNumber v-model.number="page" type="number" :max="numPages" :min="1" style="width:50px"
+                    size="small" @on-change="handlePageChange" class="showcurrentpage"></InputNumber>
                   &nbsp;
                   <span style="vertical-align:middle">/{{numPages}}</span>
-                  <img src="@/assets/images/new_img/nextPage.png" @click="next_page" style="margin-left:3px"/>
-                </Col>
-                <Col :span="9">
+                  <img src="@/assets/images/new_img/nextPage.png" @click="next_page" style="margin-left:3px" />
+                  </Col>
+                  <Col :span="9">
                   <div class="pdfcard-bottom-r">
-                    <img src="@/assets/images/new_img/synchronization.png" @click="isshare = true" v-show="!isshare"/>
-                    <img src="@/assets/images/new_img/unsynchronization.png" @click="isshare = false" v-show="isshare"/>
-                    <img src="@/assets/images/new_img/open-barrage.png" @click="barrageIsShow = true" v-show="!barrageIsShow" style="width:23px;padding:0 4px"/>
-                    <img src="@/assets/images/new_img/close-barrage.png" @click="barrageIsShow = false" v-show="barrageIsShow"/>
-                    <img src="@/assets/images/new_img/ergeType.png" @click="ergeTypeChange()"/>
-                    <img src="@/assets/images/new_img/enlarge.png"  @click="fullScreen('pdf')"/>
+                    <img src="@/assets/images/new_img/synchronization.png" @click="isshare = true" v-show="!isshare" />
+                    <img src="@/assets/images/new_img/unsynchronization.png" @click="isshare = false"
+                      v-show="isshare" />
+                    <img src="@/assets/images/new_img/open-barrage.png" @click="barrageIsShow = true"
+                      v-show="!barrageIsShow" style="width:23px;padding:0 4px" />
+                    <img src="@/assets/images/new_img/close-barrage.png" @click="barrageIsShow = false"
+                      v-show="barrageIsShow" />
+                    <img src="@/assets/images/new_img/ergeType.png" @click="ergeTypeChange()" />
+                    <img src="@/assets/images/new_img/enlarge.png" @click="fullScreen('pdf')" />
                   </div>
-                </Col>
-              </Row>
+                  </Col>
+                </Row>
               </div>
             </div>
             <div class="discuss">
@@ -321,22 +333,25 @@
               </div>
               <Card class="chatcard" v-if="showdiscuss===true">
                 <div id="chat">
-                  <div v-for="item in chatlist" :key="item.id" class="chat-item" >
+                  <div v-for="item in chatlist" :key="item.id" class="chat-item">
                     <div class="userInfo" style=" word-break: break-all">
-                        <Avatar :src="item.msg.extra.userInfo.avator" style="margin-right:8px;margin-bottom:4px" @on-error="e => { e.target.src = errorImg }"/>
-                        <span style="color:#3B88E8;">{{item.msg.extra.userInfo.name}}: </span>
-                        <span v-html="item.msg.msg" style="color:#A4A4A4"></span>
+                      <Avatar :src="item.msg.extra.userInfo.avator" style="margin-right:8px;margin-bottom:4px"
+                        @on-error="e => { e.target.src = errorImg }" />
+                      <span style="color:#3B88E8;">{{item.msg.extra.userInfo.name}}: </span>
+                      <span v-html="item.msg.msg" style="color:#A4A4A4"></span>
                     </div>
                   </div>
                 </div>
                 <div class="chat_box_bottom">
                   <div class="prohibit-discuss-btn" @click="prohibitDiscuss">
-                    <img src="@/assets/images/new_img/prohibit-discuss.png" style="vertical-align:middle;margin-right:10px">
+                    <img src="@/assets/images/new_img/prohibit-discuss.png"
+                      style="vertical-align:middle;margin-right:10px">
                     <span class="prohibit-discuss-des" v-if="online_data.groupstatus===1">全部禁言</span>
                     <span class="prohibit-discuss-des" v-if="online_data.groupstatus!==1">解除禁言</span>
                   </div>
                   <div class="input-s">
-                    <input :maxlength="30" type="text" @keyup.enter="send" v-model="msg" class="chat-input" @on-enter='send'></input>
+                    <input :maxlength="30" type="text" @keyup.enter="send" v-model="msg" class="chat-input"
+                      @on-enter='send'></input>
                     <Button type="primary" @click="send()" class="send-btn">发送</Button>
                   </div>
                 </div>
@@ -346,16 +361,19 @@
                 <div class="online-list-header">
                   <span class="blwz" @click="changeOnlineType(0,$event)">全部({{online_data.total_count}})</span>
                   <span class="ptwz" @click="changeOnlineType(1,$event)">在线({{online_data.online_count}})</span>
-                  <span class="ptwz" @click="changeOnlineType(2,$event)">离线({{online_data.total_count - online_data.online_count}})</span>
+                  <span class="ptwz"
+                    @click="changeOnlineType(2,$event)">离线({{online_data.total_count - online_data.online_count}})</span>
                 </div>
-                <Collapse class="newtypeCollapse"  v-model="collapseVal">
+                <Collapse class="newtypeCollapse" v-model="collapseVal">
                   <Panel v-model="online_data" v-for="(item,index) in online_data.students" :key="index">
                     {{item.class_name}}
                     <ul slot="content">
                       <li style="width:25%;float:left" v-for="(item2,index2) in item.student" :key="index2">
                         <div style="text-align:center">
-                          <img v-if="item2.online_status === false" :src="item2.icon===''?default_icon:item2.icon" width="60%" class="gray" style="width:40px;height:40px;border-radius:50%"/>
-                          <img v-if="item2.online_status === true" :src="item2.icon===''?default_icon:item2.icon" width="60%" style="width:40px;height:40px;border-radius:50%"/>
+                          <img v-if="item2.online_status === false" :src="item2.icon===''?default_icon:item2.icon"
+                            width="60%" class="gray" style="width:40px;height:40px;border-radius:50%" />
+                          <img v-if="item2.online_status === true" :src="item2.icon===''?default_icon:item2.icon"
+                            width="60%" style="width:40px;height:40px;border-radius:50%" />
                         </div>
                         <div class="online-data-name" style="text-align:center">
                           <span>{{item2.name}}</span>
@@ -370,208 +388,220 @@
                 </div> -->
               </Card>
             </div>
-          </Col>
-          <!-- <Col :span="5" style="background:#373639;height:100%;padding-right:20px;padding-left:10px">
+            </Col>
+            <!-- <Col :span="5" style="background:#373639;height:100%;padding-right:20px;padding-left:10px">
             <div></div>
           </Col> -->
-        </Row>
-            <!-- 二维码 -->
-        <Modal v-model="qrModal" :width="640" title="扫码" class="qrModal">
-          <div>
-            <div id="qrcode"></div>
-            <div style="width:200px;text-align:center;margin-top:20px;display:flex">
-              <div>
-                <img src="@/assets/images/new_img/qccot2.jpg" style="width:40px;height:40px;margin-right:10px"/>
+          </Row>
+          <!-- 二维码 -->
+          <Modal v-model="qrModal" :width="640" title="扫码" class="qrModal">
+            <div>
+              <div id="qrcode"></div>
+              <div style="width:200px;text-align:center;margin-top:20px;display:flex">
+                <div>
+                  <img src="@/assets/images/new_img/qccot2.jpg" style="width:40px;height:40px;margin-right:10px" />
+                </div>
+                <div style="flex:1">微信/手机浏览器扫一扫观看直播</div>
               </div>
-              <div style="flex:1">微信/手机浏览器扫一扫观看直播</div>
             </div>
-          </div>
-          <div>
-            <div id="qrcode2"></div>
-            <div style="width:200px;text-align:center;margin-top:20px;display:flex">
-              <div>
-                <img src="@/assets/images/new_img/qccot.jpg" style="width:40px;height:40px;margin-right:10px"/>
+            <div>
+              <div id="qrcode2"></div>
+              <div style="width:200px;text-align:center;margin-top:20px;display:flex">
+                <div>
+                  <img src="@/assets/images/new_img/qccot.jpg" style="width:40px;height:40px;margin-right:10px" />
+                </div>
+                <div style="flex:1">Insta360全景播放器扫一扫观看全景直播</div>
               </div>
-              <div style="flex:1">Insta360全景播放器扫一扫观看全景直播</div>
             </div>
-          </div>
-        </Modal>
-        <!-- 任务发布 -->
-        <Modal v-model="show_release" title="发布" :mask-closable='false'  footer-hide>
-            <div v-if="show_release"  style="height:150px;">
-                <h3 style="margin:10px 0;">选择发布类型：</h3>
-                <RadioGroup v-model="release_for_choose" style="height:30px;" vertical>
-                    <Radio label="2" style="padding-top:10px;" v-show="is_in === false">
-                        <span>按个人发布</span>
-                    </Radio>
-                    <Radio label="1" style="padding-top:10px;">
-                        <span>按小组发布</span>
-                        <div style="display:inline;" v-if="release_for_choose === '1'">
-                            <Input style="width:40px;margin:0 5px;" type="text" number size="small" v-model="teamnumber" />人<Tag color="warning" style="height:auto;margin:0 10px;padding:0 5px;">权重之和需为100</Tag><br>
-                            <span>&nbsp;&nbsp;&nbsp;&nbsp;
-                              老师评权重 <Input style="width:40px;margin:0 5px;" number type="text" size="small" v-model="release_teacher" />|
-                             组长评权重 <Input style="width:40px;margin:0 5px;" number type="text" size="small" v-model="release_leader" />
-                             | 组员评组长权重<Input style="width:40px;margin:0 5px;" number type="text" size="small" v-model="release_team" /></span>
-                          </div>
-                    </Radio>
-                </RadioGroup>
-                <div style="position:relative;top:65px;"><Button @click="release" type="primary" size="small">发布</Button></div>
+          </Modal>
+          <!-- 任务发布 -->
+          <Modal v-model="show_release" title="发布" :mask-closable='false' footer-hide>
+            <div v-if="show_release" style="height:150px;">
+              <h3 style="margin:10px 0;">选择发布类型：</h3>
+              <RadioGroup v-model="release_for_choose" style="height:30px;" vertical>
+                <Radio label="2" style="padding-top:10px;" v-show="is_in === false">
+                  <span>按个人发布</span>
+                </Radio>
+                <Radio label="1" style="padding-top:10px;">
+                  <span>按小组发布</span>
+                  <div style="display:inline;" v-if="release_for_choose === '1'">
+                    <Input style="width:40px;margin:0 5px;" type="text" number size="small" v-model="teamnumber" />人<Tag
+                      color="warning" style="height:auto;margin:0 10px;padding:0 5px;">权重之和需为100</Tag><br>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;
+                      老师评权重 <Input style="width:40px;margin:0 5px;" number type="text" size="small"
+                        v-model="release_teacher" />|
+                      组长评权重 <Input style="width:40px;margin:0 5px;" number type="text" size="small"
+                        v-model="release_leader" />
+                      | 组员评组长权重<Input style="width:40px;margin:0 5px;" number type="text" size="small"
+                        v-model="release_team" /></span>
+                  </div>
+                </Radio>
+              </RadioGroup>
+              <div style="position:relative;top:65px;"><Button @click="release" type="primary" size="small">发布</Button>
+              </div>
             </div>
-        </Modal>
-
-        <!-- 更换小组组长 -->
-        <div v-if="ischangeleader">
-          <Modal v-model="ischangeleader"  footer-hide width="1000" title="更换小组组长">
-            <changeLeader :task_release_id='release_id'></changeLeader>
           </Modal>
-        </div>
 
-        <!-- 测试结果查询 -->
-        <div v-if="isshowhomeworkcheck">
-          <Modal v-model="isshowhomeworkcheck" title="考试结果查询" :mask-closable='false' footer-hide width="1200" class="hei-modal">
-            <StudentExamList @closeModal="isshowhomeworkcheck=false" @on-refresh-parent-list="isshowhomeworkcheck=false" :targetwork_id="release_id" :target_type='"student_exam_list"'></StudentExamList>
-          </Modal>
-        </div>
-        <!-- 作业评价 -->
-        <div v-if="isshowevalist">
-          <Modal v-model="isshowevalist" :mask-closable='false' title="评价列表" footer-hide width="1200" class="hei-modal">
-              <StudentExamList @closeModal="isshowevalist=false" @on-refresh-parent-list="isshowevalist=false" :targetwork_id="release_id" :target_type='"student_homework_list"'></StudentExamList>
-          </Modal>
-        </div>
-
-        <!-- 测试结果分析 -->
-        <Modal v-model="isshowanalyze"  title="考试结果分析" footer-hide fullscreen v-show="isgetinfo">
-          <div v-if="isshowanalyze">
-            <addtestanalyze :analyzelist="analyzelist" ></addtestanalyze>
+          <!-- 更换小组组长 -->
+          <div v-if="ischangeleader">
+            <Modal v-model="ischangeleader" footer-hide width="1000" title="更换小组组长">
+              <changeLeader :task_release_id='release_id'></changeLeader>
+            </Modal>
           </div>
-        </Modal>
 
-        <!-- 任务详情 -->
-        <div v-if="isshowaddtask">
-          <Modal v-model="isshowaddtask" width="1000" footer-hide :title="taskname" :mask-closable='false'>
-              <TaskReleaseDetail :task_release_id="rowid" ></TaskReleaseDetail>
+          <!-- 测试结果查询 -->
+          <div v-if="isshowhomeworkcheck">
+            <Modal v-model="isshowhomeworkcheck" title="考试结果查询" :mask-closable='false' footer-hide width="1200"
+              class="hei-modal">
+              <StudentExamList @closeModal="isshowhomeworkcheck=false"
+                @on-refresh-parent-list="isshowhomeworkcheck=false" :targetwork_id="release_id"
+                :target_type='"student_exam_list"'></StudentExamList>
+            </Modal>
+          </div>
+          <!-- 作业评价 -->
+          <div v-if="isshowevalist">
+            <Modal v-model="isshowevalist" :mask-closable='false' title="评价列表" footer-hide width="1200"
+              class="hei-modal">
+              <StudentExamList @closeModal="isshowevalist=false" @on-refresh-parent-list="isshowevalist=false"
+                :targetwork_id="release_id" :target_type='"student_homework_list"'></StudentExamList>
+            </Modal>
+          </div>
+
+          <!-- 测试结果分析 -->
+          <Modal v-model="isshowanalyze" title="考试结果分析" footer-hide fullscreen v-show="isgetinfo">
+            <div v-if="isshowanalyze">
+              <addtestanalyze :analyzelist="analyzelist"></addtestanalyze>
+            </div>
           </Modal>
-        </div>
 
-        <!-- 查看测试详情 -->
-        <Modal v-model="isshowaddclass1" :title="test_name" fullscreen footer-hide>
-          <div v-if="isshowaddclass1">
-             <!-- <ExamEdit :timetable_id="timetable_id" :exam_release_id="rowid"
+          <!-- 任务详情 -->
+          <div v-if="isshowaddtask">
+            <Modal v-model="isshowaddtask" width="1000" footer-hide :title="taskname" :mask-closable='false'>
+              <TaskReleaseDetail :task_release_id="rowid"></TaskReleaseDetail>
+            </Modal>
+          </div>
+
+          <!-- 查看测试详情 -->
+          <Modal v-model="isshowaddclass1" :title="test_name" fullscreen footer-hide>
+            <div v-if="isshowaddclass1">
+              <!-- <ExamEdit :timetable_id="timetable_id" :exam_release_id="rowid"
               :action_type="3" :courseware_id="courseware_id" :teacher_course_id="$router.query.teacher_course_id" :type="2"
              ></ExamEdit> -->
-             <ExamEdit :timetable_id="timetable_id" :exam_release_id="rowid"
-              :action_type="3" :courseware_id="courseware_id" :teacher_course_id="teacher_course_id" :type="2"
-             ></ExamEdit>
-          </div>
-        </Modal>
-
-        <!-- 作业详情 -->
-        <div v-if="isshowaddhomework">
-          <Modal v-model="isshowaddhomework"  :title="homeworkname" footer-hide width="1000"  :mask-closable='false' :styles="{top: '20px'}">
-             <HomeworkReleaseDetail :homework_release_id="rowid"  ></HomeworkReleaseDetail>
-          </Modal>
-        </div>
-
-        <!-- 删除问题 -->
-        <Modal v-model="isshowDeleteModel" @on-ok="sureDelete" title="删除">
-          是否确认删除问题
-        </Modal>
-
-        <!-- 添加问题 -->
-        <Modal v-model="isshowAddquestion" :width="620" footer-hide>
-          <coursewareQuestion :online_data='online_student' :courseware_id='courseware_id' :group_chat_id='group_chat_id' :showTime="showTime" :add_type="'call'" @changeTime='changeTime' @closeQList='closeQList'></coursewareQuestion>
-        </Modal>
-
-        <!-- 显示已有客观题 -->
-        <Modal v-model="isshowSeclectquestion" :width="690"  footer-hide>
-          <div>
-            <span style="font-size:14px;color:#26282F;margin-bottom:20px;display:inline-block;margin-bottom:10px">提问：</span>
-            <div class="questionContain">
-              <p class="questionContain-question">
-                {{contentShow}}
-              </p>
-              <p v-for="(item,index) in topicShow" :key="index">{{item.choose}}、{{item.choose_content}}</p>
+              <ExamEdit :timetable_id="timetable_id" :exam_release_id="rowid" :action_type="3"
+                :courseware_id="courseware_id" :teacher_course_id="teacher_course_id" :type="2"></ExamEdit>
             </div>
+          </Modal>
+
+          <!-- 作业详情 -->
+          <div v-if="isshowaddhomework">
+            <Modal v-model="isshowaddhomework" :title="homeworkname" footer-hide width="1000" :mask-closable='false'
+              :styles="{top: '20px'}">
+              <HomeworkReleaseDetail :homework_release_id="rowid"></HomeworkReleaseDetail>
+            </Modal>
+          </div>
+
+          <!-- 删除问题 -->
+          <Modal v-model="isshowDeleteModel" @on-ok="sureDelete" title="删除">
+            是否确认删除问题
+          </Modal>
+
+          <!-- 添加问题 -->
+          <Modal v-model="isshowAddquestion" :width="620" footer-hide>
+            <coursewareQuestion :online_data='online_student' :courseware_id='courseware_id'
+              :group_chat_id='group_chat_id' :showTime="showTime" :add_type="'call'" @changeTime='changeTime'
+              @closeQList='closeQList'></coursewareQuestion>
+          </Modal>
+
+          <!-- 显示已有客观题 -->
+          <Modal v-model="isshowSeclectquestion" :width="690" footer-hide>
+            <div>
+              <span
+                style="font-size:14px;color:#26282F;margin-bottom:20px;display:inline-block;margin-bottom:10px">提问：</span>
+              <div class="questionContain">
+                <p class="questionContain-question">
+                  {{contentShow}}
+                </p>
+                <p v-for="(item,index) in topicShow" :key="index">{{item.choose}}、{{item.choose_content}}</p>
+              </div>
+              <div class="showtime">
+                作答时间：<input type="number" class="new-inputnumber" v-model="reply_timeShow" style="font-size:14px" />秒
+                <button style="background:#15B5A8" @click="submitQuestion2">全体作答</button>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          </Modal>
+
+          <!-- 显示已有主观题 -->
+          <Modal v-model="isshowMainquestion" :width="690" footer-hide>
+            <span
+              style="font-size:14px;color:#26282F;margin-bottom:20px;display:inline-block;margin-bottom:10px">提问：</span>
+            <div class="questionContain">
+              <p class="questionContain-question" style="margin-bottom:0;min-height:100px">
+                {{mainQuestionContent}}
+              </p>
+            </div>
+            <div style="float:left;margin-top:20px;line-height:26px">在线人数：{{online_data.online_count}}</div>
             <div class="showtime">
-              作答时间：<input type="number" class="new-inputnumber" v-model="reply_timeShow" style="font-size:14px"/>秒
-              <button style="background:#15B5A8" @click="submitQuestion2">全体作答</button>
+              回答人数：<input type="number" v-model="mainAnswer_num" class="new-inputnumber" />
+              <button @click="submitQuestion" style="background:#3B88E8">随机发布</button>
+              <button @click="submitQuestion" style="background:#15B5A8">指定学生</button>
+              <button @click="submitQuestion" style="background:#49951B">抢答</button>
             </div>
             <div style="clear:both"></div>
-          </div>
-        </Modal>
+          </Modal>
 
-        <!-- 显示已有主观题 -->
-        <Modal v-model="isshowMainquestion" :width="690"  footer-hide>
-          <span style="font-size:14px;color:#26282F;margin-bottom:20px;display:inline-block;margin-bottom:10px">提问：</span>
-          <div class="questionContain">
-            <p class="questionContain-question" style="margin-bottom:0;min-height:100px">
-              {{mainQuestionContent}}
-            </p>
-          </div>
-          <div style="float:left;margin-top:20px;line-height:26px">在线人数：{{online_data.online_count}}</div>
-          <div class="showtime">
-            回答人数：<input type="number" v-model="mainAnswer_num" class="new-inputnumber" />
-            <button @click="submitQuestion" style="background:#3B88E8">随机发布</button>
-            <button @click="submitQuestion" style="background:#15B5A8">指定学生</button>
-            <button @click="submitQuestion" style="background:#49951B">抢答</button>
-          </div>
-          <div style="clear:both"></div>
-        </Modal>
+          <!-- 学生主观题回答 -->
+          <Modal v-model="isshowAnswer" :width="690" footer-hide>
+            <answerList :mainQuestion='mainQuestion'></answerList>
+          </Modal>
 
-        <!-- 学生主观题回答 -->
-        <Modal v-model="isshowAnswer" :width="690" footer-hide>
-          <answerList :mainQuestion = 'mainQuestion'></answerList>
-        </Modal>
+          <!-- 学生客观题回答 -->
+          <Modal v-model="isshowAnswerSelectAnwser" :width="690" footer-hide>
+            <selectquestionAnwser :selectQuestion='selectQuestion'></selectquestionAnwser>
+          </Modal>
 
-         <!-- 学生客观题回答 -->
-        <Modal v-model="isshowAnswerSelectAnwser" :width="690" footer-hide>
-          <selectquestionAnwser :selectQuestion = 'selectQuestion'></selectquestionAnwser>
-        </Modal>
-
-        <Modal
-          v-model="modal2"
-          title="选择学生"
-          @on-ok="submit">
-            <div style="font-size:14px;margin-bottom:8px;color:black;font-weight:bold">请选择（{{total}}/{{mainAnswer_num}}）位学生:</div>
+          <Modal v-model="modal2" title="选择学生" @on-ok="submit">
+            <div style="font-size:14px;margin-bottom:8px;color:black;font-weight:bold">
+              请选择（{{total}}/{{mainAnswer_num}}）位学生:</div>
             <div class="student">
               <div v-for="(item,index) in online_student.students" class="className" ref="className" :key="index">
                 <h3>{{item.class_name}}</h3>
                 <ul>
-                  <li v-for="(item2,index2) in item.student" class="studentName" ref="studentName" @click="select(item2,$event)" :key="index2">
+                  <li v-for="(item2,index2) in item.student" class="studentName" ref="studentName"
+                    @click="select(item2,$event)" :key="index2">
                     {{item2.name}}
                   </li>
                   <div style="clear:both"></div>
                 </ul>
               </div>
             </div>
-        </Modal>
+          </Modal>
 
-        <Modal
-          v-model="modal1"
-          title="抢答"
-          @on-ok="ok">
-          <p>是否确定进行抢答？</p>
-        </Modal>
-        <!-- <Modal v-model="isshowAnswer" :width="800" title="学生回答" footer-hide>
+          <Modal v-model="modal1" title="抢答" @on-ok="ok">
+            <p>是否确定进行抢答？</p>
+          </Modal>
+          <!-- <Modal v-model="isshowAnswer" :width="800" title="学生回答" footer-hide>
           <coursewareAnswer :problemAnswer='problemAnswer'></coursewareAnswer>
         </Modal> -->
-        <Modal v-model="modal" :title="title" width="1100px" :styles="{top: '0px'}" footer-hide>
-            <CourseTable :teacher_course_id="target_id" v-if="target === 'course_table' && modal" ></CourseTable>
+          <Modal v-model="modal" :title="title" width="1100px" :styles="{top: '0px'}" footer-hide>
+            <CourseTable :teacher_course_id="target_id" v-if="target === 'course_table' && modal"></CourseTable>
           </Modal>
-        <Modal v-model="modal4" title="请选择要考勤的时间" width="300px" footer-hide>
-          <ul>
-            <li v-for="(item,index) in courseTimeList" :key="index" style="font-size:16px;margin:4px 0">
-              <span style="cursor:pointer" @click="doAtten(item)">第{{item.class}}节</span>
-            </li>
-          </ul>
-        </Modal>
-        <Modal v-model="modal3" title="考勤" width="1000" footer-hide>
-          <Attendance v-if="target == 'attend'&& modal3" :teacher_course_list='attenDetailList' :teacher_course_id="teacher_course_id" :year="year" :class_ids="class_id" :semester="semester"></Attendance>
-        </Modal>
-      </Content>
+          <Modal v-model="modal4" title="请选择要考勤的时间" width="300px" footer-hide>
+            <ul>
+              <li v-for="(item,index) in courseTimeList" :key="index" style="font-size:16px;margin:4px 0">
+                <span style="cursor:pointer" @click="doAtten(item)">第{{item.class}}节</span>
+              </li>
+            </ul>
+          </Modal>
+          <Modal v-model="modal3" title="考勤" width="1000" footer-hide>
+            <Attendance v-if="target == 'attend'&& modal3" :teacher_course_list='attenDetailList'
+              :teacher_course_id="teacher_course_id" :year="year" :class_ids="class_id" :semester="semester">
+            </Attendance>
+          </Modal>
+        </Content>
+      </Layout>
     </Layout>
-  </Layout>
-</div>
+  </div>
 </template>
 <script>
 import pdf from 'vue-pdf'
@@ -1006,7 +1036,7 @@ export default {
         if (this.mainAnswer_num <= 0) {
           this.$Message.error('提问人数不能小于1')
         } else if (this.mainAnswer_num > this.online_data.online_count) {
-        // } else if (this.mainAnswer_num > 100) {
+          // } else if (this.mainAnswer_num > 100) {
           this.$Message.error('提问人数不能大于在线人数')
         } else {
           if (e.target.innerText === '抢答') {
@@ -1568,7 +1598,7 @@ export default {
             scrollTop: this.scrollTop
           },
           group: this.group_chat_id
-        }).then(res => {})
+        }).then(res => { })
       }
     },
     send () {
@@ -1989,239 +2019,253 @@ export default {
 }
 </script>
 <style>
-  .finnish-class{
-    width:100%;
-    height:10%;
-    background:#DE5959;
-    color: #ffffff;
-    line-height: 80px;
-    text-align: center;
-    border-radius: 8px;
-    margin-top: 16%;
-    cursor:pointer
-  }
-
-  .prohibit-discuss-btn{
-    width: 100%;
-    padding: 16px 0;
-    background: #333335;
-    border: 1px solid #3C3B3E;
-    text-align: center;
-    cursor: pointer;
-    margin-bottom: 10px;
-    border-radius: 4px;
-  }
-
-  .show-list{
-    width: 32%;
-    left: 0;
-    min-width: 330px;
-    height: 100%;
-    background: #272930;
-    position: absolute;
-    z-index: 2;
-    overflow: scroll;
-    overflow-x: hidden;
-    box-shadow:0px 4px 6px 0px rgba(0, 0, 0, 0.18);
-  }
-  .list-contain{
-    padding: 0 10px;
-    font-size: 14px;
-  }
-  .table_item{
-    width: 100%;
-    color: #c4c4c4;
-    background-size: 100%;
-    background: #272930;
-  }
-  .table_item p{
-    margin-bottom: 10px;
-  }
-  .w_btn{
-      padding: 10px 0;
-    }
-  .w_btn span{
-    border: 1px solid rgb(251, 250, 252);
-    padding: 6px 20px;
-    margin-right: 10px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  .online-list-header{
-    width:100%;
-    border-bottom:1px solid #474747;
-    display:flex;
-    color:#D1D1D1
-  }
-  .ptwz{
-    flex:1;
-    text-align:center;
-    margin:0 20px;
-    padding:5px 0;
-    cursor: pointer;
-  }
-  .blwz{
-    flex:1;
-    text-align:center;
-    margin:0 20px;
-    padding:5px 0;
-    cursor: pointer;
-    border-bottom:2px solid #3B88E8;
-    color:#3B88E8
-  }
-  .newtypeCollapse{
-    background: #323232;
-    border: none;
-    height: 100%;
-    overflow-y: scroll;
-  }
-  .newtypeCollapse > .ivu-collapse-item.ivu-collapse-item-active > .ivu-collapse-header{
-    border-bottom:none
-  }
-  .newtypeCollapse .ivu-collapse > .ivu-collapse-item.ivu-collapse-item-active > .ivu-collapse-header{
-    border: none;
-  }
-  .newtypeCollapse>.ivu-collapse-item{
-    color: #C5C5C5;
-    border: none;
-  }
-  .newtypeCollapse>.ivu-collapse-item > .ivu-collapse-header{
-    color: #C5C5C5;
-    padding: 0;
-  }
-  .newtypeCollapse .ivu-collapse-content{
-    background: #323232;
-    color: #BCBCBC;
-    padding: 0;
-  }
-  .newtypeCollapse .ivu-collapse-content > .ivu-collapse-content-box{
-    padding-top: 8px;
-    padding-bottom: 4px;
-  }
-  .newtypeCollapse ul{
-    margin-bottom: 0;
-  }
-  .newtypeCollapse ul li{
-    margin: 10px 0;
-  }
-  .online-data-name{
-    position: relative;
-  }
-  .changeattenStatus{
-    position: absolute;
-    right: 0;
-    top: 10px;
-    background: rgb(55,54,57);
-    border: 1px solid #404040;
-    border-radius: 4px;
-    display: none;
-  }
-  ul.changeattenStatus>li{
-    margin: 4px;
-    cursor: pointer;
-  }
-  .atten-r{
-    display:inline-block;
-    background:red;
-    width:8px;
-    height:8px;
-    border-radius:4px;
-    margin: 0 4px;
-  }
-  .atten-g{
-    display:inline-block;
-    background:green;
-    width:8px;
-    margin: 0 4px;
-    height:8px;
-    border-radius:4px
-  }
-  .atten-o{
-    display:inline-block;
-    background:orange;
-    width:8px;
-    margin: 0 4px;
-    height:8px;
-    border-radius:4px
-  }
-  .teacher-uestionlist{
-    padding: 0 10px;
-  }
-  .teacher-uestionlist li{
-    border: 1px solid #3E4046;
-    padding: 9px 12px;
-    margin-bottom: 10px;
-    cursor: pointer;
-  }
-  .teacher-uestionlist li>span:nth-of-type(1),.teacher-uestionlist li>span:nth-of-type(3){
-    color: #A7A7A7;
-  }
-  .teacher-uestionlist li>span:nth-of-type(2){
-    color: #547A63;
-    margin-right: 10px;
-  }
-  .add-question{
-    background: #26282F;
-    border: 1px solid #3E4046;
-    color: #3B88E8;
-    padding: 9px 56px;
-    margin: 0 10px 10px 10px;
-    cursor: pointer;
-    outline: none;
-  }
-  .questionContain{
-    background: #E7E7E7;
-    color: #26282F;
-    font-size: 14px;
-    border-radius: 4px;
-    padding: 14px;
-  }
-  .questionContain>p{
-    margin: 0 0 18px 0;
-  }
-  .questionContain>p:nth-of-type(5){
-    margin-bottom:  6px;
-  }
-  .questionContain>.questionContain-question{
-    margin-bottom: 30px;
-  }
-  .qrModal .ivu-modal-body{
-    padding: 40px 60px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 16px;
-  }
-  .allscreen{
-    width: 100%;
-    height: 100%;
-    display: none;
-    position: absolute;
-    left: 0;
-    z-index: 5;
-    background: rgb(0, 0, 0, .7);
-  }
-  .hei-modal .ivu-modal-body{
-    height: 700px;
-  }
-  .gray {
-    -webkit-filter: grayscale(100%);
-    -moz-filter: grayscale(100%);
-    -ms-filter: grayscale(100%);
-    -o-filter: grayscale(100%);
-
-    filter: grayscale(100%);
-
-    filter: gray;
+.finnish-class {
+  width: 100%;
+  height: 10%;
+  background: #de5959;
+  color: #ffffff;
+  line-height: 80px;
+  text-align: center;
+  border-radius: 8px;
+  margin-top: 16%;
+  cursor: pointer;
 }
-  .clear:after{
-    content: "";
-    display: block;
-    height: 0;
-    clear: both;
-  }
-  .clearfix{zoom:1}
 
-  .show-list::-webkit-scrollbar { width: 0 !important }
-  #pdf::-webkit-scrollbar { width: 0 !important }
-  .newtypeCollapse::-webkit-scrollbar { width: 0 !important }
+.prohibit-discuss-btn {
+  width: 100%;
+  padding: 16px 0;
+  background: #333335;
+  border: 1px solid #3c3b3e;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.show-list {
+  width: 32%;
+  left: 0;
+  min-width: 330px;
+  height: 100%;
+  background: #272930;
+  position: absolute;
+  z-index: 2;
+  overflow: scroll;
+  overflow-x: hidden;
+  box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.18);
+}
+.list-contain {
+  padding: 0 10px;
+  font-size: 14px;
+}
+.table_item {
+  width: 100%;
+  color: #c4c4c4;
+  background-size: 100%;
+  background: #272930;
+}
+.table_item p {
+  margin-bottom: 10px;
+}
+.w_btn {
+  padding: 10px 0;
+}
+.w_btn span {
+  border: 1px solid rgb(251, 250, 252);
+  padding: 6px 20px;
+  margin-right: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.online-list-header {
+  width: 100%;
+  border-bottom: 1px solid #474747;
+  display: flex;
+  color: #d1d1d1;
+}
+.ptwz {
+  flex: 1;
+  text-align: center;
+  margin: 0 20px;
+  padding: 5px 0;
+  cursor: pointer;
+}
+.blwz {
+  flex: 1;
+  text-align: center;
+  margin: 0 20px;
+  padding: 5px 0;
+  cursor: pointer;
+  border-bottom: 2px solid #3b88e8;
+  color: #3b88e8;
+}
+.newtypeCollapse {
+  background: #323232;
+  border: none;
+  height: 100%;
+  overflow-y: scroll;
+}
+.newtypeCollapse
+  > .ivu-collapse-item.ivu-collapse-item-active
+  > .ivu-collapse-header {
+  border-bottom: none;
+}
+.newtypeCollapse
+  .ivu-collapse
+  > .ivu-collapse-item.ivu-collapse-item-active
+  > .ivu-collapse-header {
+  border: none;
+}
+.newtypeCollapse > .ivu-collapse-item {
+  color: #c5c5c5;
+  border: none;
+}
+.newtypeCollapse > .ivu-collapse-item > .ivu-collapse-header {
+  color: #c5c5c5;
+  padding: 0;
+}
+.newtypeCollapse .ivu-collapse-content {
+  background: #323232;
+  color: #bcbcbc;
+  padding: 0;
+}
+.newtypeCollapse .ivu-collapse-content > .ivu-collapse-content-box {
+  padding-top: 8px;
+  padding-bottom: 4px;
+}
+.newtypeCollapse ul {
+  margin-bottom: 0;
+}
+.newtypeCollapse ul li {
+  margin: 10px 0;
+}
+.online-data-name {
+  position: relative;
+}
+.changeattenStatus {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  background: rgb(55, 54, 57);
+  border: 1px solid #404040;
+  border-radius: 4px;
+  display: none;
+}
+ul.changeattenStatus > li {
+  margin: 4px;
+  cursor: pointer;
+}
+.atten-r {
+  display: inline-block;
+  background: red;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  margin: 0 4px;
+}
+.atten-g {
+  display: inline-block;
+  background: green;
+  width: 8px;
+  margin: 0 4px;
+  height: 8px;
+  border-radius: 4px;
+}
+.atten-o {
+  display: inline-block;
+  background: orange;
+  width: 8px;
+  margin: 0 4px;
+  height: 8px;
+  border-radius: 4px;
+}
+.teacher-uestionlist {
+  padding: 0 10px;
+}
+.teacher-uestionlist li {
+  border: 1px solid #3e4046;
+  padding: 9px 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.teacher-uestionlist li > span:nth-of-type(1),
+.teacher-uestionlist li > span:nth-of-type(3) {
+  color: #a7a7a7;
+}
+.teacher-uestionlist li > span:nth-of-type(2) {
+  color: #547a63;
+  margin-right: 10px;
+}
+.add-question {
+  background: #26282f;
+  border: 1px solid #3e4046;
+  color: #3b88e8;
+  padding: 9px 56px;
+  margin: 0 10px 10px 10px;
+  cursor: pointer;
+  outline: none;
+}
+.questionContain {
+  background: #e7e7e7;
+  color: #26282f;
+  font-size: 14px;
+  border-radius: 4px;
+  padding: 14px;
+}
+.questionContain > p {
+  margin: 0 0 18px 0;
+}
+.questionContain > p:nth-of-type(5) {
+  margin-bottom: 6px;
+}
+.questionContain > .questionContain-question {
+  margin-bottom: 30px;
+}
+.qrModal .ivu-modal-body {
+  padding: 40px 60px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+.allscreen {
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: absolute;
+  left: 0;
+  z-index: 5;
+  background: rgb(0, 0, 0, 0.7);
+}
+.hei-modal .ivu-modal-body {
+  height: 700px;
+}
+.gray {
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+
+  filter: grayscale(100%);
+
+  filter: gray;
+}
+.clear:after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+}
+.clearfix {
+  zoom: 1;
+}
+
+.show-list::-webkit-scrollbar {
+  width: 0 !important;
+}
+#pdf::-webkit-scrollbar {
+  width: 0 !important;
+}
+.newtypeCollapse::-webkit-scrollbar {
+  width: 0 !important;
+}
 </style>

@@ -106,7 +106,7 @@ export const get_TeacherAttention = () => {
     method: 'get'
   })
 }
-// 取消教师关注
+// 取消教师关注  移除粉丝
 export const unfollow_Attention = (id) => {
   return axios.request({
     url: '/Teacher/TeacherAttention/unfollow',
@@ -128,12 +128,31 @@ export const getMyCourseAttention = ({ page, pagesize }) => {
   })
 }
 // 解除微信绑定
-export const updateUserWechatId = ({ id }) => {
+export const updateUserWechatId = (wx_id) => {
   return axios.request({
-    url: 'home/wechat/updateUserWechatId',
+    url: '/home/wechat/updateUserWechatId',
     method: 'post',
     data: {
-      id
+      wx_id
+    }
+  })
+}
+// 我的粉丝
+export const loveMe = () => {
+  return axios.request({
+    url: '/teacher/TeacherAttention/loveMe',
+    method: 'post'
+  })
+}
+// 首页的本校课程
+export const myCourseList = ({ page, page_size, school_id }) => {
+  return axios.request({
+    method: 'get',
+    url: '/index.php/home/course/isShowSchoolCourses',
+    params: {
+      page,
+      page_size,
+      school_id
     }
   })
 }

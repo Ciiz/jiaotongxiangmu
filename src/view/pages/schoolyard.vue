@@ -347,7 +347,7 @@ export default {
         .then(res => {
           if (res.code === 200) {
             if (res.data.list.length >= 8) {
-              this.schoolList = res.data.list.slice(0, 4)
+              this.schoolList = res.data.list.slice(0, 8)
               console.log(this.schoolList)
             }
             this.DropdownItem_schoolList = res.data.list

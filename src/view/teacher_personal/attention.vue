@@ -1,10 +1,10 @@
 <template>
   <div class="attention_main">
+    <div v-if="attention_List.length===0">没有任何关注</div>
     <Row class="attention" v-for="(item,index) in attention_List" :key="item.id">
       <Col class="attention_img">
       <img :src="item.icon" alt="">
       </Col>
-
       <Col class="attention_message">
 
       <div class="attention_message_header">
@@ -12,9 +12,9 @@
         <router-link to="" class="attention_message_header_name2">查看主页>></router-link>
       </div>
       <div class="attention_message_footer">
-        <span>院校</span>
-        <span>职业</span>
-        <span>他的课程</span>
+        <span>院校:{{item.school_name}}</span>
+        <span>职业:{{item.major_name}}</span>
+        <span>他的课程:{{item.course_count}}</span>
       </div>
       </Col>
       <Col style="cursor:pointer" class="attention_cancel_f">
@@ -35,6 +35,7 @@ export default {
     return {
       attention_List: [],
       id: ''
+
     }
   },
   methods: {

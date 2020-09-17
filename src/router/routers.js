@@ -112,6 +112,7 @@ const common = [
 ]
 
 const indexRouter = [
+
   {
     path: '/',
     name: '/',
@@ -236,6 +237,16 @@ const indexRouter = [
           }
         ]
 
+      },
+      // 首页视频跳转
+      {
+        path: '/videojump/:id',
+        name: 'videojump',
+        meta: {
+          title: '首页视频播放',
+          hideInMenu: false
+        },
+        component: () => import('@/view/video_index/videojump.vue')
       }
     ]
   },
@@ -491,6 +502,7 @@ const indexRouter = [
       }
     ]
   }
+
 ]
 
 const mobileStudent = [
@@ -860,6 +872,16 @@ const mobileStudent = [
 ]
 
 const mobileTeacher = [
+  {
+
+    name: 'searchpage',
+    path: '/searchpage',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/searchpage.vue')
+
+  },
   {
     path: '/mobileCoursewareT',
     name: 'mobileCoursewareT',

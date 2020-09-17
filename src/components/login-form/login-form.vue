@@ -3,17 +3,17 @@
     <Form ref="loginForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
       <FormItem style="margin-bottom:15px">
         <RadioGroup v-model="form.user_type">
-            <Radio :label="1" style="margin-right:22px">老师</Radio>
-            <Radio :label="2">学生</Radio>
+          <Radio :label="1" style="margin-right:22px">老师</Radio>
+          <Radio :label="2">学生</Radio>
         </RadioGroup>
       </FormItem>
 
       <FormItem prop="school">
         <Row>
           <Col>
-            <Select v-model="form.school" placeholder="请选择学校" filterable>
-              <Option :value="item.id" v-for="item in schoolList" :key="item.id">{{item.school_name}}</Option>
-            </Select>
+          <Select v-model="form.school" placeholder="请选择学校" filterable>
+            <Option :value="item.id" v-for="item in schoolList" :key="item.id">{{item.school_name}}</Option>
+          </Select>
           </Col>
         </Row>
       </FormItem>
@@ -21,8 +21,8 @@
       <FormItem prop="userName">
         <Row>
           <Col>
-            <Input v-model="form.userName"  placeholder="请输入学号/工号">
-            </Input>
+          <Input v-model="form.userName" placeholder="请输入学号/工号">
+          </Input>
           </Col>
         </Row>
       </FormItem>
@@ -30,7 +30,7 @@
       <FormItem prop="password">
         <Row>
           <Col>
-            <Input type="password" v-model="form.password" placeholder="请输入密码"></input>
+          <Input type="password" v-model="form.password" placeholder="请输入密码"></input>
           </Col>
         </Row>
       </FormItem>
@@ -38,10 +38,10 @@
       <FormItem style="margin-bottom:15px;text-align:center">
         <Row>
           <Col>
-            <Button @click="handleSubmit" type="primary" long>登录</Button>
-            <div style="text-align:center;margin-top:10px">
-              <img style="cursor:pointer" src="../../assets/images/wechat.svg" width="34" height="34" @click="goLogin">
-            </div>
+          <Button @click="handleSubmit" type="primary" long>登录</Button>
+          <div style="text-align:center;margin-top:10px">
+            <img style="cursor:pointer" src="../../assets/images/wechat.svg" width="34" height="34" @click="goLogin">
+          </div>
           </Col>
         </Row>
       </FormItem>
@@ -136,30 +136,31 @@ export default {
 }
 </script>
 <style>
-  .login-index{
-    font-size: 16px;
-    width: 450px;
-    background: #ffffff;
-    left: 50%;
-    top: 50%;
-    position: absolute;
-    transform: translate(-50%,-50%);
-    padding: 20px;
-  }
-  .login-index .ivu-select-input,.login-index .ivu-select-single .ivu-select-selection{
-    height: 44px;
-    font-size: 16px;
-    line-height: 44px;
-  }
-  .login-index .ivu-input{
-    font-size: 16px;
-    height: 44px;
-    line-height: 44px;
-  }
-  .login-index .ivu-btn{
-    padding: 12px 0;
-  }
-  .login-index .ivu-radio-wrapper{
-    font-size: 16px;
-  }
+.login-index {
+  font-size: 16px;
+  width: 450px;
+  background: #ffffff;
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+}
+.login-index .ivu-select-input,
+.login-index .ivu-select-single .ivu-select-selection {
+  height: 44px;
+  font-size: 16px;
+  line-height: 44px;
+}
+.login-index .ivu-input {
+  font-size: 16px;
+  height: 44px;
+  line-height: 44px;
+}
+.login-index .ivu-btn {
+  padding: 12px 0;
+}
+.login-index .ivu-radio-wrapper {
+  font-size: 16px;
+}
 </style>
