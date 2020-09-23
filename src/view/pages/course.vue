@@ -39,8 +39,8 @@
             </Col>
           </Row>
           <ul>
-            <div v-if="commandCourseList.length===0" style="height:200px">暂无推荐课程</div>
-            <li v-for="(item,index) in commandCourseList" :key="index" class="index-course-item"
+            <div v-if="comamnd_Select_list.length===0" style="height:200px">暂无推荐课程</div>
+            <li v-for="(item,index) in comamnd_Select_list" :key="index" class="index-course-item"
               @click="$router.push({path:`/videojump/${item.id}`})">
               <img :src="item.img" style="width:100%;height:150px" />
               <div class="index-course-name">{{item.course_name}}</div>
@@ -68,12 +68,12 @@
           <Row type="flex" justify="space-between" class="new-index-course-header">
             <Col>
             <Select v-model="major" style="width:200px" @on-change='handle_select'>
-              <Option v-for="item in majorList" :value="item.major_id" :key="item.major_id">{{ item.major_name }}
+              <Option v-for="item in majorList" :value="item.major_name" :key="item.major_id">{{ item.major_name }}
               </Option>
             </Select>
             </Col>
             <Col>
-            <RadioGroup @on-change='handle_mychange'>
+            <RadioGroup @on-change='handle_Radio'>
               <Radio label="全部"></Radio>
               <Radio label="精选课程"></Radio>
               <Radio label="免费课程"></Radio>
@@ -81,8 +81,8 @@
             </Col>
           </Row>
           <ul>
-            <div v-if="courseList.length===0" style="height:200px">暂无课程</div>
-            <li v-for="(item,index) in courseList" :key="index" class="index-course-item">
+            <div v-if="Select_list.length===0" style="height:200px">暂无课程</div>
+            <li v-for="(item,index) in Select_list" :key="index" class="index-course-item">
               <img :src="item.img" style="width:100%;height:150px" />
               <div class="index-course-name">{{item.course_name}}</div>
 
@@ -191,12 +191,14 @@
     <Modal v-model="modal2" :title="title" width="800" footer-hide>
       <newsContent :id="id"></newsContent>
     </Modal>
+    <!-- <span>{{flitersdata}}</span> -->
   </div>
 </template>
 <script>
 import modal_mixin from '@/view/mixins/modal_mixin'
 import newsContent from '@/view/news/newsContent'
 import { get_bannersIndex, get_majors, myCourseList, courselist } from '@/api/common'
+// import log from 'video.js/es5/utils/log'
 export default {
   mixins: [modal_mixin],
   components: {
@@ -218,17 +220,16 @@ export default {
       tItemIndex: 0,
       value2: 0,
       autoplaySpeed: 2000,
-      newCourse: [], // 精品课程
-      freeCourse: [], // 免费课程
       animal: '全部', // 单选框
-      mycourerList: [], // 本校的精品课程
-      myfreeCourselist: [] // 本校的免费课程
+      Select_list: [], // 本校课程的渲染数组
+      comamnd_Select_list: [] // 推荐课程的渲染数组
+
     }
   },
   watch: {
-    major (newVal, oldVal) {
-      this.getData()
-    },
+    // major (newVal, oldVal) {
+    //   this.getData()
+    // },
     token (n, o) {
       if (n !== '' && n !== false && n !== undefined) {
         this.getData()
@@ -255,41 +256,49 @@ export default {
     }
   },
   methods: {
-    // 选中select下拉列表
-    handle_select (value) {
-      console.log(value)
-    },
-    // 课程推荐的单选框的切换
-    handle_change (e) {
-      if (e === '精选课程') {
-        this.commandCourseList = this.newCourse
+    // 单选
+    handle_Radio (value) {
+      this.Select_list = this.courseList.filter(v => {
+        return v.is_charge_name === value
+      })
+      if (this.Select_list.length > 10) {
+        this.Select_list.length = 10
       }
-      if (e === '免费课程') {
-        this.commandCourseList = this.freeCourse
-      }
-      if (e === '全部') {
-        courselist().then(res => {
-          this.commandCourseList = res.data.data
-        })
-      }
-    },
-    // 本校课程的单选框的切换
-    handle_mychange (e) {
-      if (e === '精选课程') {
-        this.courseList = this.mycourerList
-      }
-      if (e === '免费课程') {
-        this.courseList = this.myfreeCourselist
-      }
-      if (e === '全部') {
+      if (value === '全部') {
         var data = {
           page: 1,
           page_size: 10,
           school_id: this.schoolId
         }
         myCourseList(data).then(res => {
-          this.courseList = res.data.list
+          if (this.Select_list.length > 10) {
+            this.Select_list.length = 10
+          }
+          this.Select_list = res.data.list
         })
+      }
+    },
+    // 选中select下拉列表和
+    handle_select (value) {
+      this.Select_list = this.courseList.filter(v => {
+        return v.major_name === value
+      })
+    },
+    // 课程推荐的单选框的切换
+    handle_change (value) {
+      if (value === '全部') {
+        courselist().then(res => {
+          this.comamnd_Select_list = res.data.data
+          if (this.comamnd_Select_list.length > 10) {
+            this.comamnd_Select_list.length = 10
+          }
+        })
+      }
+      this.comamnd_Select_list = this.commandCourseList.filter(v => {
+        return v.is_charge_name === value
+      })
+      if (this.comamnd_Select_list.length > 10) {
+        this.comamnd_Select_list.length = 10
       }
     },
     // 获取轮播图
@@ -315,47 +324,35 @@ export default {
       }
       myCourseList(data).then(res => {
         console.log(res)
-        this.courseList = res.data.list
-        // 获取精品课程 和 获取免费课程
-        res.data.list.forEach((v, i) => {
-          if (v.is_charge === 1) {
-            this.mycourerList.push(v)
-            if (this.mycourerList.length > 10) {
-              this.mycourerList.length = 10
-            }
-          }
-          if (v.is_charge === 0) {
-            this.myfreeCourselist.push(v)
-            if (this.myfreeCourselist.length > 10) {
-              this.myfreeCourselist.length = 10
-            }
-          }
+        // 数据改造
+        res.data.list.map(item => {
+          if (item.is_charge === 1) return item.is_charge_name = '精选课程'
+          else if (item.is_charge === 0) return item.is_charge_name = '免费课程'
         })
+        this.courseList = res.data.list
+        this.Select_list = res.data.list
+        if (this.Select_list.length > 10) {
+          this.Select_list.length = 10
+        }
       })
     },
     // 获取推荐课程
     get_command_course () {
       courselist().then(res => {
         console.log(res)
-        this.commandCourseList = res.data.data
-        if (this.commandCourseList.length > 10) {
-          this.commandCourseList.length = 10
+        // 数据改造
+        if (res.code === 200) {
+          res.data.data.map(item => {
+            console.log(item)
+            if (item.is_charge === 1) return item.is_charge_name = '精选课程'
+            else if (item.is_charge === 0) return item.is_charge_name = '免费课程'
+          })
+          this.commandCourseList = res.data.data
+          this.comamnd_Select_list = res.data.data
+          if (this.comamnd_Select_list.length > 10) {
+            this.comamnd_Select_list.length = 10
+          }
         }
-        // 获取精品课程 和 获取免费课程
-        res.data.data.forEach((v, i) => {
-          if (v.is_charge === 1) {
-            this.newCourse.push(v)
-            if (this.newCourse.length > 10) {
-              this.newCourse.length = 10
-            }
-          }
-          if (v.is_charge === 0) {
-            this.freeCourse.push(v)
-            if (this.freeCourse.length > 10) {
-              this.freeCourse.length = 10
-            }
-          }
-        })
       })
     },
     // 获取推荐教师

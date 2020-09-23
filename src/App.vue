@@ -1,11 +1,22 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
+// ios的禁止屏幕缩放
 import { mapMutations } from 'vuex'
+window.onload = function () {
+  document.addEventListener('touchstart', function (event) {
+    if (event.touches.length > 1) {
+      event.preventDefault()
+    }
+  })
+  document.addEventListener('gesturestart', function (event) {
+    event.preventDefault()
+  })
+}
 export default {
   name: 'App',
   methods: {

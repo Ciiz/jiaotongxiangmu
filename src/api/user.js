@@ -144,15 +144,3 @@ export const loveMe = () => {
     method: 'post'
   })
 }
-// 首页的本校课程
-export const myCourseList = ({ page, page_size, school_id }) => {
-  return axios.request({
-    method: 'get',
-    url: '/index.php/home/course/isShowSchoolCourses',
-    params: {
-      page,
-      page_size,
-      school_id
-    }
-  })
-}

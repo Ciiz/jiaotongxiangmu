@@ -178,11 +178,8 @@ export default {
 <style lang='less' scoped>
 body {
 }
-// .m-index_b {
-//   overflow: hidden;
-//   width: 7.4rem;
-// }
 
 .m-index {
+  // position: relative;
 }
 </style>

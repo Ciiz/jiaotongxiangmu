@@ -5,13 +5,13 @@
         <div>
           <Icon type="ios-bookmarks-outline" />
         </div>
-        <div>我的课程</div>
+        <div>校内新闻</div>
       </div>
       <div>
         <div>
           <Icon type="ios-time-outline" />
         </div>
-        <div>历史记录</div>
+        <div>通知公告</div>
       </div>
       <div>
         <div>
@@ -26,7 +26,8 @@
         <div>问题讨论</div>
       </div>
     </div>
-    <!-- 学校 -->
+    <!--所有 学校 -->
+
     <div class="m_allschool" ref="touch" id="m_allschool" v-for="(item,index) in schoolList" :key="index"
       style="display:none">
       <div class="m_allschool_a">
@@ -35,14 +36,16 @@
           <div class="m_allschool_school_name_b">{{item.school_name}}</div>
           <div class="m_allschool_school_name_s">查看该院校所有课程</div>
         </div>
-        <div class="m_allschool_name" @click="ruterto">所有院校></div>
+        <div class="m_allschool_name" @click="ruterto_school">所有院校 ></div>
       </div>
+
     </div>
+    <indexSchool v-if="isSchool_show" @handle_schoolClose='handle_schoolClose'></indexSchool>
     <!-- 猜你喜欢 -->
     <div class="m_allcourse_like">
       <div class="m_allcourse_like_header">
         <div class="m_allcourse_like_header_l">猜你喜欢</div>
-        <div class="m_allcourse_likee_header_r">更多></div>
+        <div class="m_allcourse_likee_header_r" @click="handle_more">更多 ></div>
       </div>
       <div class="m_allcourse_like_list">
         <div class="m_allcourse_like_item" v-for="(v,i) in courseList" :key="i">
@@ -55,11 +58,12 @@
         <span @click="handle_change">换一批</span>
       </div>
     </div>
+    <indexLike v-if="ishshow" @handleslot='handle_slot'></indexLike>
     <!-- 精品课程 -->
     <div class="m_Boutique">
       <div class="m_Boutique_header">
         <div class="m_Boutique_header_left">精品课程</div>
-        <div class="m_Boutique_header_right">更多></div>
+        <div class="m_Boutique_header_right">更多 ></div>
       </div>
       <div class="m_Boutique_list">
         <div class="m_Boutique_list_item" v-for="(v,i) in newCourse" :key="i">
@@ -79,7 +83,7 @@
     <div class="m_Boutique free">
       <div class="m_Boutique_header">
         <div class="m_Boutique_header_left">免费课程</div>
-        <div class="m_Boutique_header_right free">更多></div>
+        <div class="m_Boutique_header_right free">更多 ></div>
       </div>
       <div class="m_Boutique_list">
         <div class="m_Boutique_list_item" v-for="(v,i) in freeCourse" :key="i">
@@ -99,7 +103,7 @@
     <div class="m_recommendTeacher">
       <div class="m_recommendTeacher-header">
         <div class="m_recommendTeacher-header-left">教师推荐</div>
-        <div class="m_recommendTeacher-header-right">更多></div>
+        <div class="m_recommendTeacher-header-right" @click="handle_teach">更多></div>
       </div>
       <div class="m_recommendTeacher-center">
         <div class="m_recommendTeacher-center_item" v-for="(v,i) in recommendlist" :key="i">
@@ -119,16 +123,21 @@
       </div>
       <div class="m_recommendTeacher-footer" @click="handle_footerchange">换一组</div>
     </div>
+    <keep-alive v-if="isReloadData">
+      <indexTeacher v-if="isteacth_show" @index_teacher='handle_teacherShow'></indexTeacher>
+    </keep-alive>
     <div></div>
   </div>
 </template>
 <script>
-
+import indexLike from '@/view/mobile_page/components/m_index/m_index_like'
+import indexSchool from '@/view/mobile_page/components/m_index/m_index_school'
+import indexTeacher from '@/view/mobile_page/components/m_index/m_index_teacher'
 import { get_Course, get_recommend } from '@/api/common'
 // import log from 'video.js/es5/utils/log'
 
 export default {
-
+  components: { indexLike, indexTeacher, indexSchool },
   data () {
     return {
       schoolList: [], // 所有学校
@@ -137,10 +146,52 @@ export default {
       newCourse: [], // 精品课程
       freeCourse: [], // 免费课程
       recommendlist: [], // 教师推荐
-      m: 1
+      m: 1,
+      ishshow: false,
+      isteacth_show: false,
+      isReloadData: true,
+      isSchool_show: false // 所有院校的组件打开和关闭
+    }
+  },
+  // 暴露父页面的'方法' 父传子
+  provide () {
+    return {
+      reload: this.reload
     }
   },
   methods: {
+    // 所有院校的关闭
+    handle_schoolClose () {
+      this.isSchool_show = false
+    },
+    // 所有院校的打开
+    ruterto_school () {
+      this.isSchool_show = true
+    },
+    // 刷新事件
+    reload () {
+      this.isReloadData = false
+      this.$nextTick(() => {
+        this.isReloadData = true // 从false到true的过程刷新子页面
+      })
+    },
+    // 关闭老师推荐
+    handle_teacherShow () {
+      this.isteacth_show = false
+    },
+    // 老师推荐的更多
+    handle_teach () {
+      this.isteacth_show = true
+    },
+
+    // 关闭猜你喜欢的更多
+    handle_slot () {
+      this.ishshow = false
+    },
+    // 猜你喜欢的更多
+    handle_more () {
+      this.ishshow = true
+    },
     // 教师推荐换一组
     handle_footerchange () {
       get_recommend().then(res => {
@@ -168,9 +219,6 @@ export default {
         this.courseList = res.data.data.slice(6 * this.m, 6 * (this.m + 1))
         this.m++
       })
-    },
-    ruterto () {
-      // this.$router.push({})
     },
     // 获取教师推荐
     get_recommend () {
@@ -262,7 +310,7 @@ export default {
 
         // 手指开始触摸屏幕
 
-        for (var i = 0; i < Li.length; i++) {
+        for (let i = 0; i < Li.length; i++) {
           Li[i].index = i
           Li[i].addEventListener('touchstart', function (e) {
             // var j = this.index
@@ -287,6 +335,7 @@ export default {
 
                 if (j === Li.length - 2) {
                   alert('已经到最后了')
+
                   // j === 0
                   // j++
                 }
@@ -294,11 +343,12 @@ export default {
             }
           }, false)
         }
-      }, 800)
+      }, 1500)
     }
   },
 
   mounted () {
+    // alert(999)
     this.getSchoolList()
     this.get_Course()
     this.get_recommend()

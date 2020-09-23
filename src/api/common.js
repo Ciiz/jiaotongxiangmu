@@ -241,3 +241,22 @@ export const courselist = () => {
     params: {}
   })
 }
+// 合作院校
+export const getSchoolList = () => {
+  return axios.request({
+    method: 'get',
+    url: '/index.php/Home/Index/getSchoolList',
+    params: {}
+  })
+}
+// 热门搜索
+export const hotsearch = ({ page, page_size }) => {
+  return axios.request({
+    method: 'post',
+    url: '/home/index/getHotSearch',
+    data: {
+      page,
+      page_size
+    }
+  })
+}
