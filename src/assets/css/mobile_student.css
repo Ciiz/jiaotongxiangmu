@@ -304,6 +304,8 @@
 
 .mint-header{
   height: 0.86rem;
+  
+ 
 }
 .m-tab-container{
   height: 100%;
@@ -318,6 +320,8 @@
 }
 .m-tabbar{
   background: #FFFFFF;
+    position: fixed;
+    bottom: 0;
 }
 .m-tabbar a{
   color: #A2A2A2;
@@ -378,6 +382,7 @@
 .mobile-login{
   font-family:'PingFang SC';
   height: 100%;
+
 }
 .login-form{
   font-size: 0.3rem;

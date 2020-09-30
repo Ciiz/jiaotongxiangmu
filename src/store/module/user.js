@@ -26,11 +26,15 @@ export default {
     messageList: [],
     courseData: [],
     bindType: 0,
-    currentTab: ''
+    currentTab: '',
+    schoolMesage: ''
 
   },
   // 同步操作
   mutations: {
+    setSschoolMesage (state, schoolMesage) {
+      state.schoolMesage = schoolMesage
+    },
     setAvatar (state, avatarPath) {
       state.avatarImgPath = avatarPath
     },

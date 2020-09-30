@@ -1,7 +1,7 @@
 <template>
   <div class="m-coursewareT flex-contain">
     <div class="m-coursewareT-header">
-      <img src="@/assets/images/mobile_teacher/back.png" @click="back()"/>
+      <img src="@/assets/images/mobile_teacher/back.png" @click="back()" />
       <mt-navbar v-model="selected">
         <mt-tab-item id="1">课件列表</mt-tab-item>
         <mt-tab-item id="2">章节列表</mt-tab-item>
@@ -13,7 +13,8 @@
         <coursewareList :teacher_course_id="teacher_course_id"></coursewareList>
       </mt-tab-container-item>
       <mt-tab-container-item id="2" class="hideScroll">
-        <chapterInfo :teacher_course_id="teacher_course_id" :course_id="id" :course_type="course_type" :course_name="course_name"></chapterInfo>
+        <chapterInfo :teacher_course_id="teacher_course_id" :course_id="id" :course_type="course_type"
+          :course_name="course_name"></chapterInfo>
       </mt-tab-container-item>
     </mt-tab-container>
   </div>
@@ -58,5 +59,4 @@ export default {
 }
 </script>
 <style>
-
 </style>

@@ -242,11 +242,14 @@ export const courselist = () => {
   })
 }
 // 合作院校
-export const getSchoolList = () => {
+export const getSchoolList = ({ page, page_size }) => {
   return axios.request({
     method: 'get',
     url: '/index.php/Home/Index/getSchoolList',
-    params: {}
+    params: {
+      page,
+      page_size
+    }
   })
 }
 // 热门搜索
@@ -260,3 +263,34 @@ export const hotsearch = ({ page, page_size }) => {
     }
   })
 }
+
+// 关注教师
+export const get_follow = (teacher_id) => {
+  return axios.request({
+    method: 'get',
+    url: '/Teacher/TeacherAttention/follow',
+    params: {
+      teacher_id
+    }
+  })
+}
+// 取消关注
+export const get_unfollow = (teacher_id) => {
+  return axios.request({
+    method: 'get',
+    url: '/Teacher/TeacherAttention/unfollow',
+    params: {
+      teacher_id
+    }
+  })
+}
+// 课程详情页面
+// export const get_courseMassge = (id) => {
+//   return axios.request({
+//     method: 'get',
+//     url: '/index.php/Teacher/Course/info',
+//     params: {
+//       id
+//     }
+//   })
+// }

@@ -29,8 +29,9 @@
       <col>
       <div class="teacher_team_select">
         <div class="teacher_team_select_l">
-          <Select v-model="model1" style="width:200px" placeholder="全部专业">
-            <Option v-for="item in majorList" :value="item.major_id" :key="item.major_id">{{ item.major_name }}</Option>
+          <Select v-model="model1" style="width:200px" placeholder="全部专业" @on-change='handle_major'>
+            <Option v-for="item in majorList" :value="item.major_name" :key="item.major_id">{{ item.major_name }}
+            </Option>
           </Select>
 
           <Input placeholder="" style="width: auto;margin-left:50px ;">
@@ -55,21 +56,25 @@
         </div>
       </div>
       </col>
-
       <col>
-      <div class="teacher_team_item" v-for="(item,index) in teacherList" :key="index">
-        <div class="teacher_team_item_top">
-          <div class="teacher_team_item_img">
-            <img :src="item.icon" alt="">
+      <div class="teacher_team_big">
+        <div class="teacher_team_father">
+          <div class="teacher_team_item" v-for="(item,index) in teacherList" :key="index">
+            <div class="teacher_team_item_top">
+              <div class="teacher_team_item_img">
+                <img :src="item.icon" alt="">
+              </div>
+              <div class="teacher_team_item_r">
+                <span>{{item.name}}</span>
+                <span>{{item.major_name}}</span>
+                <span>{{item.school_name}}</span>
+              </div>
+            </div>
+            <div class="teacher_team_item_buttom">
+              <span class="teacher_team_item_buttom1">ta的课程：{{item.course_count}}</span>
+              <span class="teacher_team_item_buttom2">ta的课程：{{item.student_count}}</span>
+            </div>
           </div>
-          <div class="teacher_team_item_r">
-            <span>{{item.name}}</span>
-            <span>{{item.major_name}}</span>
-            <span>{{item.school_name}}</span>
-          </div>
-        </div>
-        <div class="teacher_team_item_buttom">
-          <!-- <span>{{item.}}</span> -->
         </div>
       </div>
       </col>
@@ -89,19 +94,24 @@ export default {
       schoolList: [],
       majorList: [],
       model1: '',
-      teacherList: []
+      teacherList: [],
+      teacherSelect: []
     }
   },
-
   methods: {
+    handle_major (value) {
+      this.teacherList = this.teacherSelect.filter(v => {
+        return v.major_name === value
+      })
+    },
     // 获取教师推荐
     get_command_teacher () {
       get_recommend().then(res => {
         console.log(res)
         this.teacherList = res.data.data
+        this.teacherSelect = res.data.data
       })
     },
-
     // 获取学校列表
     getSchoolList () {
       this.schoolList = []
@@ -117,7 +127,6 @@ export default {
               this.schoolList = res.data.list
               console.log(res)
             }
-
             this.schoolList = res.data.list
           }
         })
@@ -201,10 +210,10 @@ export default {
     }
   }
   .teacher_team {
-    margin: 0 auto;
-    width: 1200px;
     .teacher_team_select {
       display: flex;
+      margin: 0 auto;
+      width: 1200px;
       justify-content: space-between;
       .teacher_team_select_r {
         display: flex;
@@ -225,6 +234,56 @@ export default {
       }
       /deep/.ivu-select-placeholder {
         text-align: center;
+      }
+    }
+    .teacher_team_big {
+      margin-top: 30px;
+      background-color: #f8f8f8;
+      padding: 20px 0;
+      .teacher_team_father {
+        width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: flex-start;
+
+        flex-wrap: wrap;
+        .teacher_team_item:nth-child(4n) {
+          margin-right: 0;
+        }
+        .teacher_team_item {
+          width: 23%;
+          // width: 280px;
+          margin-right: 31px;
+          background-color: #fff;
+          margin-bottom: 20px;
+          padding: 10px;
+          border-radius: 5px;
+          .teacher_team_item_top {
+            display: flex;
+            .teacher_team_item_img {
+              width: 100px;
+              height: 100px;
+              border-radius: 8px;
+              img {
+                width: 100px;
+                height: 100px;
+                border-radius: 8px;
+              }
+            }
+            .teacher_team_item_r {
+              display: flex;
+              flex-direction: column;
+              margin-left: 15px;
+              justify-content: space-around;
+            }
+          }
+          .teacher_team_item_buttom {
+            margin-top: 10px;
+            .teacher_team_item_buttom1 {
+              margin-right: 40px;
+            }
+          }
+        }
       }
     }
   }

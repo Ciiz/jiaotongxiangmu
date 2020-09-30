@@ -1,143 +1,148 @@
 <template>
-  <div>
-    <div class="recommend-choose">
-      <div>
+  <div class="recommend_big ">
+    <div id='recommend'>
+
+      <div class="recommend-choose">
+        <div @click="$router.push({name:'m_school_news'})">
+          <div>
+            <Icon type="ios-bookmarks-outline" />
+          </div>
+          <div>校内新闻</div>
+        </div>
         <div>
-          <Icon type="ios-bookmarks-outline" />
+          <div>
+            <Icon type="ios-time-outline" />
+          </div>
+          <div>通知公告</div>
         </div>
-        <div>校内新闻</div>
-      </div>
-      <div>
         <div>
-          <Icon type="ios-time-outline" />
+          <div>
+            <Icon type="ios-volume-up" />
+          </div>
+          <div>最新公告</div>
         </div>
-        <div>通知公告</div>
-      </div>
-      <div>
         <div>
-          <Icon type="ios-volume-up" />
-        </div>
-        <div>最新公告</div>
-      </div>
-      <div>
-        <div>
-          <Icon type="ios-chatboxes-outline" />
-        </div>
-        <div>问题讨论</div>
-      </div>
-    </div>
-    <!--所有 学校 -->
-
-    <div class="m_allschool" ref="touch" id="m_allschool" v-for="(item,index) in schoolList" :key="index"
-      style="display:none">
-      <div class="m_allschool_a">
-        <div class="m_allschool_icon"><img :src="item.school_icon" alt=""></div>
-        <div class="m_allschool_school_name">
-          <div class="m_allschool_school_name_b">{{item.school_name}}</div>
-          <div class="m_allschool_school_name_s">查看该院校所有课程</div>
-        </div>
-        <div class="m_allschool_name" @click="ruterto_school">所有院校 ></div>
-      </div>
-
-    </div>
-    <indexSchool v-if="isSchool_show" @handle_schoolClose='handle_schoolClose'></indexSchool>
-    <!-- 猜你喜欢 -->
-    <div class="m_allcourse_like">
-      <div class="m_allcourse_like_header">
-        <div class="m_allcourse_like_header_l">猜你喜欢</div>
-        <div class="m_allcourse_likee_header_r" @click="handle_more">更多 ></div>
-      </div>
-      <div class="m_allcourse_like_list">
-        <div class="m_allcourse_like_item" v-for="(v,i) in courseList" :key="i">
-          <div class="m_allcourse_like_item_icon"><img :src="v.img" alt=""></div>
-          <div class="m_allcourse_like_item_description" v-html="v.description"></div>
-        </div>
-
-      </div>
-      <div class="m_allcourse_like_footer">
-        <span @click="handle_change">换一批</span>
-      </div>
-    </div>
-    <indexLike v-if="ishshow" @handleslot='handle_slot'></indexLike>
-    <!-- 精品课程 -->
-    <div class="m_Boutique">
-      <div class="m_Boutique_header">
-        <div class="m_Boutique_header_left">精品课程</div>
-        <div class="m_Boutique_header_right">更多 ></div>
-      </div>
-      <div class="m_Boutique_list">
-        <div class="m_Boutique_list_item" v-for="(v,i) in newCourse" :key="i">
-          <div class="m_Boutique_list_item_img">
-            <img :src="v.img" alt="">
+          <div>
+            <Icon type="ios-chatboxes-outline" />
           </div>
-          <div class="m_Boutique_list_item_center">
-            <div class="m_Boutique_list_item_center1">{{v.course_name}}</div>
-            <div class="m_Boutique_list_item_center2" v-html="v.description"></div>
-            <div class="m_Boutique_list_item_center3">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
+          <div>问题讨论</div>
+        </div>
+      </div>
+      <!--所有 学校 -->
+      <ul ref="schoolList">
 
+        <li class="m_allschool" id="m_allschool" ref="li" v-for="(item,index) in schoolList" :key="index"
+          style="display:none">
+          <div class="m_allschool_a">
+            <div class="m_allschool_icon"><img :src="item.school_icon" alt=""></div>
+            <div class="m_allschool_school_name">
+              <div class="m_allschool_school_name_b">{{item.school_name}}</div>
+              <div class="m_allschool_school_name_s">查看该院校所有课程</div>
+            </div>
+            <div class="m_allschool_name" @click="$router.push({name:'m_index_school'})">所有院校 ></div>
+          </div>
+        </li>
+      </ul>
+      <indexSchool v-if="isSchool_show" @handle_schoolClose='handle_schoolClose'></indexSchool>
+      <!-- 猜你喜欢 -->
+      <div class="m_allcourse_like">
+        <div class="m_allcourse_like_header">
+          <div class="m_allcourse_like_header_l">猜你喜欢</div>
+          <div class="m_allcourse_likee_header_r" @click="handle_more">更多 ></div>
+        </div>
+        <div class="m_allcourse_like_list">
+          <div class="m_allcourse_like_item" v-for="(v,i) in courseList" :key="i">
+            <div class="m_allcourse_like_item_icon"><img :src="v.img" alt=""></div>
+            <div class="m_allcourse_like_item_description" v-html="v.description"></div>
           </div>
         </div>
-      </div>
-    </div>
-    <!-- 免费课程 -->
-    <div class="m_Boutique free">
-      <div class="m_Boutique_header">
-        <div class="m_Boutique_header_left">免费课程</div>
-        <div class="m_Boutique_header_right free">更多 ></div>
-      </div>
-      <div class="m_Boutique_list">
-        <div class="m_Boutique_list_item" v-for="(v,i) in freeCourse" :key="i">
-          <div class="m_Boutique_list_item_img">
-            <img :src="v.img" alt="">
-          </div>
-          <div class="m_Boutique_list_item_center">
-            <div class="m_Boutique_list_item_center1">{{v.course_name}}</div>
-            <div class="m_Boutique_list_item_center2" v-html="v.description"></div>
-            <div class="m_Boutique_list_item_center3">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
-
-          </div>
+        <div class="m_allcourse_like_footer">
+          <span @click="handle_change">换一批</span>
         </div>
       </div>
-    </div>
-    <!-- 教师推荐 -->
-    <div class="m_recommendTeacher">
-      <div class="m_recommendTeacher-header">
-        <div class="m_recommendTeacher-header-left">教师推荐</div>
-        <div class="m_recommendTeacher-header-right" @click="handle_teach">更多></div>
-      </div>
-      <div class="m_recommendTeacher-center">
-        <div class="m_recommendTeacher-center_item" v-for="(v,i) in recommendlist" :key="i">
-          <div class="m_recommendTeacher-center_item_icon">
-            <img :src="v.icon" alt="">
-          </div>
-          <div class="m_recommendTeacher-center_item_name">
-            <div class="m_recommendTeacher-center_item_name1">
-              <div class="m_recommendTeacher-center_item_name1_l"> {{v.name}}</div>
-              <div class="m_recommendTeacher-center_item_name1_r"> {{v.course_count}}</div>
+      <indexLike v-if="ishshow" @handleslot='handle_slot'></indexLike>
+      <!-- 精品课程 -->
+      <div class="m_Boutique">
+        <div class="m_Boutique_header">
+          <div class="m_Boutique_header_left">精品课程</div>
+          <div class="m_Boutique_header_right">更多 ></div>
+        </div>
+        <div class="m_Boutique_list">
+          <div class="m_Boutique_list_item" v-for="(v,i) in newCourse" :key="i">
+            <div class="m_Boutique_list_item_img">
+              <img :src="v.img" alt="">
+            </div>
+            <div class="m_Boutique_list_item_center">
+              <div class="m_Boutique_list_item_center1">{{v.course_name}}</div>
+              <div class="m_Boutique_list_item_center2" v-html="v.description"></div>
+              <div class="m_Boutique_list_item_center3">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
 
             </div>
-            <div class="m_recommendTeacher-center_item_name2">院校：{{v.school_name}}</div>
-            <div class="m_recommendTeacher-center_item_name3">职业：{{v.major_name}}</div>
           </div>
         </div>
       </div>
-      <div class="m_recommendTeacher-footer" @click="handle_footerchange">换一组</div>
+      <!-- 免费课程 -->
+      <div class="m_Boutique free">
+        <div class="m_Boutique_header">
+          <div class="m_Boutique_header_left">免费课程</div>
+          <div class="m_Boutique_header_right free">更多 ></div>
+        </div>
+        <div class="m_Boutique_list">
+          <div class="m_Boutique_list_item" v-for="(v,i) in freeCourse" :key="i">
+            <div class="m_Boutique_list_item_img">
+              <img :src="v.img" alt="">
+            </div>
+            <div class="m_Boutique_list_item_center">
+              <div class="m_Boutique_list_item_center1">{{v.course_name}}</div>
+              <div class="m_Boutique_list_item_center2" v-html="v.description"></div>
+              <div class="m_Boutique_list_item_center3">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 教师推荐 -->
+      <div class="m_recommendTeacher">
+        <div class="m_recommendTeacher-header">
+          <div class="m_recommendTeacher-header-left">教师推荐</div>
+          <div class="m_recommendTeacher-header-right" @click="handle_teach">更多></div>
+        </div>
+        <div class="m_recommendTeacher-center">
+          <div class="m_recommendTeacher-center_item" v-for="(v,i) in recommendlist" :key="i">
+            <div class="m_recommendTeacher-center_item_icon">
+              <img :src="v.icon" alt="">
+            </div>
+            <div class="m_recommendTeacher-center_item_name">
+              <div class="m_recommendTeacher-center_item_name1">
+                <div class="m_recommendTeacher-center_item_name1_l"> {{v.name}}</div>
+                <div class="m_recommendTeacher-center_item_name1_r"> {{v.course_count}}</div>
+
+              </div>
+              <div class="m_recommendTeacher-center_item_name2">院校：{{v.school_name}}</div>
+              <div class="m_recommendTeacher-center_item_name3">职业：{{v.major_name}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="m_recommendTeacher-footer" @click="handle_footerchange">换一组</div>
+      </div>
+      <keep-alive v-if="isReloadData">
+        <indexTeacher v-if="isteacth_show" @index_teacher='handle_teacherShow'></indexTeacher>
+      </keep-alive>
+      <div></div>
+
     </div>
-    <keep-alive v-if="isReloadData">
-      <indexTeacher v-if="isteacth_show" @index_teacher='handle_teacherShow'></indexTeacher>
-    </keep-alive>
-    <div></div>
   </div>
 </template>
 <script>
 import indexLike from '@/view/mobile_page/components/m_index/m_index_like'
-import indexSchool from '@/view/mobile_page/components/m_index/m_index_school'
+
 import indexTeacher from '@/view/mobile_page/components/m_index/m_index_teacher'
 import { get_Course, get_recommend } from '@/api/common'
+import log from 'video.js/es5/utils/log'
 // import log from 'video.js/es5/utils/log'
 
 export default {
-  components: { indexLike, indexTeacher, indexSchool },
+  components: { indexLike, indexTeacher },
   data () {
     return {
       schoolList: [], // 所有学校
@@ -160,14 +165,7 @@ export default {
     }
   },
   methods: {
-    // 所有院校的关闭
-    handle_schoolClose () {
-      this.isSchool_show = false
-    },
-    // 所有院校的打开
-    ruterto_school () {
-      this.isSchool_show = true
-    },
+
     // 刷新事件
     reload () {
       this.isReloadData = false
@@ -276,7 +274,7 @@ export default {
     },
     // 手指滑动监听处理
     getallschool () {
-      setTimeout(function () {
+      setTimeout(() => {
         var Li = document.querySelectorAll('.m_allschool')
         Li[0].style.display = 'block'
         var startx, starty
@@ -289,12 +287,10 @@ export default {
           var angx = endx - startx
           var angy = endy - starty
           var result = 0
-
           // 如果滑动距离太短
           if (Math.abs(angx) < 2 && Math.abs(angy) < 2) {
             return result
           }
-
           var angle = getAngle(angx, angy)
           if (angle >= -135 && angle <= -45) {
             result = 1
@@ -307,19 +303,18 @@ export default {
           }
           return result
         }
-
         // 手指开始触摸屏幕
-
-        for (let i = 0; i < Li.length; i++) {
+        for (let i = 0; i <= Li.length; i++) {
           Li[i].index = i
           Li[i].addEventListener('touchstart', function (e) {
             // var j = this.index
+            document.querySelector('body').style.overflow = 'hidden'
             startx = e.touches[0].pageX
             starty = e.touches[0].pageY
           })
-
           // 手指离开屏幕
           Li[i].addEventListener('touchend', function (e) {
+            document.querySelector('body').style.overflow = 'auto'
             var endx, endy
             var j = this.index
             endx = e.changedTouches[0].pageX
@@ -332,23 +327,20 @@ export default {
                 // alert("向上！");
                 Li[j].style.display = 'none'
                 Li[j + 1].style.display = 'block'
-
                 if (j === Li.length - 2) {
                   alert('已经到最后了')
-
-                  // j === 0
-                  // j++
                 }
                 break
             }
           }, false)
         }
-      }, 1500)
+      }, 800)
     }
   },
-
+  updated () {
+    // this.getallschool()
+  },
   mounted () {
-    // alert(999)
     this.getSchoolList()
     this.get_Course()
     this.get_recommend()
@@ -357,16 +349,10 @@ export default {
 }
 </script>
 <style lang='less' scoped>
+.hidden {
+  overflow: hidden;
+}
 .m_allschool {
-  // margin: 0 auto;
-  // width: 6.86rem;
-  // height: 1.3rem;
-  // background-color: #fff;
-  // border-radius: 8px;
-  // display: flex;
-  // justify-content: space-between;
-  // align-items: center;
-  // padding: 0.2rem;
   margin-top: 0.3rem;
   .m_allschool_a {
     display: flex;
@@ -379,7 +365,6 @@ export default {
     margin: 0 auto;
     padding: 0.2rem;
   }
-  // display: none;
   .m_allschool_school_name {
     flex: 1;
     margin-left: 0.3rem;
@@ -508,10 +493,12 @@ export default {
       .m_Boutique_list_item_img {
         width: 1.96rem;
         height: 1.96rem;
+        border-radius: 8px;
         box-shadow: 0px 0px 0.03rem 0px rgba(0, 0, 0, 0.5);
         img {
           width: 1.96rem;
           height: 1.96rem;
+          border-radius: 8px;
         }
       }
       .m_Boutique_list_item_center {

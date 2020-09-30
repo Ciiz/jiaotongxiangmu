@@ -32,7 +32,7 @@
 </template>
 
 <script>
-
+import { Indicator } from 'mint-ui'
 import { get_recommend } from '@/api/common'
 import cell from '@/view/mobile_page/components/public_cell'
 // import log from 'video.js/es5/utils/log'
@@ -59,8 +59,13 @@ export default {
     }
   },
   mounted () {
+    Indicator.open({
+      text: 'Loading...',
+      spinnerType: 'fading-circle'
+    })
     get_recommend().then(res => {
       this.recommendlist = res.data.data
+      Indicator.close()
     })
   }
 }

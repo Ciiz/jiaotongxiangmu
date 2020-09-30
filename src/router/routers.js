@@ -877,10 +877,64 @@ const mobileTeacher = [
     name: 'searchpage',
     path: '/searchpage',
     meta: {
-      hideInMenu: true
+      hideInMenu: true,
+      keepAlive: true
     },
     component: () => import('@/view/mobile_page/show/view/searchpage.vue')
+  },
+  {
+    name: 'm_index_school_team',
+    path: '/m_index_school_team/:id',
+    meta: {
+      hideInMenu: true,
+      keepAlive: true
+    },
+    component: () => import('@/view/mobile_page/show/view/index/m_index_school_team.vue')
 
+  },
+  {
+
+    name: 'm_index_school_teacherUser',
+    path: '/m_index_school_teacherUser/:id',
+    meta: {
+      hideInMenu: true,
+      keepAlive: true
+    },
+    component: () => import('@/view/mobile_page/show/view/index/m_index_school_teacherUser.vue')
+
+  },
+  {
+
+    name: 'm_index_school',
+    path: '/m_index_school',
+    meta: {
+      hideInMenu: true,
+      keepAlive: true
+    },
+    component: () => import('@/view/mobile_page/show/view/index/m_index_school.vue')
+
+  },
+  // 校内新闻
+  {
+
+    name: 'm_school_news',
+    path: '/m_school_news',
+    meta: {
+      hideInMenu: true,
+      keepAlive: true
+    },
+    component: () => import('@/view/mobile_page/show/view/news/m_school_news.vue')
+  },
+  // 新闻详情
+  {
+
+    name: 'm_school_news_massege',
+    path: '/m_school_news_massege/:id',
+    meta: {
+      hideInMenu: true,
+      keepAlive: true
+    },
+    component: () => import('@/view/mobile_page/show/view/news/m_school_news_massege.vue')
   },
   {
     path: '/mobileCoursewareT',

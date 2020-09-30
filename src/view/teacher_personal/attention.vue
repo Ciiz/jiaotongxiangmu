@@ -6,10 +6,9 @@
       <img :src="item.icon" alt="">
       </Col>
       <Col class="attention_message">
-
       <div class="attention_message_header">
         <div class="attention_message_header_name">{{item.teacher_name}}</div>
-        <router-link to="" class="attention_message_header_name2">查看主页>></router-link>
+        <router-link to="" class="attention_message_header_name2">查看主页 >></router-link>
       </div>
       <div class="attention_message_footer">
         <span>院校:{{item.school_name}}</span>
@@ -19,13 +18,10 @@
       </Col>
       <Col style="cursor:pointer" class="attention_cancel_f">
       <div @click="handle_unfollow(index)" class="attention_cancel">取消关注</div>
-
       </Col>
-
     </Row>
   </div>
 </template>
-
 <script>
 import { get_TeacherAttention, unfollow_Attention } from '@/api/user'
 export default {
@@ -35,7 +31,6 @@ export default {
     return {
       attention_List: [],
       id: ''
-
     }
   },
   methods: {

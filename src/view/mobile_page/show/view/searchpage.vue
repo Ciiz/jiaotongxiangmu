@@ -1,7 +1,7 @@
 <template>
   <div class="searchpage">
     <div class="searchpage_header">
-      <Icon type="ios-arrow-back" class="search-back-btn" @click="$router.back(-1)" />
+      <Icon type="ios-arrow-back" class="search-back-btn" @click="back" />
       <div class="div_sech">
         <!-- 解释：<form action="" target="frameFile"> 手机键盘添加搜索按钮，<iframe name='frameFile'
             style="display: none;"></iframe>禁止页面刷新，在当前页显示，手机上按
@@ -44,8 +44,8 @@
                     <div class="m-search_cell_coursename1" ref="foresee" v-html="item.school_name"></div>
                   </div>
                   <div class="m-search_cell_courseuser">
-                    <div class="m-search_cell_courseuser1">作者：{{}}</div>
-                    <div class="m-search_cell_courseuser2">章节:{{}}</div>
+                    <div class="m-search_cell_courseuser1">作者：</div>
+                    <div class="m-search_cell_courseuser2">章节：</div>
                   </div>
                 </div>
                 <div class="m-search_cell_icon"><img src="@/assets/images/mobile_teacher/fanhui .png" alt=""></div>
@@ -162,7 +162,7 @@
         </ul>
       </div>
     </div>
-    <div class="search_hot">
+    <div class="search_hot" v-if="value2 ==''">
       <div class="search_hot_title">热门搜索</div>
       <div class="search_hot_item">
         <ul>
@@ -180,9 +180,8 @@
 
 // import search_course from '@/view/mobile_page/show/view/userCenter/teacher/tearch_search/search_course.vue'
 import { hotsearch } from '@/api/common'
-import { Toast } from 'mint-ui'
-import log from 'video.js/es5/utils/log'
-// import log from 'video.js/es5/utils/log'
+import { Toast, Indicator } from 'mint-ui'
+
 export default {
   // components: { search_course },
   data () {
@@ -213,6 +212,10 @@ export default {
     }
   },
   methods: {
+    back () {
+      // this.$router.push({ name: 'showIndex' })
+      this.$router.back(-1)
+    },
     searchChange (e) {
       if (e) {
         this.$refs.p.style.display = 'none'
@@ -289,6 +292,7 @@ export default {
         })
         return
       }
+      Indicator.open()
       this.axios.request({
         method: 'get',
         url: '/index.php/home/index/getSearch',
@@ -299,11 +303,12 @@ export default {
         console.log(res)
 
         this.searsh_arry = res.data.course_data // 课程的数据
-        this.courelength = res.data.course_data.length // 课程的长度
+        this.courelength = res.data.course_data.length // 课程的长度 ，是拿到值后
         this.search_school = res.data.school_data // 院校的数据
         this.schoolLength = res.data.school_data.length // 院校的长度
         this.teaherLength = res.data.teaher_data.length // 用户的长度
         this.searchUserlist = res.data.teaher_data // 用户的数据
+        Indicator.close()
         this.value2 = this.value
         // 历史记录
         let arr = JSON.parse(localStorage.getItem('mykeyword')) || []

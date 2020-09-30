@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { Indicator } from 'mint-ui'
 import cell from '@/view/mobile_page/components/public_cell'
 import { get_Course } from '@/api/common'
 export default {
@@ -51,9 +52,14 @@ export default {
 
   },
   mounted () {
+    Indicator.open({
+      text: 'Loading...',
+      spinnerType: 'fading-circle'
+    })
     get_Course().then(res => {
       console.log(res)
       this.index_list = res.data.data
+      Indicator.close()
     })
   }
 
@@ -61,15 +67,19 @@ export default {
 </script>
 
 <style lang='less' scoped>
+/deep/.mint-spinner-snake {
+  margin: 0 auto;
+}
 .m_index_like {
   width: 100vw;
   height: 100vh;
-  z-index: 999;
+  z-index: 9;
   background-color: #fff;
   position: fixed;
   left: 0;
   top: 0;
   overflow-y: auto;
+
   .m_index_like_title {
     border-bottom: 1px solid #cccccc;
   }

@@ -10,8 +10,10 @@
       <div v-for="(item,index) in list" :key="index" class="m-mycourseware-item" @click="toLink(item)">
         <div :class="(item.live_status===1||item.live_status===3)?'m-color-red':'m-color-blue'">{{index+1}}</div>
         <div class="m-mycourseware-info">
-          <div :class="item.live_status===0?'m-color-black':(item.live_status===2?'m-color-gray':'m-color-red')">{{item.courseware_name}}</div>
-          <div :class="(item.live_status===1||item.live_status===3)?'m-color-red':'m-color-gray9'">上课时间：{{item.class_time}}</div>
+          <div :class="item.live_status===0?'m-color-black':(item.live_status===2?'m-color-gray':'m-color-red')">
+            {{item.courseware_name}}</div>
+          <div :class="(item.live_status===1||item.live_status===3)?'m-color-red':'m-color-gray9'">
+            上课时间：{{item.class_time}}</div>
         </div>
         <div v-if="item.live_status===2" class="m-color-gray87">已结束</div>
         <div v-if="item.live_status===1||item.live_status===3" class="m-color-red">正在上课...</div>
@@ -91,5 +93,4 @@ export default {
 }
 </script>
 <style>
-
 </style>

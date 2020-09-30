@@ -4,6 +4,7 @@
       <keep-alive>
         <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
+
       <router-view v-if="!$route.meta.keepAlive"></router-view>
       <!-- 底部tabbar -->
       <mt-tabbar v-model="selected" class="m-tabbar">
@@ -176,10 +177,4 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-body {
-}
-
-.m-index {
-  // position: relative;
-}
 </style>

@@ -1,13 +1,13 @@
 <template>
   <div class="modal-content">
-     <h1 class="news_info_title">{{title}}</h1>
-     <p class="news_info_time">发布时间：{{time}}</p>
-     <div class="news_info_img">
-       <img :src="file_url" alt=""  width="100%">
-     </div>
-     <p v-html="content"></p>
-     <a :href="file_url" target="_blank">{{file_name}}</a>
-     <Spin v-show="loading" fix></Spin>
+    <h1 class="news_info_title">{{title}}</h1>
+    <p class="news_info_time">发布时间：{{time}}</p>
+    <div class="news_info_img">
+      <img :src="file_url" alt="" width="100%">
+    </div>
+    <p v-html="content"></p>
+    <a :href="file_url" target="_blank">{{file_name}}</a>
+    <Spin v-show="loading" fix></Spin>
   </div>
 </template>
 

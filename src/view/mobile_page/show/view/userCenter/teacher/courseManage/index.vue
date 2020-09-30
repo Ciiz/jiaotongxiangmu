@@ -13,7 +13,8 @@
       <mt-tab-item id="3">自建课程</mt-tab-item>
     </mt-navbar>
     <div class="m-courseManage-contain hideScroll">
-      <div v-for="(item,index) in list" :key="index" class="m-mycourse-item" @click="showDetail(item.id,item.audit_status,item.release_status,item.teacher_course_id)">
+      <div v-for="(item,index) in list" :key="index" class="m-mycourse-item"
+        @click="showDetail(item.id,item.audit_status,item.release_status,item.teacher_course_id)">
         <div>
           <img :src="item.img" />
         </div>
@@ -27,7 +28,9 @@
               <span v-if="item.audit_status===3">待审核</span>
             </div>
             <div>
-              <spna><Icon type="ios-alarm-outline" /></spna>
+              <spna>
+                <Icon type="ios-alarm-outline" />
+              </spna>
               <spna style="vertical-align:middle">{{moment(item.created_at * 1000).format('YYYY-MM-DD')}}</spna>
             </div>
           </div>

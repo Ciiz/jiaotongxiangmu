@@ -41,7 +41,7 @@
         </div>
       </FormItem>
       <FormItem label="微信：">
-        <div class="userInfo_wc" v-if="wx_id">
+        <div class="userInfo_wc" v-if="wx_id !==''">
           <div class="userInfo_wc_img"><img src="@/assets/images/wechat.svg" alt=""></div>
           <div class="userInfo_wc_text" style="cursor:pointer;" @click="handle_wx">已绑定（解除绑定）</div>
         </div>

@@ -14,6 +14,7 @@
       <div style="position:relative">
         <mt-field class="loginfield" placeholder="请输入您的密码" :type="showPassword===true?'text':'password'" disableClear
           v-model="password"></mt-field>
+
         <img src="@/assets/images/mobile_student/showPassword.png" v-show="!showPassword" @click="showPassword=true">
         <img src="@/assets/images/mobile_student/unshowPassword.png" v-show="showPassword"
           @click="showPassword=false" />
@@ -41,6 +42,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
+import log from 'video.js/es5/utils/log'
 export default {
   data () {
     return {
@@ -123,6 +125,9 @@ export default {
             school: this.selectId
           }).then(res => {
           this.getUserInfo().then(res => {
+            console.log(res)
+            // res.schoolId
+            localStorage.setItem('schoolId', res.schoolId)
             this.$router.push({ path: '/mobile' })
           })
         })
@@ -138,3 +143,8 @@ export default {
   }
 }
 </script>
+<style lang='less' scoped>
+.mobile-login {
+  padding: 0.3rem 0;
+}
+</style>
