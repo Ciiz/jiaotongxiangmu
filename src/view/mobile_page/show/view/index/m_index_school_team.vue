@@ -16,12 +16,9 @@
       <mt-tab-container v-model="selected">
         <mt-tab-container-item id="1" class="hideScroll">
           <schoolTeacher></schoolTeacher>
-          <!-- <coursewareList :teacher_course_id="teacher_course_id"></coursewareList> -->
         </mt-tab-container-item>
         <mt-tab-container-item id="2" class="hideScroll">
           <schoolCourse></schoolCourse>
-          <!-- <chapterInfo :teacher_course_id="teacher_course_id" :course_id="id" :course_type="course_type"
-            :course_name="course_name"></chapterInfo> -->
         </mt-tab-container-item>
       </mt-tab-container>
     </div>
@@ -55,7 +52,6 @@ export default {
     let res = await get_taecherList(this.$route.params.id)
     console.log(res)
     this.teacher_list = res.data.teacher_list
-
     this.axios.request({
       method: 'post',
       url: '/home/course/isShowSchoolCourses',

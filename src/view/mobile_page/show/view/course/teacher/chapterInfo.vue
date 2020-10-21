@@ -1,10 +1,11 @@
 <template>
   <div class="m-chapterInfoT">
-    <Tree :data="chapter_class_list" class="m-tree" :render="renderContent" children-key="child" style="width:100%" v-if="course_type&&course_type.toString() === '1'"></Tree>
+    <Tree :data="chapter_class_list" class="m-tree" :render="renderContent" children-key="child" style="width:100%"
+      v-if="course_type&&course_type.toString() === '1'"></Tree>
     <div class="m-pano" v-if="course_type&&course_type.toString() === '2'">
       <div v-for="(item,index) in chapter_class_list" :key="index" class="m-pano-item" @click="showDetail(item,2)">
         <div>
-          <img :src="item.img"/>
+          <img :src="item.img" />
         </div>
         <div class="m-pano-item-name">{{item.pano_name}}</div>
       </div>
@@ -61,9 +62,9 @@ export default {
     }) {
       return (
         <div class="m-chapter-class-item" style={{ display: 'flex' }} onClick={() => { this.cur_item = data; if (data.child === undefined || data.child.length === 0) { this.showDetail(data, 1) } }}>
-          <span class="m-item2-title">{ `${data.sort}：${data.title}` }</span>
+          <span class="m-item2-title">{`${data.sort}：${data.title}`}</span>
           <span>
-            <button v-show={(data.child === undefined || data.child.length === 0) && this.showProgress !== false } onClick={(e) => { e.stopPropagation(); this.linkTo(data) }}>学生进度</button>
+            <button v-show={(data.child === undefined || data.child.length === 0) && this.showProgress !== false} onClick={(e) => { e.stopPropagation(); this.linkTo(data) }}>学生进度</button>
           </span>
         </div>
       )
@@ -91,5 +92,4 @@ export default {
 }
 </script>
 <style>
-
 </style>

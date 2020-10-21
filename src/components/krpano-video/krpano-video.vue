@@ -1,14 +1,14 @@
 <template>
-<div class="pano-container">
-  <!-- <div class="pano-content" :id="krpano_id" :style="!editable?{'height': '100%', 'width': '100%'}:{}">
+  <div class="pano-container">
+    <!-- <div class="pano-content" :id="krpano_id" :style="!editable?{'height': '100%', 'width': '100%'}:{}">
   </div>
   <Row>
     <Col :span="12" :offset='6' style="margin-bottom:50px">
        <BaseInfo :pano_id="pano_id" v-if="editable" @success="handleSuccess"></BaseInfo>
     </Col>
   </Row> -->
-  <video :src="pano.video_url" controls autoplay style="width:100%;height:100%;"></video>
-</div>
+    <video :src="pano.video_url" controls autoplay style="width:100%;height:100%;"></video>
+  </div>
 </template>
 <script>
 import BaseInfo from './base_info.vue'

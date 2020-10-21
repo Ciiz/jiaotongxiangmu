@@ -20,12 +20,6 @@
           <div class="record_List_show3">{{item.is_charge}}</div>
         </div>
         </Col>
-        <Col>
-        </Col>
-        <Col>
-        </Col>
-        <Col>
-        </Col>
       </Row>
       </Col>
     </Row>
@@ -50,12 +44,10 @@ export default {
   },
   methods: {
     get_record () {
-      const recordData = {
-        page: 1,
-        pagesize: 8,
-        status: this.status
-      }
-      get_record(recordData).then((result) => {
+      // const recordData = {
+      //   status: 
+      // }
+      get_record(this.status).then((result) => {
         console.log(result)
         this.recordlist = result.data.data.order
       })

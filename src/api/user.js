@@ -87,16 +87,13 @@ export const update_info = ({ mobile, alipay_account, sex, email, icon }) => {
   })
 }
 // 获取购买记录
-export const get_record = ({ status, page, pagesize }) => {
+export const get_record = (status) => {
   return axios.request({
     url: '/home/order/index',
     method: 'post',
     data: {
-      status,
-      page,
-      pagesize
+      status
     }
-
   })
 }
 // 获取关注教师列表
@@ -117,13 +114,11 @@ export const unfollow_Attention = (id) => {
   })
 }
 // 获取我关注的课程（教师、学生、校外人员通用）(喜欢)
-export const getMyCourseAttention = ({ page, pagesize }) => {
+export const getMyCourseAttention = () => {
   return axios.request({
     url: '/home/course/getMyCourseAttention',
     method: 'post',
     data: {
-      page,
-      pagesize
     }
   })
 }

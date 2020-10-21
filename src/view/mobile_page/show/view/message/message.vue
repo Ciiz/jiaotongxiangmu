@@ -33,7 +33,6 @@ import systemInfo from '@/view/mobile_page/show/view/message/systemInfo.vue'
 import systemInfoShow from '@/view/mobile_page/show/view/message/systeminfoShow.vue'
 import classNotice from '@/view/mobile_page/show/view/message/classNotice.vue'
 import undo from '@/view/mobile_page/show/view/message/undo.vue'
-
 export default {
   components: { studentQusetion, teacherQusetion, teacherDiscuss, systemInfo, discuss, systemInfoShow, classNotice, undo },
   data () {

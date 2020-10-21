@@ -2,9 +2,8 @@
   <div class="personal">
     <Row :gutter="16">
       <Col span="16">
-
       <Row>
-        <Col class="personal_center">
+        <Col class="personal_center" v-if="userType===1">
         <router-link class="personal_center_header" exact v-for="item in personal_tab" :key="item.title"
           :to="{path: item.path}">
           <div class="personal_center_header_icon">
@@ -15,13 +14,22 @@
           </div>
         </router-link>
         </Col>
-
+        <Col class="personal_center" v-else>
+        <router-link class="personal_center_header" exact v-for="item in student_tab" :key="item.title"
+          :to="{path: item.path}">
+          <div class="personal_center_header_icon">
+            <img :src="item.imgsrc" alt="">
+          </div>
+          <div class="personal_center_header_title">
+            {{item.title}}
+          </div>
+        </router-link>
+        </Col>
       </Row>
       <div class="personal_center_list">
         <router-view></router-view>
       </div>
       </Col>
-
       <Col span="5" offset=3>
       <Row class="personal_right">
         <Col class="personal_right_title">
@@ -29,18 +37,15 @@
         </Col>
         <Col>
         <div>
-          <Row class="personal_right_couseList" v-for="item in course_list" :key="item.id">
+          <Row class="personal_right_couseList" v-for="item in couseList" :key="item.id">
             <Col class="personal_right_couseList_img">
-
             <img :src="item.img" alt="">
             </Col>
             <Col>
             <div>{{item.course_name}}</div>
-            <div class="personal_right_teacher_list">{{teacher_list.name}}</div>
-
+            <div class="personal_right_teacher_list">{{item.user_name}}</div>
             </Col>
           </Row>
-
         </div>
         </Col>
       </Row>
@@ -52,12 +57,41 @@
 
 <script>
 // import { get_Course } from "@/api/common";
-import { teacher_message } from '@/api/user'
+import { get_Course } from '@/api/common'
+import log from 'video.js/es5/utils/log'
+
 export default {
   name: 'personal',
 
   data () {
     return {
+      student_tab: [
+        {
+          title: '个人资料',
+          imgsrc: require('@/assets/images/personal/geren2.png'),
+          path: '/personal/personaldata'
+        },
+        {
+          title: '购买记录',
+          imgsrc: require('@/assets/images/personal/goumai.png'),
+          path: '/personal/record'
+        },
+        {
+          title: '关注',
+          imgsrc: require('@/assets/images/personal/guanzhu.png'),
+          path: '/personal/attention'
+        },
+        {
+          title: '喜欢',
+          imgsrc: require('@/assets/images/personal/xihaun.png'),
+          path: '/personal/like'
+        },
+        {
+          title: '钱包',
+          imgsrc: require('@/assets/images/personal/qianbao.png'),
+          path: '/personal/wallet'
+        }
+      ],
       personal_tab: [
         {
           title: '个人资料',
@@ -83,6 +117,7 @@ export default {
           title: '粉丝',
           imgsrc: require('@/assets/images/personal/fensi.png'),
           path: '/personal/fans'
+
         },
         {
           title: '钱包',
@@ -90,39 +125,60 @@ export default {
           path: '/personal/wallet'
         }
       ],
-      course_list: [],
-      teacher_list: {}
+      // course_list: [],
+      // teacher_list: {},
+      couseList: []
     }
   },
   computed: {
 
     userId () {
       return this.$store.state.user.userId
+    },
+    userType () {
+      return this.$store.state.user.userInfo.userType
     }
 
   },
 
   methods: {
-    // get_Course () {
-    //   get_Course().then(res => {
-    //     console.log(res);
-    //     if (res.code === 200) {
-    //       this.couseList = res.data.data
-    //     }
+    get_Course () {
+      get_Course().then(res => {
+        if (res.code === 200) {
+          this.couseList = res.data.data
+        }
 
-    //   })
-    // }
-    getteacher_message () {
-      teacher_message(this.userId).then(res => {
-        this.teacher_list = res.data.teacher_list
-        this.course_list = res.data.course_list
-        console.log(this.course_list)
       })
-    }
+    },
+
+    // getteacher_message () {
+    //   if (this.userType === 1) {
+    //     teacher_message(this.userId).then(res => {
+    //       console.log(res);
+    //       this.teacher_list = res.data.teacher_list
+    //       this.course_list = res.data.course_list
+    //     })
+    //   }
+    //   else {
+    //     student_message(this.userId).then(res => {
+    //       console.log(res);
+
+    //     })
+
+    //   }
+    // }
+
   },
   mounted () {
-    // this.get_Course()
-    this.getteacher_message()
+    this.get_Course()
+    // this.getteacher_message()
+
+    // setTimeout(() => {
+    //   if (this.userType === 2) {
+    //     this.personal_tab.splice(4, 1)
+    //   }
+    // }, 1000)
+
   }
 
 }

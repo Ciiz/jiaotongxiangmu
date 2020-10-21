@@ -5,71 +5,53 @@
       <Form :label-width="100" :modal="course" :rules="courseRules" class="course-form">
         <Row>
           <Col :span="8">
-            <FormItem label="封面：">
-              <ImageUpload
-                v-model="course.img"
-                :extra="{type: 'course',token:$store.state.user.token}"
-              >
-              </ImageUpload>
-            </FormItem>
+          <FormItem label="封面：">
+            <ImageUpload v-model="course.img" :extra="{type: 'course',token:$store.state.user.token}">
+            </ImageUpload>
+          </FormItem>
           </Col>
           <Col :span="8">
-            <FormItem label="课程名称：">
-              <Input v-model="course.course_name" placeholder="请填写课程名称"></Input>
-            </FormItem>
+          <FormItem label="课程名称：">
+            <Input v-model="course.course_name" placeholder="请填写课程名称"></Input>
+          </FormItem>
           </Col>
           <Col :span="8">
-            <FormItem label="专业：">
-              <Select v-model="course.major" filterable>
-                <Option v-for="item in majorList" :value="item.major_id" :key="item.major_id">{{item.major_name}}</Option>
-              </Select>
-            </FormItem>
+          <FormItem label="专业：">
+            <Select v-model="course.major" filterable>
+              <Option v-for="item in majorList" :value="item.major_id" :key="item.major_id">{{item.major_name}}</Option>
+            </Select>
+          </FormItem>
           </Col>
         </Row>
         <Row>
           <Col :span="8">
-            <FormItem label="课程类型：">
-              <RadioGroup v-model="course.course_type" v-if="!is_editor">
-                <Radio :label="1">普通</Radio>
-                <Radio :label="2">全景</Radio>
-              </RadioGroup>
-              <div v-else>
-                {{course.course_type === 1 ? '普通课程' : '全景课程'}}
-              </div>
-            </FormItem>
+          <FormItem label="课程类型：">
+            <RadioGroup v-model="course.course_type" v-if="!is_editor">
+              <Radio :label="1">普通</Radio>
+              <Radio :label="2">全景</Radio>
+            </RadioGroup>
+            <div v-else>
+              {{course.course_type === 1 ? '普通课程' : '全景课程'}}
+            </div>
+          </FormItem>
           </Col>
           <Col :span="16">
-            <FormItem label="课程标签：">
-              <Tag
-                v-for="item in course.course_label"
-                :key="item"
-                :name="item"
-                closable
-                @on-close="handleClose"
-              >{{item}}</Tag>
-              <Input
-                v-model="tag"
-                style="width:130px;"
-                placeholder="按enter键添加标签"
-                @keyup.enter.native="handleAdd"
-              ></Input>
-              <Row>
-                <Tag
-                  v-for="tag in tagList"
-                  @on-change="chooseTag(tag)"
-                  :key="tag.id"
-                  checkable
-                  :checked="inChecked(tag.name)"
-                  color="primary"
-                >{{tag.name}}</Tag>
-              </Row>
-            </FormItem>
+          <FormItem label="课程标签：">
+            <Tag v-for="item in course.course_label" :key="item" :name="item" closable @on-close="handleClose">{{item}}
+            </Tag>
+            <Input v-model="tag" style="width:130px;" placeholder="按enter键添加标签" @keyup.enter.native="handleAdd"></Input>
+            <Row>
+              <Tag v-for="tag in tagList" @on-change="chooseTag(tag)" :key="tag.id" checkable
+                :checked="inChecked(tag.name)" color="primary">{{tag.name}}</Tag>
+            </Row>
+          </FormItem>
           </Col>
         </Row>
         <Row>
-            <FormItem label="描述：">
-              <Editor ref="editor" :cache="false" :height="200" v-model="course.description" :is_init.sync="editor_init"/>
-            </FormItem>
+          <FormItem label="描述：">
+            <Editor ref="editor" :cache="false" :height="200" v-model="course.description"
+              :is_init.sync="editor_init" />
+          </FormItem>
         </Row>
         <Row style="text-align:right" class="modal-footer">
           <Button type="primary" size="small" @click="submitshow">保存</Button>
@@ -77,7 +59,7 @@
       </Form>
 
       <div v-if="course.course_type === 1">
-        <h2>章节信息  </h2>
+        <h2>章节信息 </h2>
         <ChapterClass :course_id="course.id" :editable="true"></ChapterClass>
       </div>
 
@@ -89,14 +71,11 @@
       <Spin size="large" fix v-if="loading"></Spin>
     </div>
     <!-- 普通课程MOdal -->
-    <Modal v-model="modal" :title="title" >
+    <Modal v-model="modal" :title="title">
       <CourseFilePlay :file_url="target_id.file_url" v-if="target==='course_file_play'"></CourseFilePlay>
     </Modal>
-      <Modal
-        v-model="modal1"
-        title="保存"
-        @on-ok="submit">
-        <p>是否保存</p>
+    <Modal v-model="modal1" title="保存" @on-ok="submit">
+      <p>是否保存</p>
     </Modal>
   </div>
 </template>

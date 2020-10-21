@@ -1,24 +1,27 @@
 <template>
   <div class="modal-content mobile-modal hideScroll" style="height: 100%;margin-bottom:0">
     <Row style="margin-bottom:20px;">
-    <div style="float:left;line-height:0.46rem;font-size:0.28rem">
-      {{curDate}} 星期{{curDay}}
-    </div>
-    <div style="float:right;line-height:0.46rem">
-      <Icon type="ios-arrow-back" @click="handleWeekChange('minus')" color="#000000" style="font-size:0.46rem"/>
-      <span style="font-size:0.36rem;font-weight:bold;color:#000000;vertical-align:middle">第{{week}}周</span>
-      <Icon type="ios-arrow-forward" @click="handleWeekChange('plus')" color="#000000" style="font-size:0.46rem"/>
-    </div>
+      <div style="float:left;line-height:0.46rem;font-size:0.28rem">
+        {{curDate}} 星期{{curDay}}
+      </div>
+      <div style="float:right;line-height:0.46rem">
+        <Icon type="ios-arrow-back" @click="handleWeekChange('minus')" color="#000000" style="font-size:0.46rem" />
+        <span style="font-size:0.36rem;font-weight:bold;color:#000000;vertical-align:middle">第{{week}}周</span>
+        <Icon type="ios-arrow-forward" @click="handleWeekChange('plus')" color="#000000" style="font-size:0.46rem" />
+      </div>
     </Row>
-    <table class="timetable" border="1px;" rules="all"  cellpadding="10">
+    <table class="timetable" border="1px;" rules="all" cellpadding="10">
       <thead>
-          <th v-for="(item,index) in tableHead" :key="index" class="bg-gray" style="padding:0.3rem 0" :class="{'day-active': (index === curDay && curDate === item.date)}">{{item.label}}<br>{{item.date}}</th>
+        <th v-for="(item,index) in tableHead" :key="index" class="bg-gray" style="padding:0.3rem 0"
+          :class="{'day-active': (index === curDay && curDate === item.date)}">{{item.label}}<br>{{item.date}}</th>
       </thead>
       <tbody>
         <tr v-for="(row,index) in rowData" :key="index">
-          <td v-for="(col,index1) in row" :rowspan="col.rowspan" :colspan="col.colspan" :key="index1" :class="col.style" >
-            <div >
-              <div v-if="col.col === 1" v-html="col.class_no ? `${col.class_no}` : '&nbsp;'" :class="{item: row.class_no ? ture : false}"> </div>
+          <td v-for="(col,index1) in row" :rowspan="col.rowspan" :colspan="col.colspan" :key="index1"
+            :class="col.style">
+            <div>
+              <div v-if="col.col === 1" v-html="col.class_no ? `${col.class_no}` : '&nbsp;'"
+                :class="{item: row.class_no ? ture : false}"> </div>
               <render-desc v-else :teacher_course_id="teacher_course_id" :desc="col.desc" class="item"></render-desc>
             </div>
           </td>
@@ -52,7 +55,7 @@ function getWeekDay (dateString) {
   }
 }
 // eslint-disable-next-line standard/array-bracket-even-spacing
-const colors = ['color1', 'color2', 'color3', 'color4', 'color5', 'color6', 'color7', 'color8', 'color9', 'color10' ]
+const colors = ['color1', 'color2', 'color3', 'color4', 'color5', 'color6', 'color7', 'color8', 'color9', 'color10']
 export default {
   components: {
     renderDesc, draggable
@@ -424,37 +427,37 @@ export default {
 }
 </script>
 <style lang="less">
-.timetable{
+.timetable {
   width: 100%;
   border-color: #e4e3e3;
-  td{
+  td {
     width: 11%;
     padding: 5px;
   }
-  .text-center{
+  .text-center {
     text-align: center;
   }
-  .bg-gray{
+  .bg-gray {
     background: #f5f5f5;
   }
-  th{
+  th {
     padding: 13px;
   }
-  .day-active{
+  .day-active {
     background: #0fa9df;
     border-color: #0fa9df;
     color: #fff;
   }
-  .curtimetable{
-    background:#92344e!important;
+  .curtimetable {
+    background: #92344e !important;
     color: #fff;
   }
-  .clitem{
-    color:#fff;
+  .clitem {
+    color: #fff;
     border-radius: 0;
     box-shadow: none;
   }
-  .item{
+  .item {
     min-height: 50px;
     display: flex;
     flex-direction: column;
@@ -462,40 +465,39 @@ export default {
     justify-content: center;
   }
 
-  .color1{
+  .color1 {
     background: #b75353;
   }
-  .color2{
+  .color2 {
     background: #2b90b7;
   }
-  .color3{
+  .color3 {
     background: #835a86;
   }
-  .color4{
+  .color4 {
     background: #2a8c3b;
   }
-  .color5{
+  .color5 {
     background: #5a6186;
   }
-  .color6{
+  .color6 {
     background: #4f2c25;
   }
-  .color7{
+  .color7 {
     background: #2a2626;
   }
-  .color8{
+  .color8 {
     background: #203d48;
   }
-  .color9{
+  .color9 {
     background: #406529;
   }
-  .color10{
+  .color10 {
     background: #af2525;
   }
-
 }
 
-.course-table-form-item{
+.course-table-form-item {
   margin-bottom: 10px;
 }
 </style>

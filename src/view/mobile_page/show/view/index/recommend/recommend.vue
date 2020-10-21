@@ -29,20 +29,21 @@
         </div>
       </div>
       <!--所有 学校 -->
-      <ul ref="schoolList">
-
-        <li class="m_allschool" id="m_allschool" ref="li" v-for="(item,index) in schoolList" :key="index"
-          style="display:none">
-          <div class="m_allschool_a">
-            <div class="m_allschool_icon"><img :src="item.school_icon" alt=""></div>
-            <div class="m_allschool_school_name">
-              <div class="m_allschool_school_name_b">{{item.school_name}}</div>
-              <div class="m_allschool_school_name_s">查看该院校所有课程</div>
+      <div class="schoolLists" v-for="(item,index) in schoolList" :key="index">
+        <div ref="schoolList">
+          <div class="m_allschool" id="m_allschool" ref="li" style="display:none">
+            <div class="m_allschool_a">
+              <div class="m_allschool_icon"><img :src="item.school_icon" alt=""></div>
+              <div class="m_allschool_school_name">
+                <div class="m_allschool_school_name_b">{{item.school_name}}</div>
+                <div class="m_allschool_school_name_s"
+                  @click="$router.push({ path: `/m_index_course/${schoolList[index].id}` })">查看该院校所有课程</div>
+              </div>
+              <div class="m_allschool_name" @click="$router.push({name:'m_index_school'})">所有院校 ></div>
             </div>
-            <div class="m_allschool_name" @click="$router.push({name:'m_index_school'})">所有院校 ></div>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
       <indexSchool v-if="isSchool_show" @handle_schoolClose='handle_schoolClose'></indexSchool>
       <!-- 猜你喜欢 -->
       <div class="m_allcourse_like">
@@ -51,7 +52,8 @@
           <div class="m_allcourse_likee_header_r" @click="handle_more">更多 ></div>
         </div>
         <div class="m_allcourse_like_list">
-          <div class="m_allcourse_like_item" v-for="(v,i) in courseList" :key="i">
+          <div class="m_allcourse_like_item" v-for="(v,i) in courseList" :key="i"
+            @click="$router.push({path:`/m_index_videoCourse/${v.id}`})">
             <div class="m_allcourse_like_item_icon"><img :src="v.img" alt=""></div>
             <div class="m_allcourse_like_item_description" v-html="v.description"></div>
           </div>
@@ -68,7 +70,8 @@
           <div class="m_Boutique_header_right">更多 ></div>
         </div>
         <div class="m_Boutique_list">
-          <div class="m_Boutique_list_item" v-for="(v,i) in newCourse" :key="i">
+          <div class="m_Boutique_list_item" v-for="(v,i) in newCourse" :key="i"
+            @click="$router.push({path:`/m_index_videoCourse/${v.id}`})">
             <div class="m_Boutique_list_item_img">
               <img :src="v.img" alt="">
             </div>
@@ -76,7 +79,6 @@
               <div class="m_Boutique_list_item_center1">{{v.course_name}}</div>
               <div class="m_Boutique_list_item_center2" v-html="v.description"></div>
               <div class="m_Boutique_list_item_center3">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
-
             </div>
           </div>
         </div>
@@ -88,7 +90,8 @@
           <div class="m_Boutique_header_right free">更多 ></div>
         </div>
         <div class="m_Boutique_list">
-          <div class="m_Boutique_list_item" v-for="(v,i) in freeCourse" :key="i">
+          <div class="m_Boutique_list_item" v-for="(v,i) in freeCourse" :key="i"
+            @click="$router.push({path:`/m_index_videoCourse/${v.id}`})">
             <div class="m_Boutique_list_item_img">
               <img :src="v.img" alt="">
             </div>
@@ -135,12 +138,10 @@
 </template>
 <script>
 import indexLike from '@/view/mobile_page/components/m_index/m_index_like'
-
+import { Toast, Indicator } from 'mint-ui'
 import indexTeacher from '@/view/mobile_page/components/m_index/m_index_teacher'
 import { get_Course, get_recommend } from '@/api/common'
 import log from 'video.js/es5/utils/log'
-// import log from 'video.js/es5/utils/log'
-
 export default {
   components: { indexLike, indexTeacher },
   data () {
@@ -165,7 +166,12 @@ export default {
     }
   },
   methods: {
+    // look (index) {
+    //   console.log(index);
+    //   this.
+    //   // this.$router.push({ path: `/m_index_cours/${this.schoolList[index].id}` })
 
+    // },
     // 刷新事件
     reload () {
       this.isReloadData = false
@@ -214,23 +220,15 @@ export default {
           return
         }
         if (res.data.data.length < this.m * 6) this.m = 0
+        Toast({
+          message: '没有更多了...',
+          duration: 2000
+        })
         this.courseList = res.data.data.slice(6 * this.m, 6 * (this.m + 1))
         this.m++
       })
     },
-    // 获取教师推荐
-    get_recommend () {
-      get_recommend().then(res => {
-        console.log(res)
-        if (res.code === 200) {
-          if (res.data.data.length > 4) {
-            this.recommendlist = res.data.data.slice(0, 4)
-          } else {
-            this.recommendlist = res.data.data
-          }
-        }
-      })
-    },
+
     getSchoolList () {
       // 获取学校列表
       this.schoolList = []
@@ -275,7 +273,8 @@ export default {
     // 手指滑动监听处理
     getallschool () {
       setTimeout(() => {
-        var Li = document.querySelectorAll('.m_allschool')
+        var Li = this.$refs.li
+        // var Li = document.querySelectorAll('.m_allschool')
         Li[0].style.display = 'block'
         var startx, starty
         // 获得角度
@@ -328,17 +327,41 @@ export default {
                 Li[j].style.display = 'none'
                 Li[j + 1].style.display = 'block'
                 if (j === Li.length - 2) {
-                  alert('已经到最后了')
+
+                  // Li[0].style.display = 'block'
+                  Toast({
+                    message: '已经最后一项了...',
+                    duration: 2000
+                  })
+                  return
                 }
                 break
             }
+
           }, false)
         }
-      }, 800)
-    }
-  },
-  updated () {
-    // this.getallschool()
+
+      }, 1000)
+    },
+    // 获取教师推荐
+    get_recommend () {
+      Indicator.open({
+        text: '加载中...',
+        spinnerType: 'fading-circle'
+      })
+      get_recommend().then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          if (res.data.data.length > 4) {
+            this.recommendlist = res.data.data.slice(0, 4)
+          } else {
+            this.recommendlist = res.data.data
+          }
+        }
+        Indicator.close()
+      })
+    },
+
   },
   mounted () {
     this.getSchoolList()

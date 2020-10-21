@@ -92,7 +92,7 @@
       <mt-tab-container v-model="selected">
         <mt-tab-container-item id="course">
           <div v-if="courelength===0" class="m_courelength">
-            <div class="courelength1">{{`关键词"${value2}"`}}</div>
+            <div class="courelength1">关键词 “<span style="color:#16C2AA">{{value2}}</span>”</div>
             <div class="courelength2">很抱歉，没有找到相关内容</div>
             <div class="courelength3"><img src="@/assets/images/mobile_teacher/search.png" alt=""></div>
           </div>
@@ -115,7 +115,7 @@
 
         <mt-tab-container-item id="2">
           <div v-if="schoolLength===0" class="m_courelength">
-            <div class="courelength1">{{`关键词"${value2}"`}}</div>
+            <div class="courelength1">关键词 “<span style="color:#16C2AA">{{value2}}</span>”</div>
             <div class="courelength2">很抱歉，没有找到相关内容</div>
             <div class="courelength3"><img src="@/assets/images/mobile_teacher/search.png" alt=""></div>
           </div>
@@ -132,7 +132,7 @@
         </mt-tab-container-item>
         <mt-tab-container-item id="3">
           <div v-if="teaherLength===0" class="m_courelength">
-            <div class="courelength1">{{`关键词"${value2}"`}}</div>
+            <div class="courelength1">关键词 “<span style="color:#16C2AA">{{value2}}</span>”</div>
             <div class="courelength2">很抱歉，没有找到相关内容</div>
             <div class="courelength3"><img src="@/assets/images/mobile_teacher/search.png" alt=""></div>
           </div>
@@ -177,13 +177,11 @@
   </div>
 </template>
 <script>
-
-// import search_course from '@/view/mobile_page/show/view/userCenter/teacher/tearch_search/search_course.vue'
 import { hotsearch } from '@/api/common'
 import { Toast, Indicator } from 'mint-ui'
 
 export default {
-  // components: { search_course },
+
   data () {
     return {
       courelength: '',
@@ -216,6 +214,7 @@ export default {
       // this.$router.push({ name: 'showIndex' })
       this.$router.back(-1)
     },
+    // 预搜索
     searchChange (e) {
       if (e) {
         this.$refs.p.style.display = 'none'
@@ -375,7 +374,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
+    padding-right: 0.2rem;
     margin-top: 0.1rem;
 
     .div_sech {

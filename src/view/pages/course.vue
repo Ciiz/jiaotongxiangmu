@@ -198,6 +198,7 @@
 import modal_mixin from '@/view/mixins/modal_mixin'
 import newsContent from '@/view/news/newsContent'
 import { get_bannersIndex, get_majors, myCourseList, courselist } from '@/api/common'
+import log from 'video.js/es5/utils/log'
 // import log from 'video.js/es5/utils/log'
 export default {
   mixins: [modal_mixin],
@@ -288,6 +289,7 @@ export default {
     handle_change (value) {
       if (value === '全部') {
         courselist().then(res => {
+
           this.comamnd_Select_list = res.data.data
           if (this.comamnd_Select_list.length > 10) {
             this.comamnd_Select_list.length = 10
@@ -322,6 +324,7 @@ export default {
         page_size: 10,
         school_id: this.schoolId
       }
+
       myCourseList(data).then(res => {
         console.log(res)
         // 数据改造
@@ -339,16 +342,18 @@ export default {
     // 获取推荐课程
     get_command_course () {
       courselist().then(res => {
-        console.log(res)
+        // console.log(res)
         // 数据改造
         if (res.code === 200) {
+          console.log(res);
+
           res.data.data.map(item => {
-            console.log(item)
             if (item.is_charge === 1) return item.is_charge_name = '精选课程'
             else if (item.is_charge === 0) return item.is_charge_name = '免费课程'
           })
           this.commandCourseList = res.data.data
           this.comamnd_Select_list = res.data.data
+          console.log(this.comamnd_Select_list);
           if (this.comamnd_Select_list.length > 10) {
             this.comamnd_Select_list.length = 10
           }

@@ -95,7 +95,7 @@ export default {
       majorList: [],
       model1: '',
       teacherList: [],
-      teacherSelect: []
+      teacherSelect: [],
     }
   },
   methods: {

@@ -60,7 +60,7 @@ export default {
   },
   mounted () {
     Indicator.open({
-      text: 'Loading...',
+      text: '加载中...',
       spinnerType: 'fading-circle'
     })
     get_recommend().then(res => {

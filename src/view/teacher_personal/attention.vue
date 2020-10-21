@@ -24,6 +24,7 @@
 </template>
 <script>
 import { get_TeacherAttention, unfollow_Attention } from '@/api/user'
+import { student_attention, student_unfollow } from "@/api/student"
 export default {
   name: '',
 
@@ -33,28 +34,52 @@ export default {
       id: ''
     }
   },
+  computed: {
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    }
+  },
   methods: {
     // 取消关注
     handle_unfollow (index) {
       this.attention_List.forEach((v, i) => {
         if (i === index && this.attention_List[index].id !== '') {
-          unfollow_Attention(this.attention_List[index].id).then(res => {
-            console.log(res)
-            if (res.message === '取消成功！') {
-              this.$Message.success('取消成功！')
-              this.attention_List.splice(index, 1)
-            } else {
-              this.$Message.error('取消失败！')
-            }
-          })
+          if (this.userType === 1) {
+            unfollow_Attention(this.attention_List[index].id).then(res => {
+              console.log(res)
+              if (res.message === '取消成功！') {
+                this.$Message.success('取消成功！')
+                this.attention_List.splice(index, 1)
+              } else {
+                this.$Message.error('取消失败！')
+              }
+            })
+
+          } else {
+            student_unfollow(this.attention_List[index].id).then(res => {
+              if (res.message === '取消成功！') {
+                this.$Message.success('取消成功！')
+                this.attention_List.splice(index, 1)
+              } else {
+                this.$Message.error('取消失败！')
+              }
+            })
+          }
+
         }
       })
     },
     get_TeacherAttention () {
-      get_TeacherAttention().then(res => {
-        console.log(res)
-        this.attention_List = res.data.list
-      })
+      if (this.userType === 1) {
+        get_TeacherAttention().then(res => {
+          this.attention_List = res.data.list
+        })
+      } else {
+        student_attention().then(res => {
+          this.attention_List = res.data.list
+        })
+      }
+
     }
   },
   mounted () {

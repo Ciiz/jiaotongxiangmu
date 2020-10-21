@@ -20,42 +20,31 @@
           <div>{{moment(item.created_at * 1000).format('HH:mm')}}</div>
         </div>
         <Divider />
-
         </Col>
         <Col class="like_teacher">
         <div class="like_teacher_name">
           <div class="like_teacher_name_icon"> <img :src="item.icon" alt=""></div>
-
           {{item.user_name}}
         </div>
         <div class="like_teacher_type">{{item.learn_price}}</div>
-        </Col>
-        <Col>
-        </Col>
-        <Col>
         </Col>
       </Row>
       </Col>
     </Row>
   </div>
 </template>
-
 <script>
 import { getMyCourseAttention } from '@/api/user'
-
 export default {
   name: '',
-
   data () {
     return {
       like_list: []
     }
   },
-
   methods: {
     getMyCourseAttention () {
-      getMyCourseAttention({ page: 1, pagesize: 8 }).then((result) => {
-        console.log(result)
+      getMyCourseAttention().then((result) => {
         this.like_list = result.data.data
       })
     }

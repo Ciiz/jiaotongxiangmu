@@ -106,18 +106,19 @@ export default {
     },
     // 个人中心页面跳转
     personal () {
-      if (this.userType === 1) {
-        this.$router.push({ path: '/personal' })
-      } else {
-
-      }
+      this.$router.push({ path: '/personal' })
+      // if (this.userType === 1) {
+      //   this.$router.push({ path: '/personal' })
+      // } else {
+      //   this.$router.push({ path: '/personal' })
+      // }
     },
     // 我的关注页面跳转
     my_attention () {
       if (this.userType === 1) {
         this.$router.push({ path: '/personal/attention' })
       } else {
-
+        this.$router.push({ path: '/personal/attention' })
       }
     },
     entrySystem () {

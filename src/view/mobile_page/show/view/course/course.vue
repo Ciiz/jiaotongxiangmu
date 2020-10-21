@@ -12,7 +12,7 @@
     <div class="m-mycourse-list hideScroll">
       <div v-for="(item,index) in list" :key="index" class="m-mycourse-item" @click="toLink(item)">
         <div>
-          <img :src="item.img"/>
+          <img :src="item.img" />
         </div>
         <div class="m-mycourse-list-info-t">
           <div>{{item.course_name}}</div>
@@ -58,8 +58,8 @@ export default {
           params: {
             page: 1,
             keyword: '',
-            type: 0
-            // type: 4
+            // type: 0
+            type: 4
           }
         }).then(res => {
           if (res.code === 200) {
@@ -95,6 +95,8 @@ export default {
         course_detail(item.id).then(res => {
           this.loading = false
           if (res.code === 200) {
+            console.log(res);
+
             course_type = res.data.course_type
             this.$router.push({ name: 'mobileCoursewareT', query: { teacher_course_id: item.teacher_course_id, id: item.id, course_type: course_type, course_name: item.course_name } })
           }
@@ -113,5 +115,4 @@ export default {
 }
 </script>
 <style>
-
 </style>

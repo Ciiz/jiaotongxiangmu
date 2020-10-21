@@ -3,7 +3,8 @@
     <div class="question-item" v-for="(item,index) in chatList" :key="index" @click="toDiscuss(item)">
       <div style="position:relative">
         <img :src="item.userInfo.icon" class="question-item-icon">
-        <mt-badge type="error" size="small" style="position:absolute;top:0.08rem;right:0.08rem" class="m-badge-num" v-if="item.unread!==0">{{item.unread}}</mt-badge>
+        <mt-badge type="error" size="small" style="position:absolute;top:0.08rem;right:0.08rem" class="m-badge-num"
+          v-if="item.unread!==0">{{item.unread}}</mt-badge>
       </div>
       <div class="question-item-l">
         <div class="question-item-info">

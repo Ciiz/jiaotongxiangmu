@@ -36,7 +36,7 @@
             </div>
             <div style="color:#3B9BFF">
               {{item.task_progress}}
-           </div>
+            </div>
           </div>
           <div>
             <Icon type="ios-arrow-forward" />

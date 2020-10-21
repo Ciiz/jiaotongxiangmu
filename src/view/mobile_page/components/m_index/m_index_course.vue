@@ -38,7 +38,7 @@ export default {
   methods: {},
   mounted () {
     Indicator.open({
-      text: 'Loading...',
+      text: '加载中...',
       spinnerType: 'fading-circle'
     })
     this.axios.request({

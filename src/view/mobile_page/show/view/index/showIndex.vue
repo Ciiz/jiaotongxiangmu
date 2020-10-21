@@ -30,9 +30,8 @@
       <mt-tab-container-item id="recommend">
         <recommend></recommend>
       </mt-tab-container-item>
-
       <mt-tab-container-item id="2">
-        2
+        <videoCourse v-if="istab"></videoCourse>
       </mt-tab-container-item>
       <mt-tab-container-item id="3">
         3
@@ -45,19 +44,33 @@
 
 import { get_bannersIndex } from '@/api/common'
 import recommend from '@/view/mobile_page/show/view/index/recommend/recommend.vue'
+import videoCourse from "@/view/mobile_page/components/m_index/video_course"
 import search from '@/view/mobile_page/show/view/searchpage.vue'
 
 export default {
-  components: { recommend, search },
+  components: { recommend, search, videoCourse },
   data () {
     return {
       banner_list: [],
       selected: 'recommend',
       showsearch: false,
-      allLoaded: false
+      allLoaded: false,
+      istab: false
+    }
+  },
+  watch: {
+    selected (val, oldVal) {
+      if (val == 2) {
+        this.istab = true
+      }
+
     }
   },
   methods: {
+    istabs () {
+      console.log(22);
+
+    },
     // loadTop () {
     //   // load more data
     //   this.$refs.loadmore.onTopLoaded();

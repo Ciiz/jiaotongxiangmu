@@ -29,19 +29,23 @@
         <div class="userInfo_style">{{userInfo.school_name}}</div>
 
       </FormItem>
-      <FormItem label="工号：">
-        <div class="userInfo_style"> {{userInfo.account}}</div>
+      <FormItem label="工号：" v-if="userType==1">
+        <div class="userInfo_style"> {{userInfo.id_card}}</div>
+
+      </FormItem>
+      <FormItem label="学号" v-if="userType==2">
+        <div class="userInfo_style"> {{userInfo.id_card}}</div>
 
       </FormItem>
       <FormItem label="账号：">
         <div class="userInfo_password">
-          <Input v-model="infolist.account" class="userInfo_style Inputaccount" ref="Inputfocus" disabled
+          <Input v-model="userInfo.account" class="userInfo_style Inputaccount" ref="Inputfocus" disabled
             style="background-color:#fff"></Input>
           <div class="changed_password" style="cursor:pointer;">修改密码</div>
         </div>
       </FormItem>
       <FormItem label="微信：">
-        <div class="userInfo_wc" v-if="wx_id !==''">
+        <div class="userInfo_wc" v-if="wx_id !=='' || wx_id !== null  || wx_id !== undefined">
           <div class="userInfo_wc_img"><img src="@/assets/images/wechat.svg" alt=""></div>
           <div class="userInfo_wc_text" style="cursor:pointer;" @click="handle_wx">已绑定（解除绑定）</div>
         </div>
@@ -53,6 +57,7 @@
   </div>
 </template>
 <script>
+import { student_message } from '@/api/student'
 import { teacher_message, update_info, updateUserWechatId } from '@/api/user'
 import upload_mixin from '_c/mixins/upload_mixin'
 export default {
@@ -62,6 +67,7 @@ export default {
   data () {
     return {
       userInfo: {},
+      studentInfo: {},
       infolist: {
         icon: '',
         account: ''
@@ -83,6 +89,7 @@ export default {
   computed: {
 
     personal_userInfo () {
+
       return this.$store.state.user.userInfo
     },
     userId () {
@@ -90,6 +97,9 @@ export default {
     },
     wx_id () {
       return this.$store.state.user.wx_id
+    },
+    userType () {
+      return this.$store.state.user.userInfo.userType
     }
   },
   methods: {
@@ -160,14 +170,24 @@ export default {
         }
       })
     },
-    // 获取单个教师信息
+    // 获取单个教师信息和单个学生信息
     getteacher_message () {
-      teacher_message(this.userId).then(res => {
-        this.userInfo = res.data.teacher_list
-        this.infolist.account = res.data.teacher_list.account
-        console.log(this.userInfo.wx_id)
-        this.$store.commit('setwxId', this.userInfo.wx_id)
-      })
+      if (this.userType === 1) {
+        teacher_message(this.userId).then(res => {
+          this.userInfo = res.data.teacher_list
+          this.infolist.account = res.data.teacher_list.account
+          console.log(this.userInfo.wx_id)
+          this.$store.commit('setwxId', this.userInfo.wx_id)
+        })
+      } else {
+        student_message().then(res => {
+          console.log(res);
+          this.userInfo = res.data.user
+        })
+
+
+      }
+
     }
     // 上传图片成功
     // imgsuccess (res) {

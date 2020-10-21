@@ -23,7 +23,6 @@
 
 import coursewareList from '@/view/mobile_page/show/view/course/teacher/coursewareList'
 import chapterInfo from '@/view/mobile_page/show/view/course/teacher/chapterInfo'
-
 export default {
   components: { coursewareList, chapterInfo },
   data () {

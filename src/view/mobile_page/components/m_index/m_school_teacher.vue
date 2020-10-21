@@ -12,11 +12,9 @@
                 <div class="m_address_r_bt2">ta的课程：{{i.course_count}}</div>
               </div>
             </div>
-
           </div>
         </div>
       </mt-index-section>
-
     </mt-index-list>
   </div>
 </template>
@@ -39,7 +37,10 @@ export default {
 
   },
   mounted () {
-    Indicator.open()
+    Indicator.open({
+      text: '加载中...',
+      spinnerType: 'fading-circle'
+    })
     var elem_li = document.createElement('li')
     elem_li.innerHTML = '#'
     document.querySelector('.mint-indexlist-navlist', 'ul').appendChild(elem_li)

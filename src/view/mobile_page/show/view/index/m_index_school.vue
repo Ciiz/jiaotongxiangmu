@@ -1,18 +1,19 @@
 <template>
   <div class="m_index_school">
-    <cell class="m_index_school_title" title="合作院校">
-      <span slot="left"><img src="@/assets/images/mobile_teacher/back.png" alt="" @click="$router.back(-1)"></span>
-      <span slot="right" class="m_index_school_r" @click="$router.push({name:'searchpage'})"><img
-          src="@/assets/images/mobile_teacher/search2.png" alt=""></span>
-    </cell>
-    <div class="m_index_school_num">
-      <span class="m_index_school_num1">合作院校：{{allSchool.length}} 所</span>
-      <span class="m_index_school_num2">按课程数量排序</span>
-    </div>
 
     <mt-spinner v-show="list<1 && InitialLoading" color="#26a2ff" class="center"></mt-spinner>
     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom"
       @bottom-status-change="handleBottomChange" ref="loadmore" :bottom-all-loaded="allLoaded" :auto-fill="false">
+      <cell class="m_index_school_title" title="合作院校">
+        <span slot="left"><img src="@/assets/images/mobile_teacher/back.png" alt="" @click="$router.back(-1)"></span>
+        <span slot="right" class="m_index_school_r" @click="$router.push({name:'searchpage'})"><img
+            src="@/assets/images/mobile_teacher/search2.png" alt=""></span>
+      </cell>
+
+      <div class="m_index_school_num">
+        <span class="m_index_school_num1">合作院校：{{allSchool.length}} 所</span>
+        <span class="m_index_school_num2">按课程数量排序</span>
+      </div>
       <ul>
         <li class="m_index_school_list" v-for="(v,i) in newarr" :key="i" @click="handle_item(i)">
           <div class="m_index_school_list_l">
@@ -49,18 +50,17 @@
 <script>
 
 import cell from '@/view/mobile_page/components/public_cell'
-import { Indicator } from 'mint-ui'
 import { getSchoolList } from '@/api/common'
-import log from 'video.js/es5/utils/log'
-// import log from 'video.js/es5/utils/log'
+
 export default {
+  name: 'Loadmore',
   components: {
     cell
   },
   data () {
     return {
       allSchool: [],
-      // examplename: 'Loadmore',
+      examplename: 'Loadmore',
       pageNum: 1, // 页码
       InitialLoading: true, // 初始加载
       list: 0, // 数据
@@ -107,11 +107,9 @@ export default {
       this.$refs.loadmore.onTopLoaded()
     },
     handle_item (i) {
-      console.log(i)
       this.$router.push({ path: `/m_index_school_team/${this.newarr[i].id} ` })
       this.$store.commit('setSschoolMesage', this.newarr[i])
     },
-
     compare (property) {
       return function (a, b) {
         var value1 = a[property]
@@ -151,6 +149,8 @@ export default {
           page_size: this.pageSize
         }
       )
+      console.log(res);
+
       this.testarr = res.data.list
       this.newarr.push(...res.data.list)
       var course_num = []
@@ -177,7 +177,7 @@ export default {
     }
     setTimeout(() => { // 页面挂载完毕 模拟数据请求 这里为了方便使用一次性定时器
       this.list = 12
-    }, 1500)
+    }, 100)
   }
 }
 </script>
@@ -245,8 +245,7 @@ export default {
     align-items: center;
     padding: 0.1rem 0.3rem;
     .m_index_school_list_l {
-      padding: 0.1rem 0.5rem 0.1rem 0;
-
+      width: 15%;
       font-size: 0.36rem;
       font-family: FZLanTingHeiS-H-GB;
       font-weight: bold;

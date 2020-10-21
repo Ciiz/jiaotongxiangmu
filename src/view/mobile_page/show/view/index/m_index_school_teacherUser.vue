@@ -50,7 +50,13 @@
       <div class="teacher_massge_bottom_list">
         <div class="teacher_massge_bottom_list_item" v-for="(v,i) in course_list" :key="i">
           <div class="teacher_massge_bottom_list_itemImg">
-            <img :src="v.img" alt="">
+            <div class="teacher_massge_icon"><img src="@/assets/images/mobile_teacher/bofang3.png" alt="">
+
+              <span v-if="v.play_count===null">0</span>
+              <span v-else>{{v.play_count}}</span>
+            </div>
+
+            <div class="teacher_massge_img"> <img :src="v.img" alt=""> </div>
           </div>
           <div class="teacher_massge_bottom_list_itemName">
             {{v.course_name}}
@@ -259,16 +265,35 @@ export default {
         margin-bottom: 0.3rem;
 
         .teacher_massge_bottom_list_itemImg {
+          position: relative;
+          overflow: hidden;
+          .teacher_massge_img {
+            img {
+              width: 3.04rem;
+              height: 3.04rem;
+              border-radius: 8px;
+            }
+          }
+          .teacher_massge_icon {
+            position: absolute;
+            bottom: 0.1rem;
+            left: 0.16rem;
+            font-size: 0.22rem;
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #ffffff;
+            img {
+              width: 0.16rem;
+              height: 0.16rem;
+              margin-right: 0.1rem;
+            }
+          }
           width: 3.04rem;
           height: 3.04rem;
           background: #3c9cff;
           border-radius: 8px;
-          img {
-            width: 3.04rem;
-            height: 3.04rem;
-            border-radius: 8px;
-          }
         }
+
         .teacher_massge_bottom_list_itemName {
           font-size: 0.28rem;
           font-family: PingFang SC;

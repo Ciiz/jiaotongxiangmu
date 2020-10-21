@@ -336,6 +336,16 @@ const indexRouter = [
             },
             component: () => import('@/view/class_common/course/course_coursewares')
           },
+          // 学生的个人中心
+          // {
+          //   path: 'studentPersonal',
+          //   name: 'studentPersonal',
+          //   meta: {
+          //     title: '学生个人中心',
+          //     keepAlive: true
+          //   },
+          //   component: () => import('@/view/class_common/course/studentPersonal')
+          // },
           {
             path: 'student_courseware_detail',
             name: 'student_courseware_detail',
@@ -845,6 +855,42 @@ const mobileStudent = [
     },
     component: () => import('@/view/mobile_page/show/view/course/selectcourse.vue')
   },
+  // 我的关注
+  {
+    path: '/mobileAttention',
+    name: 'mobileAttention',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/myList/mobileAttention.vue')
+  },
+  // 我的喜欢
+  {
+    path: '/mobileLike',
+    name: 'mobileLike',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/myList/mobileLike.vue')
+  },
+  // 购买记录
+  {
+    path: '/mobileHistory',
+    name: 'mobileHistory',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/myList/mobileHistory.vue')
+  },
+  // 观看记录
+  {
+    path: '/mobileWatch',
+    name: 'mobileWatch',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/student/myList/mobileWatch.vue')
+  },
   {
     path: '/mobileChapterInfo',
     name: 'mobileChapterInfo',
@@ -890,6 +936,28 @@ const mobileTeacher = [
       keepAlive: true
     },
     component: () => import('@/view/mobile_page/show/view/index/m_index_school_team.vue')
+
+  },
+  // 该院校的所有课程
+  {
+    name: 'm_index_course',
+    path: '/m_index_course/:id',
+    meta: {
+      hideInMenu: true,
+      keepAlive: true
+    },
+    component: () => import('@/view/mobile_page/components/m_index/m_index_course.vue')
+
+  },
+  // 视频课程详情
+  {
+    name: 'm_index_videoCourse',
+    path: '/m_index_videoCourse/:id',
+    meta: {
+      hideInMenu: true,
+      keepAlive: true
+    },
+    component: () => import('@/view/mobile_page/show/view/index/m_index_videoCourse.vue')
 
   },
   {

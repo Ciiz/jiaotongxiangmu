@@ -124,13 +124,12 @@ export default {
             user_type: this.user_type,
             school: this.selectId
           }).then(res => {
-          this.getUserInfo().then(res => {
-            console.log(res)
-            // res.schoolId
-            localStorage.setItem('schoolId', res.schoolId)
-            this.$router.push({ path: '/mobile' })
+            this.getUserInfo().then(res => {
+              console.log(res)
+              localStorage.setItem('schoolId', res.schoolId)
+              this.$router.push({ path: '/mobile' })
+            })
           })
-        })
       }
     }
   },

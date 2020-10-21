@@ -12,7 +12,7 @@
         {{school_news.title}}
       </div>
       <div class="schoolNewsMassege_details_name">
-        <div class="schoolNewsMassege_details_name1">来源：{{}}</div>
+        <div class="schoolNewsMassege_details_name1">来源：{{school_news.name}}</div>
         <div class="schoolNewsMassege_details_name2">
           {{moment(school_news.created_at * 1000).format('YYYY-MM-DD HH:mm')}}</div>
       </div>
@@ -25,7 +25,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import cell from '@/view/mobile_page/components/public_cell'
 // import log from 'video.js/es5/utils/log'
@@ -83,8 +82,25 @@ export default {
     }
     .schoolNewsMassege_details_name {
       display: flex;
+      font-size: 0.24rem;
+      font-family: PingFang SC;
+      font-weight: 500;
+      color: #787878;
+      padding: 0.2rem 0;
       .schoolNewsMassege_details_name2 {
         margin-left: 0.9rem;
+      }
+    }
+    .schoolNewsMassege_details_content {
+      font-size: 0.32rem;
+      font-family: PingFang SC;
+      font-weight: 500;
+      color: #343434;
+    }
+    .schoolNewsMassege_details_cover {
+      img {
+        width: 6.86rem;
+        height: 3.92rem;
       }
     }
   }

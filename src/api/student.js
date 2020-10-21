@@ -46,3 +46,29 @@ export const student_task_detail = (student_task_id) => {
     method: 'get'
   })
 }
+// 取消关注
+export const student_unfollow = (id) => {
+  return axios.request({
+    url: '/Student/TeacherAttention/unfollow',
+    params: { id },
+    method: 'get'
+  })
+}
+// 获取单个学生信息
+export const student_message = () => {
+  return axios.request({
+    url: 'Student/User/getUserInfo',
+    method: 'get',
+    params: {
+    }
+  })
+}
+// 关注列表
+export const student_attention = () => {
+  return axios.request({
+    url: '/Student/TeacherAttention/index',
+    method: 'get',
+    params: {
+    }
+  })
+}

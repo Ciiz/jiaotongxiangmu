@@ -77,6 +77,7 @@
               <input type="text" v-if="infoCenter==='system'" style="width:254px" />
               <button class="blueC-btn" v-if="infoCenter==='people'" @click="showAddDiscuss">添加话题</button>
             </div>
+            <!-- 信息中心 -->
             <div class="infoModal-l-list" v-if="infoCenter==='people'">
               <Row type="flex" v-for="(item,index) in chatList" v-if="item.delete_status===1" :key="index+'chatList'"
                 class="infoModal-l-list-l" @click.native="selectCurrentInfo($event,item)">
@@ -103,6 +104,7 @@
                 </Col>
               </Row>
             </div>
+            <!-- 系统通知 -->
             <div class="infoModal-l-list" v-if="infoCenter==='system'">
               <Row type="flex" class="infoModal-l-list-l" @click.native="selectCurrentSystem2($event)">
                 <Col>
@@ -146,6 +148,7 @@
             <div class="infoModal-r-title">
               <span>{{infoTitle}}</span>
             </div>
+            <!-- 系统通知的 查看历史消息 -->
             <div class="infoModal-r-content">
               <div>
                 <div>
@@ -248,6 +251,7 @@
             <div class="infoModal-r-title">
               <span>{{infoTitle}}</span>
             </div>
+            <!-- 消息中心的 查看历史消息 -->
             <div class="infoModal-r-content">
               <div>
                 <div class="ab-scroll">
@@ -309,6 +313,7 @@
                 </div>
               </div>
             </div>
+            <!-- 发送消息 -->
             <div class="infoModal-r-bottom">
               <!-- <div>
                   <Icon type="ios-happy" size="20"/>
@@ -323,6 +328,7 @@
                 <button class="blackBorderC-btn" style="float:right;margin-top:5px" @click="sendInfo">发送</button>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -716,9 +722,9 @@ export default {
       uncorrectHistory: 1, // 第几次点待办历史消息
       systemInfoList: [], // 系统通知列表
       systemInfoType: '', // 系统通知类型
-      system_unread: '', // 系统信息条数
-      remind_unread: '', // 上课提醒条数
-      commission_unread: '', // 代办条数
+      system_unread: 0, // 系统信息条数
+      remind_unread: 0, // 上课提醒条数
+      commission_unread: 0, // 代办条数
       infoloading: false,
       addInfoModal: false,
       infoTitle: '',
@@ -1092,6 +1098,8 @@ export default {
       this.courdetail = 'bd'
     },
     selectCurrentInfo (e, it) { // 选择消息
+      console.log(e);
+
       if (it.table_type === 2) {
         this.infoTitle = e.currentTarget.childNodes[1].childNodes[0].childNodes[0].innerText
       } else if (it.table_type === 1) {
@@ -1145,9 +1153,11 @@ export default {
       } else if (this.infoTitle === '上课提醒') {
         this.systemInfoType = 2
         this.getSystemInfo(-1, 0)
+        this.remind_unread = 0
       } else if (this.infoTitle === '待办') {
         this.systemInfoType = 3
         this.getSystemInfo(-1, 0)
+        this.commission_unread = 0
       }
     },
     deleteSystem (i) { // 删除系统信息
@@ -1430,6 +1440,8 @@ export default {
       this.showUserDiscuss()
     },
     showInfo (e) { // 点击消息中心或系统通知时
+      console.log(e);
+
       if (e.target.innerText === '消息中心') {
         this.showUserDiscuss()
         this.data.message_total = 0
@@ -1454,6 +1466,8 @@ export default {
         method: 'get',
         params: {}
       }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           this.commission_unread = res.data.commission_unread
           this.remind_unread = res.data.remind_unread
@@ -1597,9 +1611,13 @@ export default {
         }
       }).then(res => {
         if (res.code === 200) {
-          for (let i = 0; i < res.data.list.length; i++) {
-            this.chatList.push(res.data.list[i])
+          console.log(res);
+          if (res.data !== null) {
+            for (let i = 0; i < res.data.list.length; i++) {
+              this.chatList.push(res.data.list[i])
+            }
           }
+
         }
       })
     },
@@ -1612,6 +1630,8 @@ export default {
           rows: 10000
         }
       }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           for (let i = 0; i < res.data.question_list.length; i++) {
             this.chatList.push(res.data.question_list[i])
