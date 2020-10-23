@@ -39,7 +39,7 @@
           </Input>
         </div>
         <div class="teacher_team_select_r">
-          <div class="teacher_team_course">
+          <!-- <div class="teacher_team_course">
             课程数量
             <div class="partner_icon1">
               <Icon type="md-arrow-dropup" color="red" size="8" />
@@ -52,7 +52,7 @@
               <Icon type="md-arrow-dropup" color="red" size="8" />
               <Icon type="md-arrow-dropdown" size="8" />
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       </col>
@@ -76,6 +76,7 @@
             </div>
           </div>
         </div>
+        <div class="teacher_team_btn" v-if="moreteacherList.length>8" @click="handlemore">查看更多</div>
       </div>
       </col>
 
@@ -95,10 +96,14 @@ export default {
       majorList: [],
       model1: '',
       teacherList: [],
+      moreteacherList: [],
       teacherSelect: [],
     }
   },
   methods: {
+    handlemore () {
+      this.teacherList = this.moreteacherList
+    },
     handle_major (value) {
       this.teacherList = this.teacherSelect.filter(v => {
         return v.major_name === value
@@ -107,9 +112,13 @@ export default {
     // 获取教师推荐
     get_command_teacher () {
       get_recommend().then(res => {
-        console.log(res)
-        this.teacherList = res.data.data
+        if (res.data.data.length > 8) {
+          this.teacherList = res.data.data.slice(0, 8)
+        }
+        this.moreteacherList = res.data.data
         this.teacherSelect = res.data.data
+
+
       })
     },
     // 获取学校列表
@@ -163,10 +172,14 @@ export default {
     display: flex;
     justify-content: center;
     //  align-items: center;
+    margin: 20px auto;
+    width: 1200px;
+    height: 140px;
     img {
-      height: 320px;
-      width: 1200px;
       border-radius: 4px;
+      height: 100%;
+      // width: 1200px;
+      width: 100%;
     }
   }
   .team_school {
@@ -261,12 +274,12 @@ export default {
           .teacher_team_item_top {
             display: flex;
             .teacher_team_item_img {
-              width: 100px;
-              height: 100px;
+              width: 108px;
+              height: 108px;
               border-radius: 8px;
               img {
-                width: 100px;
-                height: 100px;
+                width: 108px;
+                height: 108px;
                 border-radius: 8px;
               }
             }
@@ -275,15 +288,52 @@ export default {
               flex-direction: column;
               margin-left: 15px;
               justify-content: space-around;
+              span:nth-child(1) {
+                font-size: 16px;
+                font-family: Microsoft YaHei;
+                font-weight: bold;
+                color: #333333;
+              }
+              span:nth-child(2) {
+                height: 12px;
+                font-size: 14px;
+                font-family: Microsoft YaHei;
+                font-weight: 400;
+                color: #666666;
+              }
+              span:nth-child(3) {
+                height: 13px;
+                font-size: 14px;
+                font-family: Microsoft YaHei;
+                font-weight: 400;
+                color: #666666;
+              }
             }
           }
           .teacher_team_item_buttom {
             margin-top: 10px;
+            font-size: 12px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #919090;
             .teacher_team_item_buttom1 {
               margin-right: 40px;
             }
           }
         }
+      }
+      .teacher_team_btn {
+        width: 187px;
+        height: 48px;
+        background: #2ba4e7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #ffffff;
+        margin: 20px auto;
       }
     }
   }

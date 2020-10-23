@@ -77,6 +77,7 @@ const common = [
     },
     component: () => import('@/view/teacher_common/courseware/courseware_live_public.vue')
   },
+
   {
     path: '/live_teacher',
     name: 'live_teacher',
@@ -121,6 +122,16 @@ const indexRouter = [
     meta: {
     },
     children: [
+      // 首页视频跳转
+      {
+        path: '/videojump/:id',
+        name: 'videojump',
+        meta: {
+          title: '首页视频播放',
+          hideInMenu: false
+        },
+        component: () => import('@/view/video_index/videojump.vue')
+      },
       {
         path: 'news',
         name: 'news',
@@ -238,17 +249,10 @@ const indexRouter = [
         ]
 
       },
-      // 首页视频跳转
-      {
-        path: '/videojump/:id',
-        name: 'videojump',
-        meta: {
-          title: '首页视频播放',
-          hideInMenu: false
-        },
-        component: () => import('@/view/video_index/videojump.vue')
-      }
-    ]
+
+    ],
+
+
   },
 
   {
@@ -511,7 +515,9 @@ const indexRouter = [
         component: () => import('@/view/user/profile')
       }
     ]
-  }
+  },
+
+
 
 ]
 

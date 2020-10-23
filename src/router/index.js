@@ -22,6 +22,7 @@ const turnTo = (to, access, next) => {
 router.beforeEach((to, from, next) => {
   if (to.name === 'news' || to.path === '/news' ||
     to.name === 'schoolyard' || to.path === '/schoolyard' ||
+    to.name === 'videojump' || to.path === '/videojump/:id' ||
     to.name === 'partner' || to.path === '/partner' ||
     to.name === 'team' || to.path === '/team' ||
     to.name === 'index' || to.path === '/index' ||

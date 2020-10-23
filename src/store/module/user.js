@@ -27,11 +27,15 @@ export default {
     courseData: [],
     bindType: 0,
     currentTab: '',
-    schoolMesage: ''
+    schoolMesage: '',
+    loginstatus: '' //登录状态
 
   },
   // 同步操作
   mutations: {
+    setLoginstatus (state, status) {
+      state.loginstatus = status
+    },
     setSschoolMesage (state, schoolMesage) {
       state.schoolMesage = schoolMesage
     },

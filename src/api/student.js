@@ -72,3 +72,13 @@ export const student_attention = () => {
     }
   })
 }
+// 学生端获取单个教师信息
+export const student_massges = (teacher_id) => {
+  return axios.request({
+    url: '/Student/User/teacher_message',
+    method: 'get',
+    params: {
+      teacher_id
+    }
+  })
+}

@@ -133,6 +133,9 @@ export default {
       this.status = true
       if (res.data.data.chapter_list[0] && res.data.data.chapter_list[0].child) {
         this.chapter_firstUrl = res.data.data.chapter_list[0].child[0].file_url
+      }
+      else if (res.data.data.chapter_list.length === 0) {
+        this.chapter_firstUrl = ''
       } else {
         if (res.data.data.chapter_list[0]) {
           this.chapter_firstUrl = res.data.data.chapter_list[0].file_url
@@ -140,11 +143,7 @@ export default {
       }
     })
   },
-  mounted () {
-    console.log(this.$route);
 
-
-  }
 }
 </script>
 

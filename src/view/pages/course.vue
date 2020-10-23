@@ -41,7 +41,8 @@
           <ul>
             <div v-if="comamnd_Select_list.length===0" style="height:200px">暂无推荐课程</div>
             <li v-for="(item,index) in comamnd_Select_list" :key="index" class="index-course-item"
-              @click="$router.push({path:`/videojump/${item.id}`})">
+              @click="$router.push({ path: `/videojump/${item.id}` })">
+
               <img :src="item.img" style="width:100%;height:150px" />
               <div class="index-course-name">{{item.course_name}}</div>
               <div class="index-course-schoolanme">
@@ -257,6 +258,13 @@ export default {
     }
   },
   methods: {
+    // handlemy (item, index) {
+    //   console.log(item);
+    //   console.log(item.id);
+
+    //   // this.$router.push({ name: 'videojump' })
+    //   // this.$router.push({ path: `/video_index/${item.id}` })
+    // },
     // 单选
     handle_Radio (value) {
       this.Select_list = this.courseList.filter(v => {
@@ -346,13 +354,17 @@ export default {
         // 数据改造
         if (res.code === 200) {
           console.log(res);
-
           res.data.data.map(item => {
             if (item.is_charge === 1) return item.is_charge_name = '精选课程'
             else if (item.is_charge === 0) return item.is_charge_name = '免费课程'
           })
           this.commandCourseList = res.data.data
           this.comamnd_Select_list = res.data.data
+          // this.comamnd_Select_list.forEach((v, i) => {
+          //   console.log(v.id);
+          //   // console.log(i);
+
+          // });
           console.log(this.comamnd_Select_list);
           if (this.comamnd_Select_list.length > 10) {
             this.comamnd_Select_list.length = 10

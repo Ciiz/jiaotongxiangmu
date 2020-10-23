@@ -77,6 +77,7 @@
         </Col>
       </Row>
     </Footer>
+
     <div class="login-modal" v-if="showLogin===true" @mousedown="closeModal">
       <login-form @on-success-valid="handleSubmit"></login-form>
     </div>
@@ -173,6 +174,8 @@ export default {
     handleSubmit ({ userName, password, user_type, school }) {
       this.handleLogin({ userName, password, user_type, school }).then(res => {
         this.getUserInfo().then(res => {
+          console.log(res);
+
           this.showLogin = false
         })
       })

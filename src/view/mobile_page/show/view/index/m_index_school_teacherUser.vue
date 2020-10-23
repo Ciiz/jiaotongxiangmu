@@ -108,9 +108,7 @@ export default {
     let res = await get_taechermassge(this.$route.params.id)
     console.log(res)
     this.teacher_massge = res.data.teacher_list
-    this.isfollow = res.data.teacher_list.isfollow
-    console.log(this.isfollow)
-    console.log(this.liked)
+    // this.isfollow = res.data.teacher_list.isfollow
     this.course_list = res.data.course_list
   }
 }

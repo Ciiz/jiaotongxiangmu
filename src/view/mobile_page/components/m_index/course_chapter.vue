@@ -81,8 +81,6 @@ export default {
     },
 
     handleIsshow (index) {
-
-
       this.list[index].show_child = !this.list[index].show_child
     }
   },
