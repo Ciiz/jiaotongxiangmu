@@ -14,7 +14,6 @@
             <div class="mobileLike_list_rNameAndicon">
               <div class="mobileLike_list_rName"> {{item.course_name}}</div>
               <div class="mobileLike_list_rIcon"><img src="@/assets/images/mobile_student/like.png" alt=""></div>
-
             </div>
             <div class="mobileLike_list_rDescription" v-html="item.description"></div>
             <div class="mobileLike_list_rTime">

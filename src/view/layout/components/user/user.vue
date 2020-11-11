@@ -4,12 +4,15 @@
       <span class="ivu-avatar ivu-avatar-circle ivu-avatar-default ivu-avatar-image"
         style="width:48px;height:48px;border-radius:50%">
         <img :src="userAvatar" alt="" :onerror="errorImg01">
+        <img v-if="userType===3" src="@/assets/images/u=3730772664,138405132&fm=26&gp=0.jpg" alt="">
       </span>
       <Icon :size="18" type="md-arrow-dropdown" style="color: #fff;"></Icon>
       <DropdownMenu slot="list">
-        <DropdownItem name="" @click.native="entrySystem">教务系统</DropdownItem>
-        <DropdownItem name="" @click.native="my_attention">我的关注</DropdownItem>
-        <DropdownItem name="" @click.native="personal">个人中心</DropdownItem>
+        <div v-if="userType!==3">
+          <DropdownItem name="" @click.native="entrySystem">教务系统</DropdownItem>
+          <DropdownItem name="" @click.native="my_attention">我的关注</DropdownItem>
+          <DropdownItem name="" @click.native="personal">个人中心</DropdownItem>
+        </div>
         <DropdownItem name="logout">注销登录</DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -68,6 +71,9 @@ export default {
     ]),
     logout () {
       this.handleLogOut().then(() => {
+
+        // this.$store.commit('setUserInfo', '')
+        this.$store.commit('setLoginstatus', 0)
         // 正式环境跳转到portal入口
         // let env = process.env.NODE_ENV === 'production'
         // if (env) {

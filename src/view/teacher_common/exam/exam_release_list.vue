@@ -2,20 +2,31 @@
   <div>
     <Row class="search-bar">
       <Input type="text" v-model="keyword" placeholder="请输入搜索内容" class="new-searchSel"></Input>
-      <button @click="getData(true)"  class="blue-btn" style="width:80px;transform: translate(-20px,2px);">搜索</button>
-      <button class="blueC-btn" style="margin-left:15px;" @click="$emit('showAddCourseware',timetable_id,target_id,1,courseware_id,teacher_course_id,type,courseware_name)" v-if="editable">添加测试</button>
-      <button class="green-btn" style="margin-left:15px;width:104px" @click="open('exam_select','','选择测试', 400)" v-if="editable">选择测试</button>
+      <button @click="getData(true)" class="blue-btn" style="width:80px;transform: translate(-20px,2px);">搜索</button>
+      <button class="blueC-btn" style="margin-left:15px;"
+        @click="$emit('showAddCourseware',timetable_id,target_id,1,courseware_id,teacher_course_id,type,courseware_name)"
+        v-if="editable">添加测试</button>
+      <button class="green-btn" style="margin-left:15px;width:104px" @click="open('exam_select','','选择测试', 400)"
+        v-if="editable">选择测试</button>
       <slot name="search-bar"></slot>
     </Row>
-  <Table :loading="loading" ref="selection" class="exam_release_list_table" :columns="columns" :data="list" :height="$store.state.app.tableHeight" stripe border></Table>
-  <Row>
-    <page :total="total" :current="page"  :page-size="page_size" size="small" show-elevator @on-change="(page) => {this.page =  page , this.getData()}"  :placement="'top'"></page>
-  </Row>
-    <Modal v-model="modal" :title="title" :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen" @on-visible-change="handleVisibleChange" :mask-closable='false'>
+    <Table :loading="loading" ref="selection" class="exam_release_list_table" :columns="columns" :data="list"
+      :height="$store.state.app.tableHeight" stripe border></Table>
+    <Row>
+      <page :total="total" :current="page" :page-size="page_size" size="small" show-elevator
+        @on-change="(page) => {this.page =  page , this.getData()}" :placement="'top'"></page>
+    </Row>
+    <Modal v-model="modal" :title="title" :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen"
+      @on-visible-change="handleVisibleChange" :mask-closable='false'>
       <ExamReleaseDetail :exam_release_id="target_id" v-if="target === 'exam_release_detail'"></ExamReleaseDetail>
-      <StudentExamList style="height:700px" @closeModal="modal=false" @on-refresh-parent-list="modal=false"  :targetwork_id="target_id" :target_type="'student_exam_list'" v-if="target === 'student_exam_list'"></StudentExamList>
-      <ExamEdit :timetable_id="timetable_id"  :exam_release_id="target_id" :action_type="1" :courseware_id="courseware_id" :teacher_course_id="teacher_course_id" :type="type"  v-if="target === 'exam_edit' && modal" @success="getData();modal=false"></ExamEdit>
-      <ExamSelect :timetable_id="timetable_id"  :type="type" :courseware_id="courseware_id" v-if="target === 'exam_select'" @success="modal = false; getData(true); target = ''"></ExamSelect>
+      <StudentExamList style="height:700px" @closeModal="modal=false" @on-refresh-parent-list="modal=false"
+        :targetwork_id="target_id" :target_type="'student_exam_list'" v-if="target === 'student_exam_list'">
+      </StudentExamList>
+      <ExamEdit :timetable_id="timetable_id" :exam_release_id="target_id" :action_type="1"
+        :courseware_id="courseware_id" :teacher_course_id="teacher_course_id" :type="type"
+        v-if="target === 'exam_edit' && modal" @success="getData();modal=false"></ExamEdit>
+      <ExamSelect :timetable_id="timetable_id" :type="type" :courseware_id="courseware_id"
+        v-if="target === 'exam_select'" @success="modal = false; getData(true); target = ''"></ExamSelect>
     </Modal>
   </div>
 </template>
@@ -26,7 +37,7 @@ import StudentExamList from '@/view/teacher_common/exam/student_exam_list.vue'
 import ExamEdit from '@/view/teacher_common/exam/exam_edit.vue'
 import ExamSelect from '@/view/teacher_common/exam/exam_select.vue'
 import { ReleaseMap } from '@/view/mixins/str_map'
-export default{
+export default {
   props: {
     type: '',
     courseware_id: '',
@@ -193,7 +204,7 @@ export default{
 }
 </script>
 <style lang="less">
-  .hei-modal .ivu-modal-body{
-    height: 700px;
-  }
+.hei-modal .ivu-modal-body {
+  height: 700px;
+}
 </style>

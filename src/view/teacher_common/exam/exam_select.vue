@@ -1,19 +1,24 @@
 <template>
   <div>
-    <Form :label-width="100" :model="exam_release" :rules="rules" ref="exam_release" style="border-bottom:1px solid #ccc;">
+    <Form :label-width="100" :model="exam_release" :rules="rules" ref="exam_release"
+      style="border-bottom:1px solid #ccc;">
       <FormItem label="课件上课时间">
-        <Input v-model="class_begin_time" readonly disabled  style="width: 200px"></Input>
+        <Input v-model="class_begin_time" readonly disabled style="width: 200px"></Input>
       </FormItem>
       <FormItem label="测试">
         <Select v-model="sel" style="width: 200px" @on-change="changeExam()">
-          <Option :value="item.course_id+'!'+item.batch" v-for="item in exam_list" :key="item.course_id">{{item.exam_name}}</Option>
+          <Option :value="item.course_id+'!'+item.batch" v-for="item in exam_list" :key="item.course_id">
+            {{item.exam_name}}</Option>
         </Select>
       </FormItem>
       <FormItem label="发布时间" prop="start_time">
-        <DatePicker :value="exam_release.start_time"   @on-change="(fmt_date, date) => {exam_release.start_time = fmt_date}"  type="datetime" placeholder="开始时间" style="width: 200px"></DatePicker>
+        <DatePicker :value="exam_release.start_time"
+          @on-change="(fmt_date, date) => {exam_release.start_time = fmt_date}" type="datetime" placeholder="开始时间"
+          style="width: 200px"></DatePicker>
       </FormItem>
       <FormItem label="结束时间" prop="end_time">
-        <DatePicker :value="exam_release.end_time"   @on-change="(fmt_date, date) => {exam_release.end_time = fmt_date}" type="datetime" placeholder="结束时间" style="width: 200px"></DatePicker>
+        <DatePicker :value="exam_release.end_time" @on-change="(fmt_date, date) => {exam_release.end_time = fmt_date}"
+          type="datetime" placeholder="结束时间" style="width: 200px"></DatePicker>
       </FormItem>
     </Form>
     <div style="padding-top:10px;float:right">
@@ -24,7 +29,7 @@
 </template>
 <script>
 import class_begin from '@/view/mixins/class_begin'
-export default{
+export default {
   props: {
     courseware_id: '',
     timetable_id: '',
@@ -91,7 +96,8 @@ export default{
               start_time: Date.parse(start_time) / 1000,
               end_time: Date.parse(end_time) / 1000,
               timetable_id: this.timetable_id,
-              batch: this.batch
+              batch: this.batch,
+              exam_select_type: 1
             }
           }).then(res => {
             if (res.code === 200) {

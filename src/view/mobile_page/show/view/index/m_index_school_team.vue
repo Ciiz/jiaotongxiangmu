@@ -8,6 +8,7 @@
       <span slot="right" class="m_index_school_search" @click="$router.push({name:'searchpage'})">
         <img src="@/assets/images/mobile_teacher/search2.png" alt=""></span>
     </cell>
+
     <div class="schoolTeam_tap">
       <mt-navbar v-model="selected">
         <mt-tab-item id="1" class="schoolTeam_tap_size">教师团队({{teacher_list.length}})</mt-tab-item>
@@ -27,6 +28,7 @@
 
 <script>
 import { get_taecherList } from '@/api/teacher'
+import { get_student_taecherList } from '@/api/student'
 import cell from '@/view/mobile_page/components/public_cell'
 import schoolTeacher from '@/view/mobile_page/components/m_index/m_school_teacher.vue'
 import schoolCourse from '@/view/mobile_page/components/m_index/m_index_course.vue'
@@ -42,25 +44,45 @@ export default {
       teacher_course: []
     }
   },
-
+  computed: {
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    },
+  },
   methods: {
 
   },
   async mounted () {
     console.log(this.$route.params.id)
+    if (this.userType === 1) {
+      let res = await get_taecherList(this.$route.params.id)
+      console.log(res)
+      this.teacher_list = res.data.teacher_list
+      this.axios.request({
+        method: 'post',
+        url: '/home/course/isShowSchoolCourses',
+        params: {
+          school_id: this.$route.params.id
+        }
+      }).then(result => {
+        this.teacher_course = result.data.list
+      })
+    }
+    else if (this.userType === 2) {
+      let res2 = await get_student_taecherList(this.$route.params.id)
+      console.log(res2)
+      this.teacher_list = res2.data.teacher_list
+      this.axios.request({
+        method: 'post',
+        url: '/home/course/isShowSchoolCourses',
+        params: {
+          school_id: this.$route.params.id
+        }
+      }).then(result => {
+        this.teacher_course = result.data.list
+      })
+    }
 
-    let res = await get_taecherList(this.$route.params.id)
-    console.log(res)
-    this.teacher_list = res.data.teacher_list
-    this.axios.request({
-      method: 'post',
-      url: '/home/course/isShowSchoolCourses',
-      params: {
-        school_id: this.$route.params.id
-      }
-    }).then(result => {
-      this.teacher_course = result.data.list
-    })
   }
 }
 </script>

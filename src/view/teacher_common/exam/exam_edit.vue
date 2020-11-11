@@ -2,178 +2,154 @@
   <div class="modal-content" style="height: 95%">
     <Form :model="exam_release" :rules="rules" ref="exam_release" :label-width="120">
       <FormItem label="课件上课时间" prop>
-        <Input v-model="class_begin_time" readonly disabled style="width: 200px;"/>
+        <Input v-model="class_begin_time" readonly disabled style="width: 200px;" />
       </FormItem>
       <FormItem label="发布时间" prop="start_time">
-        <DatePicker
-          transfer
-          :value="exam_release.start_time"
-          @on-change="(fmt_date, date) => {exam_release.start_time = fmt_date}"
-          type="datetime"
-          placeholder="发布时间"
-          style="width: 200px"
-        ></DatePicker>
+        <DatePicker transfer :value="exam_release.start_time"
+          @on-change="(fmt_date, date) => {exam_release.start_time = fmt_date}" type="datetime" placeholder="发布时间"
+          style="width: 200px"></DatePicker>
       </FormItem>
       <FormItem label="截止时间" prop="end_time">
-        <DatePicker
-          transfer
-          :value="exam_release.end_time"
-          @on-change="(fmt_date, date) => {exam_release.end_time = fmt_date}"
-          type="datetime"
-          placeholder="截止时间"
-          style="width: 200px"
-        ></DatePicker>
+        <DatePicker transfer :value="exam_release.end_time"
+          @on-change="(fmt_date, date) => {exam_release.end_time = fmt_date}" type="datetime" placeholder="截止时间"
+          style="width: 200px"></DatePicker>
       </FormItem>
       <Divider orientation="left" v-if="!editable" size="small">该任务有其他班级使用 或者 当前班级已发布，以下信息不可编辑</Divider>
       <FormItem label="试卷标题" prop="exam.exam_name">
-        <Input v-model="exam_release.exam.exam_name" style="width: 200px;" :disabled="!editable"/>
+        <Input v-model="exam_release.exam.exam_name" style="width: 200px;" :disabled="!editable" />
       </FormItem>
       <FormItem label="考试时间" required>
-        <InputNumber v-model="exam_release.exam.exam_time" placeholder="请输入数字" :disabled="!editable" number style="width:80px;" />分钟
+        <InputNumber v-model="exam_release.exam.exam_time" placeholder="请输入数字" :disabled="!editable" number
+          style="width:80px;" />分钟
       </FormItem>
       <FormItem label="题目">
-          <Row>
-            <Col :span="16">
-            <Tabs :animated="false" size="small" v-model="tab">
-              <div slot="extra">
-                <span style="margin-right: 20px;">总分：{{total_score}},&nbsp;&nbsp;主观题分数：{{subj_score}},&nbsp;&nbsp;客观题分数：{{obj_score}}</span>
-                <Button @click="() => {this.view_mode = !this.view_mode}"  type="success" icon="md-eye" style="margin-right:15px;" >{{view_mode?'编辑': '预览'}}</Button>
-                <Button @click="openExamBank(tab)" type="primary"  :disabled="!editable">{{tab === 'subj' ? '主观题' : '客观题'}}题库</Button>
-              </div>
+        <Row>
+          <Col :span="16">
+          <Tabs :animated="false" size="small" v-model="tab">
+            <div slot="extra">
+              <span
+                style="margin-right: 20px;">总分：{{total_score}},&nbsp;&nbsp;主观题分数：{{subj_score}},&nbsp;&nbsp;客观题分数：{{obj_score}}</span>
+              <Button @click="() => {this.view_mode = !this.view_mode}" type="success" icon="md-eye"
+                style="margin-right:15px;">{{view_mode?'编辑': '预览'}}</Button>
+              <Button @click="openExamBank(tab)" type="primary"
+                :disabled="!editable">{{tab === 'subj' ? '主观题' : '客观题'}}题库</Button>
+            </div>
 
-              <TabPane label="主观题" name="subj">
-                <Form :label-width="80" label-position="left">
-                  <draggable
-                  v-model="exam_release.subj"
-                  v-bind="dragOptions"
-                  tag="ul"
-                  :disabled="!editable"
-                  @start="handleDragStart"
-                  @end="handleDragEnd"
-                  >
-                      <div v-for="(item,index) in exam_release.subj" :key="`${index}-${item.id}`"
-                        class="exam-item"  name="description"
-                      >
-                        <h2 :style="{cursor: editable?'move':'default'}">
-                          第{{index+1}}题
-                          <span style="float:right" >
-                            <Button type="text" @click="del(2,index)" :disabled="!editable" >删除</Button>
-                            <Button type="text" @click="move(2,'up',index)" :disabled="!editable">上移</Button>
-                            <Button type="text" @click="move(2,'down',index)" :disabled="!editable">下移</Button>
-                          </span>
-                        </h2>
-                        <FormItem label="分值：">
-                          <InputNumber :min="1" :max="100" v-model="item.score" size="small" :disabled="!editable" v-if="!view_mode"></InputNumber> <span v-else>{{item.score}}分</span>
-                        </FormItem>
-                        <FormItem label="评分维度:">
-                          <div class="score-item-container">
-                            <div v-for="(score_option,index1) in item.score_options" :key="index1" class="score-item">
-                              <div v-if="!view_mode">
-                                <Input v-model="score_option.option_name" style="width: 250px;" class="score-option-input" size="small" placeholder="维度名称" :disabled="!editable" >
-                                  <Button slot="prepend" @click="item.score_options.splice(index1,1)" size="small"  :disabled="!editable" >删除</Button>
-                                  <InputNumber placeholder="权重"  slot="append" v-model="score_option.weight" :disabled="!editable" size="small"></InputNumber>
-                                </Input>
-                              </div>
-                              <div v-else>
-                                <span>{{score_option.option_name}}:</span>
-                                <span>{{score_option.weight}}</span>
-                              </div>
-                            </div>
-                            <Button size="small" type="dashed" icon="md-add" @click="addScoreOption(item.score_options)" :disabled="!editable" v-show="!view_mode"></Button>
+            <TabPane label="主观题" name="subj">
+              <Form :label-width="80" label-position="left">
+                <draggable v-model="exam_release.subj" v-bind="dragOptions" tag="ul" :disabled="!editable"
+                  @start="handleDragStart" @end="handleDragEnd">
+                  <div v-for="(item,index) in exam_release.subj" :key="`${index}-${item.id}`" class="exam-item"
+                    name="description">
+                    <h2 :style="{cursor: editable?'move':'default'}">
+                      第{{index+1}}题
+                      <span style="float:right">
+                        <Button type="text" @click="del(2,index)" :disabled="!editable">删除</Button>
+                        <Button type="text" @click="move(2,'up',index)" :disabled="!editable">上移</Button>
+                        <Button type="text" @click="move(2,'down',index)" :disabled="!editable">下移</Button>
+                      </span>
+                    </h2>
+                    <FormItem label="分值：">
+                      <InputNumber :min="1" :max="100" v-model="item.score" size="small" :disabled="!editable"
+                        v-if="!view_mode"></InputNumber> <span v-else>{{item.score}}分</span>
+                    </FormItem>
+                    <FormItem label="评分维度:">
+                      <div class="score-item-container">
+                        <div v-for="(score_option,index1) in item.score_options" :key="index1" class="score-item">
+                          <div v-if="!view_mode">
+                            <Input v-model="score_option.option_name" style="width: 250px;" class="score-option-input"
+                              size="small" placeholder="维度名称" :disabled="!editable">
+                            <Button slot="prepend" @click="item.score_options.splice(index1,1)" size="small"
+                              :disabled="!editable">删除</Button>
+                            <InputNumber placeholder="权重" slot="append" v-model="score_option.weight"
+                              :disabled="!editable" size="small"></InputNumber>
+                            </Input>
                           </div>
-                        </FormItem>
-                        <FormItem label="题目:">
-                          <div style="margin-left:80px;">
-                          <!-- <Input type="textarea" v-model="item.content" :disabled="!editable" v-if="!view_mode"></Input> -->
-                          <Editor
-                            v-model="item.content"
-                            :is_init.sync="editor_init"
-                            :height="200"
-                            :editable="editable" v-if="!view_mode"
-                          ></Editor>
-                          <div v-html="item.content" v-else></div>
+                          <div v-else>
+                            <span>{{score_option.option_name}}:</span>
+                            <span>{{score_option.weight}}</span>
                           </div>
-                        </FormItem>
-                        <FormItem label="参考答案:">
-                          <div style="margin-left:80px;">
-                            <Input type="textarea" v-model="item.answer" :disabled="!editable" v-if="!view_mode"></Input>
-                            <div v-html="item.answer" v-else></div>
-                          </div>
-                        </FormItem>
+                        </div>
+                        <Button size="small" type="dashed" icon="md-add" @click="addScoreOption(item.score_options)"
+                          :disabled="!editable" v-show="!view_mode"></Button>
                       </div>
-                  </draggable>
-                  <Button type="dashed" icon="md-add" @click="addItem(2)" :disabled="!editable" v-show="!view_mode">添加</Button>
-                </Form>
-              </TabPane>
+                    </FormItem>
+                    <FormItem label="题目:">
+                      <div style="margin-left:80px;">
+                        <!-- <Input type="textarea" v-model="item.content" :disabled="!editable" v-if="!view_mode"></Input> -->
+                        <Editor v-model="item.content" :is_init.sync="editor_init" :height="200" :editable="editable"
+                          v-if="!view_mode"></Editor>
+                        <div v-html="item.content" v-else></div>
+                      </div>
+                    </FormItem>
+                    <FormItem label="参考答案:">
+                      <div style="margin-left:80px;">
+                        <Input type="textarea" v-model="item.answer" :disabled="!editable" v-if="!view_mode"></Input>
+                        <div v-html="item.answer" v-else></div>
+                      </div>
+                    </FormItem>
+                  </div>
+                </draggable>
+                <Button type="dashed" icon="md-add" @click="addItem(2)" :disabled="!editable"
+                  v-show="!view_mode">添加</Button>
+              </Form>
+            </TabPane>
 
-              <TabPane label="客观题" name="obj">
-                <Form :label-width="80">
-                <draggable
-                  v-model="exam_release.obj"
-                  v-bind="dragOptions"
-                  tag="ul"
-                  :disabled="!editable"
-                  @start="drag = true"
-                  @end="drag = false"
-                  >
-                      <li v-for="(item,index) in exam_release.obj" :key="`${index}-${item.id}`" class="exam-item" name="description">
-                        <h2 :style="{cursor: editable?'move':'default'}">
-                          第{{index+1}}题
-                          <span style="float:right">
-                            <Button type="text" @click="del(1,index)" :disabled="!editable">删除</Button>
-                            <Button type="text" @click="move(1,'up',index)" :disabled="!editable">上移</Button>
-                            <Button type="text" @click="move(1,'down',index)" :disabled="!editable">下移</Button>
-                          </span>
-                        </h2>
-                        <FormItem label="分值：">
-                          <InputNumber :min="1" :max="100" v-model="item.score" :disabled="!editable" v-if="!view_mode"></InputNumber><span v-else>{{item.score}}分</span>
-                        </FormItem>
-                        <FormItem label="题目:">
-                          <div style="margin-left:80px;">
-                            <Editor
-                              v-model="item.content"
-                              :is_init.sync="editor_init"
-                              :height="200"
-                              :editable="editable" v-if="!view_mode"
-                            ></Editor>
-                            <!-- <Input type="textarea" v-model="item.content" :disabled="!editable" v-if="!view_mode"></Input> -->
-                            <div v-html="item.content" v-else></div>
-                          </div>
-                        </FormItem>
-                        <FormItem label="选项:">
-                          <div style="margin-left:80px;">
-                            <Input type="textarea" v-model="item.option" placeholder="示例：A:减肥IE  B:的见覅" :disabled="!editable" v-if="!view_mode"></Input>
-                            <div v-html="item.option" v-else></div>
-                          </div>
-                        </FormItem>
-                        <FormItem label="正确答案:">
-                          <Select
-                            v-model="item.answer"
-                            multiple
-                            style="width:180px"
-                            size="small"
-                            :transfer="true"
-                            :disabled="!editable"
-                            v-if="!view_mode"
-                          >
-                            <Option value="A">A</Option>
-                            <Option value="B">B</Option>
-                            <Option value="C">C</Option>
-                            <Option value="D">D</Option>
-                            <Option value="E">E</Option>
-                            <Option value="F">F</Option>
-                          </Select>
-                          <span v-else>{{Array.isArray(item.answer) === true ? item.answer.join(',') : item.answer}}</span>
-                        </FormItem>
-                      </li>
-                  </draggable>
-                  <Button type="dashed" icon="md-add" @click="addItem(1)" :disabled="!editable" v-show="!view_mode">添加</Button>
-                </Form>
-              </TabPane>
+            <TabPane label="客观题" name="obj">
+              <Form :label-width="80">
+                <draggable v-model="exam_release.obj" v-bind="dragOptions" tag="ul" :disabled="!editable"
+                  @start="drag = true" @end="drag = false">
+                  <li v-for="(item,index) in exam_release.obj" :key="`${index}-${item.id}`" class="exam-item"
+                    name="description">
+                    <h2 :style="{cursor: editable?'move':'default'}">
+                      第{{index+1}}题
+                      <span style="float:right">
+                        <Button type="text" @click="del(1,index)" :disabled="!editable">删除</Button>
+                        <Button type="text" @click="move(1,'up',index)" :disabled="!editable">上移</Button>
+                        <Button type="text" @click="move(1,'down',index)" :disabled="!editable">下移</Button>
+                      </span>
+                    </h2>
+                    <FormItem label="分值：">
+                      <InputNumber :min="1" :max="100" v-model="item.score" :disabled="!editable" v-if="!view_mode">
+                      </InputNumber><span v-else>{{item.score}}分</span>
+                    </FormItem>
+                    <FormItem label="题目:">
+                      <div style="margin-left:80px;">
+                        <Editor v-model="item.content" :is_init.sync="editor_init" :height="200" :editable="editable"
+                          v-if="!view_mode"></Editor>
+                        <!-- <Input type="textarea" v-model="item.content" :disabled="!editable" v-if="!view_mode"></Input> -->
+                        <div v-html="item.content" v-else></div>
+                      </div>
+                    </FormItem>
+                    <FormItem label="选项:">
+                      <div style="margin-left:80px;">
+                        <Input type="textarea" v-model="item.option" placeholder="示例：A:减肥IE  B:的见覅"
+                          :disabled="!editable" v-if="!view_mode"></Input>
+                        <div v-html="item.option" v-else></div>
+                      </div>
+                    </FormItem>
+                    <FormItem label="正确答案:">
+                      <Select v-model="item.answer" multiple style="width:180px" size="small" :transfer="true"
+                        :disabled="!editable" v-if="!view_mode">
+                        <Option value="A">A</Option>
+                        <Option value="B">B</Option>
+                        <Option value="C">C</Option>
+                        <Option value="D">D</Option>
+                        <Option value="E">E</Option>
+                        <Option value="F">F</Option>
+                      </Select>
+                      <span v-else>{{Array.isArray(item.answer) === true ? item.answer.join(',') : item.answer}}</span>
+                    </FormItem>
+                  </li>
+                </draggable>
+                <Button type="dashed" icon="md-add" @click="addItem(1)" :disabled="!editable"
+                  v-show="!view_mode">添加</Button>
+              </Form>
+            </TabPane>
 
-            </Tabs>
+          </Tabs>
           </Col>
-          </Row>
+        </Row>
       </FormItem>
     </Form>
 
@@ -184,7 +160,8 @@
     <Spin fix v-show="loading"></Spin>
 
     <Modal v-model="modal" :title="title" footer-hide :width="modal_width">
-      <ExamBank :bank_type="target_id" :teacher_course_id="teacher_course_id" v-if="target === 'exam_bank'" @add="handleAdd"></ExamBank>
+      <ExamBank :bank_type="target_id" :teacher_course_id="teacher_course_id" v-if="target === 'exam_bank'"
+        @add="handleAdd"></ExamBank>
     </Modal>
 
   </div>
@@ -530,13 +507,12 @@ export default {
   background: #c8ebfb;
 }
 
-.score-item-container{
-    display: flex;
-    flex-wrap: wrap;
-    .score-item{
-      display:inline-block;
-      margin-right: 10px;
-    }
+.score-item-container {
+  display: flex;
+  flex-wrap: wrap;
+  .score-item {
+    display: inline-block;
+    margin-right: 10px;
+  }
 }
-
 </style>

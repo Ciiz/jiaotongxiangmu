@@ -8,7 +8,8 @@
       <Col class="attention_message">
       <div class="attention_message_header">
         <div class="attention_message_header_name">{{item.teacher_name}}</div>
-        <router-link to="" class="attention_message_header_name2">查看主页 >></router-link>
+        <router-link :to="{path:`/teacher_homepage/${item.teacher_id}`}" class="attention_message_header_name2">查看主页 >>
+        </router-link>
       </div>
       <div class="attention_message_footer">
         <span>院校:{{item.school_name}}</span>
@@ -23,11 +24,10 @@
   </div>
 </template>
 <script>
+import { getTearher_Massgess } from "@/api/common"
 import { get_TeacherAttention, unfollow_Attention } from '@/api/user'
 import { student_attention, student_unfollow } from "@/api/student"
 export default {
-  name: '',
-
   data () {
     return {
       attention_List: [],
@@ -72,10 +72,14 @@ export default {
     get_TeacherAttention () {
       if (this.userType === 1) {
         get_TeacherAttention().then(res => {
+          console.log(res);
+
           this.attention_List = res.data.list
         })
       } else {
         student_attention().then(res => {
+          console.log(res);
+
           this.attention_List = res.data.list
         })
       }

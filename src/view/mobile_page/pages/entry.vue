@@ -16,23 +16,58 @@
         </div>
       </div>
     </div>
-    <div class="mobile-index-text">
+    <div class="mobile-index-text" @click="handlelogin">
       <div>以游客身份访问 >>>></div>
       <div>T O U R I S T</div>
     </div>
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
+import { getUserInfo } from "@/api/user"
+import log from 'video.js/es5/utils/log'
 export default {
   data () {
     return {
 
     }
   },
+  computed: {
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    }
+  },
   methods: {
+    ...mapActions([
+      'handleLogin',
+    ]),
+    handlelogin () {
+      this.axios.request({
+        method: 'post',
+        url: '/home/login/user_login',
+        data: {
+          visitor_type: 1,
+          user_type: 3
+        }
+      }).then(res => {
+        console.log(res);
+        this.$store.commit('setToken', res.data.token)
+        this.$store.commit('setUserInfo', res.data.userInfo)
+        this.$router.push({ path: '/mobile' })
+        // getUserInfo(res.data.token).then(res => {
+        //   console.log(res);
+        // })
+      })
+
+
+    },
     tologin (i) {
       this.$router.push({ name: 'mobileLogin', query: { user_type: i } })
     }
+  },
+  mounted () {
+    console.log(this.userType);
+
   }
 }
 </script>

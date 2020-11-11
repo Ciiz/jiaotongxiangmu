@@ -25,6 +25,7 @@ import 'babel-polyfill'
 // const theme = localStorage.getItem('etoTheme') || 'default'
 require(`@/assets/theme/default.less`) // 课件直播样式
 
+
 // import VueDND from 'awe-dnd'
 // Vue.use(VueDND)
 
@@ -46,6 +47,7 @@ const routerPush = Router.prototype.push
 Router.prototype.push = function push (location) {
   return routerPush.call(this, location).catch(error => error)
 }
+
 Vue.use(vueBaberrage)
 require('vue-tour/dist/vue-tour.css')
 //注册全局

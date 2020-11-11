@@ -38,27 +38,30 @@ export default {
       }
     }
   },
-  methods: {
-    paystatus () {
-      console.log(this.admin_status);
-
-      if (this.admin_status === 0) {
-
-        this.$store.commit('setLoginstatus', this.admin_status = 1)
-        this.$emit('paystatus', true)
-      } else {
-
-      }
-    },
-  },
   computed: {
     userType () {
       return this.$store.state.user.userInfo.userType
     },
-    admin_status () {
+    loginstatus () {
       return this.$store.state.user.loginstatus
     }
   },
+  methods: {
+    paystatus () {
+
+      console.log(this.loginstatus);
+      // 未登录
+      if (this.loginstatus === 0 || this.loginstatus === '') {
+        console.log('未登录');
+
+        this.$emit('paystatus', true)
+      } else { //登陆
+        console.log('登陆');
+
+      }
+    },
+  },
+
   mounted () {
     var ots = document.querySelector('.pc_message')
     ots.addEventListener('scroll', function () {
@@ -71,24 +74,26 @@ export default {
       }
 
     })
-    setTimeout(async () => {
-      console.log(this.message);
-      // if (this.userType === 1) {
-      //   if (this.message.create_type === 3) {
-      //     let res = await get_taechermassge(this.message.teacher_id)
-      //     console.log(res);
-      //     this.course_list = res.data.course_list
-      //   }
-      // } else {
-      //   if (this.message.create_type === 3) {
-      //     let res = await student_massges(this.message.teacher_id)
-      //     console.log(res);
-      //     this.course_list = res.data.course_list
-      //   }
-      // }
+    // setTimeout(() => {
+
+    //   this.$store.commit('setLoginstatus', this.message.admin_status)
+    //   console.log(this.message);
+    //   // if (this.userType === 1) {
+    //   //   if (this.message.create_type === 3) {
+    //   //     let res = await get_taechermassge(this.message.teacher_id)
+    //   //     console.log(res);
+    //   //     this.course_list = res.data.course_list
+    //   //   }
+    //   // } else {
+    //   //   if (this.message.create_type === 3) {
+    //   //     let res = await student_massges(this.message.teacher_id)
+    //   //     console.log(res);
+    //   //     this.course_list = res.data.course_list
+    //   //   }
+    //   // }
 
 
-    }, 1000)
+    // }, 1000)
   }
 }
 </script>

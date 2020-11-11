@@ -1,6 +1,10 @@
 <template>
   <div class="m-course flex-contain">
+
     <mt-header title="我的课程" v-if="userType===1">
+      <!-- <div slot="left" @click="$router.back(-1)">
+        <mt-button icon="back"></mt-button>
+      </div> -->
       <img slot="right" src="@/assets/images/mobile_student/courseShow.png" @click="openTimetable">
     </mt-header>
     <mt-header title="我的课程" v-if="userType===2">

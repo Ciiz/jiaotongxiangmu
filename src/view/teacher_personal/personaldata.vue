@@ -39,9 +39,9 @@
       </FormItem>
       <FormItem label="账号：">
         <div class="userInfo_password">
-          <Input v-model="userInfo.account" class="userInfo_style Inputaccount" ref="Inputfocus" disabled
+          <Input v-model="userInfo.account" class="userInfo_style Inputaccount" ref="Inputfocus"
             style="background-color:#fff"></Input>
-          <div class="changed_password" style="cursor:pointer;">修改密码</div>
+          <div class="changed_password" style="cursor:pointer;" @click="handlepassword">修改密码</div>
         </div>
       </FormItem>
       <FormItem label="微信：">
@@ -54,6 +54,29 @@
         </div>
       </FormItem>
     </Form>
+    <div class="password_tip" v-if="confirmshow">
+      <div class="form">
+        <Form>
+          <Icon type="md-close" class="iocn" @click="handleicon" />
+          <span style="font-family: Microsoft YaHei;font-weight: bold;color: #444444; margin-left: 45px;">修改密码</span>
+          <FormItem style='margin-top: 20px;font-family: Microsoft YaHei;font-weight: bold;color: #444444;'>
+            <Row>
+              <Col>
+              <Input v-model="password" placeholder="请输入您的密码" @keyup.enter.native="confirm">
+              </Input>
+              </Col>
+            </Row>
+          </FormItem>
+          <FormItem style="margin-bottom:15px;text-align:center;">
+            <Row>
+              <Col>
+              <Button type="primary" @click="confirm" long>确定</Button>
+              </Col>
+            </Row>
+          </FormItem>
+        </Form>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -66,6 +89,8 @@ export default {
 
   data () {
     return {
+      confirmshow: false,
+      password: '',
       userInfo: {},
       studentInfo: {},
       infolist: {
@@ -87,9 +112,7 @@ export default {
     }
   },
   computed: {
-
     personal_userInfo () {
-
       return this.$store.state.user.userInfo
     },
     userId () {
@@ -103,6 +126,30 @@ export default {
     }
   },
   methods: {
+    handleicon () {
+      this.confirmshow = false
+    },
+    confirm () {
+      console.log(this.password);
+
+      this.axios.request({
+        method: 'get',
+        url: '/Home/course/update_info',
+        params: {
+          password: this.password,
+          type: this.userType
+        }
+      }).then(res => {
+        console.log(res);
+        this.$Message.success(res.message);
+        this.confirmshow = false
+        this.password = ''
+      })
+    },
+    // 修改密码
+    handlepassword () {
+      this.confirmshow = true
+    },
     formaterror (file) {
       this.$Notice.warning({
         title: '文件格式不正确',
@@ -207,6 +254,33 @@ export default {
 
 <style lang='less' scoped>
 .personaldata {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  .password_tip {
+    background-color: #fff;
+    width: 300px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: 1px 1px 9px #222;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    position: relative;
+    overflow: hidden;
+
+    .iocn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 30px;
+    }
+  }
   .infolist_img {
     display: flex;
     align-items: center;

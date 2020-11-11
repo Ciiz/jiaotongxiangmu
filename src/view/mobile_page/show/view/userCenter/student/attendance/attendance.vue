@@ -1,19 +1,13 @@
 <template>
   <div class="m-attendance flex-contain">
-    <mt-header title="考勤情况"  style="border-bottom: 1px solid #E5E5E5">
+    <mt-header title="考勤情况" style="border-bottom: 1px solid #E5E5E5">
       <router-link to="/mobile/mobileUserCenter" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
     </mt-header>
     <div class="m-attendance-contain hideScroll">
-      <mt-cell
-      @click.native="linkTo(item)"
-      class="m-cell"
-      v-for="(item,index) in list"
-      :key="index"
-      :title="item.course_name"
-      is-link
-      >
+      <mt-cell @click.native="linkTo(item)" class="m-cell" v-for="(item,index) in list" :key="index"
+        :title="item.course_name" is-link>
       </mt-cell>
     </div>
   </div>
@@ -42,6 +36,8 @@ export default {
         page_size: 10000,
         page_no: 1
       }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           let data = res.data
           this.list = data.list
@@ -59,5 +55,4 @@ export default {
 }
 </script>
 <style>
-
 </style>

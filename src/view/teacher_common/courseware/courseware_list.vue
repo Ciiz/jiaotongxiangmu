@@ -5,25 +5,41 @@
         <!-- <Button type="primary" size="small" @click="getData(true)" style="margin-left:15px;">搜索</Button> -->
         <slot name="search-bar"></slot>
       </Row>
-    <div class="courseware_list_table_parent">
-      <Table :loading="loading" ref="selection" class="courseware_list_table" :columns="columns" :data="list" stripe border></Table>
-    </div>
+      <div class="courseware_list_table_parent">
+        <Table :loading="loading" ref="selection" class="courseware_list_table" :columns="columns" :data="list" stripe
+          border></Table>
+      </div>
     </div>
 
-    <Modal v-model="modal" class="courseware_list_modal" :title="title" :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen" >
-      <TaskReleaseList v-if="target === 'task_release_list' && modal" :type="target_id.type" :courseware_id="target_id.courseware_id" :timetable_id="target_id.timetable_id" :release_status="target_id.release_status" :editable="editable"></TaskReleaseList>
-      <HomeworkReleaseList v-if="target === 'homework_release_list' && modal" :type="target_id.type" :courseware_id="target_id.courseware_id" :timetable_id="target_id.timetable_id" :release_status="target_id.release_status" :editable="editable"></HomeworkReleaseList>
-      <ExamReleaseList v-if="target === 'exam_release_list' && modal" @showAddCourseware='showAddCourseware' :type="target_id.type" :teacher_course_id="teacher_course_id" :courseware_id="target_id.courseware_id" :timetable_id="target_id.timetable_id" :release_status="target_id.release_status" :courseware_name="target_id.courseware_name" :editable="editable"></ExamReleaseList>
-      <CoursewareLiveClassChoose v-if="target === 'courseware_live_class_choose' && modal" :course_status="course_status" :classList="target_id.classList" :courseware_id="target_id.courseware_id" :live_status="target_id.live_status" @finished="modal = false"></CoursewareLiveClassChoose>
-      <courseware-add v-if="target === 'courseware_editor' && modal" isneworeditor="编辑课件" :rowid='target_id' :send_course_id='teacher_course_id'  @success="getData(true),modal = false"></courseware-add>
-      <coursewarePreview v-if="target === 'coursewarePreview'&& modal" isneworeditor="预览课件" :rowid='target_id' :send_course_id='teacher_course_id'  @success="getData(true),modal = false"></coursewarePreview>
-      <CoursewareTimetable v-if="target === 'courseware_timetable' && modal" :timetable_id="target_id.timetable_id" :class_id="target_id.class_id" :teacher_course_id="teacher_course_id" @success="modal = false" @error="modal = false"></CoursewareTimetable>
+    <Modal v-model="modal" class="courseware_list_modal" :title="title" :width="modal_width" :footer-hide="footerHide"
+      :fullscreen="fullscreen">
+      <TaskReleaseList v-if="target === 'task_release_list' && modal" :type="target_id.type"
+        :courseware_id="target_id.courseware_id" :timetable_id="target_id.timetable_id"
+        :release_status="target_id.release_status" :editable="editable"></TaskReleaseList>
+      <HomeworkReleaseList v-if="target === 'homework_release_list' && modal" :type="target_id.type"
+        :courseware_id="target_id.courseware_id" :timetable_id="target_id.timetable_id"
+        :release_status="target_id.release_status" :editable="editable"></HomeworkReleaseList>
+      <ExamReleaseList v-if="target === 'exam_release_list' && modal" @showAddCourseware='showAddCourseware'
+        :type="target_id.type" :teacher_course_id="teacher_course_id" :courseware_id="target_id.courseware_id"
+        :timetable_id="target_id.timetable_id" :release_status="target_id.release_status"
+        :courseware_name="target_id.courseware_name" :editable="editable"></ExamReleaseList>
+      <CoursewareLiveClassChoose v-if="target === 'courseware_live_class_choose' && modal"
+        :course_status="course_status" :classList="target_id.classList" :courseware_id="target_id.courseware_id"
+        :live_status="target_id.live_status" @finished="modal = false"></CoursewareLiveClassChoose>
+      <courseware-add v-if="target === 'courseware_editor' && modal" isneworeditor="编辑课件" :rowid='target_id'
+        :send_course_id='teacher_course_id' @success="getData(true),modal = false"></courseware-add>
+      <coursewarePreview v-if="target === 'coursewarePreview'&& modal" isneworeditor="预览课件" :rowid='target_id'
+        :send_course_id='teacher_course_id' @success="getData(true),modal = false"></coursewarePreview>
+      <CoursewareTimetable v-if="target === 'courseware_timetable' && modal" :timetable_id="target_id.timetable_id"
+        :class_id="target_id.class_id" :teacher_course_id="teacher_course_id" @success="modal = false"
+        @error="modal = false"></CoursewareTimetable>
     </Modal>
     <Modal v-model="showQuestion" title="问题列表" :width="700" footer-hide class="courseware_list_modal2">
       <showQuestion :courseware_id='courseware_id'></showQuestion>
     </Modal>
     <Modal v-model="modal3" title="视频录制" :width="1100" footer-hide>
-       <coursewareVedio @closeVedioModal="closeVedioModal" :vedioClass_id="vedioClass_id" :vedioSrc="vedioSrc" :vedioName="vedioName" :upload_courseware_id="upload_courseware_id"></coursewareVedio>
+      <coursewareVedio @closeVedioModal="closeVedioModal" :vedioClass_id="vedioClass_id" :vedioSrc="vedioSrc"
+        :vedioName="vedioName" :upload_courseware_id="upload_courseware_id"></coursewareVedio>
     </Modal>
   </div>
 </template>
@@ -40,7 +56,7 @@ import coursewareVedio from '@/view/teacher_common/courseware/courseware_vedio.v
 import showQuestion from '@/view/teacher_common/question/show_question.vue'
 import upload_mixin from '_c/mixins/upload_mixin'
 
-export default{
+export default {
   props: {
     release_status: '',
     teacher_course_id: '',
@@ -110,7 +126,7 @@ export default{
                   })
                 }
                 <Poptip placement="bottom" transfer width="200" v-show={this.editable} style={{ borderTop: '1px solid #E8EAEC', width: '100%' }}>
-                  <div onClick={() => {}} class="item" style={{ color: '#2d8cf0', hover: 'color:' }}>添加班级</div>
+                  <div onClick={() => { }} class="item" style={{ color: '#2d8cf0', hover: 'color:' }}>添加班级</div>
                   <div class="api" slot="content">{
                     this.class_list.map(item => {
                       let flag = row.class_list.some((el) => { return el.class_id === item.id })
@@ -292,11 +308,11 @@ export default{
                           data: { token: this.$store.state.user.token, type: 'classlive', courseware_id: this.upload_courseware_id, class_id: item.class_id }
                         }
                       },
-                      [
-                        h('span', {
-                          style: { color: '#2d8cf0', cursor: 'pointer' }
-                        }, '上传')
-                      ])
+                        [
+                          h('span', {
+                            style: { color: '#2d8cf0', cursor: 'pointer' }
+                          }, '上传')
+                        ])
                     ]
                     )
                   ])
@@ -505,47 +521,47 @@ export default{
 }
 </script>
 <style lang="less">
-.table-item{
-  .item{
+.table-item {
+  .item {
     padding: 5px;
     cursor: pointer;
-    &:hover{
-      background: #f5f5f5
+    &:hover {
+      background: #f5f5f5;
     }
-    span{
-      white-space:nowrap;
+    span {
+      white-space: nowrap;
       text-overflow: ellipsis;
     }
   }
-  .item+.item{
-    border-top: 1px solid #E8EAEC;
+  .item + .item {
+    border-top: 1px solid #e8eaec;
   }
-  .disable{
+  .disable {
     cursor: default;
   }
-  :last-child{
+  :last-child {
     border-bottom: none;
   }
-  .table-item-option{
-    span{
+  .table-item-option {
+    span {
       padding: 5px;
       color: #666666;
     }
   }
 }
-.action-item button{
+.action-item button {
   margin: 0 10px;
 }
-td+.my-table-cell{
-   padding: 0px!important;
-  .ivu-table-cell{
-    padding: 0px!important;
+td + .my-table-cell {
+  padding: 0px !important;
+  .ivu-table-cell {
+    padding: 0px !important;
   }
 }
-.courseware_list_modal .ivu-modal-wrap{
-  z-index: 3000!important;
+.courseware_list_modal .ivu-modal-wrap {
+  z-index: 3000 !important;
 }
-.courseware_list_modal2 .ivu-modal-mask{
-  z-index: 3000!important;
+.courseware_list_modal2 .ivu-modal-mask {
+  z-index: 3000 !important;
 }
 </style>

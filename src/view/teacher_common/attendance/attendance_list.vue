@@ -3,18 +3,19 @@
     <Row type="flex" justify="space-between" style="padding:12px 20px">
       <Col class="attendance-fl">
       <Col>
-        班级：
-        <Select v-model="class_id" class="new-searchSel" @on-change="handleClassChange" placeholder="班级" clearable style="margin-right:20px">
-          <Option v-for="(item,index) in class_list" :key="index" :value="item.id">{{item.class_name}}</Option>
-        </Select>
-        学年：
-        <Select v-model="showTime" class="new-searchSel" @on-change="handleSemesterChange" clearable>
-          <Option v-for="(item,index) in TimeList" :key="index" :value="item.value">{{item.info}}</Option>
-        </Select>
+      班级：
+      <Select v-model="class_id" class="new-searchSel" @on-change="handleClassChange" placeholder="班级" clearable
+        style="margin-right:20px">
+        <Option v-for="(item,index) in class_list" :key="index" :value="item.id">{{item.class_name}}</Option>
+      </Select>
+      学年：
+      <Select v-model="showTime" class="new-searchSel" @on-change="handleSemesterChange" clearable>
+        <Option v-for="(item,index) in TimeList" :key="index" :value="item.value">{{item.info}}</Option>
+      </Select>
       </Col>
       </Col>
       <Col>
-        <button class="greenImage-btn" @click="open('attendance_preview','','导出班级学生考勤记录',1100)">考勤总览</button>
+      <button class="greenImage-btn" @click="open('attendance_preview','','导出班级学生考勤记录',1100)">考勤总览</button>
       </Col>
     </Row>
     <div style="padding:10px;width:100%;height:100%;overflow:hidden">
@@ -27,14 +28,13 @@
     </div> -->
 
     <Modal v-model="modal" :title="title" :width="1100" footer-hide>
-      <attendance-preview style="height:700px" v-if="target === 'attendance_preview' && modal" :teacher_course_id="courseId" :class_id="class_id" :showTime="showTime"></attendance-preview>
-      <attendance-record-list v-if="target === 'attendance_record_list'"  :attendance_id="target_id"></attendance-record-list>
+      <attendance-preview style="height:700px" v-if="target === 'attendance_preview' && modal"
+        :teacher_course_id="courseId" :class_id="class_id" :showTime="showTime"></attendance-preview>
+      <attendance-record-list v-if="target === 'attendance_record_list'" :attendance_id="target_id">
+      </attendance-record-list>
     </Modal>
-    <Modal
-        v-model="modal1"
-        title="删除考勤记录"
-        @on-ok="del">
-        <p>确定删除当前考勤记录？</p>
+    <Modal v-model="modal1" title="删除考勤记录" @on-ok="del">
+      <p>确定删除当前考勤记录？</p>
     </Modal>
   </div>
 </template>
@@ -129,7 +129,7 @@ export default {
           render: (h, params) => {
             return (
               <div>
-                <Icon type="md-close" style="font-size:22px;color:#FE452D;cursor:pointer" onClick={() => { this.delId = params.row.id; this.modal1 = true }}/>
+                <Icon type="md-close" style="font-size:22px;color:#FE452D;cursor:pointer" onClick={() => { this.delId = params.row.id; this.modal1 = true }} />
               </div>
             )
           }
@@ -162,6 +162,7 @@ export default {
         class_id: this.class_id,
         time: this.showTime
       }).then(res => {
+        console.log(res);
         if (res.code === 200) {
           this.list = res.data.list
           this.count = res.data.count
@@ -178,6 +179,7 @@ export default {
           class_id: this.class_id
         }
       }).then(res => {
+        console.log(res);
         if (res.code === 200) {
           this.TimeList = res.data
         }
@@ -224,6 +226,8 @@ export default {
     }
   },
   mounted () {
+    console.log(this.courseId);
+
     this.getData()
     this.get_class_by_teacher_course()
   }

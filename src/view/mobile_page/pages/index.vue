@@ -20,12 +20,13 @@
 <script>
 
 import live from '@/view/common/live'
+import { Toast } from 'mint-ui'
 export default {
   mixins: [live],
   data () {
     return {
       selected: '',
-      userType: this.$store.state.user.userInfo.userType,
+
       teacher_tab: [
         {
           title: '首页',
@@ -58,18 +59,49 @@ export default {
       ]
     }
   },
+  computed: {
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    }
+  },
   watch: {
     selected (n, o) {
       if (n === 'userInfo') {
-        this.$router.push({ name: 'mobileUserCenter' })
-      } else if (n === 'message') {
-        if (this.teacher_tab[1].badgeShow === true) {
-          this.$router.push({ name: 'mobileMessage', query: { newInfo: true } })
+        if (this.userType === 3) {
+          Toast({
+            message: '请先注册登录....',
+            duration: 2000
+          })
+          return
         } else {
-          this.$router.push({ name: 'mobileMessage', query: { newInfo: false } })
+          this.$router.push({ name: 'mobileUserCenter' })
         }
+
+      } else if (n === 'message') {
+        if (this.userType === 3) {
+          Toast({
+            message: '请先注册登录....',
+            duration: 2000
+          })
+          return
+        } else {
+          if (this.teacher_tab[1].badgeShow === true) {
+            this.$router.push({ name: 'mobileMessage', query: { newInfo: true } })
+          } else {
+            this.$router.push({ name: 'mobileMessage', query: { newInfo: false } })
+          }
+        }
+
       } else if (n === 'course') {
-        this.$router.push({ name: 'mobileCourse' })
+        if (this.userType === 3) {
+          Toast({
+            message: '请先注册登录....',
+            duration: 2000
+          })
+          return
+        } else {
+          this.$router.push({ name: 'mobileCourse' })
+        }
       } else {
         this.$router.push({ name: 'showIndex' })
       }
@@ -79,26 +111,28 @@ export default {
     handleOnMessage (data) {
       this.updataInfo(data.notice_type, data.courseware_id)
       let type = data.type || ''
-      switch (type) {
-        // Events.php中返回的init类型的消息，将client_id发给后台进行uid绑定
-        case 'init':
-          this.bindUser(data.client_id)
-          if (this.userType === 1) {
-            this.joinDisucussTeacher()
-          } else {
-            this.joinDisucussStudent()
+      if (this.userType !== 3) {
+        switch (type) {
+          // Events.php中返回的init类型的消息，将client_id发给后台进行uid绑定
+          case 'init':
+            this.bindUser(data.client_id)
+            if (this.userType === 1) {
+              this.joinDisucussTeacher()
+            } else {
+              this.joinDisucussStudent()
+            }
+            break
+          case 'ppt':
+            break
+          case 'online':
+            break
+          case 'offline':
+            break
+          default: {
           }
-          break
-        case 'ppt':
-          break
-        case 'online':
-          break
-        case 'offline':
-          break
-        default: {
-
         }
       }
+
     },
     updataInfo (type, courseware_id) {
       if (type === 43) {
@@ -158,14 +192,17 @@ export default {
         this.selected = 'index'
       } else if (this.$route.path === '/mobile/mobileMessage') {
         this.selected = 'message'
+
       } else if (this.$route.path === '/mobile/mobileCourse') {
         this.selected = 'course'
+
       } else if (this.$route.path === '/mobile/mobileUserCenter') {
         this.selected = 'userInfo'
       }
     }
   },
   mounted () {
+    console.log(this.userType);
     this.getSelected()
     this.initChat()
     if (this.userType === 2) {

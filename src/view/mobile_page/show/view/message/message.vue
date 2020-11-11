@@ -1,7 +1,7 @@
 <template>
   <div class="m-message flex-contain" style="position:relative;height:100%">
     <mt-header title="消息">
-      <mt-button icon="search" slot="right"></mt-button>
+      <!-- <mt-button icon="search" slot="right"></mt-button> -->
     </mt-header>
     <mt-navbar v-model="selected" class="m-message-tab">
       <mt-tab-item id="1">消息中心</mt-tab-item>

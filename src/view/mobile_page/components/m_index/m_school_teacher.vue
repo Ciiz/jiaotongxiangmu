@@ -23,6 +23,7 @@
 import vPinyin from './vue-py.js'
 import { Indicator } from 'mint-ui'
 import { get_taecherList } from '@/api/teacher'
+import { get_student_taecherList } from '@/api/student'
 export default {
   data () {
     return {
@@ -31,10 +32,14 @@ export default {
     }
   },
   computed: {
-
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    },
   },
   methods: {
+    school_teacher () {
 
+    }
   },
   mounted () {
     Indicator.open({
@@ -56,27 +61,52 @@ export default {
     //     ]
     //   }
     // })
-    get_taecherList(this.$route.params.id).then(res => {
-      console.log(res)
-      this.taecherList = res.data.teacher_list
-      let employeeNameList = []
-      for (let k in res.data.teacher_list) {
-        employeeNameList.push(res.data.teacher_list[k])
-      }
-      let firstName = {}
-      this.AlphabetList.forEach((item) => {
-        firstName[item] = []
-        employeeNameList.forEach((el) => {
-          let first = vPinyin.chineseToPinYin(el.name)
-          if (first === item) {
-            firstName[item].push(el)
-          }
+    if (this.userType === 1) {
+      get_taecherList(this.$route.params.id).then(res => {
+
+        this.taecherList = res.data.teacher_list
+        let employeeNameList = []
+        for (let k in res.data.teacher_list) {
+          employeeNameList.push(res.data.teacher_list[k])
+        }
+        let firstName = {}
+        this.AlphabetList.forEach((item) => {
+          firstName[item] = []
+          employeeNameList.forEach((el) => {
+            let first = vPinyin.chineseToPinYin(el.name)
+            if (first === item) {
+              firstName[item].push(el)
+            }
+          })
         })
+        this.firstNames = firstName
+        console.log(this.firstNames)
+        Indicator.close()
       })
-      this.firstNames = firstName
-      console.log(this.firstNames)
-      Indicator.close()
-    })
+    }
+    else if (this.userType === 2) {
+      get_student_taecherList(this.$route.params.id).then(res => {
+        this.taecherList = res.data.teacher_list
+        let employeeNameList = []
+        for (let k in res.data.teacher_list) {
+          employeeNameList.push(res.data.teacher_list[k])
+        }
+        let firstName = {}
+        this.AlphabetList.forEach((item) => {
+          firstName[item] = []
+          employeeNameList.forEach((el) => {
+            let first = vPinyin.chineseToPinYin(el.name)
+            if (first === item) {
+              firstName[item].push(el)
+            }
+          })
+        })
+        this.firstNames = firstName
+        console.log(this.firstNames)
+        Indicator.close()
+      })
+    }
+
   }
 }
 </script>

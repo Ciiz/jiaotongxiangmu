@@ -8,9 +8,9 @@
         <img src="@/assets/images/mobile_student/search.png" class="m-search-icon" />
         <input class="mobile-searchInput" placeholder="搜索课程、教师、院校" />
       </div>
-      <div>
+      <!-- <div>
         <img src="@/assets/images/mobile_student/seachImage.png" class="m-seachImage" />
-      </div>
+      </div> -->
     </div>
     <mt-navbar v-model="selected" class="m-mt-navbar">
       <mt-tab-item id="recommend">推荐</mt-tab-item>
@@ -31,17 +31,22 @@
         <recommend></recommend>
       </mt-tab-container-item>
       <mt-tab-container-item id="2">
-        <videoCourse v-if="istab"></videoCourse>
+        <videoCourse v-if="istab2"></videoCourse>
       </mt-tab-container-item>
       <mt-tab-container-item id="3">
-        3
+        <videoCourse v-if="istab3"></videoCourse>
+      </mt-tab-container-item>
+      <mt-tab-container-item id="4">
+        <videoCourse v-if="istab4"></videoCourse>
+      </mt-tab-container-item>
+      <mt-tab-container-item id="5">
+        <videoCourse v-if="istab5"></videoCourse>
       </mt-tab-container-item>
     </mt-tab-container>
 
   </div>
 </template>
 <script>
-
 import { get_bannersIndex } from '@/api/common'
 import recommend from '@/view/mobile_page/show/view/index/recommend/recommend.vue'
 import videoCourse from "@/view/mobile_page/components/m_index/video_course"
@@ -55,13 +60,22 @@ export default {
       selected: 'recommend',
       showsearch: false,
       allLoaded: false,
-      istab: false
+      istab2: false,
+      istab3: false,
+      istab4: false,
+      istab5: false
     }
   },
   watch: {
     selected (val, oldVal) {
       if (val == 2) {
-        this.istab = true
+        this.istab2 = true
+      } else if (val == 3) {
+        this.istab3 = true
+      } else if (val == 4) {
+        this.istab4 = true
+      } else if (val == 5) {
+        this.istab5 = true
       }
 
     }
@@ -95,6 +109,7 @@ export default {
     }
   },
   mounted () {
+
     this.get_banners('/news')
   }
 }

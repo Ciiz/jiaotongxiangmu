@@ -157,5 +157,15 @@ export default {
     this.ws.close()
   },
   created () {
+  },
+  computed: {
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    }
+  },
+  mounted () {
+    console.log(this.userType);
+
   }
+
 }

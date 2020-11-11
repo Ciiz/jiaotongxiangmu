@@ -1,9 +1,10 @@
 <template>
+  <!-- to="/mobile/mobileMessage" -->
   <div class="m-discuss flex-contain">
     <mt-header :title="infoTitle">
-      <router-link to="/mobile/mobileMessage" slot="left">
+      <div slot="left" @click="$router.back(-1)">
         <mt-button icon="back"></mt-button>
-      </router-link>
+      </div>
     </mt-header>
     <div class="infoModal-r-content" style="height:100%;background:#ffffff;border-top:1px solid #DDDDDD">
       <div>
@@ -12,50 +13,55 @@
           <!-- <div class="infoModal-t">2020-4-21 10:20</div> -->
           <!-- table_type 1：小组讨论，2：任务提问，3：话题 -->
           <div v-for="(item,index) in answerList" :key="index">
-            <div v-if="userType===1&&chatList.table_type===2" :class="item.type === 1&&userType===1 ? 'userinfo-right' : 'userinfo-left'">
-                        <div>
-                          <img :src="item.userInfo.icon" />
-                        </div>
-                        <div>
-                          <div></div>
-                          {{item.content}}
-                        </div>
+            <div v-if="userType===1&&chatList.table_type===2"
+              :class="item.type === 1&&userType===1 ? 'userinfo-right' : 'userinfo-left'">
+              <div>
+                <img :src="item.userInfo.icon" />
+              </div>
+              <div>
+                <div></div>
+                {{item.content}}
+              </div>
             </div>
-            <div v-if="userType===1&&chatList.table_type===3" :class="item.type === 1&&userType===1 ? 'userinfo-right' : 'userinfo-left'">
-                        <div v-if="item.content">
-                          <img :src="item.object.icon" />
-                        </div>
-                        <div v-if="item.content">
-                          <div></div>
-                          {{item.content}}
-                        </div>
+            <div v-if="userType===1&&chatList.table_type===3"
+              :class="item.type === 1&&userType===1 ? 'userinfo-right' : 'userinfo-left'">
+              <div v-if="item.content">
+                <img :src="item.object.icon" />
+              </div>
+              <div v-if="item.content">
+                <div></div>
+                {{item.content}}
+              </div>
             </div>
-            <div v-if="userType===2&&chatList.table_type===2" :class="item.type === 2&&userType===2 ? 'userinfo-right' : 'userinfo-left'">
-                        <div>
-                          <img :src="item.userInfo.icon" />
-                        </div>
-                        <div>
-                          <div></div>
-                          {{item.content}}
-                        </div>
+            <div v-if="userType===2&&chatList.table_type===2"
+              :class="item.type === 2&&userType===2 ? 'userinfo-right' : 'userinfo-left'">
+              <div>
+                <img :src="item.userInfo.icon" />
+              </div>
+              <div>
+                <div></div>
+                {{item.content}}
+              </div>
             </div>
-            <div v-if="userType===2&&chatList.table_type===1" :class="item.object_id===userId&&userType===2 ? 'userinfo-right' : 'userinfo-left'">
-                        <div>
-                          <img :src="item.userInfo.icon" />
-                        </div>
-                        <div>
-                          <div></div>
-                          {{item.content}}
-                        </div>
+            <div v-if="userType===2&&chatList.table_type===1"
+              :class="item.object_id===userId&&userType===2 ? 'userinfo-right' : 'userinfo-left'">
+              <div>
+                <img :src="item.userInfo.icon" />
+              </div>
+              <div>
+                <div></div>
+                {{item.content}}
+              </div>
             </div>
-            <div v-if="userType===2&&chatList.table_type===3" :class="item.type === 2&&userType===2&&item.object_id===userId ? 'userinfo-right' : 'userinfo-left'">
-                        <div v-if="item.content">
-                          <img :src="item.object.icon" />
-                        </div>
-                        <div v-if="item.content">
-                          <div></div>
-                          {{item.content}}
-                        </div>
+            <div v-if="userType===2&&chatList.table_type===3"
+              :class="item.type === 2&&userType===2&&item.object_id===userId ? 'userinfo-right' : 'userinfo-left'">
+              <div v-if="item.content">
+                <img :src="item.object.icon" />
+              </div>
+              <div v-if="item.content">
+                <div></div>
+                {{item.content}}
+              </div>
             </div>
             <div style="clear:both"></div>
           </div>
@@ -64,9 +70,10 @@
     </div>
     <div class="m-discuss-bottom">
       <div style="flex:1">
-        <input type="text" class="m-discuss-input" v-model="discussinfo"/>
+        <input type="text" class="m-discuss-input" v-model="discussinfo" />
       </div>
-      <img src="@/assets/images/mobile_student/sendcommand.png" style="width:0.54rem;height:0.49rem;margin: auto 0 auto 0.32rem;" @click="sendInfo"/>
+      <img src="@/assets/images/mobile_student/sendcommand.png"
+        style="width:0.54rem;height:0.49rem;margin: auto 0 auto 0.32rem;" @click="sendInfo" />
     </div>
   </div>
 </template>
@@ -95,6 +102,7 @@ export default {
     chatList () {
       return this.$route.query.chatList
     }
+
   },
   watch: {
 
@@ -355,6 +363,7 @@ export default {
             this.sendInfoTeacher()
           }
         } else {
+          console.log(this.chatList);
           if (this.chatList.table_type === 2) {
             // console.log(this.chatList)
             this.sendInfoStudent(this.chatList.userInfo.id, this.discussinfo, '')
@@ -415,6 +424,8 @@ export default {
     }
   },
   mounted () {
+    console.log(this.$route);
+
     this.initChat()
     this.getInfo()
   }

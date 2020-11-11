@@ -122,12 +122,53 @@ const indexRouter = [
     meta: {
     },
     children: [
+      // 搜索页面
+      {
+        path: 'search_pages',
+        name: 'search_pages',
+        meta: {
+          title: '搜索页面',
+
+        },
+        component: () => import('@/view/pages/search_pages')
+      },
+      // 教师主页
+      {
+        path: 'teacher_homepage/:id',
+        name: 'teacher_homepage',
+        meta: {
+          title: '教师主页',
+          keepAlive: true
+        },
+        component: () => import('@/view/pages/teacher_homepage')
+      },
+      // 学生主页
+      {
+        path: 'student_homepage/:id',
+        name: 'student_homepage',
+        meta: {
+          title: '教师主页',
+          keepAlive: false
+        },
+        component: () => import('@/view/pages/student_homepage')
+      },
+      // 观看记录
+      {
+        path: 'look_History',
+        name: 'look_History',
+        meta: {
+          title: '观看记录',
+          keepAlive: true
+        },
+        component: () => import('@/view/pages/look_History')
+      },
       // 首页视频跳转
       {
-        path: '/videojump/:id',
+        path: 'videojump/:id',
         name: 'videojump',
         meta: {
           title: '首页视频播放',
+          keepAlive: true,
           hideInMenu: false
         },
         component: () => import('@/view/video_index/videojump.vue')
@@ -254,7 +295,7 @@ const indexRouter = [
 
 
   },
-
+  // 教务系统
   {
     path: '/teachingSystem',
     name: 'teachingSystem',
@@ -516,9 +557,14 @@ const indexRouter = [
       }
     ]
   },
-
-
-
+  {
+    path: '/download_pages',
+    name: 'download_pages',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/pages/download_pages')
+  },
 ]
 
 const mobileStudent = [
@@ -1026,6 +1072,33 @@ const mobileTeacher = [
     },
     component: () => import('@/view/mobile_page/show/view/course/teacher/studentProcess.vue')
   },
+  // 查看学生考勤
+  {
+    path: '/look_check',
+    name: 'look_check',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/look_check.vue')
+  },
+  // 学生考勤详情
+  {
+    path: '/look_check_details/:id',
+    name: 'look_check_details',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/look_check_details.vue')
+  },
+  // 我的班级
+  {
+    path: '/myclass',
+    name: 'myclass',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/teacher/myclass.vue')
+  },
   {
     path: '/mobileCoursewareInfo',
     name: 'mobileCoursewareInfo',
@@ -1049,6 +1122,51 @@ const mobileTeacher = [
       hideInMenu: true
     },
     component: () => import('@/view/mobile_page/show/view/userCenter/teacher/userInfo/userInfo.vue')
+  },
+  // 设置
+  {
+    path: '/usersetting',
+    name: 'usersetting',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/usersetting')
+  },
+  // 关于
+  {
+    path: '/mobileabout',
+    name: 'mobileabout',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/mobileabout')
+  },
+  // 关于我们
+  {
+    path: '/aboutwe',
+    name: 'aboutwe',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/about/aboutwe')
+  },
+  // 用户协议
+  {
+    path: '/agreement',
+    name: 'agreement',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/about/agreement')
+  },
+  // 用户反馈
+  {
+    path: '/feedback',
+    name: 'feedback',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/mobile_page/show/view/userCenter/about/feedback')
   },
   {
     path: '/mobileCourseManageT',

@@ -1,6 +1,7 @@
 <template>
   <div class="m-taskInfo flex-contain">
-    <mt-header :title="(correct_status===0?'未批':(correct_status===1?'已批':''))+(type==='exam'?'测试':(type==='task'?'任务':'作业'))">
+    <mt-header
+      :title="(correct_status===0?'未批':(correct_status===1?'已批':''))+(type==='exam'?'测试':(type==='task'?'任务':'作业'))">
       <router-link to="mobileCorrectIndex" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
@@ -30,7 +31,8 @@
       <div class="m-taskContent" v-if="type==='exam'">
         <div style="color:#212121;margin-bottom:0.1rem">测试内容：</div>
         <div v-for="(item,index) in objective_question" :key="index" class="m-exam-questionList">
-          <p v-if="item.length!==0">{{item[0].object_type===1?'单选题':'多选题'}}（共{{objective_question.multiple_choice.length}}题）</p>
+          <p v-if="item.length!==0">
+            {{item[0].object_type===1?'单选题':'多选题'}}（共{{objective_question.multiple_choice.length}}题）</p>
           <div v-for="(item2,index2) in item" :key="index2">
             <p>{{index2+1}}、{{item2.content}}（{{item2.score}}分）</p>
             <ul>
@@ -49,7 +51,8 @@
       </div>
     </div>
     <div style="display:flex">
-      <button class="m-b-btn-b" v-if="correct_status===0" @click="showStudent">批改{{type==='exam'?'测试':(type==='task'?'任务':'作业')}}</button>
+      <button class="m-b-btn-b" v-if="correct_status===0"
+        @click="showStudent">批改{{type==='exam'?'测试':(type==='task'?'任务':'作业')}}</button>
       <button class="m-b-btn-b" v-if="correct_status===1" @click="showStudent">查看成绩</button>
     </div>
   </div>

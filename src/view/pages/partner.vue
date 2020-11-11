@@ -162,6 +162,9 @@ export default {
       justify-content: flex-start;
 
       li {
+        &:hover {
+          box-shadow: 1px 1px 9px #ccc;
+        }
         .li_img {
           margin: auto 0;
         }

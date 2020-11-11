@@ -839,6 +839,7 @@ export default {
       'setHomeRoute'
     ]),
     returnHome () {
+      this.$store.commit('setuserMessagess', false)
       this.$router.push({ name: 'index' })
     },
     logout () {
@@ -1537,6 +1538,8 @@ export default {
       }, 1000)
     },
     closeInfoCenter (e) {
+      // 关闭消息
+      this.$store.commit('setuserMessagess', false)
       if (e.target.className === 'infoModal-full') {
         document.getElementsByClassName('infoModal-full')[0].style.display = 'none'
         document.getElementsByClassName('sjx-t')[0].style.display = 'none'
@@ -1931,6 +1934,16 @@ export default {
     }
   },
   mounted () {
+    if (this.$store.state.user.userMessagess == true) {
+      this.infoCenter = 'system'
+      document.getElementsByClassName('sjx-t')[0].style.display = 'none'
+      document.getElementsByClassName('sjx-t2')[0].style.display = 'block'
+      document.getElementsByClassName('infoModal-full')[0].style.display = 'block'
+      this.data.system_total = 0
+      this.getSystemNum()
+      // this.showUserDiscuss()
+      // this.data.message_total = 0
+    }
     this.initChat()
     this.getData()
     if (this.userType === 1) {

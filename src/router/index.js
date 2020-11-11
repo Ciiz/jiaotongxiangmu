@@ -22,7 +22,9 @@ const turnTo = (to, access, next) => {
 router.beforeEach((to, from, next) => {
   if (to.name === 'news' || to.path === '/news' ||
     to.name === 'schoolyard' || to.path === '/schoolyard' ||
+    to.name === 'search_pages' || to.path === '/search_pages' ||
     to.name === 'videojump' || to.path === '/videojump/:id' ||
+    to.name === 'teacher_homepage' || to.path === '/teacher_homepage/:id' ||
     to.name === 'partner' || to.path === '/partner' ||
     to.name === 'team' || to.path === '/team' ||
     to.name === 'index' || to.path === '/index' ||
@@ -30,6 +32,7 @@ router.beforeEach((to, from, next) => {
     to.name === 'live_online' || to.path === '/live_online' ||
     to.name === 'online_qrcode' || to.path === '/online_qrcode' ||
     to.name === 'entry' || to.path === '/entry' ||
+    to.name === 'showIndex' || to.path === '/showIndex' ||
     to.name === 'mobileLogin' || to.path === '/mobileLogin') {
     next()
   } else {

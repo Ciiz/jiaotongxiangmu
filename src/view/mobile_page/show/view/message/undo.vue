@@ -1,9 +1,12 @@
 <template>
-   <div class="m-undo flex-contain">
+  <div class="m-undo flex-contain">
     <mt-header title="代办事项">
-      <router-link to="/mobile/mobileMessage" slot="left">
+      <div slot="left" @click="$router.back(-1)">
         <mt-button icon="back"></mt-button>
-      </router-link>
+      </div>
+      <!-- <router-link to="/mobile/mobileMessage" slot="left">
+        <mt-button icon="back"></mt-button>
+      </router-link> -->
     </mt-header>
     <div class="infoModal-r-content">
       <div>
@@ -21,7 +24,9 @@
             <!-- <router-link to="/teachingSystem/correct" @click.native="changeTab($event)" style="display:inline-block;margin-top:12px">
               <span>前往批改>></span>
             </router-link> -->
-            <div style="margin-top:10px;color:#FF3333"><span style="cursor:pointer" @click="modal3=true,deleteSystemId=item.id">删除</span></div>
+            <!-- @click="modal3=true,deleteSystemId=item.id" -->
+            <div style="margin-top:10px;color:#FF3333"><span style="cursor:pointer" @click="handledele(index)">删除</span>
+            </div>
           </div>
         </div>
       </div>
@@ -29,6 +34,7 @@
   </div>
 </template>
 <script>
+import { Toast } from 'mint-ui'
 export default {
   data () {
     return {
@@ -40,6 +46,40 @@ export default {
 
   },
   methods: {
+    handledele (index) {
+      if (this.userType === 1) {
+        this.axios.request({
+          url: '/index.php/Teacher/Notice/delete',
+          method: 'post',
+          data: {
+            id: this.systemInfoList[index].id
+          }
+        }).then(res => {
+          console.log(res);
+          this.systemInfoList.splice(index, 1)
+          Toast({
+            message: '删除成功！',
+            duration: 2000
+          })
+        })
+      } else if (this.userType === 2) {
+        this.axios.request({
+          url: 'index.php/Student/User/delete_notice',
+          method: 'post',
+          data: {
+            id: this.systemInfoList[index].id
+          }
+        }).then(res => {
+          console.log(res);
+          this.systemInfoList.splice(index, 1)
+          Toast({
+            message: '删除成功！',
+            duration: 2000
+          })
+        })
+      }
+
+    },
     getData () {
       if (this.userType === 1) {
         this.axios.request({
@@ -51,6 +91,7 @@ export default {
             pagesize: 10
           }
         }).then(res => {
+          console.log(res);
           if (res.code === 200) {
             this.systemInfoList = []
             for (let i = res.data.notice_list.length - 1; i >= 0; i--) {

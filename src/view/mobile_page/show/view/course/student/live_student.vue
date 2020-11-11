@@ -1,20 +1,15 @@
 <template>
   <div class="m-liveStudent flex-contain">
-    <Icon type="ios-arrow-back" @click="back"/>
+    <Icon type="ios-arrow-back" @click="back" />
     <div class="m-live-box">
       <div style="height:100%;width:100%;background: #000" v-if="mode === 'live'">
-        <video id="myVideo"
-          style="display:none;width:100%;height:100%"
-           class="video-js vjs-default-skin vjs-big-play-centered"
-           controls
-           muted
-           preload="auto"
-          >
-          <source src="" type="application/x-mpegURL" >
+        <video id="myVideo" style="display:none;width:100%;height:100%"
+          class="video-js vjs-default-skin vjs-big-play-centered" controls muted preload="auto">
+          <source src="" type="application/x-mpegURL">
         </video>
         <video id="videoElement" style="width:100%;height:100%;display:none;outline:none" controls muted></video>
       </div>
-       <!-- pdf -->
+      <!-- pdf -->
       <div class="m-pdfcard" ref="pdfcard" v-if="mode === 'pdf'">
         <div id="pdf" v-if="unpdf" style="align-self:center">
           <!-- 弹幕组件：vue-baberrage -->
@@ -27,62 +22,54 @@
             :boxHeight="100"
           >
           </vue-baberrage> -->
-          <div style="height:100%;overflow:auto;background:#000;display:flex;width:100%;align-items:center"
-               id="pdf1" ref="pdf1" v-if="['pdf'].indexOf(file_stuffix) !== -1 && mode === 'pdf'">
-              <pdf
-                ref="pdf"
-                :src="student_courseware.courseware.file_url"
-                :page="page"
-                :style="{width:'100%'}"
-                style="margin: 0 auto;"
-                @progress="loadedRatio = $event"
-                @error="error"
-                @num-pages="numPages = $event"
-                @link-clicked="page = $event"
-              ></pdf>
-  
+          <div style="height:100%;overflow:auto;background:#000;display:flex;width:100%;align-items:center" id="pdf1"
+            ref="pdf1" v-if="['pdf'].indexOf(file_stuffix) !== -1 && mode === 'pdf'">
+            <pdf ref="pdf" :src="student_courseware.courseware.file_url" :page="page" :style="{width:'100%'}"
+              style="margin: 0 auto;" @progress="loadedRatio = $event" @error="error" @num-pages="numPages = $event"
+              @link-clicked="page = $event"></pdf>
+
           </div>
         </div>
         <div v-else style="width:100%;height:444px;overflow-y:auto;">
           <!-- <embed :src="src" width="100%" height="440px" autostart="false"> -->
         </div>
         <div class="m-pdf-control">
-          <img src="@/assets/images/mobile_student/lastpage.png" @click="handlePageChange('up')"/>
+          <img src="@/assets/images/mobile_student/lastpage.png" @click="handlePageChange('up')" />
           <span>{{page}}/{{numPages}}</span>
-          <img src="@/assets/images/mobile_student/nextpage.png" @click="handlePageChange('down')"/>
+          <img src="@/assets/images/mobile_student/nextpage.png" @click="handlePageChange('down')" />
           <!-- <img src="@/assets/images/mobile_student/fullscreen.png" class="m-pdf-control-r" @click="fullScreen()"/> -->
         </div>
       </div>
     </div>
-    
-      <mt-navbar v-model="selected">
-        <mt-tab-item id="1">弹幕讨论</mt-tab-item>
-        <mt-tab-item id="2">课堂笔记</mt-tab-item>
-        <mt-tab-item id="3">老师提问</mt-tab-item>
-        <mt-tab-item id="4">任务测试</mt-tab-item>
-      </mt-navbar>
-      
-      <!-- tab-container -->
-      <mt-tab-container v-model="selected">
-        <mt-tab-container-item id="1">
-          <mt-cell v-for="n in 10" :title="'内容 ' + n" />
-        </mt-tab-container-item>
-        <mt-tab-container-item id="2">
-          <note :courseware_id="courseware_id"></note>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="3">
-          <mt-cell v-for="n in 6" :title="'选项 ' + n" />
-        </mt-tab-container-item>
-        <mt-tab-container-item id="4">
-          <mt-cell v-for="n in 6" :title="'选项 ' + n" />
-        </mt-tab-container-item>
-      </mt-tab-container>
-    </div>
-    <!-- <div class="m-chapterDetail-bottom">
+
+    <mt-navbar v-model="selected">
+      <mt-tab-item id="1">弹幕讨论</mt-tab-item>
+      <mt-tab-item id="2">课堂笔记</mt-tab-item>
+      <mt-tab-item id="3">老师提问</mt-tab-item>
+      <mt-tab-item id="4">任务测试</mt-tab-item>
+    </mt-navbar>
+
+    <!-- tab-container -->
+    <mt-tab-container v-model="selected">
+      <mt-tab-container-item id="1">
+        <mt-cell v-for="n in 10" :key="n" :title="'内容 ' + n" />
+      </mt-tab-container-item>
+      <mt-tab-container-item id="2">
+        <note :courseware_id="courseware_id"></note>
+      </mt-tab-container-item>
+      <mt-tab-container-item id="3">
+        <mt-cell v-for="n in 6" :key="n" :title="'选项 ' + n" />
+      </mt-tab-container-item>
+      <mt-tab-container-item id="4">
+        <mt-cell v-for="n in 6" :key="n" :title="'选项 ' + n" />
+      </mt-tab-container-item>
+    </mt-tab-container>
+  </div>
+  <!-- <div class="m-chapterDetail-bottom">
       <input type="text" placeholder="留个言 分享下你的收获..." v-model="writeDiscuss"/>
       <img src="@/assets/images/mobile_student/sendcommand.png" @click="addDiscuss"/>
     </div> -->
-  </div>
+
 </template>
 <script>
 
@@ -97,15 +84,15 @@ export default {
       unpdf: true, // 判断src是否为pdf，true：是
       isSync: true, // 是否同屏
       student_courseware: { courseware: { courseware_files: [] } },
-      live_url:'',
-      courseware_id:'',
-      selected:1,
+      live_url: '',
+      courseware_id: '',
+      selected: 1,
       page: 1,
       loadedRatio: 0,
       numPages: undefined,
     }
   },
-   components: {
+  components: {
     pdf,
     note
   },
@@ -244,5 +231,4 @@ export default {
 }
 </script>
 <style>
- 
 </style>

@@ -159,6 +159,7 @@ import { video_index, get_Course, get_follow, get_unfollow } from '@/api/common'
 import chapter from "@/view/video_index/components/pc_chapter"
 import message from "@/view/video_index/components/course_massgess"
 import { mapActions } from 'vuex'
+import log from 'video.js/es5/utils/log'
 export default {
   name: 'videojump',
   components: {
@@ -173,7 +174,7 @@ export default {
       like_list: [],
       onend_stutas: false,
       recommend: [],
-      loginststus: false
+      loginststus: false,
 
 
     }
@@ -197,6 +198,7 @@ export default {
     handleSubmit ({ userName, password, user_type, school }) {
       this.handleLogin({ userName, password, user_type, school }).then(res => {
         this.getUserInfo().then(res => {
+          this.$store.commit('setLoginstatus', 1)
           this.loginststus = false
         })
       })
@@ -234,10 +236,7 @@ export default {
       video_index(item.id).then(res => {
         console.log(res);
         this.packaging(res)
-
-
         if (this.videoUrl !== '') {
-          console.log(document.querySelector('#video_massege'));
           document.querySelector('#video_massege').style.display = "block"
           if (this.videoUrl === this.videoUrl) {
             document.querySelector('.video_item').play()
@@ -287,7 +286,6 @@ export default {
     handlevideo (data) {
       console.log(data);
       this.videoUrl = data.file_url
-
       this.onend_stutas = data.stutas
       this.$nextTick(() => {
         document.querySelector('#video_massege').style.display = "block"
@@ -296,14 +294,12 @@ export default {
     // 获取跳转的视频
     get_video () {
       video_index(this.route).then(res => {
-        console.log(res);
-        this.$store.commit('setLoginstatus', res.data.data.admin_status)
+        // this.$store.commit('setLoginstatus', res.data.data.admin_status)
         this.packaging(res)
       })
     },
     get_like () {
       get_Course().then(res => {
-        console.log(res);
         this.recommend = res.data.data.slice(0, 3)
         if (res.data.data.length >= 5) {
           this.like_list = res.data.data.slice(0, 5)
@@ -316,9 +312,10 @@ export default {
     }
   },
 
-
-  mounted () {
+  activated () {
     this.get_video()
+  },
+  mounted () {
     this.get_like()
   }
 }

@@ -5,7 +5,8 @@
       <span slot="right"></span>
     </cell>
     <div class="m_index_like_list">
-      <div class="m_index_like_list_item" v-for="(v,i) in index_list" :key="i">
+      <div class="m_index_like_list_item" v-for="(v,i) in index_list" :key="i"
+        @click="$router.push({path:`/m_index_videoCourse/${v.id}`})">
         <div class="m_index_like_list_img"> <img :src="v.img" alt=""></div>
         <div class="m_index_like_list_center">
           <div class="m_index_like_list_center_t"> {{v.course_name}}</div>
@@ -38,7 +39,10 @@ export default {
 
   data () {
     return {
-      index_list: []
+      index_list: [],
+      newCourse: [],
+      freeCourse: []
+
     }
   },
 
@@ -59,6 +63,7 @@ export default {
     get_Course().then(res => {
       console.log(res)
       this.index_list = res.data.data
+
       Indicator.close()
     })
   }

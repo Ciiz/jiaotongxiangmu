@@ -3,11 +3,13 @@
 
     <Row style="background: #424242;">
       <Col :span="14" :offset='5'>
+
       <swiper :options="swiperOption" ref="mySwiper">
-        <!-- slides -->
-        <swiper-slide v-for="banner in banner_list" :key="banner.id" class="swiper-slide-news">
-          <!-- <div class="slide-item" @click="openBanner(banner)"> -->
-          <div class="slide-item">
+
+        <swiper-slide v-for="banner in banner_list" :key="banner.id" class="swiper_slide_news">
+
+          <div class="slide_item">
+
             <img :src="banner.img" alt="">
             <div class="content">
               <h2>{{banner.title}}</h2>
@@ -15,7 +17,7 @@
             </div>
           </div>
         </swiper-slide>
-        <!-- Optional controls -->
+
         <div class="swiper-pagination" slot="pagination"></div>
         <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
         <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
@@ -129,6 +131,7 @@ export default {
     swiper,
     swiperSlide
   },
+
   data () {
     return {
       page: 1,
@@ -144,39 +147,48 @@ export default {
       loading: false,
       loading2: false,
       banner_list: [],
+
       swiperOption: {
-        spaceBetween: 30,
-        // freeMode: true,
-        observeParents: true,
-        effect: 'coverflow',
-        coverflowEffect: {
-          rotate: 0,
-          stretch: 10,
-          depth: 160,
-          modifier: 2,
-          slideShadows: true
+        initialSlide: 0,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
         },
-        slidesPerView: 3,
-        observer: true,
-        observeSlideChildren: true,
-        loop: true,
         pagination: {
           el: '.swiper-pagination',
           clickable: true
         },
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev'
+        centeredSlides: true,
+        loop: false,
+        effect: 'coverflow',
+        slidesPerView: 1.7,
+        spaceBetween: 90,
+        // centeredSlides: true,
+        speed: 1000,
+        autoplay: {
+          delay: 1000,
+          stopOnLastSlide: false,
+          disableOnInteraction: false
+        },
+        coverflowEffect: {
+          rotate: 30, // slide做3d旋转时Y轴的旋转角度。默认50。
+          stretch: 120, // 每个slide之间的拉伸值，越大slide靠得越紧。
+          depth: 300, // slide的位置深度。值越大z轴距离越远，看起来越小。
+          modifier: 1, // depth和rotate和stretch的倍率，相当于depth*modifier、rotate*modifier、stretch*modifier，值越大这三个参数的效果越明显。默认1。
+          slideShadows: false // 开启slide阴影。默认 true。
         }
-      }
+      },
     }
   },
   computed: {
     swiper () {
       return this.$refs.mySwiper.swiper
-    }
+    },
+
   },
   methods: {
+
+
     getNewsData (p, z, t) {
       let _this = this
       _this.loading = true
@@ -264,6 +276,8 @@ export default {
     }
   },
   mounted () {
+
+    // this.swiper.slideTo(3, 1000, false)
     this.getNewsData(this.page, this.page_size, this.type)
     this.getNewsData2()
     this.get_banners('/news')
@@ -271,6 +285,9 @@ export default {
 }
 </script>
 <style lang="less">
+/deep/.swiper-wrapper {
+  transition-timing-function: linear !important;
+}
 .newsContain {
   min-height: 522px;
   background: #fff;
@@ -356,34 +373,39 @@ export default {
   // }
 }
 
-.swiper-slide-news {
-  width: auto;
-}
-.slide-item {
-  height: 300px;
-  overflow: hidden;
-  cursor: pointer;
-  margin: 5px;
-  position: relative;
-  .content {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 10px;
-    color: #fff;
-    background-image: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 1),
-      rgba(255, 255, 255, 0)
-    );
-  }
-  &:hover {
-    box-shadow: 1px 1px 9px #222;
-  }
-  img {
+.swiper_slide_news {
+  // width: 100%;
+  height: 100%;
+  .slide_item {
     height: 100%;
+    width: 400px;
+    overflow: hidden;
+    cursor: pointer;
+    margin: 5px;
+    position: relative;
+    .content {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 10px;
+      color: #fff;
+      background-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 1),
+        rgba(255, 255, 255, 0)
+      );
+    }
+    &:hover {
+      box-shadow: 1px 1px 9px #222;
+    }
+    img {
+      height: 300px;
+      // height: 100%;
+      width: 400px;
+    }
   }
 }
+
 .Sdes {
   display: inline-block;
   overflow: hidden;

@@ -1,6 +1,6 @@
 <template>
   <div class="m-attendanceDetail flex-contain">
-    <mt-header title="考勤统计"  style="border-bottom: 1px solid #E5E5E5">
+    <mt-header title="考勤统计" style="border-bottom: 1px solid #E5E5E5">
       <router-link to="/attendance" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
@@ -73,5 +73,4 @@ export default {
 }
 </script>
 <style>
-
 </style>

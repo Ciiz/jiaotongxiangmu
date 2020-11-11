@@ -4,7 +4,7 @@
     <div class="m_Boutique">
       <div class="m_Boutique_header">
         <div class="m_Boutique_header_left">精品课程</div>
-        <div class="m_Boutique_header_right">更多 ></div>
+        <div class="m_Boutique_header_right" @click="Boutiquemore">更多 ></div>
       </div>
       <div class="m_Boutique_list">
         <div class="m_Boutique_list_item" v-for="(v,i) in newCourse" :key="i"
@@ -16,16 +16,16 @@
             <div class="m_Boutique_list_item_center1">{{v.course_name}}</div>
             <div class="m_Boutique_list_item_center2" v-html="v.description"></div>
             <div class="m_Boutique_list_item_center3">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
-
           </div>
         </div>
       </div>
     </div>
+    <Boutique v-if="Boutiqueshow" @handleslot='Boutique_colse'></Boutique>
     <!-- 免费课程 -->
     <div class="m_Boutique free">
       <div class="m_Boutique_header">
         <div class="m_Boutique_header_left">免费课程</div>
-        <div class="m_Boutique_header_right free">更多 ></div>
+        <div class="m_Boutique_header_right free" @click="handlefreeshow">更多 ></div>
       </div>
       <div class="m_Boutique_list">
         <div class="m_Boutique_list_item" v-for="(v,i) in freeCourse" :key="i"
@@ -42,6 +42,7 @@
         </div>
       </div>
     </div>
+    <free v-if="freeshow" @handleslot='handle_free'></free>
     <!-- 教师推荐 -->
     <div class="m_recommendTeacher">
       <div class="m_recommendTeacher-header">
@@ -49,7 +50,8 @@
         <div class="m_recommendTeacher-header-right" @click="handle_teach">更多></div>
       </div>
       <div class="m_recommendTeacher-center">
-        <div class="m_recommendTeacher-center_item" v-for="(v,i) in recommendlist" :key="i">
+        <div class="m_recommendTeacher-center_item" v-for="(v,i) in recommendlist" :key="i"
+          @click="$router.push({path: `/m_index_school_teacherUser/${v.teacher_id}`})">
           <div class="m_recommendTeacher-center_item_icon">
             <img :src="v.icon" alt="">
           </div>
@@ -73,11 +75,14 @@
 </template>
 
 <script>
+import free from '@/view/mobile_page/components/m_index/m_index_free'
+import Boutique from '@/view/mobile_page/components/m_index/m_index_Boutique'
 import { Indicator, Toast } from 'mint-ui'
 import { get_Course, get_recommend } from '@/api/common'
 import indexTeacher from '@/view/mobile_page/components/m_index/m_index_teacher'
+import { f } from 'tree-table-vue'
 export default {
-  components: { indexTeacher },
+  components: { indexTeacher, Boutique, free },
   data () {
     return {
       courseList: [],
@@ -87,6 +92,8 @@ export default {
       isteacth_show: false,
       isReloadData: true,
       m: 1,
+      Boutiqueshow: false,
+      freeshow: false
     }
 
   },
@@ -98,6 +105,19 @@ export default {
   },
 
   methods: {
+    handle_free () {
+      this.freeshow = false
+    },
+    handlefreeshow () {
+      this.freeshow = true
+    },
+    // 精品更多
+    Boutiquemore () {
+      this.Boutiqueshow = true
+    },
+    Boutique_colse () {
+      this.Boutiqueshow = false
+    },
     // 刷新事件
     reload () {
       this.isReloadData = false

@@ -5,7 +5,8 @@
         <div class="question-item-icon" style="background:#4AA0FB">
           <img src="@/assets/images/mobile_student/sh.png" />
         </div>
-        <mt-badge type="error" size="small" style="position:absolute;top:0.08rem;right:0.08rem" class="m-badge-num" v-if="system_unread!==0">{{system_unread}}</mt-badge>
+        <mt-badge type="error" size="small" style="position:absolute;top:0.08rem;right:0.08rem" class="m-badge-num"
+          v-if="system_unread!==0">{{system_unread}}</mt-badge>
       </div>
       <div class="question-item-l">
         <div class="question-item-info">
@@ -20,7 +21,8 @@
         <div class="question-item-icon" style="background:#16C2AA">
           <img src="@/assets/images/mobile_student/ring.png" />
         </div>
-        <mt-badge type="error" size="small" style="position:absolute;top:0.08rem;right:0.08rem" class="m-badge-num"  v-if="remind_unread!==0">{{remind_unread}}</mt-badge>
+        <mt-badge type="error" size="small" style="position:absolute;top:0.08rem;right:0.08rem" class="m-badge-num"
+          v-if="remind_unread!==0">{{remind_unread}}</mt-badge>
       </div>
       <div class="question-item-l">
         <div class="question-item-info">
@@ -35,7 +37,8 @@
         <div class="question-item-icon" style="background:#FBA64A">
           <img src="@/assets/images/mobile_student/uncorrect.png" />
         </div>
-        <mt-badge type="error" size="small" style="position:absolute;top:0.08rem;right:0.08rem" class="m-badge-num" v-if="commission_unread!==0">{{commission_unread}}</mt-badge>
+        <mt-badge type="error" size="small" style="position:absolute;top:0.08rem;right:0.08rem" class="m-badge-num"
+          v-if="commission_unread!==0">{{commission_unread}}</mt-badge>
       </div>
       <div class="question-item-l">
         <div class="question-item-info">
@@ -77,7 +80,7 @@ export default {
       this.axios.request({
         url: uRl,
         method: 'get',
-        params: { }
+        params: {}
       }).then(res => {
         if (res.code === 200) {
           this.commission_unread = res.data.commission_unread

@@ -48,14 +48,13 @@
       <div class="teacher_massge_bottom_title">Ta的全部课程</div>
       <div v-if="course_list.length===0" class="teacher_massge_bottom_null">暂无课程！</div>
       <div class="teacher_massge_bottom_list">
-        <div class="teacher_massge_bottom_list_item" v-for="(v,i) in course_list" :key="i">
+        <div class="teacher_massge_bottom_list_item" v-for="(v,i) in course_list" :key="i"
+          @click="$router.push({path:`/m_index_videoCourse/${v.id}`})">
           <div class="teacher_massge_bottom_list_itemImg">
             <div class="teacher_massge_icon"><img src="@/assets/images/mobile_teacher/bofang3.png" alt="">
-
               <span v-if="v.play_count===null">0</span>
               <span v-else>{{v.play_count}}</span>
             </div>
-
             <div class="teacher_massge_img"> <img :src="v.img" alt=""> </div>
           </div>
           <div class="teacher_massge_bottom_list_itemName">
@@ -68,6 +67,7 @@
 </template>
 <script>
 import { get_taechermassge } from '@/api/teacher'
+import { student_massges, student_follow, student_unfollow } from '@/api/student'
 import { get_follow, get_unfollow } from '@/api/common'
 import { Toast } from 'mint-ui'
 import cell from '@/view/mobile_page/components/public_cell'
@@ -81,35 +81,79 @@ export default {
       course_list: []
     }
   },
+  computed: {
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    },
+  },
   methods: {
     async handle_follow () {
-      if (this.teacher_massge.isfollow) {
-        let result = await get_unfollow(this.teacher_massge.id)
-        if (result.code === 200) {
-          Toast({
-            message: '取消成功!',
-            duration: 2000
-          })
+      if (this.userType === 1) {
+        if (this.teacher_massge.isfollow) {
+          let result = await get_unfollow(this.teacher_massge.id)
+          if (result.code === 200) {
+            Toast({
+              message: '取消成功!',
+              duration: 2000
+            })
+          }
+          this.teacher_massge.isfollow = false
+        } else {
+          let res = await get_follow(this.teacher_massge.id)
+          if (res.code === 200) {
+            Toast({
+              message: '关注成功!',
+              duration: 2000
+            })
+          }
+          this.teacher_massge.isfollow = true
         }
-        this.teacher_massge.isfollow = false
-      } else {
-        let res = await get_follow(this.teacher_massge.id)
-        if (res.code === 200) {
-          Toast({
-            message: '关注成功!',
-            duration: 2000
-          })
-        }
-        this.teacher_massge.isfollow = true
       }
+      else if (this.userType === 2) {
+        if (this.teacher_massge.isfollow) {
+          let result = await student_unfollow(this.teacher_massge.id)
+          if (result.code === 200) {
+            Toast({
+              message: '取消成功!',
+              duration: 2000
+            })
+          }
+          this.teacher_massge.isfollow = false
+        } else {
+          let res = await student_follow(this.teacher_massge.id)
+          if (res.code === 200) {
+            Toast({
+              message: '关注成功!',
+              duration: 2000
+            })
+          }
+          this.teacher_massge.isfollow = true
+        }
+      }
+
     }
   },
   async  mounted () {
-    let res = await get_taechermassge(this.$route.params.id)
-    console.log(res)
-    this.teacher_massge = res.data.teacher_list
-    // this.isfollow = res.data.teacher_list.isfollow
-    this.course_list = res.data.course_list
+    console.log(this.$route.params.id);
+    if (this.userType === 1) {
+      let res = await get_taechermassge(this.$route.params.id)
+      console.log(res)
+      this.teacher_massge = res.data.teacher_list
+      // this.isfollow = res.data.teacher_list.isfollow
+      this.course_list = res.data.course_list
+    } else if (this.userType === 2) {
+      let res = await student_massges(this.$route.params.id)
+      console.log(res)
+      this.teacher_massge = res.data.teacher_list
+      // this.isfollow = res.data.teacher_list.isfollow
+      this.course_list = res.data.course_list
+    } else if (this.userType === 3) {
+      Toast({
+        message: '请先注册登录才可以查看教师信息!',
+        duration: 2000
+      })
+    }
+
   }
 }
 </script>

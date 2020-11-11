@@ -10,16 +10,29 @@
         </div>
         </Col>
         <Col>
-        <div class="record_List_description" v-html="item.description">
+        <div class="record_List_description">
+          {{item.course_name}}
         </div>
         </Col>
+        <div class="record_List_schoolandmajor">
+          <span>{{item.school_name}}</span>
+          <span>{{item.major_name}}</span>
+        </div>
         <Col>
         <div class="record_List_show">
-          <div class="record_List_show1">{{item.is_show}}</div>
-          <div class="record_List_show2">{{item.is_mooc}}</div>
-          <div class="record_List_show3">{{item.is_charge}}</div>
+          <div class="record_List_show1" v-if="item.play_count===null">0</div>
+          <div class="record_List_show1" v-else>{{item.play_count}}</div>
+          <div class="record_List_show2"></div>
+          <div class="record_List_show3"></div>
         </div>
         </Col>
+        <div class="record_List_user">
+          <div class="record_List_user_icon"><img :src="item.icon" alt=""></div>
+          <div class="record_List_user_icon" v-if="item.icon===''">
+            <Icon type="md-person" />
+          </div>
+          <div class="record_List_user_name">{{item.user_name}}</div>
+        </div>
       </Row>
       </Col>
     </Row>
@@ -44,9 +57,6 @@ export default {
   },
   methods: {
     get_record () {
-      // const recordData = {
-      //   status: 
-      // }
       get_record(this.status).then((result) => {
         console.log(result)
         this.recordlist = result.data.data.order
@@ -94,15 +104,38 @@ export default {
       -webkit-line-clamp: 1;
       overflow: hidden;
     }
+    .record_List_schoolandmajor {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 10px;
+    }
     .record_List_show {
       padding: 0 10px;
-      margin: 10px 0;
+
       display: flex;
       justify-content: space-between;
       font-size: 12px;
       font-family: SimSun;
       font-weight: 400;
       color: #adadad;
+      border-bottom: 1px solid #f1f1f1ff;
+    }
+    .record_List_user {
+      display: flex;
+      text-align: center;
+      padding: 2px 3px;
+      /deep/.ivu-icon {
+        font-size: 20px;
+      }
+      .record_List_user_name {
+        margin-left: 10px;
+        font-size: 12px;
+        font-family: SimSun;
+        font-weight: 400;
+        color: #646464;
+
+        line-height: 24px;
+      }
     }
   }
 }

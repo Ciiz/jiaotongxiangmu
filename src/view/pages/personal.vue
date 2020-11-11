@@ -37,15 +37,16 @@
         </Col>
         <Col>
         <div>
-          <Row class="personal_right_couseList" v-for="item in couseList" :key="item.id">
-            <Col class="personal_right_couseList_img">
-            <img :src="item.img" alt="">
-            </Col>
-            <Col>
-            <div>{{item.course_name}}</div>
-            <div class="personal_right_teacher_list">{{item.user_name}}</div>
-            </Col>
-          </Row>
+          <div class="personal_right_couseList" v-for="item in couseList" :key="item.id"
+            @click="$router.push({ path: `/videojump/${item.id}` })">
+            <div class="personal_right_couseList_img">
+              <img :src="item.img" alt="">
+            </div>
+            <div>
+              <div>{{item.course_name}}</div>
+              <div class="personal_right_teacher_list">{{item.user_name}}</div>
+            </div>
+          </div>
         </div>
         </Col>
       </Row>
@@ -145,6 +146,8 @@ export default {
     get_Course () {
       get_Course().then(res => {
         if (res.code === 200) {
+          console.log(res);
+
           this.couseList = res.data.data
         }
 

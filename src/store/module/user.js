@@ -28,11 +28,27 @@ export default {
     bindType: 0,
     currentTab: '',
     schoolMesage: '',
-    loginstatus: '' //登录状态
+    loginstatus: '', //登录状态
+    userMessagess: false, //信息中心的状态
+    searchResult: '', //搜索结果
+    passwordUserId: '' //游客登陆的id
+
+
 
   },
   // 同步操作
   mutations: {
+
+    setsearchResult (state, key) {
+      state.searchResult = key
+    },
+    setpasswordUserId (state, id) {
+      console.log(id);
+      state.passwordUserId = id
+    },
+    setuserMessagess (state, status) {
+      state.userMessagess = status
+    },
     setLoginstatus (state, status) {
       state.loginstatus = status
     },
@@ -102,6 +118,7 @@ export default {
           user_type,
           school
         }).then(res => {
+          console.log(res);
           if (res.code === 200) {
             const data = res.data
             commit('setToken', data.token)

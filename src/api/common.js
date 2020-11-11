@@ -222,14 +222,23 @@ export const video_index = (id) => {
   })
 }
 // 首页的本校课程
-export const myCourseList = ({ page, page_size, school_id }) => {
+export const myCourseList = (school_id) => {
   return axios.request({
     method: 'get',
     url: '/index.php/home/course/isShowSchoolCourses',
     params: {
-      page,
-      page_size,
       school_id
+    }
+  })
+}
+// 不同学校的课程
+export const schoolCourseList = ({ schoolId, major_id }) => {
+  return axios.request({
+    method: 'get',
+    url: '/home/index/isCheckSchoolCourses',
+    params: {
+      schoolId,
+      major_id
     }
   })
 }
@@ -238,6 +247,14 @@ export const courselist = () => {
   return axios.request({
     method: 'get',
     url: '/index.php/home/index/recommendCourse',
+    params: {}
+  })
+}
+// 获取推荐教师
+export const teacher_recommend = () => {
+  return axios.request({
+    method: 'get',
+    url: '/index.php/home/index/recommendTeacher',
     params: {}
   })
 }
@@ -284,13 +301,65 @@ export const get_unfollow = (teacher_id) => {
     }
   })
 }
-// 课程详情页面
-// export const get_courseMassge = (id) => {
-//   return axios.request({
-//     method: 'get',
-//     url: '/index.php/Teacher/Course/info',
-//     params: {
-//       id
-//     }
-//   })
-// }
+// 观看记录
+export const get_lookHistory = () => {
+  return axios.request({
+    method: 'post',
+    url: '/home/course/showMyViewRecord',
+    data: {
+    }
+  })
+}
+// 查看教师信息
+export const getTearher_Massgess = (teacher_id) => {
+  return axios.request({
+    method: 'get',
+    url: '/Teacher/User/teacher_message',
+    params: {
+      teacher_id
+    }
+  })
+}
+// 首页搜索
+export const get_search = (keyword) => {
+  return axios.request({
+    method: 'get',
+    url: '/index.php/home/index/getSearch',
+    params: {
+      keyword
+    }
+  })
+}
+// 未登录的教师列表
+export const taecherList_nologin = (school_id) => {
+  return axios.request({
+    url: 'home/index/teacher_list',
+    method: 'post',
+    data: {
+      school_id
+    }
+
+  })
+}
+// 未读通知数
+export const teacher_unread = () => {
+  return axios.request({
+    url: '/index.php/Teacher/Notice/unread',
+    method: 'get',
+    params: {
+    }
+  })
+}
+// 游客注册
+export const tourist_register = ({ account, password, user_type, email }) => {
+  return axios.request({
+    url: '/home/index/register/',
+    method: 'get',
+    params: {
+      account,
+      password,
+      user_type,
+      email
+    }
+  })
+}

@@ -3,50 +3,70 @@
     <div id='recommend'>
 
       <div class="recommend-choose">
-        <div @click="$router.push({name:'m_school_news'})">
+        <div @click="toRouter('mobileCourseTimetable')">
           <div>
             <Icon type="ios-bookmarks-outline" />
           </div>
-          <div>校内新闻</div>
+          <div>我的课表</div>
         </div>
-        <div>
+        <div @click="toRouter('mobileWatch')">
           <div>
             <Icon type="ios-time-outline" />
           </div>
-          <div>通知公告</div>
+          <div>观看记录</div>
         </div>
-        <div>
+        <div @click="toRouter('undo')">
           <div>
             <Icon type="ios-volume-up" />
           </div>
           <div>最新公告</div>
         </div>
         <div>
-          <div>
+          <div @click="toRouter('m_school_news')">
             <Icon type="ios-chatboxes-outline" />
           </div>
-          <div>问题讨论</div>
+          <div>校内新闻</div>
         </div>
       </div>
       <!--所有 学校 -->
-      <div class="schoolLists" v-for="(item,index) in schoolList" :key="index">
+      <!-- style="display:none" -->
+      <!-- <div class="schoolLists" v-for="(item,index) in schoolList" :key="index">
         <div ref="schoolList">
-          <div class="m_allschool" id="m_allschool" ref="li" style="display:none">
+          <div class="m_allschool" id="m_allschool" ref="li">
             <div class="m_allschool_a">
               <div class="m_allschool_icon"><img :src="item.school_icon" alt=""></div>
               <div class="m_allschool_school_name">
                 <div class="m_allschool_school_name_b">{{item.school_name}}</div>
-                <div class="m_allschool_school_name_s"
-                  @click="$router.push({ path: `/m_index_course/${schoolList[index].id}` })">查看该院校所有课程</div>
+
+                <div class="m_allschool_school_name_s" @click="lookall(index)">查看该院校所有课程</div>
               </div>
               <div class="m_allschool_name" @click="$router.push({name:'m_index_school'})">所有院校 ></div>
             </div>
           </div>
         </div>
+      </div> -->
+      <div class="schoolLists">
+        <swiper :options="swiperOption" ref="mySwiper">
+
+          <swiper-slide v-for="(item,index) in schoolList" :key="index" class="swiper_slide_news">
+            <div ref="schoolList">
+              <div class="m_allschool" id="m_allschool" ref="li">
+                <div class="m_allschool_a">
+                  <div class="m_allschool_icon"><img :src="item.school_icon" alt=""></div>
+                  <div class="m_allschool_school_name">
+                    <div class="m_allschool_school_name_b">{{item.school_name}}</div>
+                    <div class="m_allschool_school_name_s" @click="lookall(index)">查看该院校所有课程</div>
+                  </div>
+                  <div class="m_allschool_name" @click="$router.push({name:'m_index_school'})">所有院校 ></div>
+                </div>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper>
       </div>
       <indexSchool v-if="isSchool_show" @handle_schoolClose='handle_schoolClose'></indexSchool>
       <!-- 猜你喜欢 -->
-      <div class="m_allcourse_like">
+      <div class="m_allcourse_like" v-if="userType !==3">
         <div class="m_allcourse_like_header">
           <div class="m_allcourse_like_header_l">猜你喜欢</div>
           <div class="m_allcourse_likee_header_r" @click="handle_more">更多 ></div>
@@ -67,7 +87,7 @@
       <div class="m_Boutique">
         <div class="m_Boutique_header">
           <div class="m_Boutique_header_left">精品课程</div>
-          <div class="m_Boutique_header_right">更多 ></div>
+          <div class="m_Boutique_header_right" @click="Boutiquemore">更多 ></div>
         </div>
         <div class="m_Boutique_list">
           <div class="m_Boutique_list_item" v-for="(v,i) in newCourse" :key="i"
@@ -83,11 +103,12 @@
           </div>
         </div>
       </div>
+      <Boutique v-if="Boutiqueshow" @handleslot='Boutique_colse'></Boutique>
       <!-- 免费课程 -->
       <div class="m_Boutique free">
         <div class="m_Boutique_header">
           <div class="m_Boutique_header_left">免费课程</div>
-          <div class="m_Boutique_header_right free">更多 ></div>
+          <div class="m_Boutique_header_right free" @click="handlefreeshow">更多 ></div>
         </div>
         <div class="m_Boutique_list">
           <div class="m_Boutique_list_item" v-for="(v,i) in freeCourse" :key="i"
@@ -99,11 +120,11 @@
               <div class="m_Boutique_list_item_center1">{{v.course_name}}</div>
               <div class="m_Boutique_list_item_center2" v-html="v.description"></div>
               <div class="m_Boutique_list_item_center3">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
-
             </div>
           </div>
         </div>
       </div>
+      <free v-if="freeshow" @handleslot='handle_free'></free>
       <!-- 教师推荐 -->
       <div class="m_recommendTeacher">
         <div class="m_recommendTeacher-header">
@@ -111,7 +132,8 @@
           <div class="m_recommendTeacher-header-right" @click="handle_teach">更多></div>
         </div>
         <div class="m_recommendTeacher-center">
-          <div class="m_recommendTeacher-center_item" v-for="(v,i) in recommendlist" :key="i">
+          <div class="m_recommendTeacher-center_item" v-for="(v,i) in recommendlist" :key="i"
+            @click="$router.push({path: `/m_index_school_teacherUser/${v.teacher_id}`})">
             <div class="m_recommendTeacher-center_item_icon">
               <img :src="v.icon" alt="">
             </div>
@@ -119,7 +141,6 @@
               <div class="m_recommendTeacher-center_item_name1">
                 <div class="m_recommendTeacher-center_item_name1_l"> {{v.name}}</div>
                 <div class="m_recommendTeacher-center_item_name1_r"> {{v.course_count}}</div>
-
               </div>
               <div class="m_recommendTeacher-center_item_name2">院校：{{v.school_name}}</div>
               <div class="m_recommendTeacher-center_item_name3">职业：{{v.major_name}}</div>
@@ -137,13 +158,18 @@
   </div>
 </template>
 <script>
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
 import indexLike from '@/view/mobile_page/components/m_index/m_index_like'
 import { Toast, Indicator } from 'mint-ui'
 import indexTeacher from '@/view/mobile_page/components/m_index/m_index_teacher'
+import Boutique from '@/view/mobile_page/components/m_index/m_index_Boutique'
+import free from '@/view/mobile_page/components/m_index/m_index_free'
 import { get_Course, get_recommend } from '@/api/common'
 import log from 'video.js/es5/utils/log'
 export default {
-  components: { indexLike, indexTeacher },
+  components: { indexLike, indexTeacher, swiper, swiperSlide, Boutique, free },
+
   data () {
     return {
       schoolList: [], // 所有学校
@@ -154,9 +180,26 @@ export default {
       recommendlist: [], // 教师推荐
       m: 1,
       ishshow: false,
+      Boutiqueshow: false,
+      freeshow: false,
       isteacth_show: false,
       isReloadData: true,
-      isSchool_show: false // 所有院校的组件打开和关闭
+      isSchool_show: false, // 所有院校的组件打开和关闭
+      swiperOption: {
+        notNextTick: true,
+        direction: 'vertical',
+        // directionType: "vertical",   //控制滚动的方向
+        paginationClickable: true,
+        autoplay: {
+          delay: 2000,  //这里需要注意，如果想每2秒去自动切换，直接autoplay:2000是失效的，
+          stopOnLastSlide: false,
+          disableOnInteraction: false
+        },
+        loop: false,
+        speed: 1000,
+
+      }
+
     }
   },
   // 暴露父页面的'方法' 父传子
@@ -165,13 +208,33 @@ export default {
       reload: this.reload
     }
   },
-  methods: {
-    // look (index) {
-    //   console.log(index);
-    //   this.
-    //   // this.$router.push({ path: `/m_index_cours/${this.schoolList[index].id}` })
+  computed: {
+    swiper () {
+      return this.$refs.mySwiper.swiper
+    },
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    }
 
-    // },
+  },
+  methods: {
+    toRouter (i) {
+      if (this.userType === 3) {
+        Toast({
+          message: '请先注册登录....',
+          duration: 2000
+        })
+        return
+      } else {
+        this.$router.push({ name: i })
+      }
+
+    },
+    lookall (index) {
+      this.$router.push({ path: `/m_index_school_team/${this.schoolList[index].id}` })
+      this.$store.commit('setSschoolMesage', this.schoolList[index])
+
+    },
     // 刷新事件
     reload () {
       this.isReloadData = false
@@ -187,10 +250,22 @@ export default {
     handle_teach () {
       this.isteacth_show = true
     },
-
+    Boutique_colse () {
+      this.Boutiqueshow = false
+    },
     // 关闭猜你喜欢的更多
     handle_slot () {
       this.ishshow = false
+    },
+    handle_free () {
+      this.freeshow = false
+    },
+    handlefreeshow () {
+      this.freeshow = true
+    },
+    // 精品更多
+    Boutiquemore () {
+      this.Boutiqueshow = true
     },
     // 猜你喜欢的更多
     handle_more () {
@@ -240,7 +315,8 @@ export default {
         .then(res => {
           if (res.code === 200) {
             this.schoolList = res.data.list
-            console.log(this.schoolList)
+            console.log(this.schoolList);
+
           }
         })
     },
@@ -272,76 +348,76 @@ export default {
     },
     // 手指滑动监听处理
     getallschool () {
-      setTimeout(() => {
-        var Li = this.$refs.li
-        // var Li = document.querySelectorAll('.m_allschool')
-        Li[0].style.display = 'block'
-        var startx, starty
-        // 获得角度
-        function getAngle (angx, angy) {
-          return Math.atan2(angy, angx) * 180 / Math.PI
-        };
-        // 根据起点终点返回方向 1向上滑动 2向下滑动 3向左滑动 4向右滑动 0点击事件
-        function getDirection (startx, starty, endx, endy) {
-          var angx = endx - startx
-          var angy = endy - starty
-          var result = 0
-          // 如果滑动距离太短
-          if (Math.abs(angx) < 2 && Math.abs(angy) < 2) {
-            return result
-          }
-          var angle = getAngle(angx, angy)
-          if (angle >= -135 && angle <= -45) {
-            result = 1
-          } else if (angle > 45 && angle < 135) {
-            result = 2
-          } else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
-            result = 3
-          } else if (angle >= -45 && angle <= 45) {
-            result = 4
-          }
-          return result
-        }
-        // 手指开始触摸屏幕
-        for (let i = 0; i <= Li.length; i++) {
-          Li[i].index = i
-          Li[i].addEventListener('touchstart', function (e) {
-            // var j = this.index
-            document.querySelector('body').style.overflow = 'hidden'
-            startx = e.touches[0].pageX
-            starty = e.touches[0].pageY
-          })
-          // 手指离开屏幕
-          Li[i].addEventListener('touchend', function (e) {
-            document.querySelector('body').style.overflow = 'auto'
-            var endx, endy
-            var j = this.index
-            endx = e.changedTouches[0].pageX
-            endy = e.changedTouches[0].pageY
-            var direction = getDirection(startx, starty, endx, endy)
-            switch (direction) {
-              case 0:
-                break
-              case 1:
-                // alert("向上！");
-                Li[j].style.display = 'none'
-                Li[j + 1].style.display = 'block'
-                if (j === Li.length - 2) {
+      // setTimeout(() => {
+      //   var Li = this.$refs.li
+      //   // var Li = document.querySelectorAll('.m_allschool')
+      //   Li[0].style.display = 'block'
+      //   var startx, starty
+      //   // 获得角度
+      //   function getAngle (angx, angy) {
+      //     return Math.atan2(angy, angx) * 180 / Math.PI
+      //   };
+      //   // 根据起点终点返回方向 1向上滑动 2向下滑动 3向左滑动 4向右滑动 0点击事件
+      //   function getDirection (startx, starty, endx, endy) {
+      //     var angx = endx - startx
+      //     var angy = endy - starty
+      //     var result = 0
+      //     // 如果滑动距离太短
+      //     if (Math.abs(angx) < 2 && Math.abs(angy) < 2) {
+      //       return result
+      //     }
+      //     var angle = getAngle(angx, angy)
+      //     if (angle >= -135 && angle <= -45) {
+      //       result = 1
+      //     } else if (angle > 45 && angle < 135) {
+      //       result = 2
+      //     } else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
+      //       result = 3
+      //     } else if (angle >= -45 && angle <= 45) {
+      //       result = 4
+      //     }
+      //     return result
+      //   }
+      //   // 手指开始触摸屏幕
+      //   for (let i = 0; i <= Li.length; i++) {
+      //     Li[i].index = i
+      //     Li[i].addEventListener('touchstart', function (e) {
+      //       // var j = this.index
+      //       document.querySelector('body').style.overflow = 'hidden'
+      //       startx = e.touches[0].pageX
+      //       starty = e.touches[0].pageY
+      //     })
+      //     // 手指离开屏幕
+      //     Li[i].addEventListener('touchend', function (e) {
+      //       document.querySelector('body').style.overflow = 'auto'
+      //       var endx, endy
+      //       var j = this.index
+      //       endx = e.changedTouches[0].pageX
+      //       endy = e.changedTouches[0].pageY
+      //       var direction = getDirection(startx, starty, endx, endy)
+      //       switch (direction) {
+      //         case 0:
+      //           break
+      //         case 1:
+      //           // alert("向上！");
+      //           Li[j].style.display = 'none'
+      //           Li[j + 1].style.display = 'block'
+      //           if (j === Li.length - 2) {
 
-                  // Li[0].style.display = 'block'
-                  Toast({
-                    message: '已经最后一项了...',
-                    duration: 2000
-                  })
-                  return
-                }
-                break
-            }
+      //             // Li[0].style.display = 'block'
+      //             Toast({
+      //               message: '已经最后一项了...',
+      //               duration: 2000
+      //             })
+      //             return
+      //           }
+      //           break
+      //       }
 
-          }, false)
-        }
+      //     }, false)
+      //   }
 
-      }, 1000)
+      // }, 1000)
     },
     // 获取教师推荐
     get_recommend () {
@@ -363,7 +439,10 @@ export default {
     },
 
   },
+
   mounted () {
+    console.log(this.userType);
+
     this.getSchoolList()
     this.get_Course()
     this.get_recommend()
@@ -372,6 +451,12 @@ export default {
 }
 </script>
 <style lang='less' scoped>
+/deep/.swiper-container {
+  height: 1.7rem;
+  margin-left: auto;
+  margin-right: auto;
+  // background-color: pink;
+}
 .hidden {
   overflow: hidden;
 }

@@ -18,9 +18,11 @@
         <div class="m-userCenter-icon">
           <img src="@/assets/images/mobile_student/userInfot.png" v-if="userInfo.userInfo.userType===1"
             @click="toRouter('mobileUserInfoT')" />
+
           <img src="@/assets/images/mobile_student/userInfot.png" v-if="userInfo.userInfo.userType===2"
             @click="toRouter('mobileUserInfo')" />
-          <img src="@/assets/images/mobile_student/settings.png" />
+
+          <img src="@/assets/images/mobile_student/settings.png" @click="toRouter('usersetting')" />
         </div>
       </div>
       <teacherItem v-if="userInfo.userInfo.userType===1"></teacherItem>

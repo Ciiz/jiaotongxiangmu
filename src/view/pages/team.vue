@@ -2,19 +2,19 @@
   <div class="team">
     <Row class="team_img">
       <col>
-      <img src="@/assets/images/login-bg.jpg" alt="">
+      <div class="team_img_img"></div>
+      <!-- <img src="@/assets/images/login-bg.jpg" alt=""> -->
       <col>
     </Row>
 
     <Row class="team_school">
       <col>
       <Button type="info">
-
         <span>全部</span>
-
       </Button>
       <div class="team_school_list">
-        <span v-for="(item,index) in schoolList" :key="index"><a href="#">{{item.school_name}}</a></span>
+        <span v-for="(item,index) in schoolList" :key="index"><a href="#"
+            @click="handleSchoolList(index)">{{item.school_name}}</a></span>
         <router-link to="partner">
           <Icon type="md-arrow-dropdown" size="20" color="#000" />
         </router-link>
@@ -34,8 +34,9 @@
             </Option>
           </Select>
 
-          <Input placeholder="" style="width: auto;margin-left:50px ;">
-          <Icon type="ios-search" slot="suffix" />
+          <Input placeholder="" style="width: auto;margin-left:50px ;" v-model="searchvalue"
+            @keyup.enter.native="handlesearch">
+          <Icon type="ios-search" slot="suffix" @click.native="handlesearch" />
           </Input>
         </div>
         <div class="teacher_team_select_r">
@@ -59,7 +60,8 @@
       <col>
       <div class="teacher_team_big">
         <div class="teacher_team_father">
-          <div class="teacher_team_item" v-for="(item,index) in teacherList" :key="index">
+          <div class="teacher_team_item" v-for="(item,index) in teacherList" :key="index"
+            @click="$router.push({ path: `/teacher_homepage/${item.id}`})">
             <div class="teacher_team_item_top">
               <div class="teacher_team_item_img">
                 <img :src="item.icon" alt="">
@@ -86,7 +88,8 @@
 </template>
 
 <script>
-import { get_recommend } from '@/api/common.js'
+import { get_recommend, get_search, taecherList_nologin } from '@/api/common.js'
+import { get_taecherList } from '@/api/teacher'
 export default {
   name: 'team',
 
@@ -98,9 +101,49 @@ export default {
       teacherList: [],
       moreteacherList: [],
       teacherSelect: [],
+      searchvalue: '',
+
     }
   },
+  computed: {
+    schoolId () {
+      return this.$store.state.user.userInfo.schoolId
+    },
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    },
+  },
   methods: {
+    handleSchoolList (index) {
+      taecherList_nologin(this.schoolList[index].id).then(res => {
+        console.log(res);
+
+        if (res.data.teacher_list.length > 8) {
+          this.teacherList = res.data.teacher_list.slice(0, 8)
+        } else {
+          this.teacherList = res.data.teacher_list
+        }
+        this.moreteacherList = res.data.teacher_list
+        this.teacherSelect = res.data.teacher_list
+      })
+
+
+
+    },
+    handlesearch () {
+      get_search(this.searchvalue).then(res => {
+        console.log(res);
+        if (res.data.teaher_data.length !== 0) {
+          this.teacherList = res.data.teaher_data
+          this.moreteacherList.length = 8
+        } else {
+          this.teacherList = []
+          this.$Message.info("暂无可搜的教师哦！")
+          this.moreteacherList.length = 8
+        }
+
+      })
+    },
     handlemore () {
       this.teacherList = this.moreteacherList
     },
@@ -108,18 +151,26 @@ export default {
       this.teacherList = this.teacherSelect.filter(v => {
         return v.major_name === value
       })
+      this.moreteacherList.length = 8
+      this.searchvalue = ''
     },
-    // 获取教师推荐
+    // 获取教师列表
     get_command_teacher () {
-      get_recommend().then(res => {
-        if (res.data.data.length > 8) {
-          this.teacherList = res.data.data.slice(0, 8)
+
+      taecherList_nologin().then(res => {
+        console.log(res);
+        if (res.data.teacher_list.length > 8) {
+          this.teacherList = res.data.teacher_list.slice(0, 8)
+        } else {
+          this.teacherList = res.data.teacher_list
         }
-        this.moreteacherList = res.data.data
-        this.teacherSelect = res.data.data
+        this.moreteacherList = res.data.teacher_list
+        this.teacherSelect = res.data.teacher_list
 
 
       })
+
+
     },
     // 获取学校列表
     getSchoolList () {
@@ -130,6 +181,8 @@ export default {
           url: '/index.php/Home/Index/getSchoolList'
         })
         .then(res => {
+          console.log(res);
+
           if (res.code === 200) {
             if (res.data.list.length >= 8) {
               res.data.list.length = 8
@@ -175,11 +228,18 @@ export default {
     margin: 20px auto;
     width: 1200px;
     height: 140px;
-    img {
-      border-radius: 4px;
+
+    .team_img_img {
       height: 100%;
-      // width: 1200px;
       width: 100%;
+
+      background: url(../../assets/images/login-bg.jpg) center center;
+    }
+    img {
+      // border-radius: 4px;
+      // // height: 100%;
+      // width: 1200px;
+      // width: 100%;
     }
   }
   .team_school {
@@ -200,11 +260,12 @@ export default {
       margin-left: 20px;
 
       span {
-        // margin: 0 17px;
-        // font-size: 13px;
         a {
           color: #000;
           // font-size: 12px;
+        }
+        a:hover {
+          color: #2ba4e7ff;
         }
       }
     }

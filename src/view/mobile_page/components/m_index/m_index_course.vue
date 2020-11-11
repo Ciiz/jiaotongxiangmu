@@ -3,7 +3,8 @@
     <div class="m_Boutique">
 
       <div class="m_Boutique_list">
-        <div class="m_Boutique_list_item" v-for="(v,i) in teacher_course" :key="i">
+        <div class="m_Boutique_list_item" v-for="(v,i) in teacher_course" :key="i"
+          @click="$router.push({path:`/m_index_videoCourse/${v.id}`})">
           <div class="m_Boutique_list_item_img">
             <img :src="v.img" alt="">
           </div>
@@ -15,9 +16,7 @@
                 {{v.play_count}}</div>
               <div class="m_Boutique_list_item_center3_num" v-else>0</div>
               <div class="m_Boutique_list_item_center3_time"> {{moment(v.created_at * 1000).format('HH:mm')}}</div>
-
             </div>
-
           </div>
         </div>
       </div>
@@ -27,31 +26,35 @@
 
 <script>
 import { Indicator } from 'mint-ui'
-import { get_courseMassge } from '@/api/common'
+import { get_courseMassge, schoolCourseList } from '@/api/common'
 export default {
   data () {
     return {
       teacher_course: []
     }
   },
-
   methods: {},
   mounted () {
     Indicator.open({
       text: '加载中...',
       spinnerType: 'fading-circle'
     })
-    this.axios.request({
-      method: 'post',
-      url: '/home/course/isShowSchoolCourses',
-      params: {
-        school_id: this.$route.params.id
-      }
-    }).then(result => {
-      console.log(result)
-      this.teacher_course = result.data.list
+    schoolCourseList(this.$route.params.id).then(res => {
+      console.log(res);
+      this.teacher_course = res.data.list
       Indicator.close()
     })
+    // this.axios.request({
+    //   method: 'post',
+    //   url: '/home/course/isShowSchoolCourses',
+    //   params: {
+    //     school_id: this.$route.params.id
+    //   }
+    // }).then(result => {
+    //   console.log(result)
+    //   this.teacher_course = result.data.list
+    //   Indicator.close()
+    // })
   }
 
 }

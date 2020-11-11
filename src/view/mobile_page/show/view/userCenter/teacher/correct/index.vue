@@ -2,7 +2,7 @@
   <div class="flex-contain">
     <div>
       <div class="m-correct-backBtn">
-        <img src="@/assets/images/mobile_teacher/back.png" @click="back()"/>
+        <img src="@/assets/images/mobile_teacher/back.png" @click="back()" />
       </div>
       <div class="m-correct-navbar">
         <mt-navbar v-model="correct_status">
@@ -12,7 +12,8 @@
       </div>
     </div>
     <div class="m-correct-contain hideScroll">
-      <div v-for="(item,index) in tasklist" :key="index" class="m-correct-list-item" @click="showDetail(item.task_release_id,'task')">
+      <div v-for="(item,index) in tasklist" :key="index" class="m-correct-list-item"
+        @click="showDetail(item.task_release_id,'task')">
         <div class="m-correct-list-item-title">{{item.task_name}}</div>
         <div>
           <span style="margin-right:0.4rem">{{item.course_name}}</span>
@@ -24,7 +25,8 @@
         </div>
         <div>截止时间：{{moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')}}</div>
       </div>
-      <div v-for="(item,index) in homeworklist" :key="index" class="m-correct-list-item" @click="showDetail(item.homework_release_id,'homework')">
+      <div v-for="(item,index) in homeworklist" :key="index" class="m-correct-list-item"
+        @click="showDetail(item.homework_release_id,'homework')">
         <div class="m-correct-list-item-title">{{item.homework_name}}</div>
         <div>
           <span style="margin-right:0.4rem">{{item.course_name}}</span>
@@ -36,7 +38,8 @@
         </div>
         <div>截止时间：{{moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')}}</div>
       </div>
-      <div v-for="(item,index) in examlist" :key="index" class="m-correct-list-item" @click="showDetail(item.exam_release_id,'exam')">
+      <div v-for="(item,index) in examlist" :key="index" class="m-correct-list-item"
+        @click="showDetail(item.exam_release_id,'exam')">
         <div class="m-correct-list-item-title">{{item.exam_name}}</div>
         <div>
           <span style="margin-right:0.4rem">{{item.course_name}}</span>

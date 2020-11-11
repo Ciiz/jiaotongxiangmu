@@ -4,7 +4,8 @@
       <span slot="left"><img src="@/assets/images/mobile_teacher/back.png" alt="" @click="$router.back(-1)"></span>
       <span slot="right"></span>
     </cell>
-    <div class="mobileWatch_list">
+    <div v-if="mobileWatch.length===0" style=" margin-left: 0.3rem;">暂无观看记录...</div>
+    <div class="mobileWatch_list" v-else>
       <ul v-if="todayList.length !==0">
         <span class="daystyle">今天</span>
         <li v-for="(item,index) in todayList" :key="item.index">
@@ -70,7 +71,6 @@ export default {
       moredayList: []
     }
   },
-
   methods: {
     WatchList () {
       Indicator.open()

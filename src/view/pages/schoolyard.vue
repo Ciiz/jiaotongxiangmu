@@ -10,29 +10,19 @@
       <Row class="allschool_and_major">
         <col>
         <Button type="info">
-
           <span>全部</span>
-
         </Button>
         <div class="allschool_list">
-          <span v-for="(item,index) in schoolList" :key="index"><a href="#">{{item.school_name}}</a></span>
-          <!-- <div @mouseover="enter">
-            <Icon type="md-arrow-dropdown" size="20" color="#000" />
-          </div> -->
-
-          <!-- <div class="school_name_list" v-for="(v,i) in DropdownItem_schoolList" :key="i">
-            {{v.school_name}}</div> -->
+          <span v-for="(item,index) in schoolList" :key="index"><a href="#"
+              @click="handleschoolList(index)">{{item.school_name}}</a></span>
           <Dropdown style="margin-left: 20px">
             <Icon type="md-arrow-dropdown" size="20" color="#000" />
             <DropdownMenu slot="list" type="flex" class="schoolyard_DropdownMenu">
-              <DropdownItem disabled v-for="(v,i) in DropdownItem_schoolList" :key="i">{{v.school_name}}
+              <DropdownItem v-for="(v,i) in DropdownItem_schoolList" :key="i" @click.native="handleschoolList(i)">
+                {{v.school_name}}
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <!-- <router-link to="partner">
-            <Icon type="md-arrow-dropdown" size="20" color="#000" />
-          </router-link> -->
-
         </div>
         </col>
 
@@ -46,43 +36,39 @@
 
         </Button>
         <div class="allschool_list">
-          <span v-for="(item,index) in majorList" :key="index"><a href="#">{{item.major_name}}</a></span>
-          <Icon type="md-arrow-dropdown" size="20" color="#000" />
+          <span v-for="(item,index) in majorList" :key="index"><a href="#"
+              @click="handleMajorList(index)">{{item.major_name}}</a></span>
+          <Dropdown style="margin-left: 20px">
+            <Icon type="md-arrow-dropdown" size="20" color="#000" />
+            <DropdownMenu slot="list" type="flex" class="schoolyard_DropdownMenu">
+              <DropdownItem v-for="(v,i) in majorListAll" :key="i" @click.native="handleMajorList(i)">{{v.major_name}}
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
         </col>
 
       </Row>
     </div>
+
     <!-- 精品课程 -->
-    <!-- <Row>
-        <col>
-        <div class="boutique">
-          <div class="boutique_header_left">
-                精品课程
-          </div>
-          <div class="boutique_header_right">
-                查看更多>>
-          </div>
-         </div>
-        </col>
-      </Row> -->
-    <!-- 精品课程 -->
-    <div style="background-color: #f8f8f8;">
+    <div>
       <Tabs value="allCourse" class="index-tabs" @on-click="changeTabs">
         <TabPane label="精品课程" name="allCourse">
           <Row type="flex" justify="space-between" class="new-index-course-header">
 
             <Col>
-            <RadioGroup>
+            <RadioGroup @on-change='handle_Radio'>
               <Radio label="全部"></Radio>
-              <Radio label="精选课程"></Radio>
-              <Radio label="免费课程"></Radio>
+              <Radio label="视频"></Radio>
+              <Radio label="全景"></Radio>
             </RadioGroup>
             </Col>
           </Row>
           <ul>
-            <div v-if="commandCourseList.length===0" style="height:200px">暂无推荐课程</div>
-            <li v-for="(item,index) in commandCourseList" :key="index" class="index-course-item">
+            <div v-if="newCourse.length===0" style="height:200px">暂无推荐课程</div>
+            <li v-for="(item,index) in newCourse" :key="index" class="index-course-item"
+              @click="$router.push({ path: `/videojump/${item.id}` })">
               <img :src="item.img" style="width:100%;height:150px" />
               <div class="index-course-name">{{item.course_name}}</div>
               <div class="index-course-majorname">{{item.course_label}}</div>
@@ -90,8 +76,7 @@
             <div style="clear:both"></div>
           </ul>
         </TabPane>
-
-        <TabPane label="本校课程" name="schoolCourse" v-if="token!==''&&token!==false&&token!==undefined&&userId!==''">
+        <!-- <TabPane label="本校课程" name="schoolCourse" v-if="token!==''&&token!==false&&token!==undefined&&userId!==''">
           <Row type="flex" justify="space-between" class="new-index-course-header">
             <Col>
             <Select v-model="major" style="width:200px">
@@ -100,7 +85,7 @@
             </Select>
             </Col>
             <Col>
-            <RadioGroup>
+            <RadioGroup @on-change='handle_change'>
               <Radio label="全部"></Radio>
               <Radio label="精选课程"></Radio>
               <Radio label="免费课程"></Radio>
@@ -116,9 +101,9 @@
             </li>
             <div style="clear:both"></div>
           </ul>
-        </TabPane>
+        </TabPane> -->
       </Tabs>
-      <div style="text-align:center;margin-bottom:51px">
+      <div style="text-align:center;margin-bottom:51px" @click="handlenewCoursemore">
         <button class="index-course-more-btn">加载更多...</button>
       </div>
     </div>
@@ -129,7 +114,7 @@
           <Row type="flex" justify="space-between" class="new-index-course-header">
 
             <Col>
-            <RadioGroup>
+            <RadioGroup @on-change='handle_Radio2'>
               <Radio label="全部"></Radio>
               <Radio label="视频"></Radio>
               <Radio label="全景"></Radio>
@@ -137,8 +122,9 @@
             </Col>
           </Row>
           <ul>
-            <div v-if="commandCourseList.length===0" style="height:200px">暂无推荐课程</div>
-            <li v-for="(item,index) in commandCourseList" :key="index" class="index-course-item">
+            <div v-if="freeCourse.length===0" style="height:200px">暂无推荐课程</div>
+            <li v-for="(item,index) in freeCourse" :key="index" class="index-course-item"
+              @click="$router.push({ path: `/videojump/${item.id}` })">
               <img :src="item.img" style="width:100%;height:150px" />
               <div class="index-course-name">{{item.course_name}}</div>
               <div class="index-course-majorname">{{item.course_label}}</div>
@@ -147,7 +133,7 @@
           </ul>
         </TabPane>
 
-        <TabPane label="本校课程" name="schoolCourse" v-if="token!==''&&token!==false&&token!==undefined&&userId!==''">
+        <!-- <TabPane label="本校课程" name="schoolCourse" v-if="token!==''&&token!==false&&token!==undefined&&userId!==''">
           <Row type="flex" justify="space-between" class="new-index-course-header">
             <Col>
             <Select v-model="major" style="width:200px">
@@ -172,9 +158,9 @@
             </li>
             <div style="clear:both"></div>
           </ul>
-        </TabPane>
+        </TabPane> -->
       </Tabs>
-      <div style="text-align:center;margin-bottom:51px">
+      <div style="text-align:center;margin-bottom:51px" @click="handlefreeCourseemore">
         <button class="index-course-more-btn">加载更多...</button>
       </div>
     </div>
@@ -187,7 +173,8 @@
         <Icon type="ios-arrow-back" size="60" color="#E1E1E1" @click="scroll(--tItemIndex)" />
         <div class="index-teacher-list-d">
           <ul class="index-teacher-list-ul">
-            <li v-for="(item,index) in teacherList" :key="index" class="index-teacher-item">
+            <li v-for="(item,index) in teacherList" :key="index" class="index-teacher-item"
+              @click="$router.push({path:`/teacher_homepage/${item.teacher_id}`})">
               <div>
                 <img :src="item.icon" />
               </div>
@@ -198,7 +185,7 @@
         </div>
         <Icon type="ios-arrow-forward" size="60" color="#E1E1E1" @click="scroll(++tItemIndex)" />
       </div>
-      <div style="text-align:center;margin-bottom:51px">
+      <div style="text-align:center;margin-bottom:51px" @click="$router.push({name:'team'})">
         <button class="index-course-more-btn">教师团队...</button>
       </div>
     </div>
@@ -206,6 +193,8 @@
 </template>
 
 <script>
+import { get_majors, courselist, teacher_recommend, myCourseList, schoolCourseList } from '@/api/common'
+import log from 'video.js/es5/utils/log'
 export default {
   name: 'schoolyard',
 
@@ -215,11 +204,17 @@ export default {
       majorList: [],
       // getData: [],
       major: '',
-      courseList: [],
+      schoolCourse: [],
       teacherList: [],
       tItemIndex: 0,
       schoolList: [],
-      DropdownItem_schoolList: []
+      DropdownItem_schoolList: [],
+      comamnd_Select_list: [],
+      newCourse: [],
+      freeCourse: [],
+      majorListAll: [],
+      newCourseAll: [],
+      freeCourseAll: []
 
     }
   },
@@ -252,45 +247,175 @@ export default {
   },
 
   methods: {
-    get_command_teacher () {
-      // 获取推荐教师
-      this.axios
-        .request({
-          method: 'get',
-          url: '/index.php/home/index/recommendTeacher',
-          params: {}
-        })
-        .then(res => {
-          this.teacherList = res.data.data
-        })
+    // 单选
+    handle_Radio (value) {
+      if (value === "视频") {
+        value = 1
+      }
+      else if (value === '全景') {
+        value = 2
+      }
+      else {
+        value = 0
+      }
+      var coursearr = this.newCourseAll.filter(v => {
+        return v.course_type === value
+      })
+      if (coursearr.length > 10) {
+        coursearr.length = 10
+      }
+      this.newCourse = coursearr
+      if (value === 0) {
+        this.newCourse = this.newCourseAll
+        if (this.newCourse.length > 10) {
+          this.newCourse.length = 10
+        }
+      }
     },
-    getData () {
-      // 获取本校课程
-      this.axios
-        .request({
-          method: 'get',
-          url: '/index.php/home/course/isShowSchoolCourses',
-          params: {
-            page: 1,
-            page_size: 10,
-            school_id: this.schoolId
+    handle_Radio2 (value) {
+      if (value === "视频") {
+        value = 1
+      }
+      else if (value === '全景') {
+        value = 2
+      }
+      else {
+        value = 0
+      }
+      var coursearr2 = this.freeCourseAll.filter(v => {
+        return v.course_type === value
+      })
+      if (coursearr2.length > 10) {
+        coursearr2.length = 10
+      }
+      this.freeCourse = coursearr2
+      if (value === 0) {
+        this.freeCourse = this.freeCourseAll
+        if (this.newCourse.length > 10) {
+          this.freeCourse.length = 10
+        }
+      }
+    },
+    handleMajorList (index) {
+      var majorcourse = this.schoolCourse.filter(v => {
+        return this.majorList[index].major_name === v.major_name
+      })
+      if (majorcourse.length == 0) {
+        this.$Message.error('该专业暂时没有课程推荐...')
+      }
+      var arr = [];
+      var arr2 = [];
+      majorcourse.forEach((v, i) => {
+        if (v.is_charge === 1) {
+          arr.push(v)
+          this.newCourseAll = arr
+          if (arr.length > 10) {
+            this.newCourse = arr.slice(0, 10)
+          } else {
+            this.newCourse = arr
+          }
+        }
+        if (v.is_charge === 0) {
+          arr2.push(v)
+          this.freeCourseAll = arr2
+          if (arr2.length > 10) {
+            this.freeCourse = arr2.slice(0, 10)
+          } else {
+            this.freeCourse = arr2
+          }
+        }
+      })
+    },
+    handleschoolList (ind) {
+      schoolCourseList(
+        this.DropdownItem_schoolList[ind].id
+      ).then(res => {
+        if (res.data.list.length == 0) {
+          this.$Message.error('该学校暂时没有课程推荐...')
+        }
+        this.schoolCourse = res.data.list
+        var arr = [];
+        var arr2 = [];
+        res.data.list.forEach((v, i) => {
+          if (v.is_charge === 1) {
+            arr.push(v)
+            this.newCourseAll = arr
+            if (arr.length > 10) {
+              this.newCourse = arr.slice(0, 10)
+            } else {
+              this.newCourse = arr
+            }
+          }
+          if (v.is_charge === 0) {
+            arr2.push(v)
+            this.freeCourseAll = arr2
+            if (arr2.length > 10) {
+              this.freeCourse = arr2.slice(0, 10)
+            } else {
+              this.freeCourse = arr2
+            }
           }
         })
-        .then(res => {
-          this.courseList = res.data.list
+      })
+    },
+    handlenewCoursemore () {
+      if (this.newCourseAll.length > 10) {
+        this.newCourse = this.newCourseAll
+      } else {
+        this.$Message.warning('没有更多了....');
+      }
+    },
+    handlefreeCourseemore () {
+      if (this.freeCourseAll.length > 10) {
+        this.freeCourse = this.freeCourseAll
+      } else {
+        this.$Message.warning('没有更多了....');
+      }
+
+    },
+    get_command_teacher () {
+      // 获取推荐教师
+      teacher_recommend().then(res => {
+        this.teacherList = res.data.data
+      })
+    },
+    get_schoolCourseList (id) {
+      schoolCourseList(id).then(res => {
+        console.log(res);
+        this.schoolCourse = res.data.list
+        // 获取精品课程 和 获取免费课程
+        var arr = [];
+        var arr2 = []
+        res.data.list.forEach((v, i) => {
+          if (v.is_charge === 1) {
+            arr.push(v)
+            this.newCourseAll = arr
+            if (arr.length > 10) {
+              this.newCourse = arr.slice(0, 10)
+            } else {
+              this.newCourse = arr
+            }
+          }
+          if (v.is_charge === 0) {
+            arr2.push(v)
+            this.freeCourseAll = arr2
+            if (arr2.length > 10) {
+              this.freeCourse = arr2.slice(0, 10)
+            } else {
+              this.freeCourse = arr2
+            }
+          }
         })
+      })
     },
     get_command_course () {
-      // 获取推荐课程
-      this.axios
-        .request({
-          method: 'get',
-          url: '/index.php/home/index/recommendCourse',
-          params: {}
-        })
-        .then(res => {
-          this.commandCourseList = res.data.data
-        })
+      // 首页课程推荐
+      if (this.schoolId) {
+        this.get_schoolCourseList(this.schoolId)
+      } else {
+        this.get_schoolCourseList({ schoolId: '' })
+      }
+
     },
     changeTabs (i) {
       if (i === 'allCourse') {
@@ -303,22 +428,24 @@ export default {
 
     getMajor () {
       // 获取所有学校所有专业信息
-      this.axios
-        .request({
-          method: 'post',
-          url: '/index.php/home/index/getAllMajor',
-          data: {}
-        })
+      this.axios.request({
+        method: 'post',
+        url: '/index.php/home/index/getAllMajor',
+        data: {}
+      })
         .then(res => {
+          console.log(res);
+
           if (res.data.list.length >= 12) {
             res.data.list.length = 12
             this.majorList = res.data.list
-            // console.log(res);
           }
           this.majorList = res.data.list
+          this.majorListAll = res.data.list
+
         })
     },
-    // z左右箭头的切换
+    // 左右箭头的切换
     scroll (i) {
       let teacherlist = document.getElementsByClassName(
         'index-teacher-list-ul'
@@ -337,37 +464,40 @@ export default {
     },
     // 获取学校列表
     getSchoolList () {
-      // let schoolList = []
-      // this.DropdownItem_schoolList = [];
       this.axios
         .request({
           method: 'get',
           url: '/index.php/Home/Index/getSchoolList'
         })
         .then(res => {
+          console.log(res);
           if (res.code === 200) {
             if (res.data.list.length >= 8) {
               this.schoolList = res.data.list.slice(0, 8)
-              console.log(this.schoolList)
+            } else {
+              this.schoolList = res.data.list
             }
             this.DropdownItem_schoolList = res.data.list
+            console.log(this.DropdownItem_schoolList);
+
           }
         })
     }
   },
   mounted () {
+    // this.getData()
     this.getSchoolList()
     this.get_command_course()
     this.getMajor()
     this.get_command_teacher()
-    if (
-      this.token !== '' &&
-      this.token !== false &&
-      this.token !== undefined &&
-      this.userId !== ''
-    ) {
-      this.getData()
-    }
+    // if (
+    //   this.token !== '' &&
+    //   this.token !== false &&
+    //   this.token !== undefined &&
+    //   this.userId !== ''
+    // ) {
+    //   this.getData()
+    // }
   }
 }
 </script>
@@ -521,6 +651,9 @@ export default {
       align-items: center;
 
       .allschool_list {
+        a:hover {
+          color: #2ba4e7ff;
+        }
         .schoolyard_DropdownMenu {
           display: flex;
           flex-wrap: wrap;
@@ -535,11 +668,11 @@ export default {
         /deep/.ivu-select-dropdown {
           width: 1200px;
           background-color: #fff;
-
           position: absolute;
           left: 0 !important;
           // opacity: 0.6;
           display: flex;
+          top: 30px !important;
         }
         flex: 1;
         display: flex;

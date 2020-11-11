@@ -23,10 +23,10 @@
         <button class="login-btn" @click="handleSubmit">立即登录</button>
       </div>
     </div>
-    <div class="login-bottom">
+    <!-- <div class="login-bottom">
       <Divider style="font-size:0.24rem;color:#9A9A9A">使用微信账号登录</Divider>
       <img src="@/assets/images/mobile_student/wechat.jpg" />
-    </div>
+    </div> -->
     <div id="peopleChorseT" @click="openQuestionType"></div>
     <mt-popup v-model="popupVisible" v-if="popupVisible===true" popup-transition="popup-fade" closeOnClickModal="true"
       position="bottom" style="width:100%">

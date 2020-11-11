@@ -53,7 +53,7 @@
         </div>
         <div>购买记录</div>
       </div>
-      <div>
+      <div @click="myschool">
         <div>
           <img src="@/assets/images/mobile_student/school.png" />
         </div>
@@ -65,7 +65,7 @@
         </div>
         <div>我的课表</div>
       </div>
-      <div>
+      <div @click="toRouter('undo')">
         <div>
           <img src="@/assets/images/mobile_student/undo.png" />
         </div>
@@ -104,14 +104,23 @@ export default {
 
   },
   methods: {
+    myschool () {
+      this.$store.commit('setSschoolMesage', this.userInfo.userInfo)
+      this.$router.push({ path: `/m_index_school_team/${this.userInfo.userInfo.schoolId} ` })
+    },
     hangdele () {
       this.ISattention = true
     },
     toRouter (i) {
       this.$router.push({ name: i })
     }
+    // quiz_teacher () {
+    //   this.$router.push({ path: `/teacherList/${this.userInfo.userId} ` })
+    // }
   },
   mounted () {
+
+
   }
 }
 </script>

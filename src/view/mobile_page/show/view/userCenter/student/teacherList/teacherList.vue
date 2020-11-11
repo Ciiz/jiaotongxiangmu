@@ -1,9 +1,10 @@
 <template>
+  <!-- to="/mobile/mobileUserCenter" -->
   <div class="m-teacherList flex-contain">
     <mt-header title="提问教师" style="border-bottom: 1px solid #E5E5E5">
-      <router-link to="/mobile/mobileUserCenter" slot="left">
+      <div slot="left" @click="$router.back(-1)">
         <mt-button icon="back"></mt-button>
-      </router-link>
+      </div>
     </mt-header>
     <div class="m-teacherList-contain hideScroll">
       <div v-for="(item,index) in list" :key="index">
@@ -38,6 +39,8 @@ export default {
         }
       }).then(res => {
         if (res.code === 200) {
+          console.log(res);
+
           this.list = res.data.teacher_list
           Indicator.close()
         }
@@ -48,6 +51,7 @@ export default {
       this.sendInfoStudent(item, a)
     },
     sendInfoStudent (item, a) { // 学生端提问
+      console.log(item);
       this.axios.request({
         method: 'post',
         url: '/index.php/Student/Task/question_send',
@@ -58,7 +62,7 @@ export default {
         }
       }).then(res => {
         if (res.code === 200) {
-          let chatList = { table_type: 2, taskgroup: a, userInfo: { name: item.name } }
+          let chatList = { table_type: 2, taskgroup: a, userInfo: { name: item.name, id: item.id } }
           this.$router.push({ name: 'discuss', query: { chatList: chatList } })
         }
       })

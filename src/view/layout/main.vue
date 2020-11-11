@@ -15,15 +15,27 @@
           </MenuItem>
         </Menu>
         </Col>
+
         <Col>
-        <img src="@/assets/images/new-index/search.png" style="margin-right:20px">
-        <span v-if="token===''||token===false||token===undefined||userId===''" @click="showLoginModal"
-          style="cursor:pointer">登录</span>
-        <img src="@/assets/images/new-index/message.png"
-          v-if="token!==''&&token!==false&&token!==undefined&&userId!==''">
-        <user v-if="token!==''&&token!==false&&token!==undefined&&userId!==''"
-          :message-unread-count="this.$store.state.user.userInfo.userType === 1 ? $store.state.user.userInfo.notice_total : unreadCount"
-          :user-avatar="$store.state.user.userInfo.userType === 1 ? icon : userAvatar" />
+        <!-- maxlength='18' -->
+        <div class="search_input">
+          <Input v-model="searchValue" class="search_input_l" placeholder="请搜索院校、学生、课程"
+            style="width: 200px;margin-right:30px" @keyup.enter.native="handlesearch" />
+          <img src="@/assets/images/new-index/search.png" style="margin-right:20px" @click="handlesearch">
+
+          <span v-if="token===''||token===false||token===undefined||userId===''" @click="showLoginModal"
+            style="cursor:pointer">登录</span>
+          <div v-if="userType!==3">
+            <Badge dot :offset='[20,4]' :count="message_total"
+              v-if="token!==''&&token!==false&&token!==undefined&&userId!==''">
+              <img src="@/assets/images/new-index/message.png" @click="handlemessages">
+            </Badge>
+          </div>
+
+          <user v-if="token!==''&&token!==false&&token!==undefined&&userId!==''"
+            :message-unread-count="this.$store.state.user.userInfo.userType === 1 ? $store.state.user.userInfo.notice_total : unreadCount"
+            :user-avatar="$store.state.user.userInfo.userType === 1 ? icon : userAvatar" />
+        </div>
         </Col>
       </Row>
     </Header>
@@ -84,12 +96,15 @@
   </Layout>
 </template>
 <script>
+import { get_search, teacher_unread } from "@/api/common"
+import { student_unread } from "@/api/student"
 import maxLogo from '@/assets/images/new-index/logo.png'
 import LoginForm from '_c/login-form'
 import User from './components/user'
 import routers from '@/router/routers'
 // import config from '@/config'
 import { mapActions, mapMutations } from 'vuex'
+import log from 'video.js/es5/utils/log'
 
 // const homeName = config.homeName
 export default {
@@ -98,6 +113,9 @@ export default {
   },
   data () {
     return {
+      message_total: 0,
+      isshow: false,
+      searchValue: '',
       showLogin: false,
       maxLogo: maxLogo,
       menuList: [
@@ -136,6 +154,9 @@ export default {
     }
   },
   computed: {
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    },
     token () {
       return this.$store.state.user.token
     },
@@ -174,11 +195,63 @@ export default {
     handleSubmit ({ userName, password, user_type, school }) {
       this.handleLogin({ userName, password, user_type, school }).then(res => {
         this.getUserInfo().then(res => {
-          console.log(res);
-
+          this.$store.commit('setpasswordUserId', res.userId)
+          if (res.login_status === 1) {
+            this.$store.commit('setLoginstatus', res.login_status)
+          } else {
+            this.$store.commit('setLoginstatus', 0)
+          }
           this.showLogin = false
         })
       })
+    },
+    handlesearch () {
+      if (this.searchValue.trim() === '') {
+        this.$Message.info("内容不能为空哦...")
+        return
+      }
+      get_search(this.searchValue).then(res => {
+        console.log(res);
+        if (res.data.course_data.length === 0 && res.data.school_data.length === 0 && res.data.teaher_data.length === 0) {
+          this.$Message.info("暂无可搜的结果！")
+        }
+        this.$store.commit('setsearchResult', res.data)
+        this.$router.push({ name: 'search_pages' })
+      })
+    },
+    handlemessages () {
+
+      this.$store.commit('setuserMessagess', true)
+      if (this.userType === 1) {
+        this.$router.push({
+          path: '/teachingSystem/MyCourse/course_courseware'
+        })
+      } else {
+        this.$router.push({
+          path: '/teachingSystem/StudentCourse/course_coursewares'
+        })
+      }
+
+    },
+    // 头部未读消息
+    async get_unread () {
+      let res = await teacher_unread()
+      console.log(res);
+      if (res.data.commission_unread === 0 && res.data.remind_unread === 0 && res.data.system_unread === 0) {
+        this.message_total = 0
+      } else {
+        this.message_total = 1
+      }
+
+    },
+    async student_unread () {
+      let res = await student_unread()
+      console.log(res);
+      if (res.data.commission_unread === 0 && res.data.remind_unread === 0 && res.data.system_unread === 0) {
+        this.message_total = 0
+      } else {
+        this.message_total = 1
+      }
     },
     showLoginModal () {
       this.showLogin = true
@@ -190,6 +263,19 @@ export default {
     }
   },
   mounted () {
+    if (this.token !== '' && this.token !== false && this.token !== undefined && this.userId !== '') {
+      if (this.userType === 1) {
+        this.get_unread()
+      } else {
+        this.student_unread()
+        console.log(2222);
+      }
+
+    }
+
+
+
+
     this.setHomeRoute(routers)
     // this.$store.state.user.userInfo.userType === 2 ? this.getUnreadMessageCount() : this.sendunread()
     this.$store.commit('setcurrentTab', '我的课程')
@@ -222,6 +308,10 @@ export default {
   cursor: pointer;
 }
 .top-fixed-top {
+  .search_input {
+    display: flex;
+    align-items: center;
+  }
   position: fixed;
   top: 0;
   left: 0;
@@ -246,7 +336,9 @@ export default {
   border: none !important;
 }
 .login-modal {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);

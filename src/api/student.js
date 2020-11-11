@@ -46,6 +46,16 @@ export const student_task_detail = (student_task_id) => {
     method: 'get'
   })
 }
+// 关注教师
+export const student_follow = (teacher_id) => {
+  return axios.request({
+    method: 'get',
+    url: '/Student/TeacherAttention/follow',
+    params: {
+      teacher_id
+    }
+  })
+}
 // 取消关注
 export const student_unfollow = (id) => {
   return axios.request({
@@ -80,5 +90,28 @@ export const student_massges = (teacher_id) => {
     params: {
       teacher_id
     }
+  })
+}
+// 头部未读信息
+
+export const student_unread = () => {
+  return axios.request({
+    url: '/index.php/Student/User/unread',
+    method: 'get',
+    params: {
+
+    }
+
+  })
+}
+// 教师列表
+export const get_student_taecherList = (school_id) => {
+  return axios.request({
+    url: '/Student/User/teacher_list',
+    method: 'get',
+    params: {
+      school_id
+    }
+
   })
 }

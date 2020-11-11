@@ -69,7 +69,7 @@
     <div class="courseDetails_his">
       <div class="courseDetails_his_title">ta的其他课程</div>
       <div v-if="course_list.length===0" class="teacher_massge_bottom_null">暂无课程！</div>
-      <div class="teacher_massge_bottom_list">
+      <div class="teacher_massge_bottom_list" v-else>
         <div class="teacher_massge_bottom_list_item" v-for="(v,i) in course_list" :key="i">
           <div class="teacher_massge_bottom_list_itemImg">
             <div class="teacher_massge_icon"><img src="@/assets/images/mobile_teacher/bofang3.png" alt="">
@@ -89,6 +89,7 @@
 </template> 
 <script>
 import { get_taechermassge } from '@/api/teacher'
+import { student_massges } from '@/api/student'
 export default {
   data () {
     return {
@@ -104,6 +105,11 @@ export default {
       }
     }
   },
+  computed: {
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    },
+  },
   methods: {
     handlebtn () {
       this.isshow = !this.isshow
@@ -111,10 +117,21 @@ export default {
   },
   mounted () {
     setTimeout(async () => {
+      console.log(this.message);
       if (this.message.create_type === 3) {
-        let res = await get_taechermassge(this.message.teacher_id)
-        console.log(res);
-        this.course_list = res.data.course_list
+        if (this.userType === 1) {
+          let res = await get_taechermassge(this.message.teacher_id)
+          console.log(res);
+          this.course_list = res.data.course_list
+        }
+        else if (this.userType === 2) {
+          console.log(this.message.teacher_id);
+
+          let res2 = await student_massges(this.message.teacher_id)
+          console.log(res2);
+
+          this.course_list = res2.data.course_list
+        }
       }
 
     }, 1000)

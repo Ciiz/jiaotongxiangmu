@@ -7,13 +7,13 @@
     <div class="mobileAttention_list">
       <div class="mobile_null" v-if="mobileAttentionlength===0 ">暂无关注...</div>
       <ul>
-        <li v-for="(item,index) in mobileAttention" :key="index">
+        <li v-for="(item,index) in mobileAttention" :key="index"
+          @click="$router.push({path: `/m_index_school_teacherUser/${item.teacher_id}`})">
           <div class="mobileAttention_list_icon"><img :src="item.icon" alt=""></div>
           <div class="mobileAttention_list_nameAndmajor">
             <div class="mobileAttention_list_name">{{item.teacher_name}}</div>
             <div class="mobileAttention_list_major">({{item.major_name}}老师)</div>
           </div>
-
           <div class="mobileAttention_list_cancle" @click="handleCancel(index)">取消关注</div>
         </li>
       </ul>
@@ -22,8 +22,9 @@
 </template>
 
 <script>
-import { Indicator } from 'mint-ui'
+import { Indicator, Toast } from 'mint-ui'
 import { student_unfollow } from "@/api/student"
+import { unfollow_Attention } from "@/api/user"
 import cell from '@/view/mobile_page/components/public_cell'
 import log from 'video.js/es5/utils/log'
 export default {
@@ -38,26 +39,58 @@ export default {
       mobileAttentionlength: ''
     }
   },
-
+  computed: {
+    userType () {
+      return this.$store.state.user.userInfo.userType
+    },
+  },
   methods: {
     handleCancel (index) {
+      if (this.userType === 1) {
+        unfollow_Attention(this.mobileAttention[index].id).then(res => {
+          this.mobileAttention.splice(index, 1)
+          Toast({
+            message: '取消成功',
+            duration: 2000
+          })
+        })
+      }
+      else if (this.userType === 2) {
+        student_unfollow(this.mobileAttention[index].id).then(res => {
+          this.mobileAttention.splice(index, 1)
+          Toast({
+            message: '取消成功',
+            duration: 2000
+          })
+        })
+      }
 
-      student_unfollow(this.mobileAttention[index].id).then(res => {
-        this.mobileAttention.splice(index, 1)
-      })
     }
   },
   mounted () {
     Indicator.open()
-    this.axios.request({
-      method: 'get',
-      url: '/Student/TeacherAttention/index',
-    }).then(res => {
-      console.log(res);
-      this.mobileAttention = res.data.list
-      this.mobileAttentionlength = res.data.list.length
-      Indicator.close()
-    })
+    if (this.userType === 1) {
+      this.axios.request({
+        method: 'get',
+        url: '/Teacher/TeacherAttention/index',
+      }).then(res => {
+        this.mobileAttention = res.data.list
+        this.mobileAttentionlength = res.data.list.length
+        Indicator.close()
+      })
+    } else if (this.userType === 2) {
+      this.axios.request({
+        method: 'get',
+        url: '/Student/TeacherAttention/index',
+      }).then(res => {
+        console.log(res);
+        this.mobileAttention = res.data.list
+        this.mobileAttentionlength = res.data.list.length
+        Indicator.close()
+      })
+    }
+
+
   }
 }
 </script>

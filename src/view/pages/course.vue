@@ -16,8 +16,8 @@
       </Carousel>
     </div>
     <div class="entry-btnList">
-      <div @click="entrySystem">教务系统</div>
-      <div>观看记录</div>
+      <div @click="entrySystem" v-if="userType !==3">教务系统</div>
+      <div @click="handle_History">观看记录</div>
       <div>智慧党建</div>
       <div>第二课堂</div>
       <div>在线报名</div>
@@ -65,33 +65,37 @@
           </ul>
         </TabPane>
         <!-- 本校课程 -->
-        <TabPane label="本校课程" name="schoolCourse" v-if="token!==''&&token!==false&&token!==undefined&&userId!==''">
-          <Row type="flex" justify="space-between" class="new-index-course-header">
-            <Col>
-            <Select v-model="major" style="width:200px" @on-change='handle_select'>
-              <Option v-for="item in majorList" :value="item.major_name" :key="item.major_id">{{ item.major_name }}
-              </Option>
-            </Select>
-            </Col>
-            <Col>
-            <RadioGroup @on-change='handle_Radio'>
-              <Radio label="全部"></Radio>
-              <Radio label="精选课程"></Radio>
-              <Radio label="免费课程"></Radio>
-            </RadioGroup>
-            </Col>
-          </Row>
-          <ul>
-            <div v-if="Select_list.length===0" style="height:200px">暂无课程</div>
-            <li v-for="(item,index) in Select_list" :key="index" class="index-course-item">
-              <img :src="item.img" style="width:100%;height:150px" />
-              <div class="index-course-name">{{item.course_name}}</div>
+        <div v-if="userType !==3">
+          <TabPane label="本校课程" name="schoolCourse" v-if="token!==''&&token!==false&&token!==undefined&&userId!==''">
+            <Row type="flex" justify="space-between" class="new-index-course-header">
+              <Col>
+              <Select v-model="major" style="width:200px" @on-change='handle_select'>
+                <Option v-for="item in majorList" :value="item.major_name" :key="item.major_id">{{ item.major_name }}
+                </Option>
+              </Select>
+              </Col>
+              <Col>
+              <RadioGroup @on-change='handle_Radio'>
+                <Radio label="全部"></Radio>
+                <Radio label="精选课程"></Radio>
+                <Radio label="免费课程"></Radio>
+              </RadioGroup>
+              </Col>
+            </Row>
+            <ul class="myschool_ul">
+              <div v-if="Select_list.length===0" style="height:200px">暂无课程</div>
+              <li v-for="(item,index) in Select_list" :key="index" class="index-course-item"
+                @click="$router.push({ path: `/videojump/${item.id}` })">
+                <img :src="item.img" style="width:100%;height:150px" />
+                <div class="index-course-name">{{item.course_name}}</div>
 
-              <div class="index-course-majorname">{{item.major_name}}</div>
-            </li>
-            <div style="clear:both"></div>
-          </ul>
-        </TabPane>
+                <div class="index-course-majorname">{{item.major_name}}</div>
+              </li>
+              <div style="clear:both"></div>
+            </ul>
+          </TabPane>
+        </div>
+
       </Tabs>
       <div style="text-align:center;margin-bottom:51px">
         <button class="index-course-more-btn" @click="$router.push({name:'schoolyard'})">加载更多...</button>
@@ -174,7 +178,8 @@
         <Icon type="ios-arrow-back" size="60" color="#E1E1E1" @click="scroll(--tItemIndex)" />
         <div class="index-teacher-list-d">
           <ul class="index-teacher-list-ul">
-            <li v-for="(item,index) in teacherList" :key="index" class="index-teacher-item">
+            <li v-for="(item,index) in teacherList" :key="index" class="index-teacher-item"
+              @click="$router.push({ path: `/teacher_homepage/${item.teacher_id}`})">
               <div>
                 <img :src="item.icon" />
               </div>
@@ -198,7 +203,7 @@
 <script>
 import modal_mixin from '@/view/mixins/modal_mixin'
 import newsContent from '@/view/news/newsContent'
-import { get_bannersIndex, get_majors, myCourseList, courselist } from '@/api/common'
+import { get_bannersIndex, get_majors, myCourseList, courselist, teacher_recommend } from '@/api/common'
 import log from 'video.js/es5/utils/log'
 // import log from 'video.js/es5/utils/log'
 export default {
@@ -234,13 +239,13 @@ export default {
     // },
     token (n, o) {
       if (n !== '' && n !== false && n !== undefined) {
-        this.getData()
+        // this.getData()
         this.getMajor()
       }
     },
     schoolId () {
       this.getMajorStudent()
-      this.getData()
+      // this.getData()
     }
   },
   computed: {
@@ -258,6 +263,26 @@ export default {
     }
   },
   methods: {
+    handle_History () {
+      if (
+        this.token === '' ||
+        this.token === false ||
+        this.token === undefined ||
+        this.userId === ''
+      ) {
+        this.$Message.error('您尚未登录，请先登录')
+        this.$emit('showLoginModal')
+      } else {
+        this.$router.push({
+          name: 'look_History'
+        })
+        // if (this.userType === 1) {
+        // } else {
+        //   this.$router.push({
+        //   })
+        // }
+      }
+    },
     // handlemy (item, index) {
     //   console.log(item);
     //   console.log(item.id);
@@ -274,12 +299,10 @@ export default {
         this.Select_list.length = 10
       }
       if (value === '全部') {
-        var data = {
-          page: 1,
-          page_size: 10,
-          school_id: this.schoolId
-        }
-        myCourseList(data).then(res => {
+        // var data = {
+        //   school_id: this.schoolId
+        // }
+        myCourseList(this.schoolId).then(res => {
           if (this.Select_list.length > 10) {
             this.Select_list.length = 10
           }
@@ -289,7 +312,9 @@ export default {
     },
     // 选中select下拉列表和
     handle_select (value) {
+      console.log(this.courseList);
       this.Select_list = this.courseList.filter(v => {
+
         return v.major_name === value
       })
     },
@@ -297,7 +322,6 @@ export default {
     handle_change (value) {
       if (value === '全部') {
         courselist().then(res => {
-
           this.comamnd_Select_list = res.data.data
           if (this.comamnd_Select_list.length > 10) {
             this.comamnd_Select_list.length = 10
@@ -327,25 +351,22 @@ export default {
     },
     // 获取本校课程
     getData () {
-      var data = {
-        page: 1,
-        page_size: 10,
-        school_id: this.schoolId
+      if (this.userType !== 3 && this.schoolId !== '') {
+        myCourseList(this.schoolId).then(res => {
+          console.log(res)
+          // 数据改造
+          res.data.list.map(item => {
+            if (item.is_charge === 1) return item.is_charge_name = '精选课程'
+            else if (item.is_charge === 0) return item.is_charge_name = '免费课程'
+          })
+          this.courseList = res.data.list
+          this.Select_list = res.data.list
+          if (this.Select_list.length > 10) {
+            this.Select_list.length = 10
+          }
+        })
       }
 
-      myCourseList(data).then(res => {
-        console.log(res)
-        // 数据改造
-        res.data.list.map(item => {
-          if (item.is_charge === 1) return item.is_charge_name = '精选课程'
-          else if (item.is_charge === 0) return item.is_charge_name = '免费课程'
-        })
-        this.courseList = res.data.list
-        this.Select_list = res.data.list
-        if (this.Select_list.length > 10) {
-          this.Select_list.length = 10
-        }
-      })
     },
     // 获取推荐课程
     get_command_course () {
@@ -360,11 +381,6 @@ export default {
           })
           this.commandCourseList = res.data.data
           this.comamnd_Select_list = res.data.data
-          // this.comamnd_Select_list.forEach((v, i) => {
-          //   console.log(v.id);
-          //   // console.log(i);
-
-          // });
           console.log(this.comamnd_Select_list);
           if (this.comamnd_Select_list.length > 10) {
             this.comamnd_Select_list.length = 10
@@ -374,15 +390,11 @@ export default {
     },
     // 获取推荐教师
     get_command_teacher () {
-      this.axios
-        .request({
-          method: 'get',
-          url: '/index.php/home/index/recommendTeacher',
-          params: {}
-        })
-        .then(res => {
-          this.teacherList = res.data.data
-        })
+
+      teacher_recommend().then(res => {
+        console.log(res);
+        this.teacherList = res.data.data
+      })
     },
     changeTabs (i) {
       if (i === 'allCourse') {
@@ -532,12 +544,16 @@ export default {
     this.getSchoolList()
     this.get_command_course()
     this.get_command_teacher()
+    console.log(this.userType);
+
     if (
       this.token !== '' &&
       this.token !== false &&
       this.token !== undefined &&
       this.userId !== ''
+      // this.userType !== 3
     ) {
+
       this.getData()
     }
   }
@@ -579,7 +595,11 @@ export default {
   font-size: 14px;
   text-align: center;
   line-height: 146px;
+  border-radius: 10px;
   cursor: pointer;
+  &:hover {
+    box-shadow: 1px 1px 9px #222;
+  }
 }
 .entry-btnList > div:nth-of-type(1) {
   background-image: url("../../assets/images/new-index/system.png");
@@ -602,6 +622,11 @@ export default {
 .index-tabs {
   width: 1200px;
   margin: 0 auto;
+}
+.index-tabs .myschool_ul {
+  display: flex;
+  width: 1200px;
+  flex-wrap: wrap;
 }
 .index-tabs .ivu-tabs-bar .ivu-tabs-nav {
   width: 100%;

@@ -3,7 +3,8 @@
     <span class="like_all">共喜欢了{{like_list.length}}个课程:</span>
     <Row>
       <Col class="record">
-      <Row class="record_List" v-for="(item,index) in like_list" :key="index">
+      <div class="record_List" v-for="(item,index) in like_list" :key="index"
+        @click="$router.push({ path: `/videojump/${item.course_id}` })">
         <Col>
         <div class="record_List_img">
           <img :src="item.img" alt="">
@@ -28,7 +29,7 @@
         </div>
         <div class="like_teacher_type">{{item.learn_price}}</div>
         </Col>
-      </Row>
+      </div>
       </Col>
     </Row>
   </div>
@@ -45,6 +46,8 @@ export default {
   methods: {
     getMyCourseAttention () {
       getMyCourseAttention().then((result) => {
+        console.log(result);
+
         this.like_list = result.data.data
       })
     }
