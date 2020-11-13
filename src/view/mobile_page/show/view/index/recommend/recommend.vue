@@ -199,7 +199,6 @@ export default {
         speed: 1000,
 
       }
-
     }
   },
   // 暴露父页面的'方法' 父传子
@@ -228,7 +227,6 @@ export default {
       } else {
         this.$router.push({ name: i })
       }
-
     },
     lookall (index) {
       this.$router.push({ path: `/m_index_school_team/${this.schoolList[index].id}` })
@@ -453,8 +451,10 @@ export default {
 <style lang='less' scoped>
 /deep/.swiper-container {
   height: 1.7rem;
-  margin-left: auto;
-  margin-right: auto;
+  // margin-left: auto;
+  // margin-right: auto;
+  width: 6.86rem;
+  margin: 0 auto;
   // background-color: pink;
 }
 .hidden {

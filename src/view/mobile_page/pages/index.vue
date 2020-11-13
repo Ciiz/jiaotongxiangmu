@@ -67,15 +67,7 @@ export default {
   watch: {
     selected (n, o) {
       if (n === 'userInfo') {
-        if (this.userType === 3) {
-          Toast({
-            message: '请先注册登录....',
-            duration: 2000
-          })
-          return
-        } else {
-          this.$router.push({ name: 'mobileUserCenter' })
-        }
+        this.$router.push({ name: 'mobileUserCenter' })
 
       } else if (n === 'message') {
         if (this.userType === 3) {

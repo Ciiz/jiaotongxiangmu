@@ -8,7 +8,7 @@
 <script>
 import coursewareList from '@/view/teacher_common/courseware/courseware_list.vue'
 import modal_mixin from '@/view/mixins/modal_mixin'
-export default{
+export default {
   components: {
     coursewareList
   },

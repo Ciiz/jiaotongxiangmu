@@ -2,7 +2,7 @@
   <div style="margin-bottom:37px;padding:5px;overflow:auto">
     <CheckboxGroup v-model="class_id">
       <div v-for="item in classList" :key="item.class_id">
-        <Checkbox :label="item.class_id" >{{item.class_name}}</Checkbox>
+        <Checkbox :label="item.class_id">{{item.class_name}}</Checkbox>
       </div>
     </CheckboxGroup>
     <div class="modal-footer">
@@ -12,7 +12,7 @@
 </template>
 <script>
 import modal_mixin from '@/view/mixins/modal_mixin'
-export default{
+export default {
   mixins: [modal_mixin],
   components: {
   },

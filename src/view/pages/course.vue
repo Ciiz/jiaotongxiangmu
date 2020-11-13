@@ -390,7 +390,6 @@ export default {
     },
     // 获取推荐教师
     get_command_teacher () {
-
       teacher_recommend().then(res => {
         console.log(res);
         this.teacherList = res.data.data
@@ -544,7 +543,7 @@ export default {
     this.getSchoolList()
     this.get_command_course()
     this.get_command_teacher()
-    console.log(this.userType);
+
 
     if (
       this.token !== '' &&

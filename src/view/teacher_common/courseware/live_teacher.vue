@@ -326,6 +326,7 @@
                 </Row>
               </div>
             </div>
+            <!-- 弹幕讨论 -->
             <div class="discuss">
               <div class="discuss-top">
                 <span @click="changeType(0,$event)" class="selectChangActive">弹幕讨论</span>
@@ -854,6 +855,8 @@ export default {
     }
   },
   created () {
+    console.log(333);
+
     if (!window.localStorage.getItem('sendbarrage')) { // 弹幕发送间隔初始化
       window.localStorage.setItem('sendbarrage', new Date().getTime().toString().slice(8)) // 设置缓存(分钟+毫秒：00000-99999)
     }
@@ -1487,6 +1490,8 @@ export default {
           course_status: this.course_status
         }
       }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           this.teacher_course_id = res.data.courseware_info.teacher_course_id
           let domain = window.location.protocol + '//' + window.location.host
@@ -1497,10 +1502,10 @@ export default {
           this.courseware_name = res.data.courseware_info.courseware_name
           if (res.data.courseware_info.courseware_file) this.material_list = res.data.courseware_info.courseware_file
           if (res.data.task_list['2']) this.task.in = this.getArray(res.data.task_list['2'], 'task_name')
-          if (res.data.task_list['3']) this.task.after = this.getArray(res.data.task_list['3'], 'task_name')
-          if (res.data.exam_list['2']) this.test.in = this.getArray(res.data.exam_list['2'], 'exam_name')
-          if (res.data.exam_list['3']) this.test.after = this.getArray(res.data.exam_list['3'], 'exam_name')
-          if (res.data.homework_list['3']) this.homework = this.getArray(res.data.homework_list['3'], 'homework_name')
+          if (res.data.task_list['1']) this.task.after = this.getArray(res.data.task_list['1'], 'task_name')
+          if (res.data.exam_list['0']) this.test.in = this.getArray(res.data.exam_list['0'], 'exam_name')
+          if (res.data.exam_list['2']) this.test.after = this.getArray(res.data.exam_list['2'], 'exam_name')
+          if (res.data.homework_list['0']) this.homework = this.getArray(res.data.homework_list['0'], 'homework_name')
           if (this.list_title === '课中任务') {
             this.courseware_list = this.task.in
           } else if (this.list_title === '课中测试') {
@@ -1517,25 +1522,25 @@ export default {
           } else {
             this.courseware_list_list[0].listlength = res.data.task_list['2'].length
           }
-          if (res.data.exam_list['2'] === undefined) {
+          if (res.data.exam_list['0'] === undefined) {
             this.courseware_list_list[1].listlength = 0
           } else {
-            this.courseware_list_list[1].listlength = res.data.exam_list['2'].length
+            this.courseware_list_list[1].listlength = res.data.exam_list['0'].length
           }
-          if (res.data.task_list['3'] === undefined) {
+          if (res.data.task_list['1'] === undefined) {
             this.courseware_list_list[2].listlength = 0
           } else {
-            this.courseware_list_list[2].listlength = res.data.task_list['3'].length
+            this.courseware_list_list[2].listlength = res.data.task_list['1'].length
           }
-          if (res.data.exam_list['3'] === undefined) {
+          if (res.data.exam_list['2'] === undefined) {
             this.courseware_list_list[3].listlength = 0
           } else {
-            this.courseware_list_list[3].listlength = res.data.exam_list['3'].length
+            this.courseware_list_list[3].listlength = res.data.exam_list['2'].length
           }
-          if (res.data.homework_list['3'] === undefined) {
+          if (res.data.homework_list['0'] === undefined) {
             this.courseware_list_list[4].listlength = 0
           } else {
-            this.courseware_list_list[4].listlength = res.data.homework_list['3'].length
+            this.courseware_list_list[4].listlength = res.data.homework_list['0'].length
           }
           this.getOnlineData(0)
         }
@@ -1550,6 +1555,8 @@ export default {
           status: m
         }
       }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           this.online_data = res.data
         }

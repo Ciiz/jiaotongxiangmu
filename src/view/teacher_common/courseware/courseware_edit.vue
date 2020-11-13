@@ -1,6 +1,6 @@
 <template>
   <div class="modal-content">
-    <Form ref="formValidate" :model="formValidate"  :label-width="80" >
+    <Form ref="formValidate" :model="formValidate" :label-width="80">
       <!-- <FormItem label="课程名称" required>
        <div>{{formValidate.course}}</div>
       </FormItem> -->
@@ -10,7 +10,8 @@
       <FormItem label="排序" required>
         <InputNumber :min="1" v-model="formValidate.sort" style="width:50px;" size="small"></InputNumber>
         <Tag color="warning" v-if="showtag" style="margin-left:5px;">该序号已经使用,请重新选择</Tag>
-        <Tag color="warning" v-if="showcopy && isneworeditor === '复制课件'" style="margin-left:5px;">复制课件时序号不能与原课件相同,请重新选择</Tag>
+        <Tag color="warning" v-if="showcopy && isneworeditor === '复制课件'" style="margin-left:5px;">复制课件时序号不能与原课件相同,请重新选择
+        </Tag>
       </FormItem>
       <FormItem label="课时数" required>
         <Input number style="width:50px;" size="small" v-model="courseware_weight"></Input>
@@ -23,9 +24,16 @@
           &nbsp;&nbsp;<Tag color="warning" v-if="course_before + course_in + course_after !== 100">权重之和需为100</Tag>
         </div>
         <div v-if="course_before + course_in + course_after === 100">
-          课前：任务：<Input number style="width:40px;" size="small" v-model="before_task"></Input>&nbsp;&nbsp;测试：<Input number style="width:40px;" size="small" v-model="before_test"></Input>&nbsp;&nbsp;<Tag color="warning" v-if="before_task + before_test  !== 100">任务、测试的权重之和应为100</Tag><br>
-          课中：任务：<Input number style="width:40px;" size="small" v-model="in_task"></Input>&nbsp;&nbsp;测试：<Input number style="width:40px;" size="small" v-model="in_test"></Input>&nbsp;&nbsp;<Tag color="warning" v-if="in_task + in_test  !== 100">任务、测试的权重之和应为100</Tag><br>
-          课后：任务：<Input number style="width:40px;" size="small" v-model="after_task"></Input>&nbsp;&nbsp;测试：<Input number style="width:40px;" size="small" v-model="after_test"></Input>&nbsp;&nbsp;作业：<Input number style="width:40px;" size="small" v-model="after_homework" ></Input>&nbsp;&nbsp;<Tag color="warning" v-if="after_task + after_test + after_homework !== 100">任务、测试、作业的权重之和应为100</Tag>
+          课前：任务：<Input number style="width:40px;" size="small" v-model="before_task"></Input>&nbsp;&nbsp;测试：<Input
+            number style="width:40px;" size="small" v-model="before_test"></Input>&nbsp;&nbsp;<Tag color="warning"
+            v-if="before_task + before_test  !== 100">任务、测试的权重之和应为100</Tag><br>
+          课中：任务：<Input number style="width:40px;" size="small" v-model="in_task"></Input>&nbsp;&nbsp;测试：<Input number
+            style="width:40px;" size="small" v-model="in_test"></Input>&nbsp;&nbsp;<Tag color="warning"
+            v-if="in_task + in_test  !== 100">任务、测试的权重之和应为100</Tag><br>
+          课后：任务：<Input number style="width:40px;" size="small" v-model="after_task"></Input>&nbsp;&nbsp;测试：<Input number
+            style="width:40px;" size="small" v-model="after_test"></Input>&nbsp;&nbsp;作业：<Input number
+            style="width:40px;" size="small" v-model="after_homework"></Input>&nbsp;&nbsp;<Tag color="warning"
+            v-if="after_task + after_test + after_homework !== 100">任务、测试、作业的权重之和应为100</Tag>
         </div>
       </FormItem>
       <FormItem label="课件文件">
@@ -33,28 +41,35 @@
           注意：只允许上传 pdf 文件
         </p>
         <!-- <Button type="primary" v-if="!needprogress" @click="needprogress = !needprogress">上传课件文件</Button> -->
-        <upload-file  :needprogress='true' @upload_file_success='pdf_upload' :showlist="false" :format="['pdf']" btnname='上传课件文件' :maxsize='105120' :maxlength='1' :data_type="{type:'courseware',token:$store.state.user.token}"></upload-file>
+        <upload-file :needprogress='true' @upload_file_success='pdf_upload' :showlist="false" :format="['pdf']"
+          btnname='上传课件文件' :maxsize='105120' :maxlength='1'
+          :data_type="{type:'courseware',token:$store.state.user.token}"></upload-file>
         <embed :src="pdfsrc" v-if="ispdf" width="100%" height="300px">
       </FormItem>
       <FormItem label="课件素材">
-        <upload-file @upload_file_success='material_upload'  :showlist="false" :format="['mp4', 'pdf', 'docx', 'doc', 'xls', 'zip', 'rar', 'png', 'jpg', 'jpeg', 'pptx']" btnname='上传课件素材' :maxsize='307200' :maxlength='9999' :data_type="{type:'courseware.file',token:$store.state.user.token}"></upload-file>
+        <upload-file @upload_file_success='material_upload' :showlist="false"
+          :format="['mp4', 'pdf', 'docx', 'doc', 'xls', 'zip', 'rar', 'png', 'jpg', 'jpeg', 'pptx']" btnname='上传课件素材'
+          :maxsize='307200' :maxlength='9999' :data_type="{type:'courseware.file',token:$store.state.user.token}">
+        </upload-file>
         <p>仅支持mp4', 'pdf', 'docx', 'doc', 'xls', 'zip', 'rar', 'png', 'jpg', 'jpeg', 'pptx格式</p>
         <div v-if="attachment_file_name.length > 0">
           已上传的课件素材 ：
-          <span  v-for="(tagitem,index) in attachment_file_name" :key="index + ' tag'">
-              <Tag type="dot" closable color="success" @on-close="tagclose(index)">
-                <!-- <Input type="text" number style="width:90px;height:20px;top:-7px;" v-model="tagitem.page"  placeholder="素材对应页码"/> -->
-                <InputNumber :min="1" v-model="tagitem.page" style="width:90px;height:33px;top:-1px;" placeholder="素材对应页码"></InputNumber>
-                <a style="color:#989DA9;" :href="tagitem.file_url" target='_blank' >
-                   {{tagitem.file_name}}
-                </a>
-              </Tag>
+          <span v-for="(tagitem,index) in attachment_file_name" :key="index + ' tag'">
+            <Tag type="dot" closable color="success" @on-close="tagclose(index)">
+              <!-- <Input type="text" number style="width:90px;height:20px;top:-7px;" v-model="tagitem.page"  placeholder="素材对应页码"/> -->
+              <InputNumber :min="1" v-model="tagitem.page" style="width:90px;height:33px;top:-1px;"
+                placeholder="素材对应页码"></InputNumber>
+              <a style="color:#989DA9;" :href="tagitem.file_url" target='_blank'>
+                {{tagitem.file_name}}
+              </a>
+            </Tag>
           </span>
           <p>素材对应页:课件对应页码显示对应素材</p>
         </div>
       </FormItem>
-      <FormItem label="课件备注"  required>
-        <editor ref="editor" :value="formValidate.desc" :height="200" v-model="formValidate.desc" is_init='true'></editor>
+      <FormItem label="课件备注" required>
+        <editor ref="editor" :value="formValidate.desc" :height="200" v-model="formValidate.desc" is_init='true'>
+        </editor>
       </FormItem>
     </Form>
     <div class="modal-footer">

@@ -33,6 +33,12 @@ router.beforeEach((to, from, next) => {
     to.name === 'online_qrcode' || to.path === '/online_qrcode' ||
     to.name === 'entry' || to.path === '/entry' ||
     to.name === 'showIndex' || to.path === '/showIndex' ||
+    to.name === 'mobileUserCenter' || to.path === '/mobileUserCenter' ||
+    to.name === 'usersetting' || to.path === '/usersetting' ||
+    to.name === 'mobileabout' || to.path === '/mobileabout' ||
+    to.name === 'aboutwe' || to.path === '/aboutwe' ||
+    to.name === 'agreement' || to.path === '/agreement' ||
+    to.name === 'feedback' || to.path === '/feedback' ||
     to.name === 'mobileLogin' || to.path === '/mobileLogin') {
     next()
   } else {

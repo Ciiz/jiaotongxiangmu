@@ -3,11 +3,14 @@
     <div class="m-userCenter-bg"></div>
     <div class="m-userCenter-contain flex-contain">
       <div class="m-userCenter-header">
-        <div>
+        <div v-if="userInfo.userInfo.userType ===3"><img src="@/assets/images/public/toux.jpg" alt=""
+            class="m-userAvatar" /></div>
+        <div v-else>
           <img :src="userInfo.avatarImgPath" class="m-userAvatar" />
         </div>
         <div class="m-userCenter-r">
-          <div class="m-userCenter-name">{{userInfo.userName}}</div>
+          <div class="m-userCenter-name" v-if="userInfo.userInfo.userType ===3">游客</div>
+          <div class="m-userCenter-name" v-else>{{userInfo.userName}}</div>
           <div class="m-userCenter-c">
             <span v-if="userInfo.userInfo.userType===2"
               style="margin-right:0.2rem">{{userInfo.userInfo.class_name}}</span>
@@ -25,7 +28,7 @@
           <img src="@/assets/images/mobile_student/settings.png" @click="toRouter('usersetting')" />
         </div>
       </div>
-      <teacherItem v-if="userInfo.userInfo.userType===1"></teacherItem>
+      <teacherItem v-if="userInfo.userInfo.userType===1 || userInfo.userInfo.userType===3"></teacherItem>
       <studentItem v-if="userInfo.userInfo.userType===2"></studentItem>
     </div>
   </div>
@@ -55,6 +58,7 @@ export default {
     }
   },
   mounted () {
+
   }
 }
 </script>

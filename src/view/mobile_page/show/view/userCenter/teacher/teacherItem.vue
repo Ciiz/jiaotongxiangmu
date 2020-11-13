@@ -91,6 +91,7 @@
   </div>
 </template>
 <script>
+import { Toast } from 'mint-ui'
 import log from 'video.js/es5/utils/log'
 export default {
   data () {
@@ -100,6 +101,9 @@ export default {
   computed: {
     userInfo () {
       return this.$store.state.user
+    },
+    userType () {
+      return this.$store.state.user.userInfo.userType
     }
   },
   watch: {
@@ -107,12 +111,29 @@ export default {
   },
   methods: {
     toRouter (i) {
-      this.$router.push({ name: i })
+      if (this.userType === 3) {
+        Toast({
+          message: '请先注册登录....',
+          duration: 2000
+        })
+        return
+      } else {
+        this.$router.push({ name: i })
+      }
+
     },
     handleMyschool () {
+      if (this.userType === 3) {
+        Toast({
+          message: '请先注册登录....',
+          duration: 2000
+        })
+        return
+      } else {
+        this.$store.commit('setSschoolMesage', this.userInfo.userInfo)
+        this.$router.push({ path: `/m_index_school_team/${this.userInfo.userInfo.schoolId} ` })
+      }
 
-      this.$store.commit('setSschoolMesage', this.userInfo.userInfo)
-      this.$router.push({ path: `/m_index_school_team/${this.userInfo.userInfo.schoolId} ` })
     }
   },
   mounted () {

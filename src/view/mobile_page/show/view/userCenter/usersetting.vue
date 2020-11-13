@@ -17,7 +17,6 @@
         <span>退出登录</span>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -72,17 +71,16 @@ export default {
       font-size: 0.34rem;
       border-radius: 0.8rem;
       position: absolute;
-      bottom: 0;
+      bottom: 90px;
       left: 0.3rem;
     }
     background-color: #f3f3f3ff;
-    // height: 100vh;
-    height: 12.46rem;
+    height: 100vh;
+    // height: 11rem;
     padding-top: 0.2rem;
     .setting_content {
       background-color: #fff;
       width: 100%;
-
       font-size: 0.3rem;
       font-family: PingFang SC;
       font-weight: 500;

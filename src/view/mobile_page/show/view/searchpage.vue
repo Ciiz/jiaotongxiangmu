@@ -14,7 +14,8 @@
                 <img src="@/assets/images/mobile_teacher/searchicon 3.png" alt="">
                 <span>搜索“<span style="color:#16C2AA">{{value}}</span>”</span>
               </div>
-              <div class="m-search_cell" v-if="searchChangelist" v-for="item in searchChangelist" :key="item.id">
+              <div class="m-search_cell" v-if="searchChangelist" v-for="item in searchChangelist" :key="item.id"
+                @click="$router.push({path:`/m_index_videoCourse/${item.course_id}`})">
                 <div class="m-search_cell_img"><img :src="item.img" alt=""></div>
                 <div class="m-search_cell_coursename">
                   <div class="tuxing">
@@ -31,17 +32,15 @@
                 </div>
                 <div class="m-search_cell_icon"><img src="@/assets/images/mobile_teacher/fanhui .png" alt=""></div>
               </div>
-              <div class="m-search_cell" v-if="searchSchoollist" v-for="item in searchSchoollist" :key="item.id">
-                <div class="m-search_cell_img"><img :src="item.school_icon" alt=""></div>
+              <div class="m-search_cell" v-if="searchSchoollist" v-for="(v,i) in searchSchoollist" :key="i"
+                @click="lookall2(i)">
+                <div class="m-search_cell_img"><img :src="v.school_icon" alt=""></div>
                 <div class="m-search_cell_coursename">
                   <div class="tuxing">
                     <div class="tuxing_img"><img src="@/assets/images/mobile_teacher/tuxing.png" alt="">
-
                       <div class="tuxing_right" v-if="searchSchoollist">院校</div>
-
                     </div>
-
-                    <div class="m-search_cell_coursename1" ref="foresee" v-html="item.school_name"></div>
+                    <div class="m-search_cell_coursename1" ref="foresee" v-html="v.name"></div>
                   </div>
                   <div class="m-search_cell_courseuser">
                     <div class="m-search_cell_courseuser1">作者：</div>
@@ -50,7 +49,8 @@
                 </div>
                 <div class="m-search_cell_icon"><img src="@/assets/images/mobile_teacher/fanhui .png" alt=""></div>
               </div>
-              <div class="m-search_cell" v-if="searchUser" v-for="item in searchUser" :key="item.id">
+              <div class="m-search_cell" v-if="searchUser" v-for="item in searchUser" :key="item.id"
+                @click="$router.push({path: `/m_index_school_teacherUser/${item.teacher_id}`})">
                 <div class="m-search_cell_img"><img :src="item.icon" alt=""></div>
                 <div class="m-search_cell_coursename">
                   <div class="tuxing">
@@ -96,7 +96,8 @@
             <div class="courelength2">很抱歉，没有找到相关内容</div>
             <div class="courelength3"><img src="@/assets/images/mobile_teacher/search.png" alt=""></div>
           </div>
-          <div class="m-search_courseList" v-if="courelength !==0" v-for="(v,i) in searsh_arry" :key="i">
+          <div class="m-search_courseList" v-if="courelength !==0" v-for="(v,i) in searsh_arry" :key="i"
+            @click="$router.push({path:`/m_index_videoCourse/${v.course_id}`})">
             <div class="m-search_courseList_img">
               <img :src="v.img" alt="">
             </div>
@@ -110,19 +111,18 @@
               </div>
             </div>
           </div>
-
         </mt-tab-container-item>
-
         <mt-tab-container-item id="2">
           <div v-if="schoolLength===0" class="m_courelength">
             <div class="courelength1">关键词 “<span style="color:#16C2AA">{{value2}}</span>”</div>
             <div class="courelength2">很抱歉，没有找到相关内容</div>
             <div class="courelength3"><img src="@/assets/images/mobile_teacher/search.png" alt=""></div>
           </div>
-          <div class="search_schoolList" v-if="schoolLength !==0" v-for="(v,i) in search_school" :key="i">
+          <div class="search_schoolList" v-if="schoolLength !==0" v-for="(v,i) in search_school" :key="i"
+            @click="lookall(i)">
             <div class="search_schoolList_icon"><img :src="v.school_icon" alt=""></div>
             <div class="search_schoolList_name">
-              <div class="search_schoolList_name_t" v-html="v.school_name"></div>
+              <div class="search_schoolList_name_t" v-html="v.name"></div>
               <div class="search_schoolList_name_b">
                 <div class="search_schoolList_name_b1">拥有课程 ：{{v.course_num}}</div>
                 <div class="search_schoolList_name_b2">拥有教师 ：{{v.teacher_num}}</div>
@@ -136,7 +136,8 @@
             <div class="courelength2">很抱歉，没有找到相关内容</div>
             <div class="courelength3"><img src="@/assets/images/mobile_teacher/search.png" alt=""></div>
           </div>
-          <div class="search_schoolList" v-for="(v,i) in searchUserlist" :key="i">
+          <div class="search_schoolList" v-for="(v,i) in searchUserlist" :key="i"
+            @click="$router.push({path: `/m_index_school_teacherUser/${v.teacher_id}`})">
             <div class="search_schoolList_icon"><img :src="v.icon" alt=""></div>
             <div class="search_schoolList_name">
               <div class="search_schoolList_name_t" v-html="v.name"></div>
@@ -158,7 +159,7 @@
       </div>
       <div class="searchpage_history_list">
         <ul>
-          <li v-for="(item,index) in tearchdata" :key="index">{{item}}</li>
+          <li v-for="(item,index) in tearchdata" :key="index" @click="Search_history(item)">{{item}}</li>
         </ul>
       </div>
     </div>
@@ -210,6 +211,19 @@ export default {
     }
   },
   methods: {
+    lookall (i) {
+      this.$router.push({ path: `/m_index_school_team/${this.search_school[i].id}` })
+      this.$store.commit('setSschoolMesage', this.search_school[i])
+
+    },
+    lookall2 (i) {
+      this.$router.push({ path: `/m_index_school_team/${this.searchSchoollist[i].id}` })
+      this.$store.commit('setSschoolMesage', this.searchSchoollist[i])
+    },
+    Search_history (item) {
+      this.value = item
+      this.search_list()
+    },
     back () {
       // this.$router.push({ name: 'showIndex' })
       this.$router.back(-1)
@@ -229,6 +243,9 @@ export default {
         }
       }).then(res => {
         console.log(res)
+        res.data.school_data.map(v => {
+          return v.name = v.school_name
+        })
         if (res.data.course_data.length > 2) {
           this.searchChangelist = res.data.course_data.slice(0, 2)
         } else {
@@ -253,7 +270,7 @@ export default {
         })
         this.searchSchoollist.forEach(v => {
           var ss = this.value
-          v.school_name = v.school_name.replace(ss, `<span style="color:#16C2AA">${ss}</span>`)
+          v.name = v.name.replace(ss, `<span style="color:#16C2AA">${ss}</span>`)
         })
         this.searchUser.forEach(v => {
           var ss = this.value
@@ -308,6 +325,9 @@ export default {
         this.teaherLength = res.data.teaher_data.length // 用户的长度
         this.searchUserlist = res.data.teaher_data // 用户的数据
         Indicator.close()
+        res.data.school_data.map(v => {
+          return v.name = v.school_name
+        })
         this.value2 = this.value
         // 历史记录
         let arr = JSON.parse(localStorage.getItem('mykeyword')) || []
@@ -329,7 +349,7 @@ export default {
           })
           this.search_school.forEach(v => {
             var ss = this.value
-            v.school_name = v.school_name.replace(new RegExp(ss, 'g'), `<span style="color:#16C2AA">${ss}</span>`) // 操作dom的，必须是html
+            v.name = v.name.replace(new RegExp(ss, 'g'), `<span style="color:#16C2AA">${ss}</span>`) // 操作dom的，必须是html
           })
           this.searchUserlist.forEach(v => {
             var ss = this.value

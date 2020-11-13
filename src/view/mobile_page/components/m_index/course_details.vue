@@ -7,7 +7,8 @@
         <div class="courseDetails_name2">{{message.school_name}}</div>
       </div>
       <div class="courseDetails_homepage"
-        @click="$router.push({path: `/m_index_school_teacherUser/${message.teacher_id}`})">Ta的主页 >>
+        @click="$router.push({path: `/m_index_school_teacherUser/${message.teacher_id}`})"
+        v-if="this.message.create_type===3">Ta的主页 >>
       </div>
     </div>
     <div class="courseDetails_mome">
@@ -60,7 +61,6 @@
           </span>
         </div>
       </div>
-
       <div class="courseDetails_centerFooter" :class="{active:isshow}" v-html="message.description">
       </div>
     </div>
@@ -117,6 +117,7 @@ export default {
   },
   mounted () {
     setTimeout(async () => {
+      console.log(this.message.create_type);
       console.log(this.message);
       if (this.message.create_type === 3) {
         if (this.userType === 1) {
@@ -125,15 +126,10 @@ export default {
           this.course_list = res.data.course_list
         }
         else if (this.userType === 2) {
-          console.log(this.message.teacher_id);
-
           let res2 = await student_massges(this.message.teacher_id)
-          console.log(res2);
-
           this.course_list = res2.data.course_list
         }
       }
-
     }, 1000)
   }
 }

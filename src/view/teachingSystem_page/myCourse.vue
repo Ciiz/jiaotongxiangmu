@@ -4,10 +4,14 @@
       <Content style="background:#DEDEDE;overflow:hidden;position:relative"> -->
     <div class="myCourse-contain-header" v-if="userType===1">
       <ul>
-        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/MyCourse/course_courseware'}" @click.native="getName">课件列表</router-link>
-        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/MyCourse/course_courseware_detail'}" @click.native="getName">课程详情</router-link>
-        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/MyCourse/course_students_manage'}" @click.native="getName">学生管理</router-link>
-        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/MyCourse/show_attendance'}" @click.native="getName">查看考勤</router-link>
+        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/MyCourse/course_courseware'}"
+          @click.native="getName">课件列表</router-link>
+        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/MyCourse/course_courseware_detail'}"
+          @click.native="getName">课程详情</router-link>
+        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/MyCourse/course_students_manage'}"
+          @click.native="getName">学生管理</router-link>
+        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/MyCourse/show_attendance'}"
+          @click.native="getName">查看考勤</router-link>
       </ul>
       <Breadcrumb style="float:right;margin:16px 10px 0 0">
         <BreadcrumbItem>我的课程</BreadcrumbItem>
@@ -18,10 +22,13 @@
     </div>
     <div class="myCourse-contain-header" v-if="userType===2">
       <ul>
-        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/StudentCourse/course_coursewares'}" @click.native="getName">课件列表</router-link>
-        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/StudentCourse/student_courseware_detail'}" @click.native="getName">课程详情</router-link>
+        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/StudentCourse/course_coursewares'}"
+          @click.native="getName">课件列表</router-link>
+        <router-link active-class="mycourse-tab" :to="{path: '/teachingSystem/StudentCourse/student_courseware_detail'}"
+          @click.native="getName">课程详情</router-link>
       </ul>
-      <button v-if="titleName==='课件列表'" @click="modal1=true" class="redBorder-btn" style="float:right;margin:10px">退选</button>
+      <button v-if="titleName==='课件列表'" @click="modal1=true" class="redBorder-btn"
+        style="float:right;margin:10px">退选</button>
       <Breadcrumb v-if="titleName==='课程详情'" style="float:right;margin:16px 10px 0 0">
         <BreadcrumbItem>我的课程</BreadcrumbItem>
         <BreadcrumbItem>课程列表</BreadcrumbItem>
@@ -29,17 +36,15 @@
       </Breadcrumb>
       <div style="clear:both"></div>
     </div>
-    <keep-alive >
-        <router-view style="position:relative;overflow:hidden" @showCourseDetail="showCourseDetail" @showAllCourseDetail="showAllCourseDetail" v-if="$route.meta.keepAlive"></router-view>
+    <keep-alive>
+      <router-view style="position:relative;overflow:hidden" @showCourseDetail="showCourseDetail"
+        @showAllCourseDetail="showAllCourseDetail" v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"></router-view>
-      <!-- </Content>
+    <!-- </Content>
     </Layout> -->
-     <Modal
-        v-model="modal1"
-        title="退选"
-        @on-ok="unbind(courseId)">
-        <p>确定退选此门课程？</p>
+    <Modal v-model="modal1" title="退选" @on-ok="unbind(courseId)">
+      <p>确定退选此门课程？</p>
     </Modal>
   </div>
 </template>
@@ -107,5 +112,4 @@ export default {
 }
 </script>
 <style lang="less">
-
 </style>

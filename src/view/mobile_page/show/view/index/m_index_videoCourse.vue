@@ -127,6 +127,8 @@ export default {
     }
   },
   created () {
+    console.log(this.$route.params.id);
+
     video_index(this.$route.params.id).then(res => {
       console.log(res);
       this.video_index = res.data.data

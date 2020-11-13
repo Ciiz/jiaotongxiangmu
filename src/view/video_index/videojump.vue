@@ -4,7 +4,7 @@
       <Col>
       <div class="video_user_l">
 
-        <div class='videoCourse_video_isCharge' v-if="video_list.is_charge===1">
+        <div class='videoCourse_video_isCharge' v-if="is_charge===1">
           <div class="isCharge_text">
             <div class="isCharge_text_big">
               <span>提示</span>
@@ -27,7 +27,6 @@
               </div>
               <div class="video_end_topRight">
                 <div class="video_end_topRight_play" @click="handlePlay">
-
                   <div class="video_end_topRight_play1">
                     <span></span>
                     <!-- <img src="@/assets/images/public/congbo.png" alt=""> -->
@@ -168,7 +167,8 @@ export default {
   data () {
     return {
       video_list: {
-        chapter_list: []
+        chapter_list: [],
+
       },
       videoUrl: null,
       like_list: [],
@@ -186,6 +186,9 @@ export default {
     content_type () {
       return getSuffix(this.videoUrl)
     },
+    is_charge () {
+      return this.video_list.is_charge
+    }
   },
   methods: {
     ...mapActions([
@@ -218,29 +221,38 @@ export default {
         this.videoUrl = ''
       }
       else if (res.data.data.chapter_list) {
-        // if (res.data.data.chapter_list[0].child) {
-
-        // }
         if (res.data.data.chapter_list[0].file_url) {
           this.videoUrl = res.data.data.chapter_list[0].file_url
         } else {
           this.videoUrl = ''
         }
       }
-
     },
-    // 猜你喜欢的点击
+    // 猜你喜欢的点击和相关推荐
     handlelikeplay (item) {
       console.log(item);
       this.onend_stutas = false
       video_index(item.id).then(res => {
         console.log(res);
+        this.video_list.is_charge = res.data.data.is_charge
         this.packaging(res)
+        console.log(res.data.data.is_charge);
+        if (res.data.data.is_charge === 1) {
+          this.$nextTick(() => {
+            document.querySelector('.isCharge_text').style.display = "block"
+          })
+
+        } else {
+          this.$nextTick(() => {
+            document.querySelector('.isCharge_text').style.display = "none"
+          })
+        }
         if (this.videoUrl !== '') {
           document.querySelector('#video_massege').style.display = "block"
           if (this.videoUrl === this.videoUrl) {
             document.querySelector('.video_item').play()
           }
+
         }
       })
     },
@@ -280,8 +292,6 @@ export default {
     handleend () {
       this.onend_stutas = true
       this.$nextTick(() => { document.querySelector('#video_massege').style.display = "none" })
-
-
     },
     handlevideo (data) {
       console.log(data);
@@ -294,12 +304,12 @@ export default {
     // 获取跳转的视频
     get_video () {
       video_index(this.route).then(res => {
-        // this.$store.commit('setLoginstatus', res.data.data.admin_status)
         this.packaging(res)
       })
     },
     get_like () {
       get_Course().then(res => {
+        console.log(res);
         this.recommend = res.data.data.slice(0, 3)
         if (res.data.data.length >= 5) {
           this.like_list = res.data.data.slice(0, 5)
@@ -364,7 +374,6 @@ export default {
         justify-content: center;
         align-items: center;
         // opacity: 0.21;
-
         .isCharge_text {
           position: relative;
           .isCharge_text_big {
