@@ -1,20 +1,24 @@
 <template>
-<Row style="padding:20px 10px;background:#ffffff;height:100%">
-  <div class="courseware_list_table_parent">
-    <Table class="courseware_list_table c_list" size="large" :loading="loading" ref="selection" :columns="columns" :data="list">
-     >
-    </Table>
-  </div>
-  <!-- <Modal class="liveT" v-model="modal" :title="title" :fullscreen="fullscreen" footer-hide :mask-closable='false'>
+  <Row style="padding:20px 10px;background:#ffffff;height:100%">
+    <div class="courseware_list_table_parent">
+      <Table class="courseware_list_table c_list" size="large" :loading="loading" ref="selection" :columns="columns"
+        :data="list">
+        >
+      </Table>
+    </div>
+    <!-- <Modal class="liveT" v-model="modal" :title="title" :fullscreen="fullscreen" footer-hide :mask-closable='false'>
     <Evaluate :student_courseware_id="target_id" :mode="mode" v-if="target==='evaluate'" @success="handleSuccess"></Evaluate>
   </Modal> -->
-  <Modal v-model="modal2" width='1000' class="homeworkModal" :title="title" :fullscreen="fullscreen" footer-hide :mask-closable='false'>
-    <Homework @closeModal='closeModal' :exam_score_status="exam_score_status" :student_homework_id="student_homework_id" v-if="target === 'homework'" @success="handleSuccess"></Homework>
-  </Modal>
-   <Modal v-model="modal3" title="视频录制" :width="1100" footer-hide :mask-closable='false'>
-       <coursewareVedio  :vedioSrc="vedioSrc" :vedioName="vedioName" :upload_courseware_id="upload_courseware_id"></coursewareVedio>
+    <Modal v-model="modal2" width='1000' class="homeworkModal" :title="title" :fullscreen="fullscreen" footer-hide
+      :mask-closable='false'>
+      <Homework @closeModal='closeModal' :exam_score_status="exam_score_status"
+        :student_homework_id="student_homework_id" v-if="target === 'homework'" @success="handleSuccess"></Homework>
     </Modal>
-</Row>
+    <Modal v-model="modal3" title="视频录制" :width="1100" footer-hide :mask-closable='false'>
+      <coursewareVedio :vedioSrc="vedioSrc" :vedioName="vedioName" :upload_courseware_id="upload_courseware_id">
+      </coursewareVedio>
+    </Modal>
+  </Row>
 </template>
 
 <script>
@@ -293,35 +297,35 @@ export default {
 </script>
 
 <style lang="less">
-  // .ivu-modal-body{
-  //   border:15px solid rgb(255, 255, 255);
-  //   background:  rgb(244, 245, 249)
-  // }
-  .liveT .ivu-modal-header{
-    background-color: #242424;
-  }
-  .liveT .ivu-modal-header .ivu-modal-header-inner{
-    color: #ffffff;
-  }
-  .c_list .ivu-table-cell > div{
-    position: relative;
-  }
-  .c_list .ivu-table-cell{
-    overflow: initial;
-  }
-  .homeWorkItem{
-    text-align: left;
-    padding: 4px 0;
-    width: 120px;
-    cursor: pointer;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .homeWorkItem:hover{
-    color: #3B9BFF;
-  }
-  .homeworkModal .ivu-modal-body{
-    height: 700px;
-  }
+// .ivu-modal-body{
+//   border:15px solid rgb(255, 255, 255);
+//   background:  rgb(244, 245, 249)
+// }
+.liveT .ivu-modal-header {
+  background-color: #242424;
+}
+.liveT .ivu-modal-header .ivu-modal-header-inner {
+  color: #ffffff;
+}
+.c_list .ivu-table-cell > div {
+  position: relative;
+}
+.c_list .ivu-table-cell {
+  overflow: initial;
+}
+.homeWorkItem {
+  text-align: left;
+  padding: 4px 0;
+  width: 120px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.homeWorkItem:hover {
+  color: #3b9bff;
+}
+.homeworkModal .ivu-modal-body {
+  height: 700px;
+}
 </style>

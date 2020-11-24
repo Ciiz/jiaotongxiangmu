@@ -158,8 +158,6 @@ export default {
         return v
       })
       this.newarr = course_num.sort(this.compare('course_num')) // 排序
-      console.log(this.newarr)
-
       if (res.data.list.length < this.pageSize) {
         this.allLoaded = true
       }

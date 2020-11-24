@@ -31,7 +31,7 @@
             <Col>
             </Col>
             <Col>
-            <RadioGroup @on-change='handle_change'>
+            <RadioGroup @on-change='handle_change' v-model="goodrideo">
               <Radio label="全部"></Radio>
               <Radio label="精选课程"></Radio>
               <Radio label="免费课程"></Radio>
@@ -42,7 +42,7 @@
             <div v-if="comamnd_Select_list.length===0" style="height:200px">暂无推荐课程</div>
             <li v-for="(item,index) in comamnd_Select_list" :key="index" class="index-course-item"
               @click="$router.push({ path: `/videojump/${item.id}` })">
-
+              <div class="jingxuan" v-if="item.is_charge"><img src="@/assets/images/public/jingxuan.png" alt=""></div>
               <img :src="item.img" style="width:100%;height:150px" />
               <div class="index-course-name">{{item.course_name}}</div>
               <div class="index-course-schoolanme">
@@ -75,7 +75,7 @@
               </Select>
               </Col>
               <Col>
-              <RadioGroup @on-change='handle_Radio'>
+              <RadioGroup @on-change='handle_Radio' v-model="myschool">
                 <Radio label="全部"></Radio>
                 <Radio label="精选课程"></Radio>
                 <Radio label="免费课程"></Radio>
@@ -86,9 +86,9 @@
               <div v-if="Select_list.length===0" style="height:200px">暂无课程</div>
               <li v-for="(item,index) in Select_list" :key="index" class="index-course-item"
                 @click="$router.push({ path: `/videojump/${item.id}` })">
+                <div class="jingxuan" v-if="item.is_charge"><img src="@/assets/images/public/jingxuan.png" alt=""></div>
                 <img :src="item.img" style="width:100%;height:150px" />
                 <div class="index-course-name">{{item.course_name}}</div>
-
                 <div class="index-course-majorname">{{item.major_name}}</div>
               </li>
               <div style="clear:both"></div>
@@ -183,8 +183,14 @@
               <div>
                 <img :src="item.icon" />
               </div>
-              <div style="font-size:16px;color:#000000;font-weight:bold;margin-top:10px">{{item.name}}</div>
-              <div style="font-size:14px;color:#909090">院校：{{item.school_name}}</div>
+              <div class="teacher_recommend">
+                <div style="font-size:16px;color:#000000;font-weight:bold;margin-top:10px">{{item.name}}</div>
+                <div style="font-size:14px;color:#909090">
+                  <div>职业：{{item.major_name}}</div>
+                  <div>院校：{{item.school_name}}</div>
+                  <div>发布的课程：{{item.course_count}}</div>
+                </div>
+              </div>
             </li>
           </ul>
         </div>
@@ -227,9 +233,10 @@ export default {
       tItemIndex: 0,
       value2: 0,
       autoplaySpeed: 2000,
-      animal: '全部', // 单选框
       Select_list: [], // 本校课程的渲染数组
-      comamnd_Select_list: [] // 推荐课程的渲染数组
+      comamnd_Select_list: [], // 推荐课程的渲染数组
+      goodrideo: '全部',
+      myschool: '全部'
 
     }
   },
@@ -371,7 +378,6 @@ export default {
     // 获取推荐课程
     get_command_course () {
       courselist().then(res => {
-        // console.log(res)
         // 数据改造
         if (res.code === 200) {
           console.log(res);
@@ -400,6 +406,7 @@ export default {
         this.getMajor()
       }
       if (i === 'schoolCourse') {
+        this.getData()
         this.getMajorStudent()
       }
     },
@@ -543,8 +550,6 @@ export default {
     this.getSchoolList()
     this.get_command_course()
     this.get_command_teacher()
-
-
     if (
       this.token !== '' &&
       this.token !== false &&
@@ -721,10 +726,15 @@ export default {
 .index-teacher-list-ul {
   width: max-content;
 }
+.index-teacher-list-ul .teacher_recommend {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
 .index-teacher-item {
   float: left;
   width: 224px;
-  text-align: center;
+  // text-align: center;
 }
 .index-teacher-item img {
   width: 120px;
@@ -770,6 +780,18 @@ export default {
   cursor: pointer;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.06);
   margin-bottom: 50px;
+  position: relative;
+  .jingxuan {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50px;
+    height: 50px;
+    img {
+      width: 50px;
+      height: 50px;
+    }
+  }
   .index-course-schoolanme {
     display: flex;
     justify-content: space-between;

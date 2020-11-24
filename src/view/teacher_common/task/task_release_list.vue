@@ -3,21 +3,31 @@
     <Row class="search-bar">
       <Input type="text" v-model="keyword" placeholder="请输入搜索内容" class="new-searchSel"></Input>
       <button @click="getData(true)" class="blue-btn" style="width:80px;transform: translate(-20px,2px);">搜索</button>
-      <button @click="open('task_edit','','添加任务')" class="blueC-btn" style="margin-left:15px;" v-if="editable">添加任务</button>
-      <button @click="open('task_select','','选择任务')" class="green-btn" style="margin-left:15px;width:104px" v-if="editable">选择任务</button>
+      <button @click="open('task_edit','','添加任务')" class="blueC-btn" style="margin-left:15px;"
+        v-if="editable">添加任务</button>
+      <button @click="open('task_select','','选择任务')" class="green-btn" style="margin-left:15px;width:104px"
+        v-if="editable">选择任务</button>
       <slot name="search-bar"></slot>
     </Row>
-  <Table :loading="loading" ref="selection" class="task_release_list_table" :columns="columns" :data="list" :height="$store.state.app.tableHeight" stripe border></Table>
-  <Row>
-    <page :total="total" :current="page"  :page-size="page_size" size="small" show-elevator @on-change="(page) => {this.page = page , this.getData(false)}"  :placement="'top'"></page>
-  </Row>
-    <Modal v-model="modal" :title="title" width="1200" :footer-hide="footerHide" :fullscreen="fullscreen" :mask-closable='false'>
+    <Table :loading="loading" ref="selection" class="task_release_list_table" :columns="columns" :data="list"
+      :height="$store.state.app.tableHeight" stripe border></Table>
+    <Row>
+      <page :total="total" :current="page" :page-size="page_size" size="small" show-elevator
+        @on-change="(page) => {this.page = page , this.getData(false)}" :placement="'top'"></page>
+    </Row>
+    <Modal v-model="modal" :title="title" width="1200" :footer-hide="footerHide" :fullscreen="fullscreen"
+      :mask-closable='false'>
       <TaskReleaseDetail :task_release_id="target_id" v-if="target === 'task_release_detail'"></TaskReleaseDetail>
-      <Student-exam-list style="height:700px" @closeModal="closeModal" :targetwork_id="target_id" :target_type='target' v-if="target === 'student_task_list' && modal"></Student-exam-list>
-      <TaskTeamLeaderChange :task_release_id="target_id" v-if="target === 'task_team_leader_change' && modal"></TaskTeamLeaderChange>
-      <TaskEdit :timetable_id="timetable_id"  :type="type" :task_release_id="target_id" :courseware_id="courseware_id" v-if="target === 'task_edit' && modal" @success="modal = false; getData(); target = ''"></TaskEdit>
-      <TaskSelect :timetable_id="timetable_id"  :type="type" :courseware_id="courseware_id" v-if="target === 'task_select'" @success="modal = false; getData(); target = ''"></TaskSelect>
-      <TaskEvaluationEdit :id="target_id" v-if="target === 'task_evaluation_edit'" @success="modal = false;"></TaskEvaluationEdit>
+      <Student-exam-list style="height:700px" @closeModal="closeModal" :targetwork_id="target_id" :target_type='target'
+        v-if="target === 'student_task_list' && modal"></Student-exam-list>
+      <TaskTeamLeaderChange :task_release_id="target_id" v-if="target === 'task_team_leader_change' && modal">
+      </TaskTeamLeaderChange>
+      <TaskEdit :timetable_id="timetable_id" :type="type" :task_release_id="target_id" :courseware_id="courseware_id"
+        v-if="target === 'task_edit' && modal" @success="modal = false; getData(); target = ''"></TaskEdit>
+      <TaskSelect :timetable_id="timetable_id" :type="type" :courseware_id="courseware_id"
+        v-if="target === 'task_select'" @success="modal = false; getData(); target = ''"></TaskSelect>
+      <TaskEvaluationEdit :id="target_id" v-if="target === 'task_evaluation_edit'" @success="modal = false;">
+      </TaskEvaluationEdit>
     </Modal>
   </div>
 </template>
@@ -31,7 +41,7 @@ import TaskSelect from '@/view/teacher_common/task/task_select.vue'
 import TaskEvaluationEdit from '@/view/teacher_common/task/task_evaluation_edit.vue'
 import { ReleaseMap } from '@/view/mixins/str_map'
 import { task_release, task_un_release } from '@/api/data'
-export default{
+export default {
   props: {
     type: '',
     courseware_id: '',
@@ -111,7 +121,7 @@ export default{
                 <button class="blueText-btn" v-show={row.release_type === 1} onClick={() => { this.open('task_team_leader_change', row.task_release_id, '更换小组组长') }}>更换组长</button>
                 <button class="redText-btn" onClick={() => { this.del(row.id) }} v-show={this.editable}>删除</button>
               </div>
-            // <Button type='warning' size="small" onClick={() => { this.open('task_evaluation_edit', row.id, `任务-${row.task_name}-评分维度编辑`, 600) }} v-show={this.editable}>评分维度</Button>
+              // <Button type='warning' size="small" onClick={() => { this.open('task_evaluation_edit', row.id, `任务-${row.task_name}-评分维度编辑`, 600) }} v-show={this.editable}>评分维度</Button>
             )
           }
         }
@@ -144,6 +154,7 @@ export default{
     release (item) {
       if (item.release_status === 0) { // 发布
         task_release(item.task_release_id).then(res => {
+          console.log(res);
           if (res.code === 200) {
             this.$Message.success(res.message)
             this.getData()
@@ -197,5 +208,4 @@ export default{
 }
 </script>
 <style lang="less">
-
 </style>

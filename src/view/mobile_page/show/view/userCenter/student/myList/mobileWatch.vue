@@ -16,7 +16,7 @@
               <div class="mobileWatch_list_description" v-html="item.course_description"></div>
               <div class="mobileWatch_list_rTime">
                 <div class="mobileWatch_list_rTitle_l">时长：{{moment(item.video_time * 1000).format('mm:ss')}}</div>
-                <div class="mobileWatch_list_rTitle_r">已看{{item.percent}}%</div>
+                <div class="mobileWatch_list_rTitle_r">已看{{item.study_time}}%</div>
               </div>
             </div>
           </div>

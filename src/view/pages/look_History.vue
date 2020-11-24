@@ -15,7 +15,7 @@
                 <div class="lookHistory_list_lText_school">{{v.school_name}}</div>
                 <div class="lookHistory_list_lText_major">{{v.major_name}}</div>
                 <div class="lookHistory_list_lText_time" v-if="v.study_time===null">看到：0:00</div>
-                <div class="lookHistory_list_lText_time" v-else>看到：{{v.study_time}}</div>
+                <div class="lookHistory_list_lText_time" v-else>看到：{{v.study_time}}%</div>
               </div>
             </div>
           </div>

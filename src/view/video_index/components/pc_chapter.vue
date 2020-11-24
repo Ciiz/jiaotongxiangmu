@@ -64,13 +64,14 @@ export default {
       // scrollTo(0, 0);
     },
     handleIsshow (index) {
+      console.log(this.list[index].show_child);
       this.list[index].show_child = !this.list[index].show_child
+
     }
   },
   mounted () {
     setTimeout(() => {
       console.log(this.list);
-
       if (this.list[0] && this.list[0].child) this.active = this.list[0].child[0].id
     }, 1200)
   }

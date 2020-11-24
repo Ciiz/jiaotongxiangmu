@@ -31,14 +31,17 @@ export default {
     loginstatus: '', //登录状态
     userMessagess: false, //信息中心的状态
     searchResult: '', //搜索结果
-    passwordUserId: '' //游客登陆的id
-
+    passwordUserId: '', //游客登陆的id
+    examInfo: {}, //作业批改的测试信息
 
 
   },
   // 同步操作
   mutations: {
 
+    setexamInfo (state, obj) {
+      state.examInfo = obj
+    },
     setsearchResult (state, key) {
       state.searchResult = key
     },

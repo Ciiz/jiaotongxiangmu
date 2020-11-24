@@ -1,8 +1,10 @@
 <template>
   <div class="correct" style="height:100%;postition:relative">
     <div style="height:100%;width:100%;position:absolute" v-show="showCorrctList">
-      <student-exam-list :targetwork_id="target_id" :target_type='target' @closeModal="closeModal" @on-refresh-parent-list="getData()"></student-exam-list>
+      <student-exam-list :targetwork_id="target_id" :target_type='target' @closeModal="closeModal"
+        @on-refresh-parent-list="getData()"></student-exam-list>
     </div>
+
     <div style="height:100%;display:flex;flex-direction:column;padding:20px">
       <div class="correct-iscorrect">
         <span v-show="correct_status===0" style="background:#1170FF;color:#FFFFFF" @click="correct_status=0">待批改</span>
@@ -12,18 +14,22 @@
       </div>
       <Row type="flex" justify="space-between" class="correct-select" v-show="correct_status===1">
         <Col>
-          <Select class="new-searchSel" v-model="class_id" placeholder="全部班级" clearable style="margin-right:30px">
-            <Option :value="0">所有班级</Option>
-            <Option v-for="item in classLst" :value="item.class_id" :key="'class'+item.class_id">{{item.class_name}}</Option>
-          </Select>
-          <Select class="new-searchSel" v-model="teacher_course_id" placeholder="全部课程" clearable style="margin-right:30px">
-            <Option :value="0">所有课程</Option>
-            <Option v-for="item in teacher_course_list" :value="item.id" :key="'course'+item.id">{{item.course_name}}</Option>
-          </Select>
-          <Input class="new-searchSel"  v-model="keyword"  placeholder="请输入课业关键词" style="width:240px;" />
-          <button class="orangeRBorder-btn" style="transform:translate(-20px,2px)" @click="changeType()">搜索</button>
+        <Select class="new-searchSel" v-model="class_id" placeholder="全部班级" clearable style="margin-right:30px">
+          <Option :value="0">所有班级</Option>
+          <Option v-for="item in classLst" :value="item.class_id" :key="'class'+item.class_id">{{item.class_name}}
+          </Option>
+        </Select>
+        <Select class="new-searchSel" v-model="teacher_course_id" placeholder="全部课程" clearable
+          style="margin-right:30px">
+          <Option :value="0">所有课程</Option>
+          <Option v-for="item in teacher_course_list" :value="item.id" :key="'course'+item.id">{{item.course_name}}
+          </Option>
+        </Select>
+        <Input class="new-searchSel" v-model="keyword" placeholder="请输入课业关键词" style="width:240px;" />
+        <button class="orangeRBorder-btn" style="transform:translate(-20px,2px)" @click="changeType()">搜索</button>
         </Col>
       </Row>
+      <!-- 待批改 -->
       <div style="width:100%;height:100%;position:relative" v-show="correct_status===0">
         <ul class="correct-list">
           <li v-for="(item,index) in unreadtasklist" :key="'task'+index" style="width:300px;margin:10px 0">
@@ -50,7 +56,7 @@
               <div class="cclass">
                 <span>班级：{{item.class_name}}</span>
                 <span v-if="item.correct_status===1" class="cstatus" style="color: #0066FF">已批</span>
-                <span v-if="item.correct_status===0" class="cstatus"  style="color: #FF3333">批改中...</span>
+                <span v-if="item.correct_status===0" class="cstatus" style="color: #FF3333">批改中...</span>
               </div>
             </div>
             <span style="margin-left:20px">截止时间：{{moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')}}</span>
@@ -73,11 +79,12 @@
           </li>
         </ul>
       </div>
+      <!-- 已批改 -->
       <Tabs size="small" @on-click="changeType" class="correct-tab" value="task" v-if="correct_status===1">
         <TabPane label="任务" name="task">
           <ul class="correct-list">
             <li v-for="(item,index) in tasklist" :key="'task'+index" style="width:300px;margin:10px 0">
-              <div class="showdetail"  @click="openModal('student_task_list', item.task_release_id)">
+              <div class="showdetail" @click="openModal('student_task_list', item.task_release_id)">
                 <div class="correct-sjx" style="border-top:40px solid #1170FF"></div>
                 <div class="correct-sjx-xz">任务</div>
                 <div class="cname">{{item.task_name}}</div>
@@ -104,7 +111,7 @@
                 <div class="cclass">
                   <span>班级：{{item.class_name}}</span>
                   <span v-if="item.correct_status===1" class="cstatus" style="color: #0066FF">已批</span>
-                  <span v-if="item.correct_status===0" class="cstatus"  style="color: #FF3333">批改中...</span>
+                  <span v-if="item.correct_status===0" class="cstatus" style="color: #FF3333">批改中...</span>
                 </div>
               </div>
               <span style="margin-left:20px">截止时间：{{moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')}}</span>
@@ -136,7 +143,6 @@
   </div>
 </template>
 <script>
-
 import StudentExamList from '@/view/teacher_common/exam/student_exam_list'
 import modal_mixin from '@/view/mixins/modal_mixin'
 import { get_teacher_course_list, get_task_release_list, get_exam_release_list, get_homework_release_list } from '@/api/data'
@@ -255,6 +261,8 @@ export default {
           teacher_course_id: this.teacher_course_id,
           correct_status: this.correct_status
         }).then(res => {
+          console.log(res);
+          console.log('待测试');
           if (res.code === 200) {
             this.examlist = res.data.list
             this.examcount = res.data.count
@@ -297,6 +305,7 @@ export default {
         teacher_course_id: this.teacher_course_id,
         correct_status: this.correct_status
       }).then(res => {
+        console.log(res);
         if (res.code === 200) {
           this.unreadexamlist = res.data.list
         }

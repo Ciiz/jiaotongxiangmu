@@ -12,13 +12,20 @@
           <div class="m_index_like_list_center_t"> {{v.course_name}}</div>
           <div class="m_index_like_list_center_c" v-html="v.description"></div>
           <div class="m_index_like_list_center_b">
-            <div class="m_index_like_list_center_b1">{{v.caNum}}</div>
-            <div class="m_index_like_list_center_b2">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
+            <div class="m_index_like_list_center_b1">
+              <img src="@/assets/images/public/play_icon.png" alt="">
+              {{v.caNum}}
+            </div>
+            <div class="m_index_like_list_center_b2">
+              <img src="@/assets/images/public/time_icon.png" alt="">
+              <span>{{moment(v.created_at * 1000).format('HH:mm')}}</span>
+
+            </div>
           </div>
         </div>
-        <div class="m_index_like_x" @click="hangle_delete(i)">
+        <!-- <div class="m_index_like_x" @click="hangle_delete(i)">
           X
-        </div>
+        </div> -->
       </div>
 
     </div>
@@ -50,9 +57,9 @@ export default {
     handle_slot () {
       this.$emit('handleslot')
     },
-    hangle_delete (i) {
-      index_list
-    }
+    // hangle_delete (i) {
+
+    // }
 
   },
   mounted () {
@@ -127,8 +134,24 @@ export default {
           font-family: PingFang SC;
           font-weight: 500;
           color: #787878;
+          .m_index_like_list_center_b1 {
+            display: flex;
+            align-items: center;
+            img {
+              width: 0.22rem;
+              height: 0.22rem;
+              margin-right: 0.1rem;
+            }
+          }
           .m_index_like_list_center_b2 {
             margin-left: 0.3rem;
+            display: flex;
+            align-items: center;
+            img {
+              width: 0.22rem;
+              height: 0.22rem;
+              margin-right: 0.1rem;
+            }
           }
         }
       }

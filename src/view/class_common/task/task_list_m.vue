@@ -1,12 +1,13 @@
 <template>
-<div>
-  <!-- 课中任务列表 -->
-  <Table :data="list" size="small" :columns="columns"></Table>
-  <Modal v-model="modal" :title="title" width="800"  footer-hide :mask-closable="false">
-    <Task :student_task_id="target_id" v-if="target === 'task'"></Task>
-    <TeamDiscussion :student_task_id="target_id" ref="team_discussion" v-if="target === 'team_discussion'"></TeamDiscussion>
-  </Modal>
-</div>
+  <div>
+    <!-- 课中任务列表 -->
+    <Table :data="list" size="small" :columns="columns"></Table>
+    <Modal v-model="modal" :title="title" width="800" footer-hide :mask-closable="false">
+      <Task :student_task_id="target_id" v-if="target === 'task'"></Task>
+      <TeamDiscussion :student_task_id="target_id" ref="team_discussion" v-if="target === 'team_discussion'">
+      </TeamDiscussion>
+    </Modal>
+  </div>
 </template>
 <script>
 import Task from './task_detail.vue'
@@ -14,7 +15,8 @@ import TeamDiscussion from '@/view/class_common/task/team_discussion.vue'
 import modal_mixin from '@/view/mixins/modal_mixin'
 export default {
   props: {
-    student_courseware_id: ''
+    student_courseware_id: '',
+
   },
   mixins: [modal_mixin],
   components: {
@@ -24,11 +26,13 @@ export default {
   watch: {
     student_courseware_id (newVal, oldVal) {
       this.getData()
-    }
+    },
+
   },
   data () {
     return {
       list: [],
+      modal: false,
       columns: [
         {
           key: 'task.task_name',
@@ -58,6 +62,7 @@ export default {
           title: '操作',
           align: 'center',
           render: (h, params) => {
+            console.log(params);
             return (
               <div style="text-align:center">
                 <Button size="small" type="primary" style="margin:2px 0" onClick={() => { this.open('task', params.row.id, '任务详情') }}>查看</Button>
@@ -70,6 +75,7 @@ export default {
     }
   },
   methods: {
+
     getData () {
       if (!this.student_courseware_id) {
         return false
@@ -81,13 +87,19 @@ export default {
           student_courseware_id: this.student_courseware_id
         }
       }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
-          this.list = res.data.list
+          // this.list = res.data.list
+          this.list = res.data.list.filter(v => {
+            return v.release_status === 1
+          });
         }
       })
     }
   },
   created () {
+
     this.getData()
     let _this = this
     this.$on('message', msg => {

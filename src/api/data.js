@@ -213,12 +213,14 @@ export const student_course_score = (student_course_id) => {
 }
 
 // ============任务===================
-export const task_release = (task_release_id) => { // 发布任务
+export const task_release = (task_release_id, group) => { // 发布任务
   return axios.request({
-    url: '/teacher/task/release',
+    url: '/teacher/task/live_release',
     method: 'post',
     data: {
-      task_release_id
+      task_release_id,
+      group
+
     }
   })
 }

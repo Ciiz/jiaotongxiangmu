@@ -3,10 +3,10 @@
     <div class="videoCourse_video">
       <div class="videoCourse_video_arrow">
         <div class="videoCourse_video_arrowLeft">
-          <img src="@/assets/images/mobile_teacher/lastpage.png" alt="" @click="$router.back()">
+          <img src="@/assets/images/mobile_teacher/lastpage.png" alt="" @click="$router.back(-1)">
         </div>
         <div class="videoCourse_video_arrowRight">
-          <img src="@/assets/images/mobile_teacher/fx2.png" alt="">
+          <!-- <img src="@/assets/images/mobile_teacher/fx2.png" alt=""> -->
         </div>
       </div>
       <div class="videoCourse_video_ispay" v-if="video_index.pay_status===0">
@@ -98,7 +98,6 @@ import chapter from "@/view/mobile_page/components/m_index/course_chapter"
 import detail from "@/view/mobile_page/components/m_index/course_details"
 export default {
   components: { chapter, detail },
-
   data () {
     return {
       video_index: {

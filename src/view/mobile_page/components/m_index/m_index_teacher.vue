@@ -17,8 +17,10 @@
           <div class="m_recommendTeacher-center_item_name">
             <div class="m_recommendTeacher-center_item_name1">
               <div class="m_recommendTeacher-center_item_name1_l"> {{v.name}}</div>
-              <div class="m_recommendTeacher-center_item_name1_r"> {{v.course_count}}</div>
-
+              <div class="m_recommendTeacher-center_item_name1_r">
+                <img src="@/assets/images/public/book_icon.png" alt="">
+                {{v.course_count}}
+              </div>
             </div>
             <div class="m_recommendTeacher-center_item_name2">院校：{{v.school_name}}</div>
             <div class="m_recommendTeacher-center_item_name3">职业：{{v.major_name}}</div>
@@ -129,6 +131,13 @@ export default {
               font-family: PingFang SC;
               font-weight: 500;
               color: #000000;
+              display: flex;
+              align-items: center;
+              img {
+                width: 0.24rem;
+                height: 0.24rem;
+                margin-right: 0.1rem;
+              }
             }
           }
           .m_recommendTeacher-center_item_name2,

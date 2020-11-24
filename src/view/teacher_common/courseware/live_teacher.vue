@@ -28,16 +28,20 @@
               <img src="@/assets/images/new_img/question.png"
                 style="vertical-align:middle;width:16px;margin-right:10px;" />提问
             </div>
-            <ul class="live-btnList">
+            <div class="livedot">1</div>
+            <ul class="live-btnList liveul">
               <li class="live-btnList-li" @click="showList3">
                 <Badge dot :offset=[0,-4] :count="badge" class="question-badge">
                   提问列表({{questionAllQuestionList.length}})
                 </Badge>
               </li>
               <li class="live-btnList-li" @click="showList2">附件列表({{material_total.length}})</li>
+
+              <!-- <li class="live-btnList-li" @click="showList2">课中测试({{material_total.length}})</li> -->
               <li v-for="(item,index) in courseware_list_list" :key="index" @click="showList(item,$event)"
                 class="live-btnList-li">
                 {{item.title}}({{item.listlength}})
+                {{item.color}}
               </li>
               <li class="live-btnList-li" @click="openAtten()" v-if="course_status.toString()===1+''">考勤</li>
               <!-- <li class="live-btnList-li" @click="open('course_table','','课程表编辑',1100)" v-if="course_status===1">考勤</li> -->
@@ -73,10 +77,12 @@
                             @click="taskname = in_task_item.task_name,timetable_id = in_task_item.timetable_id,rowid = in_task_item.task_release_id,tasktype = '3',click_type = 'info',isshowaddtask = true">查看</span>
                           <span v-if="in_task_item.release_status === 0 && in_task_item.task_release_id!==undefined"
                             @click="release_id = in_task_item.task_release_id,release_type='task',release()">发布</span>
+
                           <span v-if="in_task_item.release_status === 1 && in_task_item.task_release_id!==undefined"
                             @click="unrelease('task',in_task_item.task_release_id)">撤回</span>
                           <span v-if="in_task_item.release_status === 0 && in_task_item.exam_release_id!==undefined"
                             @click="release_id = in_task_item.exam_release_id,release_type='test',release()">发布</span>
+
                           <span v-if="in_task_item.release_status === 1 && in_task_item.exam_release_id!==undefined"
                             @click="unrelease('test',in_task_item.exam_release_id)">撤回</span>
                           <span v-if="in_task_item.release_type === 1 && in_task_item.release_status === 1"
@@ -698,7 +704,8 @@ export default {
           title: '课中测试',
           courseware_list_type: 'inclass',
           courseware_list_type2: 'test',
-          listlength: ''
+          listlength: '',
+
         },
         {
           title: '课后任务',
@@ -1367,7 +1374,8 @@ export default {
     ***/
     release () {
       if (this.release_type === 'task') {
-        task_release(this.release_id).then(res => {
+        task_release(this.release_id, this.group_chat_id).then(res => {
+          console.log(res);
           if (res.code === 200) {
             this.$Message.success(res.message)
             this.getInfo()
@@ -1376,11 +1384,14 @@ export default {
       } else if (this.release_type === 'test') {
         this.axios.request({
           method: 'post',
-          url: '/index.php/Teacher/Examination/release',
+          url: '/index.php/Teacher/Examination/live_release',
           data: {
-            exam_release_id: this.release_id
+            exam_release_id: this.release_id,
+            group: this.group_chat_id,
+            reply_time: '',
           }
         }).then(res => {
+          console.log(res);
           if (res.code === 200) {
             this.$Message.success(res.message)
             this.getInfo()
@@ -1491,7 +1502,6 @@ export default {
         }
       }).then(res => {
         console.log(res);
-
         if (res.code === 200) {
           this.teacher_course_id = res.data.courseware_info.teacher_course_id
           let domain = window.location.protocol + '//' + window.location.host
@@ -1501,9 +1511,9 @@ export default {
           this.src = res.data.courseware_info.file_url
           this.courseware_name = res.data.courseware_info.courseware_name
           if (res.data.courseware_info.courseware_file) this.material_list = res.data.courseware_info.courseware_file
-          if (res.data.task_list['2']) this.task.in = this.getArray(res.data.task_list['2'], 'task_name')
-          if (res.data.task_list['1']) this.task.after = this.getArray(res.data.task_list['1'], 'task_name')
-          if (res.data.exam_list['0']) this.test.in = this.getArray(res.data.exam_list['0'], 'exam_name')
+          if (res.data.task_list['1']) this.task.in = this.getArray(res.data.task_list['1'], 'task_name')
+          if (res.data.task_list['2']) this.task.after = this.getArray(res.data.task_list['2'], 'task_name')
+          if (res.data.exam_list['1']) this.test.in = this.getArray(res.data.exam_list['1'], 'exam_name') //课中
           if (res.data.exam_list['2']) this.test.after = this.getArray(res.data.exam_list['2'], 'exam_name')
           if (res.data.homework_list['0']) this.homework = this.getArray(res.data.homework_list['0'], 'homework_name')
           if (this.list_title === '课中任务') {
@@ -1517,20 +1527,21 @@ export default {
           } else if (this.list_title === '课后作业') {
             this.courseware_list = this.homework
           }
-          if (res.data.task_list['2'] === undefined) {
+          if (res.data.task_list['1'] === undefined) {
             this.courseware_list_list[0].listlength = 0
           } else {
-            this.courseware_list_list[0].listlength = res.data.task_list['2'].length
+            this.courseware_list_list[0].listlength = res.data.task_list['1'].length
           }
-          if (res.data.exam_list['0'] === undefined) {
+          if (res.data.exam_list['1'] === undefined) {
             this.courseware_list_list[1].listlength = 0
           } else {
-            this.courseware_list_list[1].listlength = res.data.exam_list['0'].length
+            this.courseware_list_list[1].listlength = res.data.exam_list['1'].length
+
           }
-          if (res.data.task_list['1'] === undefined) {
+          if (res.data.task_list['2'] === undefined) {
             this.courseware_list_list[2].listlength = 0
           } else {
-            this.courseware_list_list[2].listlength = res.data.task_list['1'].length
+            this.courseware_list_list[2].listlength = res.data.task_list['2'].length
           }
           if (res.data.exam_list['2'] === undefined) {
             this.courseware_list_list[3].listlength = 0
@@ -1795,6 +1806,7 @@ export default {
         this.courseware_list = this.task.in
       } else if (index.title === '课中测试') {
         this.courseware_list = this.test.in
+
       } else if (index.title === '课后任务') {
         this.courseware_list = this.task.after
       } else if (index.title === '课后测试') {
@@ -2026,6 +2038,13 @@ export default {
 }
 </script>
 <style>
+.liveul :nth-child(3) {
+  color: red;
+}
+.liveul .livedot {
+  width: 10px;
+  height: 10px;
+}
 .finnish-class {
   width: 100%;
   height: 10%;

@@ -478,6 +478,8 @@ export default {
           teacher_course_id: this.teacher_course_id
         }
       }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           this.$Message.success(res.message)
           this.getData()

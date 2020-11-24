@@ -2,75 +2,90 @@
   <div style="height:100%;padding-bottom:20px;display:flex;flex-direction: column;">
     <Row style="padding-bottom:10px" type="flex" justify="space-between">
       <Col>
-        <button class="blue-btn" v-if="sty===2||sty===3||sty===4" @click="ok">返回</button>
+      <button class="blue-btn" v-if="sty===2||sty===3||sty===4" @click="ok">返回</button>
       </Col>
       <Col>
-        <span class="student-exam-remainTime" v-if="exam_status.status === 1">
-          剩余时间: <span style="color:#EE3333">{{remainTime}}分钟</span>
-        </span>
-        <span class="student-exam-remainTime">{{exam_status.status_str}}</span>
-        <button class="blue-btn" @click="submit(2)" v-show="canSubmit" style="margin-left:20px">交卷</button>
+      <span class="student-exam-remainTime" v-if="exam_status.status === 1">
+        剩余时间: <span style="color:#EE3333">{{remainTime}}分钟</span>
+      </span>
+      <span class="student-exam-remainTime">{{exam_status.status_str}}</span>
+      <button class="blue-btn" @click="submit(2)" v-show="canSubmit" style="margin-left:20px">交卷</button>
       </Col>
     </Row>
     <Row class="studentExam">
       <Col style="width:52%;margin-right:20px;display:flex;flex-direction:column">
-        <div class="studentExam-l-t">
-          <div class="studentExam-l-t-h">
-            <div>
-              <span class="studentHomework-black-font">{{student_exam.exam.exam_name}}</span>
-            </div>
-            <div>
-              <span>满分：{{student_exam.total_score}}分</span>
-              <span style="margin-left:20px">考试时长：{{student_exam.exam.exam_time}}分钟</span>
-            </div>
+      <div class="studentExam-l-t">
+        <div class="studentExam-l-t-h">
+          <div>
+            <span class="studentHomework-black-font">{{student_exam.exam.exam_name}}</span>
           </div>
-          <div>所属课程：{{student_exam.exam.course_name}} {{student_exam.exam.type===1?'课前':(student_exam.exam.type===2?'课中':'课后')}}测试</div>
-          <div>授课老师：{{student_exam.exam.teacher}}</div>
-          <div>截止时间：{{moment(student_exam.exam_release.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')}}</div>
-          <div class="studentExam-t-score" v-if="sty===3">{{student_exam.user_total_score}}分</div>
-        </div>
-        <div class="studentExam-l-b">
-          <div class="studentExam-l-b-title">客观题</div>
-          <div class="studentExam-l-b-contain" v-if="objectList.length>0">
-            <div class="black-c">{{selectquestionIndex+1}}、[{{objectList[selectquestionIndex].object_type===1?'单选题':'多选题'}}]（{{objectList[selectquestionIndex].score}}分）</div>
-            <p style="line-height:24px" class="black-c">{{objectList[selectquestionIndex].content}}</p>
-            <!-- 0：未开始，1：考试中，2：已交卷，3：已批改 4:逾期 -->
-            <CheckboxGroup class="studentExam-select-itemList" v-model="seletIn" v-if="sty===1||sty===0">
-              <Checkbox v-for="(item,index) in changeOption(objectList[selectquestionIndex].option)" :key="index" :label="changeSel(index)">{{changeSel(index)+'.'+item}}</Checkbox>
-            </CheckboxGroup>
-            <CheckboxGroup class="studentExam-select-itemList" v-model="seletIn" v-if="sty===2||sty===4">
-              <Checkbox v-for="(item,index) in changeOption(objectList[selectquestionIndex].option)" disabled :key="index" :label="changeSel(index)">{{changeSel(index)+'.'+item}}</Checkbox>
-            </CheckboxGroup>
-            <CheckboxGroup :class="changeAnwser(seletIn)===objectList[selectquestionIndex].answer?'right-checkbox':'error-checkbox'" class="studentExam-select-itemList" v-model="seletIn" v-if="sty===3">
-              <Checkbox v-for="(item,index) in changeOption(objectList[selectquestionIndex].option)" disabled :key="index" :label="changeSel(index)">{{changeSel(index)+'.'+item}}</Checkbox>
-            </CheckboxGroup>
-            <div class="blue-c" v-if="sty===3" style="font-size:18px;margin-left:20px">正确答案：{{objectList[selectquestionIndex].answer}}</div>
-            <div class="studentExam-l-b-contain-button">
-              <button class="blueC-btn" @click="changeSelectQuestion(selectquestionIndex+1)">下一题</button>
-              <button class="blue-btn"  @click="changeSelectQuestion(selectquestionIndex-1)">上一题</button>
-            </div>
-          </div>
-          <div class="studentExam-l-b-footer">
-            <ul class="question-index">
-              <li v-if="sty!==3" :class="objectList[index].student_answer.content===''?(selectquestionIndex===index?'inpage':'unpage'):'ispage'" v-for="(item,index) in objectList" :key="index" @click="changeSelectQuestion(index,$event)">{{index+1}}</li>
-              <li v-if="sty===3" :class="objectList[index].student_answer.score!==0?'ispage':'errpage'" v-for="(item,index) in objectList" :key="index" @click="changeSelectQuestion(index,$event)">{{index+1}}</li>
-            </ul>
+          <div>
+            <span>满分：{{student_exam.total_score}}分</span>
+            <span style="margin-left:20px">考试时长：{{student_exam.exam.exam_time}}分钟</span>
           </div>
         </div>
+        <div>所属课程：{{student_exam.exam.course_name}}
+          {{student_exam.exam.type===1?'课前':(student_exam.exam.type===2?'课中':'课后')}}测试</div>
+        <div>授课老师：{{student_exam.exam.teacher}}</div>
+        <div>截止时间：{{moment(student_exam.exam_release.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')}}</div>
+        <div class="studentExam-t-score" v-if="sty===3">{{student_exam.user_total_score}}分</div>
+      </div>
+      <div class="studentExam-l-b">
+        <div class="studentExam-l-b-title">客观题</div>
+        <div class="studentExam-l-b-contain" v-if="objectList.length>0">
+          <div class="black-c">
+            {{selectquestionIndex+1}}、[{{objectList[selectquestionIndex].object_type===1?'单选题':'多选题'}}]（{{objectList[selectquestionIndex].score}}分）
+          </div>
+          <p style="line-height:24px" class="black-c">{{objectList[selectquestionIndex].content}}</p>
+          <!-- 0：未开始，1：考试中，2：已交卷，3：已批改 4:逾期 -->
+          <CheckboxGroup class="studentExam-select-itemList" v-model="seletIn" v-if="sty===1||sty===0">
+            <Checkbox v-for="(item,index) in changeOption(objectList[selectquestionIndex].option)" :key="index"
+              :label="changeSel(index)">{{changeSel(index)+'.'+item}}</Checkbox>
+          </CheckboxGroup>
+          <CheckboxGroup class="studentExam-select-itemList" v-model="seletIn" v-if="sty===2||sty===4">
+            <Checkbox v-for="(item,index) in changeOption(objectList[selectquestionIndex].option)" disabled :key="index"
+              :label="changeSel(index)">{{changeSel(index)+'.'+item}}</Checkbox>
+          </CheckboxGroup>
+          <CheckboxGroup
+            :class="changeAnwser(seletIn)===objectList[selectquestionIndex].answer?'right-checkbox':'error-checkbox'"
+            class="studentExam-select-itemList" v-model="seletIn" v-if="sty===3">
+            <Checkbox v-for="(item,index) in changeOption(objectList[selectquestionIndex].option)" disabled :key="index"
+              :label="changeSel(index)">{{changeSel(index)+'.'+item}}</Checkbox>
+          </CheckboxGroup>
+          <div class="blue-c" v-if="sty===3" style="font-size:18px;margin-left:20px">
+            正确答案：{{objectList[selectquestionIndex].answer}}</div>
+          <div class="studentExam-l-b-contain-button">
+            <button class="blueC-btn" @click="changeSelectQuestion(selectquestionIndex+1)">下一题</button>
+            <button class="blue-btn" @click="changeSelectQuestion(selectquestionIndex-1)">上一题</button>
+          </div>
+        </div>
+        <div class="studentExam-l-b-footer">
+          <ul class="question-index">
+            <li v-if="sty!==3"
+              :class="objectList[index].student_answer.content===''?(selectquestionIndex===index?'inpage':'unpage'):'ispage'"
+              v-for="(item,index) in objectList" :key="index" @click="changeSelectQuestion(index,$event)">{{index+1}}
+            </li>
+            <li v-if="sty===3" :class="objectList[index].student_answer.score!==0?'ispage':'errpage'"
+              v-for="(item,index) in objectList" :key="index" @click="changeSelectQuestion(index,$event)">{{index+1}}
+            </li>
+          </ul>
+        </div>
+      </div>
       </Col>
       <Col class="studentExam-r" style="flex:1">
-        <div class="studentExam-l-b-title">主观题</div>
-        <div>
-          <div style="margin-bottom:20px" v-for="(item,index) in subjectList" :key="index">
-            <div class="black-c">{{index+1}}、[{{getMainQuestionType(item.subject_type)}}]（{{item.score}}分）</div>
-            <p style="line-height:24px;margin-bottom:10px" class="black-c">{{item.content}}</p>
-            <b>作答：</b>
-            <Input v-if="sty===2||sty===3||sty===4" type="textarea" :rows="4" v-model="item.student_answer.content" disabled/>
-            <Input v-if="sty===1||sty===0" type="textarea" :rows="4" v-model="item.student_answer.content"/>
-            <div class="main-scroe" v-if="sty===3">本题得分：{{item.student_answer.score}}</div>
-            <div style="clear:both"></div>
-          </div>
+      <div class="studentExam-l-b-title">主观题</div>
+      <div>
+        <div style="margin-bottom:20px" v-for="(item,index) in subjectList" :key="index">
+          <div class="black-c">{{index+1}}、[{{getMainQuestionType(item.subject_type)}}]（{{item.score}}分）</div>
+          <p style="line-height:24px;margin-bottom:10px" class="black-c">{{item.content}}</p>
+          <b>作答：</b>
+          <Input v-if="sty===2||sty===3||sty===4" type="textarea" :rows="4" v-model="item.student_answer.content"
+            disabled />
+          <Input v-if="sty===1||sty===0" type="textarea" :rows="4" v-model="item.student_answer.content" />
+          <div class="main-scroe" v-if="sty===3">本题得分：{{item.student_answer.score}}</div>
+          <div style="clear:both"></div>
         </div>
+      </div>
       </Col>
     </Row>
     <Spin size="large" v-if="loading" fix></Spin>
@@ -83,6 +98,7 @@ export default {
   },
   props: {
     student_exam_id: '',
+    examId: {},
     sty: ''
   },
   data () {
@@ -138,6 +154,7 @@ export default {
       return a
     },
     getExam () {
+      console.log(this.student_exam_id);
       this.objectList = []
       this.subjectList = []
       if (!this.student_exam_id) return
@@ -150,27 +167,61 @@ export default {
       let _this = this
       _this.loading = true
       _this.editor_init = true
-      _this.axios.request({
-        method: 'get',
-        url: `/index.php/Student/Exam/detail`,
-        params: {
-          student_exam_id: _this.student_exam_id,
-          hasAnswer: hs
-        }
-      }).then(res => {
-        _this.loading = false
-        let data = res.data
-        if (res.code === 200) {
-          _this.student_exam = data.student_exam
-          _this.exam_status = data.exam_status_data
-          _this.getObjectList(data.student_exam.object)
-          _this.getSubjectList(data.student_exam.subject)
-          // // 状态是未开始就发送开始考试请求
-          // // 先判断考试进行状态,可以提交状态就显示交卷按钮，考试中就显示保存
-          _this.dealExamStatus(_this.exam_status.status)
-          _this.timeInterval()
-        }
-      })
+      // console.log(_this.examId.exam_release_id);
+
+      if (_this.examId.exam_release_id) {
+        // console.log(_this.examId);
+        _this.axios.request({
+          method: 'post',
+          url: `/index.php/Student/Exam/live_exam_detail`,
+          data: {
+            student_id: _this.examId.student_id,
+            exam_release_id: _this.examId.exam_release_id,
+            hasAnswer: hs
+          }
+        }).then(res => {
+          console.log(res);
+          // this.student_exam_id = _this.examId.exam_release_id
+          _this.loading = false
+          let data = res.data
+          if (res.code === 200) {
+            _this.student_exam = data.student_exam
+            _this.exam_status = data.exam_status_data
+            this.sty = data.exam_status_data.status
+            _this.getObjectList(data.student_exam.object)
+            _this.getSubjectList(data.student_exam.subject)
+            // // 状态是未开始就发送开始考试请求
+            // // 先判断考试进行状态,可以提交状态就显示交卷按钮，考试中就显示保存
+            _this.dealExamStatus(_this.exam_status.status)
+            _this.timeInterval()
+            _this.$emit("name", data.student_exam.exam.exam_name)
+          }
+        })
+      } else {
+        _this.axios.request({
+          method: 'get',
+          url: `/index.php/Student/Exam/detail`,
+          params: {
+            student_exam_id: _this.student_exam_id,
+            hasAnswer: hs
+          }
+        }).then(res => {
+          _this.loading = false
+          let data = res.data
+
+          if (res.code === 200) {
+            _this.student_exam = data.student_exam
+            _this.exam_status = data.exam_status_data
+            _this.getObjectList(data.student_exam.object)
+            _this.getSubjectList(data.student_exam.subject)
+            // // 状态是未开始就发送开始考试请求
+            // // 先判断考试进行状态,可以提交状态就显示交卷按钮，考试中就显示保存
+            _this.dealExamStatus(_this.exam_status.status)
+            _this.timeInterval()
+          }
+        })
+      }
+
     },
     getObjectList (item) { // 处理客观题
       if (item.single.length !== 0) {
@@ -324,7 +375,7 @@ export default {
         }
       }).then(res => {
         if (res.code === 200) {
-          _this.$Message.success(res.message)
+          _this.$Message.success('提交成功!')
           _this.$emit('success')
         }
       })
@@ -351,9 +402,13 @@ export default {
     },
     ok () {
       this.$emit('closeModal')
+
+
     }
   },
   mounted () {
+
+
     this.getExam()
   },
   beforeDestroy () {

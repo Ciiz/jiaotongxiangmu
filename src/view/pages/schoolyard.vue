@@ -58,7 +58,7 @@
           <Row type="flex" justify="space-between" class="new-index-course-header">
 
             <Col>
-            <RadioGroup @on-change='handle_Radio'>
+            <RadioGroup @on-change='handle_Radio' v-model="goodrideo">
               <Radio label="全部"></Radio>
               <Radio label="视频"></Radio>
               <Radio label="全景"></Radio>
@@ -110,11 +110,11 @@
     <!-- 免费课程 -->
     <div>
       <Tabs value="allCourse" class="index-tabs" @on-click="changeTabs">
-        <TabPane label="免费课程" name="allCourse">
+        <TabPane label="推荐课程" name="allCourse">
           <Row type="flex" justify="space-between" class="new-index-course-header">
 
             <Col>
-            <RadioGroup @on-change='handle_Radio2'>
+            <RadioGroup @on-change='handle_Radio2' v-model="couserradio">
               <Radio label="全部"></Radio>
               <Radio label="视频"></Radio>
               <Radio label="全景"></Radio>
@@ -214,7 +214,9 @@ export default {
       freeCourse: [],
       majorListAll: [],
       newCourseAll: [],
-      freeCourseAll: []
+      freeCourseAll: [],
+      couserradio: '全部',
+      goodrideo: '全部'
 
     }
   },
@@ -261,15 +263,15 @@ export default {
       var coursearr = this.newCourseAll.filter(v => {
         return v.course_type === value
       })
-      if (coursearr.length > 10) {
-        coursearr.length = 10
-      }
+      // if (coursearr.length > 10) {
+      //   coursearr.length = 10
+      // }
       this.newCourse = coursearr
       if (value === 0) {
         this.newCourse = this.newCourseAll
-        if (this.newCourse.length > 10) {
-          this.newCourse.length = 10
-        }
+        // if (this.newCourse.length > 10) {
+        //   this.newCourse.length = 10
+        // }
       }
     },
     handle_Radio2 (value) {
@@ -285,15 +287,15 @@ export default {
       var coursearr2 = this.freeCourseAll.filter(v => {
         return v.course_type === value
       })
-      if (coursearr2.length > 10) {
-        coursearr2.length = 10
-      }
+      // if (coursearr2.length > 10) {
+      //   coursearr2.length = 10
+      // }
       this.freeCourse = coursearr2
       if (value === 0) {
         this.freeCourse = this.freeCourseAll
-        if (this.newCourse.length > 10) {
-          this.freeCourse.length = 10
-        }
+        // if (this.newCourse.length > 10) {
+        //   this.freeCourse.length = 10
+        // }
       }
     },
     handleMajorList (index) {
@@ -371,7 +373,6 @@ export default {
       } else {
         this.$Message.warning('没有更多了....');
       }
-
     },
     get_command_teacher () {
       // 获取推荐教师

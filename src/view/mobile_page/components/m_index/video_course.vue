@@ -3,7 +3,9 @@
     <!-- 精品课程 -->
     <div class="m_Boutique">
       <div class="m_Boutique_header">
-        <div class="m_Boutique_header_left">精品课程</div>
+        <div class="m_Boutique_header_left publiciocn"><img src="@/assets/images/public/boutique_icon.png"
+            alt=""><span>精品课程</span>
+        </div>
         <div class="m_Boutique_header_right" @click="Boutiquemore">更多 ></div>
       </div>
       <div class="m_Boutique_list">
@@ -15,7 +17,10 @@
           <div class="m_Boutique_list_item_center">
             <div class="m_Boutique_list_item_center1">{{v.course_name}}</div>
             <div class="m_Boutique_list_item_center2" v-html="v.description"></div>
-            <div class="m_Boutique_list_item_center3">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
+            <div class="m_Boutique_list_item_center3">
+              <img src="@/assets/images/public/time_icon.png" alt="">
+              <span>{{moment(v.created_at * 1000).format('HH:mm')}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -24,7 +29,9 @@
     <!-- 免费课程 -->
     <div class="m_Boutique free">
       <div class="m_Boutique_header">
-        <div class="m_Boutique_header_left">免费课程</div>
+        <div class="m_Boutique_header_left publiciocn"><img src="@/assets/images/public/free_icon.png" alt="">
+          <span>免费课程</span>
+        </div>
         <div class="m_Boutique_header_right free" @click="handlefreeshow">更多 ></div>
       </div>
       <div class="m_Boutique_list">
@@ -36,8 +43,10 @@
           <div class="m_Boutique_list_item_center">
             <div class="m_Boutique_list_item_center1">{{v.course_name}}</div>
             <div class="m_Boutique_list_item_center2" v-html="v.description"></div>
-            <div class="m_Boutique_list_item_center3">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
-
+            <div class="m_Boutique_list_item_center3">
+              <img src="@/assets/images/public/time_icon.png" alt="">
+              <span>{{moment(v.created_at * 1000).format('HH:mm')}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -58,7 +67,8 @@
           <div class="m_recommendTeacher-center_item_name">
             <div class="m_recommendTeacher-center_item_name1">
               <div class="m_recommendTeacher-center_item_name1_l"> {{v.name}}</div>
-              <div class="m_recommendTeacher-center_item_name1_r"> {{v.course_count}}</div>
+              <div class="m_recommendTeacher-center_item_name1_r"> <img src="@/assets/images/public/book_icon.png"
+                  alt=""><span>{{v.course_count}}</span> </div>
 
             </div>
             <div class="m_recommendTeacher-center_item_name2">院校：{{v.school_name}}</div>
@@ -205,6 +215,15 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.publiciocn {
+  display: flex;
+  align-items: center;
+  img {
+    width: 0.35rem;
+    height: 0.31rem;
+    margin-right: 0.1rem;
+  }
+}
 .videoCourse {
   // height: 100vh;
   background: #f7f7f7;
@@ -280,6 +299,13 @@ export default {
             font-family: PingFang SC;
             font-weight: 500;
             color: #4a4a4a;
+            display: flex;
+            align-items: center;
+            img {
+              width: 0.22rem;
+              height: 0.22rem;
+              margin-right: 0.1rem;
+            }
           }
         }
       }
@@ -342,6 +368,13 @@ export default {
               font-family: PingFang SC;
               font-weight: 500;
               color: #000000;
+              display: flex;
+              align-items: center;
+              img {
+                width: 0.24rem;
+                height: 0.24rem;
+                margin-right: 0.1rem;
+              }
             }
           }
           .m_recommendTeacher-center_item_name2,

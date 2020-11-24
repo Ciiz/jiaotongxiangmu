@@ -70,6 +70,13 @@ export default {
   },
 
   methods: {
+    compare (property) {
+      return function (a, b) {
+        var value1 = a[property]
+        var value2 = b[property]
+        return value2 - value1 // value2>value1---降序  value1>value2 ---升序
+      }
+    },
     getSchoolList () {
       // 获取学校列表
       this.schoolList = []
@@ -79,8 +86,15 @@ export default {
           url: '/index.php/Home/Index/getSchoolList'
         })
         .then(res => {
+          console.log(res);
+
           if (res.code === 200) {
-            this.schoolList = res.data.list
+            // this.schoolList = res.data.list
+            var course_num = []
+            var course_num = res.data.list.map(v => {
+              return v
+            })
+            this.schoolList = course_num.sort(this.compare('course_num')) // 排序
           }
         })
     }

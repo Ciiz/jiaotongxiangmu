@@ -96,7 +96,7 @@
   </Layout>
 </template>
 <script>
-import { get_search, teacher_unread } from "@/api/common"
+import { get_search, teacher_unread, myCourseList } from "@/api/common"
 import { student_unread } from "@/api/student"
 import maxLogo from '@/assets/images/new-index/logo.png'
 import LoginForm from '_c/login-form'
@@ -178,8 +178,10 @@ export default {
     },
     icon () {
       return this.$store.state.user.userInfo.icon
+    },
+    schoolId () {
+      return this.$store.state.user.userInfo.schoolId
     }
-
   },
   methods: {
     ...mapActions([
@@ -194,10 +196,19 @@ export default {
     ]),
     handleSubmit ({ userName, password, user_type, school }) {
       this.handleLogin({ userName, password, user_type, school }).then(res => {
+
         this.getUserInfo().then(res => {
+
           this.$store.commit('setpasswordUserId', res.userId)
           if (res.login_status === 1) {
+
+            if (this.userType === 1) {
+              this.get_unread()
+            } else if (this.userType === 2) {
+              this.student_unread()
+            }
             this.$store.commit('setLoginstatus', res.login_status)
+
           } else {
             this.$store.commit('setLoginstatus', 0)
           }
@@ -220,7 +231,6 @@ export default {
       })
     },
     handlemessages () {
-
       this.$store.commit('setuserMessagess', true)
       if (this.userType === 1) {
         this.$router.push({
@@ -242,7 +252,6 @@ export default {
       } else {
         this.message_total = 1
       }
-
     },
     async student_unread () {
       let res = await student_unread()
@@ -268,14 +277,10 @@ export default {
         this.get_unread()
       } else {
         this.student_unread()
-        console.log(2222);
+
       }
 
     }
-
-
-
-
     this.setHomeRoute(routers)
     // this.$store.state.user.userInfo.userType === 2 ? this.getUnreadMessageCount() : this.sendunread()
     this.$store.commit('setcurrentTab', '我的课程')

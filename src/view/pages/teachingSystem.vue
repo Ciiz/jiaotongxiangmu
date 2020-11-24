@@ -669,6 +669,9 @@ export default {
     },
     currentTab () {
       return this.$store.state.user.currentTab
+    },
+    userType () {
+      return this.$store.state.user.userInfo.userType
     }
   },
   data () {
@@ -733,7 +736,7 @@ export default {
       showClassTable: true,
       modal1: false,
       showT: false,
-      userType: this.$store.state.user.userInfo.userType,
+
       userId: this.$store.state.user.userId,
       data: {
         message_total: 0,
@@ -828,6 +831,7 @@ export default {
       ]
     }
   },
+
   methods: {
     ...mapActions([
       'getUnreadMessageCount',

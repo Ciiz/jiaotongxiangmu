@@ -68,7 +68,8 @@
       <!-- 猜你喜欢 -->
       <div class="m_allcourse_like" v-if="userType !==3">
         <div class="m_allcourse_like_header">
-          <div class="m_allcourse_like_header_l">猜你喜欢</div>
+          <div class="m_allcourse_like_header_l publiciocn"> <img src="@/assets/images/public/like_icon.png" alt="">
+            <span>猜你喜欢</span></div>
           <div class="m_allcourse_likee_header_r" @click="handle_more">更多 ></div>
         </div>
         <div class="m_allcourse_like_list">
@@ -86,7 +87,8 @@
       <!-- 精品课程 -->
       <div class="m_Boutique">
         <div class="m_Boutique_header">
-          <div class="m_Boutique_header_left">精品课程</div>
+          <div class="m_Boutique_header_left publiciocn"><img src="@/assets/images/public/boutique_icon.png"
+              alt=""><span>精品课程</span> </div>
           <div class="m_Boutique_header_right" @click="Boutiquemore">更多 ></div>
         </div>
         <div class="m_Boutique_list">
@@ -98,7 +100,10 @@
             <div class="m_Boutique_list_item_center">
               <div class="m_Boutique_list_item_center1">{{v.course_name}}</div>
               <div class="m_Boutique_list_item_center2" v-html="v.description"></div>
-              <div class="m_Boutique_list_item_center3">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
+              <div class="m_Boutique_list_item_center3 ">
+                <img src="@/assets/images/public/time_icon.png" alt="">
+                <span>{{moment(v.created_at * 1000).format('HH:mm')}}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -107,7 +112,9 @@
       <!-- 免费课程 -->
       <div class="m_Boutique free">
         <div class="m_Boutique_header">
-          <div class="m_Boutique_header_left">免费课程</div>
+          <div class="m_Boutique_header_left publiciocn"><img src="@/assets/images/public/free_icon.png" alt="">
+            <span>免费课程</span>
+          </div>
           <div class="m_Boutique_header_right free" @click="handlefreeshow">更多 ></div>
         </div>
         <div class="m_Boutique_list">
@@ -119,7 +126,9 @@
             <div class="m_Boutique_list_item_center">
               <div class="m_Boutique_list_item_center1">{{v.course_name}}</div>
               <div class="m_Boutique_list_item_center2" v-html="v.description"></div>
-              <div class="m_Boutique_list_item_center3">{{moment(v.created_at * 1000).format('HH:mm')}}</div>
+              <div class="m_Boutique_list_item_center3 ">
+                <img src="@/assets/images/public/time_icon.png" alt="">
+                <span>{{moment(v.created_at * 1000).format('HH:mm')}}</span></div>
             </div>
           </div>
         </div>
@@ -128,7 +137,10 @@
       <!-- 教师推荐 -->
       <div class="m_recommendTeacher">
         <div class="m_recommendTeacher-header">
-          <div class="m_recommendTeacher-header-left">教师推荐</div>
+          <div class="m_recommendTeacher-header-left publiciocn"><img src="@/assets/images/public/teacher_icon.png"
+              alt="">
+            <span>教师推荐</span>
+          </div>
           <div class="m_recommendTeacher-header-right" @click="handle_teach">更多></div>
         </div>
         <div class="m_recommendTeacher-center">
@@ -140,7 +152,11 @@
             <div class="m_recommendTeacher-center_item_name">
               <div class="m_recommendTeacher-center_item_name1">
                 <div class="m_recommendTeacher-center_item_name1_l"> {{v.name}}</div>
-                <div class="m_recommendTeacher-center_item_name1_r"> {{v.course_count}}</div>
+                <div class="m_recommendTeacher-center_item_name1_r">
+                  <img src="@/assets/images/public/book_icon.png" alt="">
+                  <span>{{v.course_count}}</span>
+                </div>
+
               </div>
               <div class="m_recommendTeacher-center_item_name2">院校：{{v.school_name}}</div>
               <div class="m_recommendTeacher-center_item_name3">职业：{{v.major_name}}</div>
@@ -449,6 +465,16 @@ export default {
 }
 </script>
 <style lang='less' scoped>
+.publiciocn {
+  display: flex;
+  align-items: center;
+  img {
+    width: 0.35rem;
+    height: 0.31rem;
+    margin-right: 0.1rem;
+  }
+}
+
 /deep/.swiper-container {
   height: 1.7rem;
   // margin-left: auto;
@@ -462,6 +488,7 @@ export default {
 }
 .m_allschool {
   margin-top: 0.3rem;
+
   .m_allschool_a {
     display: flex;
     justify-content: space-between;
@@ -482,6 +509,10 @@ export default {
       font-family: PingFang SC;
       font-weight: bold;
       color: #222222;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
     }
     .m_allschool_school_name_s {
       font-size: 0.22rem;
@@ -520,6 +551,13 @@ export default {
       font-family: PingFang SC;
       font-weight: bold;
       color: #222222;
+      // display: flex;
+      // align-items: center;
+      // img {
+      //   width: 35px;
+      //   height: 31px;
+      //   margin-right: 10px;
+      // }
       .m_allcourse_likee_header_r {
         font-size: 0.24rem;
         font-family: PingFang SC;
@@ -641,6 +679,13 @@ export default {
           font-family: PingFang SC;
           font-weight: 500;
           color: #4a4a4a;
+          display: flex;
+          align-items: center;
+          img {
+            width: 0.22rem;
+            height: 0.22rem;
+            margin-right: 0.1rem;
+          }
         }
       }
     }
@@ -703,6 +748,13 @@ export default {
             font-family: PingFang SC;
             font-weight: 500;
             color: #000000;
+            display: flex;
+            align-items: center;
+            img {
+              width: 0.24rem;
+              height: 0.24rem;
+              margin-right: 0.1rem;
+            }
           }
         }
         .m_recommendTeacher-center_item_name2,

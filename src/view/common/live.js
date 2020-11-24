@@ -19,6 +19,8 @@ export default {
       _this.ws.onmessage = e => {
         // json数据转换成js对象
         let data = JSON.parse(e.data)
+        console.log(data);
+
         this.handleOnMessage(data)
         this.getHistory = false
       }

@@ -3,68 +3,83 @@
     <div class="showCorrctList">
       <Row type="flex" justify="space-between">
         <Col :span="12" class="correct-iscorrect2">
-          <span v-show="correct_status===1" style="background:#1170FF;color:#FFFFFF" @click="changeRank($event,'')">全部（{{data_info.student_num}}）</span>
-          <span v-show="correct_status===1" style="background:#ffffff" @click="changeRank($event,'A')">优秀（{{data_info.rank_A_num}}）</span>
-          <span v-show="correct_status===1" style="background:#ffffff" @click="changeRank($event,'B')">良好（{{data_info.rank_B_num}}）</span>
-          <span v-show="correct_status===1" style="background:#ffffff" @click="changeRank($event,'C')">及格（{{data_info.rank_C_num}}）</span>
-          <span v-show="correct_status===1" style="background:#ffffff" @click="changeRank($event,'D')">不及格（{{data_info.rank_D_num}}）</span>
+        <span v-show="correct_status===1" style="background:#1170FF;color:#FFFFFF"
+          @click="changeRank($event,'')">全部（{{data_info.student_num}}）</span>
+        <span v-show="correct_status===1" style="background:#ffffff"
+          @click="changeRank($event,'A')">优秀（{{data_info.rank_A_num}}）</span>
+        <span v-show="correct_status===1" style="background:#ffffff"
+          @click="changeRank($event,'B')">良好（{{data_info.rank_B_num}}）</span>
+        <span v-show="correct_status===1" style="background:#ffffff"
+          @click="changeRank($event,'C')">及格（{{data_info.rank_C_num}}）</span>
+        <span v-show="correct_status===1" style="background:#ffffff"
+          @click="changeRank($event,'D')">不及格（{{data_info.rank_D_num}}）</span>
         </Col>
         <Col style="margin-bottom:10px">
-          <button class="correct-iscorrect2-back" @click="$emit('closeModal')">返回</button>
-          <span v-show="correct_status===0" class="correct-iscorrect2-shownum" style="cursor:pointer" v-if="data_info.has_correct===list.length" @click="updateCorrectStatus">批改完成(发布)</span>
-          <span v-show="correct_status===0" class="correct-iscorrect2-shownum" v-if="data_info.has_correct!==list.length">已批改：{{data_info.has_correct}}/{{list.length}}</span>
+        <button class="correct-iscorrect2-back" @click="$emit('closeModal')">返回</button>
+        <span v-show="correct_status===0" class="correct-iscorrect2-shownum" style="cursor:pointer"
+          v-if="data_info.has_correct===list.length" @click="updateCorrectStatus">批改完成(发布)</span>
+        <span v-show="correct_status===0" class="correct-iscorrect2-shownum"
+          v-if="data_info.has_correct!==list.length">已批改：{{data_info.has_correct}}/{{list.length}}</span>
         </Col>
       </Row>
       <Row type="flex" style="flex:1;overflow:hidden">
         <Col :span="12" style="height:100%;overflow-y:scroll;margin-right:20px;padding:10px;background:#ffffff">
-          <div style="border:1px solid #EEEEEE">
-            <Row v-for="(item,index) in list" :key="index" style="color:#666666;font-size:14px;line-height:60px;text-align:center">
-              <Col :span="1">{{index+1}}</Col>
-              <Col :span="5" v-if="target_type==='student_task_list'">
-                <span v-if="release_type === 2">
-                <img :src="item.icon" style="margin:14px 0;vertical-align:middle;border-radius:50%;display:inline-block;width:32px;height:32px;margin-right:10px"/>
-                  {{item.name}}
-                </span>
-                <span v-if="release_type === 1">小组{{item.team_id}}（组长：{{item.name}}）</span>
-              </Col>
-              <Col :span="5" v-else>
-                <span v-if="release_type === 2">
-                <img :src="item.icon" style="margin:14px 0;vertical-align:middle;border-radius:50%;display:inline-block;width:32px;height:32px;margin-right:10px"/>
-                  {{item.name}}
-                </span>
-                <span v-if="release_type === 1">小组{{item.team_id}}（组长：{{item.name}}）</span>
-              </Col>
-              <Col :span="6">学号：{{item.s_no}}</Col>
-              <Col :span="3" v-if="target_type==='student_exam_list'">{{getexamstatus(item.exam_status)}}</Col>
-              <Col :span="3" v-else>{{item.submit_status===1?'已提交':'未提交'}}</Col>
-              <Col :span="3">{{getscorestatus(item.score_status)}}</Col>
-              <Col :span="3" v-if="target_type==='student_exam_list'">
-                <span v-if="item.total_score!==''">{{item.total_score}}分</span>
-                <span v-if="item.total_score===''">未评分</span>
-              </Col>
-              <Col :span="3" v-else>
-                <span v-if="item.user_score!==''">{{item.user_score}}分</span>
-                <span v-if="item.user_score===''">未评分</span>
-              </Col>
-              <Col :span="3">
-                <button class="blue-btn" style="width:62px;line-height:30px" @click="openEvaluate(item,index)">{{item.score_status===1?'查看':'评价'}}</button>
-              </Col>
-            </Row>
-          </div>
+        <div style="border:1px solid #EEEEEE">
+          <Row v-for="(item,index) in list" :key="index"
+            style="color:#666666;font-size:14px;line-height:60px;text-align:center">
+            <Col :span="1">{{index+1}}</Col>
+            <Col :span="5" v-if="target_type==='student_task_list'">
+            <span v-if="release_type === 2">
+              <img :src="item.icon"
+                style="margin:14px 0;vertical-align:middle;border-radius:50%;display:inline-block;width:32px;height:32px;margin-right:10px" />
+              {{item.name}}
+            </span>
+            <span v-if="release_type === 1">小组{{item.team_id}}（组长：{{item.name}}）</span>
+            </Col>
+            <Col :span="5" v-else>
+            <span v-if="release_type === 2">
+              <img :src="item.icon"
+                style="margin:14px 0;vertical-align:middle;border-radius:50%;display:inline-block;width:32px;height:32px;margin-right:10px" />
+              {{item.name}}
+            </span>
+            <span v-if="release_type === 1">小组{{item.team_id}}（组长：{{item.name}}）</span>
+            </Col>
+            <Col :span="6">学号：{{item.s_no}}</Col>
+            <Col :span="3" v-if="target_type==='student_exam_list'">{{getexamstatus(item.exam_status)}}</Col>
+            <Col :span="3" v-else>{{item.submit_status===1?'已提交':'未提交'}}</Col>
+            <Col :span="3">{{getscorestatus(item.score_status)}}</Col>
+            <Col :span="3" v-if="target_type==='student_exam_list'">
+            <span v-if="item.total_score!==''">{{item.total_score}}分</span>
+            <span v-if="item.total_score===''">未评分</span>
+            </Col>
+            <Col :span="3" v-else>
+            <span v-if="item.user_score!==''">{{item.user_score}}分</span>
+            <span v-if="item.user_score===''">未评分</span>
+            </Col>
+            <Col :span="3">
+            <button class="blue-btn" style="width:62px;line-height:30px"
+              @click="openEvaluate(item,index)">{{item.score_status===1?'查看':'评价'}}</button>
+            </Col>
+          </Row>
+        </div>
         </Col>
         <Col style="padding:20px;height:100%;flex:1;background:#ffffff;overflow-y:scroll">
-        <div style="font-size:16px;color:#222222">{{target_type==='student_exam_list'?data_info.exam_name:(target_type==='student_task_list'?data_info.task_name:data_info.homework_name)}}</div>
+        <div style="font-size:16px;color:#222222">
+          {{target_type==='student_exam_list'?data_info.exam_name:(target_type==='student_task_list'?data_info.task_name:data_info.homework_name)}}
+        </div>
         <div class="examDetail-info">
           <span>班级：{{data_info.class_name}}</span>
           <span>开始时间：{{moment(data_info.start_time * 1000).format('YYYY-MM-DD HH:mm')}}</span>
           <span>截止时间：{{moment(data_info.end_time * 1000).format('YYYY-MM-DD HH:mm')}}</span>
         </div>
-        <div style="font-size:14px;margin-top:2px">提交人数：{{data_info.student_submitted_num}}/{{data_info.student_num}}</div>
+        <div style="font-size:14px;margin-top:2px">提交人数：{{data_info.student_submitted_num}}/{{data_info.student_num}}
+        </div>
         <div class="examDetail-info-num">满分：{{data_info.option}}</div>
         <Row v-if="target_type==='student_exam_list'">
           <h2 style="font-size:16px;color:#3B9BFF">试题内容</h2>
           <div v-for="(item,index) in objective_question" :key="index" class="exam-questionList">
-            <p class="examDetail-info-title" v-if="item.length!==0">{{item[0].object_type===1?'单选题':'多选题'}}（共{{objective_question.multiple_choice.length}}题）</p>
+            <p class="examDetail-info-title" v-if="item.length!==0">
+              {{item[0].object_type===1?'单选题':'多选题'}}（共{{objective_question.multiple_choice.length}}题）</p>
             <div v-for="(item2,index2) in item" :key="index2">
               <p>{{index2+1}}、{{item2.content}}（{{item2.score}}分）</p>
               <ul>
@@ -75,7 +90,8 @@
             </div>
           </div>
           <div v-for="(item,index) in subjective_question" :key="index" class="exam-questionList">
-            <p class="examDetail-info-title" v-if="item.length!==0">{{changeQusetionType(item[0].subject_type)}}（共{{item.length}}题）</p>
+            <p class="examDetail-info-title" v-if="item.length!==0">
+              {{changeQusetionType(item[0].subject_type)}}（共{{item.length}}题）</p>
             <div v-for="(item2,index2) in item" :key="index2">
               <p>{{index2+1}}、{{item2.content}}（{{item2.score}}分）</p>
             </div>
@@ -90,10 +106,16 @@
           <div v-html="data_info.homework_content"></div>
         </Row>
         </Col>
-        <Modal class="fistIndex-modal" v-model="modal" :title="title" :width="900" :footer-hide="footerHide" :fullscreen="fullscreen">
-          <StudentExamEvaluate @changeExam="changePage" :examIndex="currentIndex" :student_exam_id="target_id" v-if="target === 'student_exam_list' && modal" @success="modal = false ; getData()"></StudentExamEvaluate>
-          <StudentTaskEvaluate @changeTask='changePage' :taskIndex="currentIndex" :student_task_id="target_id" v-if="target === 'student_task_list' && modal" @success="modal = false ; getData()"></StudentTaskEvaluate>
-          <StudentHomeworkEvaluate @changeHomwork="changePage" :homeworkIndex="currentIndex" :student_homework_id="target_id" v-if="target === 'student_homework_list' && modal" @success="modal = false ; getData()"></StudentHomeworkEvaluate>
+        <Modal class="fistIndex-modal" v-model="modal" :title="title" :width="900" :footer-hide="footerHide"
+          :fullscreen="fullscreen">
+          <StudentExamEvaluate @changeExam="changePage" :examIndex="currentIndex" :student_exam_id="target_id"
+            :targetwork_id='targetwork_id' v-if="target === 'student_exam_list' && modal"
+            @success="modal = false ; getData()"></StudentExamEvaluate>
+          <StudentTaskEvaluate @changeTask='changePage' :taskIndex="currentIndex" :student_task_id="target_id"
+            v-if="target === 'student_task_list' && modal" @success="modal = false ; getData()"></StudentTaskEvaluate>
+          <StudentHomeworkEvaluate @changeHomwork="changePage" :homeworkIndex="currentIndex"
+            :student_homework_id="target_id" v-if="target === 'student_homework_list' && modal"
+            @success="modal = false ; getData()"></StudentHomeworkEvaluate>
         </Modal>
       </Row>
     </div>
@@ -106,7 +128,7 @@ import StudentExamEvaluate from '@/view/teacher_common/exam/student_exam_evaluat
 import StudentTaskEvaluate from '@/view/teacher_common/task/student_task_evaluate'
 import StudentHomeworkEvaluate from '@/view/teacher_common/homework/student_homework_evaluate'
 
-export default{
+export default {
   props: {
     targetwork_id: '',
     target_type: ''
@@ -143,8 +165,14 @@ export default{
       this.getData()
     }
   },
+  // computed: {
+  //   examInfo () {
+  //     return this.$store.state.user.examInfo
+  //   }
+  // },
   methods: {
     changeRank (e, r) {
+      console.log(r);
       for (let i = 0; i < document.getElementsByClassName('correct-iscorrect2')[0].children.length; i++) {
         document.getElementsByClassName('correct-iscorrect2')[0].children[i].style.color = '#666666'
         document.getElementsByClassName('correct-iscorrect2')[0].children[i].style.background = '#ffffff'
@@ -206,7 +234,7 @@ export default{
     },
     getData () {
       this.loading = true
-      if (this.target_type === 'student_exam_list') {
+      if (this.target_type === 'student_exam_list') { //测试
         this.axios.request({
           method: 'get',
           url: '/index.php/Teacher/Examination/student_exam_list',
@@ -215,9 +243,12 @@ export default{
             score_rank: this.rank
           }
         }).then(res => {
+          console.log(res);
           if (res.code === 200) {
             this.list = res.data.list
             this.correct_status = res.data.correct_status
+            console.log(this.correct_status);
+
             this.release_type = 2
             this.objective_question = res.data.exam_info.objective_question
             this.subjective_question = res.data.exam_info.subjective_question
@@ -225,7 +256,7 @@ export default{
           }
           this.loading = false
         })
-      } else if (this.target_type === 'student_task_list') {
+      } else if (this.target_type === 'student_task_list') { //任务
         this.axios.request({
           method: 'post',
           url: '/index.php/Teacher/Task/team_list_v2',
@@ -244,7 +275,7 @@ export default{
           }
           this.loading = false
         })
-      } else if (this.target_type === 'student_homework_list') {
+      } else if (this.target_type === 'student_homework_list') { //作业
         this.axios.request({
           method: 'get',
           url: '/index.php/Teacher/Homework/student_homework_list',
@@ -278,6 +309,17 @@ export default{
         if (res.code === 200) {
           this.$Message.success(res.message)
           this.$emit('on-refresh-parent-list')
+          location.reload()
+          // this.axios.request({
+          //   method: 'get',
+          //   url: '/index.php/Teacher/Examination/student_exam_list',
+          //   params: {
+          //     exam_release_id: this.targetwork_id,
+          //   }
+          // }).then(res => {
+          //   console.log(res);
+          //   this.$store.commit('setexamInfo', res.data)
+          // })
         }
       })
     },

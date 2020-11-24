@@ -132,6 +132,7 @@
       <div class="video_likeList">
         <ul>
           <li v-for="item in like_list" :key="item.id" @click="handlelikeplay(item)">
+            <div class="jingxuan" v-if="item.is_charge"><img src="@/assets/images/public/jingxuan.png" alt=""></div>
             <div class="video_likeList_itemImg">
               <img :src="item.img" alt="">
             </div>
@@ -241,7 +242,6 @@ export default {
           this.$nextTick(() => {
             document.querySelector('.isCharge_text').style.display = "block"
           })
-
         } else {
           this.$nextTick(() => {
             document.querySelector('.isCharge_text').style.display = "none"
@@ -249,9 +249,15 @@ export default {
         }
         if (this.videoUrl !== '') {
           document.querySelector('#video_massege').style.display = "block"
+          document.querySelector('.videoCourse_video_img').style.display = "none"
           if (this.videoUrl === this.videoUrl) {
             document.querySelector('.video_item').play()
           }
+
+        } else {
+          this.$nextTick(() => {
+            document.querySelector('.videoCourse_video_img').style.display = "block"
+          })
 
         }
       })
@@ -671,7 +677,18 @@ export default {
           width: 200px;
           height: 230px;
           margin-right: 51px;
-
+          position: relative;
+          .jingxuan {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50px;
+            height: 50px;
+            img {
+              width: 50px;
+              height: 50px;
+            }
+          }
           .video_likeList_itemImg {
             width: 200px;
             height: 150px;
