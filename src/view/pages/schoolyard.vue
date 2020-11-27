@@ -76,32 +76,7 @@
             <div style="clear:both"></div>
           </ul>
         </TabPane>
-        <!-- <TabPane label="本校课程" name="schoolCourse" v-if="token!==''&&token!==false&&token!==undefined&&userId!==''">
-          <Row type="flex" justify="space-between" class="new-index-course-header">
-            <Col>
-            <Select v-model="major" style="width:200px">
-              <Option v-for="item in majorList" :value="item.major_id" :key="item.major_id">{{ item.major_name }}
-              </Option>
-            </Select>
-            </Col>
-            <Col>
-            <RadioGroup @on-change='handle_change'>
-              <Radio label="全部"></Radio>
-              <Radio label="精选课程"></Radio>
-              <Radio label="免费课程"></Radio>
-            </RadioGroup>
-            </Col>
-          </Row>
-          <ul>
-            <div v-if="courseList.length===0" style="height:200px">暂无课程</div>
-            <li v-for="(item,index) in courseList" :key="index" class="index-course-item">
-              <img :src="item.img" style="width:100%;height:150px" />
-              <div class="index-course-name">{{item.course_name}}</div>
-              <div class="index-course-majorname">{{item.major_name}}</div>
-            </li>
-            <div style="clear:both"></div>
-          </ul>
-        </TabPane> -->
+
       </Tabs>
       <div style="text-align:center;margin-bottom:51px" @click="handlenewCoursemore">
         <button class="index-course-more-btn">加载更多...</button>
@@ -110,7 +85,7 @@
     <!-- 免费课程 -->
     <div>
       <Tabs value="allCourse" class="index-tabs" @on-click="changeTabs">
-        <TabPane label="推荐课程" name="allCourse">
+        <TabPane label="免费课程" name="allCourse">
           <Row type="flex" justify="space-between" class="new-index-course-header">
 
             <Col>
@@ -132,33 +107,6 @@
             <div style="clear:both"></div>
           </ul>
         </TabPane>
-
-        <!-- <TabPane label="本校课程" name="schoolCourse" v-if="token!==''&&token!==false&&token!==undefined&&userId!==''">
-          <Row type="flex" justify="space-between" class="new-index-course-header">
-            <Col>
-            <Select v-model="major" style="width:200px">
-              <Option v-for="item in majorList" :value="item.major_id" :key="item.major_id">{{ item.major_name }}
-              </Option>
-            </Select>
-            </Col>
-            <Col>
-            <RadioGroup>
-              <Radio label="全部"></Radio>
-              <Radio label="视频"></Radio>
-              <Radio label="全景"></Radio>
-            </RadioGroup>
-            </Col>
-          </Row>
-          <ul>
-            <div v-if="courseList.length===0" style="height:200px">暂无课程</div>
-            <li v-for="(item,index) in courseList" :key="index" class="index-course-item">
-              <img :src="item.img" style="width:100%;height:150px" />
-              <div class="index-course-name">{{item.course_name}}</div>
-              <div class="index-course-majorname">{{item.major_name}}</div>
-            </li>
-            <div style="clear:both"></div>
-          </ul>
-        </TabPane> -->
       </Tabs>
       <div style="text-align:center;margin-bottom:51px" @click="handlefreeCourseemore">
         <button class="index-course-more-btn">加载更多...</button>

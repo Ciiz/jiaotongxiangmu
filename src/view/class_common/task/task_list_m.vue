@@ -17,6 +17,7 @@ export default {
   props: {
     student_courseware_id: '',
 
+
   },
   mixins: [modal_mixin],
   components: {

@@ -371,12 +371,12 @@ export const update_correct_status = ({ type, release_id, correct_status }) => {
 }
 
 // =======================考勤========================
-export const generate_attendance = ({ teacher_course_id, class_ids, year, semester, week, day, class_no }) => { // 生成考勤记录，并获取考勤记录对应的学生考勤信息
+export const generate_attendance = ({ teacher_course_id, class_ids, year, semester, week, day, class_no, group }) => { // 生成考勤记录，并获取考勤记录对应的学生考勤信息
   return axios.request({
     url: '/teacher/attendance/generate_attendance',
     method: 'get',
     params: {
-      teacher_course_id, class_ids, year, semester, week, day, class_no
+      teacher_course_id, class_ids, year, semester, week, day, class_no, group
     }
   })
 }

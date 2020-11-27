@@ -83,9 +83,9 @@
                 class="infoModal-l-list-l" @click.native="selectCurrentInfo($event,item)">
                 <Col>
                 <Badge :offset=[-4,6] :count="item.unread">
-                  <img v-if="item.table_type===2" :src="item.userInfo.icon"
+                  <img v-if="item.table_type===2" :src="item.userInfo.icon===''? default_icon : item.userInfo.icon"
                     style="width:44px;height:44px;border-radius:5px;margin-right:10px" />
-                  <img v-if="item.table_type===1||item.table_type===3" :src="item.icon"
+                  <img v-if="item.table_type===1||item.table_type===3" :src="item.icon==='' ? default_icon : item.icon"
                     style="width:44px;height:44px;border-radius:5px;margin-right:10px" />
                 </Badge>
                 </Col>
@@ -261,7 +261,7 @@
                     <div v-if="userType===1&&table_type===2"
                       :class="item.type === 1&&userType===1 ? 'userinfo-right' : 'userinfo-left'">
                       <div>
-                        <img :src="item.userInfo.icon" />
+                        <img :src="item.userInfo.icon===''? default_icon : item.userInfo.icon" />
                       </div>
                       <div>
                         <div></div>
@@ -271,7 +271,7 @@
                     <div v-if="userType===1&&table_type===3"
                       :class="item.type === 1&&userType===1 ? 'userinfo-right' : 'userinfo-left'">
                       <div v-if="item.content">
-                        <img :src="item.object.icon" />
+                        <img :src="item.object.icon==='' ? default_icon:item.object.icon" />
                       </div>
                       <div v-if="item.content">
                         <div></div>
@@ -281,7 +281,7 @@
                     <div v-if="userType===2&&table_type===2"
                       :class="item.type === 2&&userType===2 ? 'userinfo-right' : 'userinfo-left'">
                       <div>
-                        <img :src="item.userInfo.icon" />
+                        <img :src="item.userInfo.icon==='' ? default_icon :item.userInfo.icon " />
                       </div>
                       <div>
                         <div></div>
@@ -291,7 +291,7 @@
                     <div v-if="userType===2&&table_type===1"
                       :class="item.object_id===userId&&userType===2 ? 'userinfo-right' : 'userinfo-left'">
                       <div>
-                        <img :src="item.userInfo.icon" />
+                        <img :src="item.userInfo.icon==='' ? default_icon:item.userInfo.icon" />
                       </div>
                       <div>
                         <div></div>
@@ -301,7 +301,7 @@
                     <div v-if="userType===2&&table_type===3"
                       :class="item.type === 2&&userType===2&&item.object_id===userId ? 'userinfo-right' : 'userinfo-left'">
                       <div v-if="item.content">
-                        <img :src="item.object.icon" />
+                        <img :src="item.object.icon==='' ? default_icon:item.object.icon" />
                       </div>
                       <div v-if="item.content">
                         <div></div>
@@ -491,13 +491,14 @@
             </homeworkExam>
           </div>
         </div>
-        <Modal v-model="modal" :title="title" width="1100px" footer-hide>
+        <Modal v-model="modal" :title="title" width="1100px" footer-hide class="modelcoursetable">
           <!-- <courseTimetable :teacher_course_id="target_id" v-if="target === 'course_timetable' && modal" @error="modal = false"></courseTimetable> -->
           <!-- <courseChooseList :course_id="target_id" v-if="target === 'course_choose_list' && modal" @bind-success="getData()"></courseChooseList> -->
           <courseDetailEdit :course_id="target_id" v-if="target === 'course_detail_edit' && modal" @success="getData()">
           </courseDetailEdit>
           <SchoolCourse v-if="target === 'school_course'" @bind-course="getData()"></SchoolCourse>
           <CourseTable :teacher_course_id="target_id" v-if="target === 'course_table' && modal"></CourseTable>
+
           <CourseTableStudent :teacher_course_id="target_id" v-if="target === 'course_table_student' && modal">
           </CourseTableStudent>
         </Modal>
@@ -736,7 +737,7 @@ export default {
       showClassTable: true,
       modal1: false,
       showT: false,
-
+      default_icon: require('@/assets/images/new_img/default.jpg'),
       userId: this.$store.state.user.userId,
       data: {
         message_total: 0,
@@ -1441,7 +1442,6 @@ export default {
           })
         }
       }
-
       this.showUserDiscuss()
     },
     showInfo (e) { // 点击消息中心或系统通知时
@@ -1617,8 +1617,8 @@ export default {
           page_size: 10000
         }
       }).then(res => {
+        console.log(res);
         if (res.code === 200) {
-          console.log(res);
           if (res.data !== null) {
             for (let i = 0; i < res.data.list.length; i++) {
               this.chatList.push(res.data.list[i])
@@ -1638,7 +1638,6 @@ export default {
         }
       }).then(res => {
         console.log(res);
-
         if (res.code === 200) {
           for (let i = 0; i < res.data.question_list.length; i++) {
             this.chatList.push(res.data.question_list[i])
@@ -1999,5 +1998,13 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="less" >
+.modelcoursetable {
+  .ivu-modal-content {
+    z-index: 999999 !important;
+  }
+  .ivu-modal-mask {
+    z-index: 2000 !important;
+  }
+}
 </style>

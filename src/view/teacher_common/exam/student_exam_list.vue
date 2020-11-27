@@ -30,7 +30,7 @@
             <Col :span="1">{{index+1}}</Col>
             <Col :span="5" v-if="target_type==='student_task_list'">
             <span v-if="release_type === 2">
-              <img :src="item.icon"
+              <img :src="item.icon===''? default_icon : item.icon"
                 style="margin:14px 0;vertical-align:middle;border-radius:50%;display:inline-block;width:32px;height:32px;margin-right:10px" />
               {{item.name}}
             </span>
@@ -38,7 +38,7 @@
             </Col>
             <Col :span="5" v-else>
             <span v-if="release_type === 2">
-              <img :src="item.icon"
+              <img :src="item.icon===''? default_icon : item.icon"
                 style="margin:14px 0;vertical-align:middle;border-radius:50%;display:inline-block;width:32px;height:32px;margin-right:10px" />
               {{item.name}}
             </span>
@@ -111,8 +111,10 @@
           <StudentExamEvaluate @changeExam="changePage" :examIndex="currentIndex" :student_exam_id="target_id"
             :targetwork_id='targetwork_id' v-if="target === 'student_exam_list' && modal"
             @success="modal = false ; getData()"></StudentExamEvaluate>
+
           <StudentTaskEvaluate @changeTask='changePage' :taskIndex="currentIndex" :student_task_id="target_id"
             v-if="target === 'student_task_list' && modal" @success="modal = false ; getData()"></StudentTaskEvaluate>
+
           <StudentHomeworkEvaluate @changeHomwork="changePage" :homeworkIndex="currentIndex"
             :student_homework_id="target_id" v-if="target === 'student_homework_list' && modal"
             @success="modal = false ; getData()"></StudentHomeworkEvaluate>
@@ -154,7 +156,8 @@ export default {
       exam_name: '',
       objective_question: [],
       subjective_question: [],
-      data_info: []
+      data_info: [],
+      default_icon: require('@/assets/images/new_img/default.jpg')
     }
   },
   watch: {
@@ -265,6 +268,7 @@ export default {
             score_rank: this.rank
           }
         }).then(res => {
+          console.log(res);
           if (res.code === 200) {
             this.list = res.data.list
             this.data_info = res.data.task_info

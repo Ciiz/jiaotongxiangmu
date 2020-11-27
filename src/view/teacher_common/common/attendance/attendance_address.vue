@@ -1,38 +1,42 @@
 <template>
-<div>
-  <Button type="success" icon="md-add" @click="toAdd">新增地址</Button>
-  <Table :data="address_list" :columns="columns" :loading="loading"></Table>
+  <div>
+    <Button type="success" icon="md-add" @click="toAdd">新增地址</Button>
+    <Table :data="address_list" :columns="columns" :loading="loading"></Table>
 
-  <Modal v-model="modal" :title="title" :width="modal_width" @on-ok="save" okText="保存" :styles="{top: '20px'}" :transition-names="['ease', 'fade']">
-    <div>
-      <Form :model="address" :label-width="120">
-        <FormItem label="地点名称" prop="address">
-          <Input v-model="address.address"/>
-        </FormItem>
-        <FormItem label="经度(longitude,lng)" prop="lng">
-          <Input v-model="address.lng"/>
-        </FormItem>
-        <FormItem label="纬度(latitude,lat)" prop="lat">
-          <Input v-model="address.lat"/>
-        </FormItem>
-        <FormItem label="地图搜索">
-          <div style="margin-bottom: 20px">
-            关键词:<Input v-model="keyword"  style="width: 150px" placeholder="输入地址搜索" />
-            所在城市: <Input v-model="location"  style="width: 150px" placeholder="城市名称" />
-          </div>
-          <Alert style="margin: 10px 10px;">双击地图或拖动地图中粉红色没字母的标记设置考勤位置。</Alert>
-          <baidu-map :center="{lng:address.lng,lat:address.lat}"  @ready="mapReady" :zoom="zoom" @dblclick="handlePositionChange" class="bm-view" ak="2NSf0hRUjyORiH1CDMWPrrlUNE53k8mi">
-            <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" :showZoomInfo="true"></bm-navigation>
-            <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
-            <bm-marker @dragend="handlePositionChange" :position="{lng:address.lng,lat:address.lat}" :dragging="true" :clicking="true" :icon="{url: locationIcon, size: {width: 40, height: 40}}"></bm-marker>
-            <bm-local-search :keyword="keyword" :auto-viewport="true" :location="location" ></bm-local-search>
-          </baidu-map>
-        </FormItem>
-      </Form>
-    </div>
-  </Modal>
+    <Modal v-model="modal" :title="title" :width="modal_width" @on-ok="save" okText="保存" :styles="{top: '20px'}"
+      :transition-names="['ease', 'fade']">
+      <div>
+        <Form :model="address" :label-width="120">
+          <FormItem label="地点名称" prop="address">
+            <Input v-model="address.address" />
+          </FormItem>
+          <FormItem label="经度(longitude,lng)" prop="lng">
+            <Input v-model="address.lng" />
+          </FormItem>
+          <FormItem label="纬度(latitude,lat)" prop="lat">
+            <Input v-model="address.lat" />
+          </FormItem>
+          <FormItem label="地图搜索">
+            <div style="margin-bottom: 20px">
+              关键词:<Input v-model="keyword" style="width: 150px" placeholder="输入地址搜索" />
+              所在城市: <Input v-model="location" style="width: 150px" placeholder="城市名称" />
+            </div>
+            <Alert style="margin: 10px 10px;">双击地图或拖动地图中粉红色没字母的标记设置考勤位置。</Alert>
+            <baidu-map :center="{lng:address.lng,lat:address.lat}" @ready="mapReady" :zoom="zoom"
+              @dblclick="handlePositionChange" class="bm-view" ak="2NSf0hRUjyORiH1CDMWPrrlUNE53k8mi">
+              <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" :showZoomInfo="true"></bm-navigation>
+              <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true">
+              </bm-geolocation>
+              <bm-marker @dragend="handlePositionChange" :position="{lng:address.lng,lat:address.lat}" :dragging="true"
+                :clicking="true" :icon="{url: locationIcon, size: {width: 40, height: 40}}"></bm-marker>
+              <bm-local-search :keyword="keyword" :auto-viewport="true" :location="location"></bm-local-search>
+            </baidu-map>
+          </FormItem>
+        </Form>
+      </div>
+    </Modal>
 
-</div>
+  </div>
 </template>
 <script>
 import { get_address_list, save_address, delete_address } from '@/api/data'
@@ -40,7 +44,7 @@ import modal_mixin from '@/view/mixins/modal_mixin'
 import locationIcon from '@/assets/images/location.svg'
 import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import { BmNavigation, BmCityList, BmGeolocation, BmMarker, BmLabel, BmLocalSearch, bmView, BmInfoWindow } from 'vue-baidu-map'
-export default{
+export default {
   mixins: [modal_mixin],
   components: {
     BaiduMap,
@@ -155,7 +159,7 @@ export default{
 </script>
 <style lang="less" scoped>
 .bm-view {
-    width: 80%;
-    height: 500px;
+  width: 80%;
+  height: 500px;
 }
 </style>

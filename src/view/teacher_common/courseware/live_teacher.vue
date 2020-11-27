@@ -28,7 +28,6 @@
               <img src="@/assets/images/new_img/question.png"
                 style="vertical-align:middle;width:16px;margin-right:10px;" />提问
             </div>
-            <div class="livedot">1</div>
             <ul class="live-btnList liveul">
               <li class="live-btnList-li" @click="showList3">
                 <Badge dot :offset=[0,-4] :count="badge" class="question-badge">
@@ -36,12 +35,9 @@
                 </Badge>
               </li>
               <li class="live-btnList-li" @click="showList2">附件列表({{material_total.length}})</li>
-
-              <!-- <li class="live-btnList-li" @click="showList2">课中测试({{material_total.length}})</li> -->
               <li v-for="(item,index) in courseware_list_list" :key="index" @click="showList(item,$event)"
                 class="live-btnList-li">
                 {{item.title}}({{item.listlength}})
-                {{item.color}}
               </li>
               <li class="live-btnList-li" @click="openAtten()" v-if="course_status.toString()===1+''">考勤</li>
               <!-- <li class="live-btnList-li" @click="open('course_table','','课程表编辑',1100)" v-if="course_status===1">考勤</li> -->
@@ -80,8 +76,11 @@
 
                           <span v-if="in_task_item.release_status === 1 && in_task_item.task_release_id!==undefined"
                             @click="unrelease('task',in_task_item.task_release_id)">撤回</span>
+
                           <span v-if="in_task_item.release_status === 0 && in_task_item.exam_release_id!==undefined"
                             @click="release_id = in_task_item.exam_release_id,release_type='test',release()">发布</span>
+                          <span v-if="in_task_item.release_status === 1"
+                            @click="release_id = in_task_item.task_release_id,isshowtasklist = true">批改</span>
 
                           <span v-if="in_task_item.release_status === 1 && in_task_item.exam_release_id!==undefined"
                             @click="unrelease('test',in_task_item.exam_release_id)">撤回</span>
@@ -379,7 +378,8 @@
                         <div style="text-align:center">
                           <img v-if="item2.online_status === false" :src="item2.icon===''?default_icon:item2.icon"
                             width="60%" class="gray" style="width:40px;height:40px;border-radius:50%" />
-                          <img v-if="item2.online_status === true" :src="item2.icon===''?default_icon:item2.icon"
+
+                          <img v-if="item2.online_status === true" :src="item2.icon===''? default_icon:item2.icon"
                             width="60%" style="width:40px;height:40px;border-radius:50%" />
                         </div>
                         <div class="online-data-name" style="text-align:center">
@@ -465,6 +465,14 @@
                 :target_type='"student_exam_list"'></StudentExamList>
             </Modal>
           </div>
+          <!-- 任务结果查询 -->
+          <div v-if="isshowtasklist">
+            <Modal v-model="isshowtasklist" title="任务结果查询" :mask-closable='false' footer-hide width="1200"
+              class="hei-modal">
+              <StudentExamList @closeModal="isshowtasklist=false" @on-refresh-parent-list="isshowtasklist=false"
+                :targetwork_id="release_id" :target_type='"student_task_list"'></StudentExamList>
+            </Modal>
+          </div>
           <!-- 作业评价 -->
           <div v-if="isshowevalist">
             <Modal v-model="isshowevalist" :mask-closable='false' title="评价列表" footer-hide width="1200"
@@ -511,12 +519,11 @@
           <Modal v-model="isshowDeleteModel" @on-ok="sureDelete" title="删除">
             是否确认删除问题
           </Modal>
-
           <!-- 添加问题 -->
           <Modal v-model="isshowAddquestion" :width="620" footer-hide>
             <coursewareQuestion :online_data='online_student' :courseware_id='courseware_id'
               :group_chat_id='group_chat_id' :showTime="showTime" :add_type="'call'" @changeTime='changeTime'
-              @closeQList='closeQList'></coursewareQuestion>
+              @closeQList='closeQList' @closemodal='closemodal'></coursewareQuestion>
           </Modal>
 
           <!-- 显示已有客观题 -->
@@ -537,7 +544,6 @@
               <div style="clear:both"></div>
             </div>
           </Modal>
-
           <!-- 显示已有主观题 -->
           <Modal v-model="isshowMainquestion" :width="690" footer-hide>
             <span
@@ -556,10 +562,9 @@
             </div>
             <div style="clear:both"></div>
           </Modal>
-
           <!-- 学生主观题回答 -->
           <Modal v-model="isshowAnswer" :width="690" footer-hide>
-            <answerList :mainQuestion='mainQuestion'></answerList>
+            <answerList :mainQuestion='mainQuestion' @amendclose='amendclose'></answerList>
           </Modal>
 
           <!-- 学生客观题回答 -->
@@ -602,7 +607,8 @@
           </Modal>
           <Modal v-model="modal3" title="考勤" width="1000" footer-hide>
             <Attendance v-if="target == 'attend'&& modal3" :teacher_course_list='attenDetailList'
-              :teacher_course_id="teacher_course_id" :year="year" :class_ids="class_id" :semester="semester">
+              :teacher_course_id="teacher_course_id" :year="year" :class_ids="class_id" :semester="semester"
+              :group='group_chat_id'>
             </Attendance>
           </Modal>
         </Content>
@@ -659,6 +665,7 @@ export default {
       modal2: false,
       modal3: false,
       modal4: false,
+      taskmessage: {},
       selectQuestion: [],
       mainQuestion: [],
       deleteId: '',
@@ -679,6 +686,7 @@ export default {
       course_status: this.$route.query.course_status,
       showdiscuss: true,
       problemAnswer: [],
+      taskAnswer: {},
       mainQuestionContent: '',
       mainAnswer_num: '',
       studentNumber: 1,
@@ -767,6 +775,7 @@ export default {
       isgetinfo: false, // 判断考试分析数据是否接受完成
       isshowanalyze: false,
       isshowhomeworkcheck: false,
+      isshowtasklist: false,
       release_id: 0, // 发布id
       show_release: false,
       release_for_choose: '', // 发布类型
@@ -774,6 +783,7 @@ export default {
       leader_name: '', // 组长姓名
       leader_id: 0, // 组长id
       ischangeleader: false,
+      examAnswer: {},
       team_list: [], // 更换组长时显示成员列表
       team: {
         list: [],
@@ -885,6 +895,8 @@ export default {
         })
         this.badge = 1
       }
+
+
     },
     showTime (n, o) {
       if (n !== '') {
@@ -965,6 +977,12 @@ export default {
     }
   },
   methods: {
+    amendclose (data) {
+      this.isshowAnswer = data
+    },
+    closemodal (data) {
+      this.isshowAddquestion = data
+    },
     deleteQuestion (e, i) {
       if (event && event.stopPropagation) {
         event.stopPropagation() // 非IE浏览器
@@ -1290,7 +1308,6 @@ export default {
           semester: this.semester,
           year: this.year,
           courseware_id: this.courseware_id
-
         }
       }).then(res => {
         this.courseTimeList = res.data.list
@@ -1518,6 +1535,7 @@ export default {
           if (res.data.homework_list['0']) this.homework = this.getArray(res.data.homework_list['0'], 'homework_name')
           if (this.list_title === '课中任务') {
             this.courseware_list = this.task.in
+            console.log(this.courseware_list);
           } else if (this.list_title === '课中测试') {
             this.courseware_list = this.test.in
           } else if (this.list_title === '课后任务') {
@@ -1667,9 +1685,25 @@ export default {
         }
       }, 0)
     },
+    // 在线的信息传递
     handleOnMessage (data) {
+      console.log(data);
       if (data.data !== undefined) {
         this.problemAnswer = data.data
+      } else if (data.task !== undefined) {
+        this.taskAnswer = data.task
+        this.$Message.info({
+          content: data.task.student_name + '完成了课中任务！',
+          duration: 3,
+          closable: true
+        })
+      } else if (data.exam !== undefined) {
+        this.examAnswer = data.exam
+        this.$Message.info({
+          content: data.exam.student_name + '完成了课中测试！',
+          duration: 3,
+          closable: true
+        })
       }
       let type = data.type || ''
       switch (type) {
@@ -1788,6 +1822,8 @@ export default {
           type: 0
         }
       }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           this.questionAllQuestionList = res.data.list
         }
@@ -1804,6 +1840,8 @@ export default {
       e.target.style.color = '#397ED6'
       if (index.title === '课中任务') {
         this.courseware_list = this.task.in
+        console.log(this.courseware_list);
+
       } else if (index.title === '课中测试') {
         this.courseware_list = this.test.in
 
@@ -2038,13 +2076,6 @@ export default {
 }
 </script>
 <style>
-.liveul :nth-child(3) {
-  color: red;
-}
-.liveul .livedot {
-  width: 10px;
-  height: 10px;
-}
 .finnish-class {
   width: 100%;
   height: 10%;

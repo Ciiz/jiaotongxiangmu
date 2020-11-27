@@ -564,6 +564,6 @@ td + .my-table-cell {
   z-index: 3000 !important;
 }
 .courseware_list_modal2 .ivu-modal-mask {
-  z-index: 3000 !important;
+  z-index: 2000 !important;
 }
 </style>

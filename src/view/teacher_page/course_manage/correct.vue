@@ -45,7 +45,7 @@
               </div>
             </div>
             <span style="margin-left:20px">截止时间：{{moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')}}</span>
-            <span style="margin-left:20px">提交人数：</span>
+            <span style="margin-left:20px">提交人数：{{item.student_submit}}</span>
           </li>
           <li v-for="(item,index) in unreadhomeworklist" :key="'homework'+index" style="width:300px;margin:10px 0">
             <div class="showdetail" @click="openModal('student_homework_list', item.homework_release_id)">
@@ -293,6 +293,7 @@ export default {
         teacher_course_id: this.teacher_course_id,
         correct_status: this.correct_status
       }).then(res => {
+        console.log(res);
         if (res.code === 200) {
           this.unreadtasklist = res.data.list
         }

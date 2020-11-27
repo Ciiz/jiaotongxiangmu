@@ -20,7 +20,8 @@
     </Modal>
     <!-- 添加问题 -->
     <Modal v-model="isshowAddquestion" :width="600" footer-hide class="question-modal">
-      <coursewareQuestion :add_type="'save'" :courseware_id='courseware_id' @closeModal="closeModal"></coursewareQuestion>
+      <coursewareQuestion :add_type="'save'" :courseware_id='courseware_id' @closeModal="closeModal">
+      </coursewareQuestion>
     </Modal>
   </div>
 </template>
@@ -90,10 +91,10 @@ export default {
 </script>
 
 <style>
-  .question-modal .ivu-modal-wrap{
-    z-index: 3010!important;
-  }
-  .question-modal .ivu-modal-mask{
-    z-index: 3000!important;
-  }
+.question-modal .ivu-modal-wrap {
+  z-index: 3010 !important;
+}
+.question-modal .ivu-modal-mask {
+  z-index: 2000 !important;
+}
 </style>

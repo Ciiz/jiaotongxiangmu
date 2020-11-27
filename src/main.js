@@ -60,7 +60,7 @@ Vue.prototype.fileDomain = config.fileDomain;
 Vue.prototype.axios = axios;
 Vue.prototype.baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
 Vue.prototype.errorImg = errorImg
-Vue.prototype.errorImg01 = 'this.src="' + require('@/assets/images/default.jpg') + '"'//处理文件的url
+Vue.prototype.errorImg01 = 'this.src="' + require('@/assets/images/u=3730772664,138405132&fm=26&gp=0.jpg') + '"'//处理文件的url
 moment.locale('zh-cn');
 Vue.prototype.moment = moment;
 Vue.prototype.$video = Video

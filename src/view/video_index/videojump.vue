@@ -96,9 +96,9 @@
                 <div class="video_user_icon">
                   <img :src="video_list.icon" alt="">
                 </div>
-                <div class="video_user_users">作者：{{video_list.user_name}}</div>
+                <div class="video_user_users">作者: {{video_list.user_name}}</div>
               </div>
-              <div class="video_user_mijor"> 专业：{{video_list.major_name}}</div>
+              <div class="video_user_mijor"> 专业: {{video_list.major_name}}</div>
               <div class="video_user_school">所属院校：{{video_list.school_name}}</div>
             </div>
             <div class="video_user_l_footer2_right">
@@ -128,7 +128,7 @@
     </Row>
     <Row class="video_like">
       <Col>
-      <div class="video_likeTitle">猜你喜欢</div>
+      <div class="video_likeTitle">guess what you like</div>
       <div class="video_likeList">
         <ul>
           <li v-for="item in like_list" :key="item.id" @click="handlelikeplay(item)">

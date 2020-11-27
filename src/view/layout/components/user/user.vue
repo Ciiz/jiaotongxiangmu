@@ -3,8 +3,12 @@
     <Dropdown @on-click="handleClick">
       <span class="ivu-avatar ivu-avatar-circle ivu-avatar-default ivu-avatar-image"
         style="width:48px;height:48px;border-radius:50%">
+        <!-- <img v-if="userAvatar===''" src="@/assets/images/u=3730772664,138405132&fm=26&gp=0.jpg" alt=""> -->
+        <!-- <img :src="userAvatar" alt=""> -->
         <img :src="userAvatar" alt="" :onerror="errorImg01">
+
         <img v-if="userType===3" src="@/assets/images/u=3730772664,138405132&fm=26&gp=0.jpg" alt="">
+
       </span>
       <Icon :size="18" type="md-arrow-dropdown" style="color: #fff;"></Icon>
       <DropdownMenu slot="list">

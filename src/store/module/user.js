@@ -33,12 +33,19 @@ export default {
     searchResult: '', //搜索结果
     passwordUserId: '', //游客登陆的id
     examInfo: {}, //作业批改的测试信息
-
+    teacher_id_task: "",
+    teacher_id_exam: ""
 
   },
   // 同步操作
   mutations: {
 
+    setteacher_id_exam (state, id) {
+      state.teacher_id_exam = id
+    },
+    setteacher_id_task (state, id) {
+      state.teacher_id_task = id
+    },
     setexamInfo (state, obj) {
       state.examInfo = obj
     },

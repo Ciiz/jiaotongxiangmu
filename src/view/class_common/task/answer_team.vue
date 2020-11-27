@@ -6,56 +6,54 @@
       </div>
       <Row type="flex" style="flex:1;overflow:hidden">
         <Col style="margin-right:20px;flex:1;height:100%;overflow-y:scroll">
-          <div v-for="member in members" :key="member.id" style="margin-bottom:10px;padding:20px;background:#ffffff">
-            <Row type="flex" justify="space-between">
-              <Col>
-                <img style="width:30px;height:30px;border-radius:50%;vertical-align:middle;margin-right:10px" :src="member.icon"/>
-                <span class="gray-c">{{member.student_name}}</span>
-              </Col>
-              <Col v-if="member.submit_status === 1&&member.file_url">
-                文件：<a class="new-file" :href="member.file_url" target="blank">{{member.file_name===''?'附件':member.file_name}}</a>
-              </Col>
-            </Row>
-            <p style="padding:10px 0" v-if="member.submit_status === 0"><Tag color="red">还没提交....</Tag></p>
-            <div v-if="member.submit_status === 1" style="padding:10px 0">
-              <div v-html="member.submit_content" class="gray-c8 anwsercontent" style="word-break:break-all"></div>
-              <!-- <span class="blue-c" style="float:right;margin-top:4px;cursor:pointer" >展开</span> -->
-              <div style="clear:both"></div>
-            </div>
-            <Row type="flex" class="answer-team-evaluation">
-              <Col :span="7" v-for="score_item in member.score_option" :key="score_item.index" style="margin-right:40px">
-                <span class="gray-c8">评分：</span>
-                <Input type="text" v-model="score_item.score"/>
-              </Col>
-              <Col style="flex:1">
-                <span class="gray-c8">评语：</span>
-                <Input v-model="member.evaluation" type="text"/>
-              </Col>
-            </Row>
+        <div v-for="member in members" :key="member.id" style="margin-bottom:10px;padding:20px;background:#ffffff">
+          <Row type="flex" justify="space-between">
+            <Col>
+            <img style="width:30px;height:30px;border-radius:50%;vertical-align:middle;margin-right:10px"
+              :src="member.icon" />
+            <span class="gray-c">{{member.student_name}}</span>
+            </Col>
+            <Col v-if="member.submit_status === 1&&member.file_url">
+            文件：<a class="new-file" :href="member.file_url"
+              target="blank">{{member.file_name===''?'附件':member.file_name}}</a>
+            </Col>
+          </Row>
+          <p style="padding:10px 0" v-if="member.submit_status === 0">
+            <Tag color="red">还没提交....</Tag>
+          </p>
+          <div v-if="member.submit_status === 1" style="padding:10px 0">
+            <div v-html="member.submit_content" class="gray-c8 anwsercontent" style="word-break:break-all"></div>
+            <!-- <span class="blue-c" style="float:right;margin-top:4px;cursor:pointer" >展开</span> -->
+            <div style="clear:both"></div>
           </div>
+          <Row type="flex" class="answer-team-evaluation">
+            <Col :span="7" v-for="score_item in member.score_option" :key="score_item.index" style="margin-right:40px">
+            <span class="gray-c8">评分：</span>
+            <Input type="text" v-model="score_item.score" />
+            </Col>
+            <Col style="flex:1">
+            <span class="gray-c8">评语：</span>
+            <Input v-model="member.evaluation" type="text" />
+            </Col>
+          </Row>
+        </div>
         </Col>
         <Col class="answer-team-anwser">
-          <Divider orientation="left"><span class="black-b">组长任务答题区：</span></Divider>
-          <Alert show-icon closable>小组任务由组长自己整理组员的回答并提交</Alert>
-            <Editor
-              class="new-editor"
-              v-model="student_task.submit_content"
-              :is_init.sync="editor_init"
-            >
-            </Editor>
-          <FileUpload
-            :fileObj="{url: student_task.file_url, name: student_task.file_name}"
-            @on-change="(file)=>{student_task.file_url = file.url;student_task.file_name= file.name}"
-            :extra="{type: 'task',token:$store.state.user.token}"
-          >
-          </FileUpload>
-          <div class="studentHomework-bottom" style="margin-bottom:10px">
-            <!-- <button>保存(不提交)</button> -->
-            <button @click="submit">提交</button>
-          </div>
+        <Divider orientation="left"><span class="black-b">组长任务答题区：</span></Divider>
+        <Alert show-icon closable>小组任务由组长自己整理组员的回答并提交</Alert>
+        <Editor class="new-editor" v-model="student_task.submit_content" :is_init.sync="editor_init">
+        </Editor>
+        <FileUpload :fileObj="{url: student_task.file_url, name: student_task.file_name}"
+          @on-change="(file)=>{student_task.file_url = file.url;student_task.file_name= file.name}"
+          :extra="{type: 'task',token:$store.state.user.token}">
+        </FileUpload>
+        <div class="studentHomework-bottom" style="margin-bottom:10px">
+          <!-- <button>保存(不提交)</button> -->
+          <button @click="submit">提交</button>
+        </div>
         </Col>
       </Row>
-      <Spin size="large" v-if="loading" fix ></Spin>
+      <Spin size="large" v-if="loading" fix></Spin>
     </div>
   </div>
 </template>
@@ -157,28 +155,28 @@ export default {
 }
 </script>
 <style type="text/css" lang="less" scoped>
-.p-text{
+.p-text {
   margin-top: 5px;
 }
-.p-label{
+.p-label {
   font-weight: bold;
 }
-.row-item{
+.row-item {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-.center{
+.center {
   text-align: right;
   margin-top: 15px;
 }
-.ivu-btn{
+.ivu-btn {
   margin-right: 10px;
 }
-.comment-area{
-    background: #fcfcfc;
+.comment-area {
+  background: #fcfcfc;
 }
-.p-title{
-  margin:15px 0px;
+.p-title {
+  margin: 15px 0px;
   font-weight: bold;
 }
 </style>

@@ -376,7 +376,7 @@
       </RadioGroup>
       <div class="showtime">
         作答时间：{{reply_time}}秒
-        <button style="background:#15B5A8" @click="submitAnswer2()">提交</button>
+        <button style="background:#15B5A8" @click="submitAnswer2()">提交111</button>
       </div>
     </Modal>
 
@@ -415,7 +415,7 @@ export default {
       issureSaveNote: false,
       newNoteId: '',
       reply_time: '',
-      teacher_id: '',
+
       quiz_id: '',
       sty: '',
       badge: 0,
@@ -442,6 +442,7 @@ export default {
       courseware_id: '',
       group_chat_id: '',
       live_url: '',
+      teacher_id: '',
       page: 1,
       numPages: undefined,
       showdiscuss: true,
@@ -456,7 +457,7 @@ export default {
       modal1: false,
       questionList: [],
       taskList: {},
-      exam_release_id: '',
+      // exam_release_id: '',
       columns: [
         {
           title: '试卷标题',
@@ -479,7 +480,6 @@ export default {
               <div>
                 <Button style={{ marginRight: '10px' }} size="small" type="info"
                   onClick={() => { this.detail(params.row) }}>
-
                   {btnText}
                 </Button>
               </div>
@@ -566,6 +566,8 @@ export default {
     },
     selectAnwser (i) {
       let arr = i.split('_')
+
+      console.log(arr[0]);
       this.selectChoose = arr[0]
       // this.selectChooseContent = arr[1]
     },
@@ -756,6 +758,9 @@ export default {
     closeLive () {
       history.go(-1)
     },
+
+
+
     showProblem () {
       if (this.topic_type === 2) {
         this.modal2 = true
@@ -782,6 +787,8 @@ export default {
             topic: this.topic_type
           }
         }).then(res => {
+          console.log(res);
+
           if (res.code === 200) {
             this.$Message.success(res.message)
             this.modal2 = false
@@ -807,6 +814,7 @@ export default {
             topic: this.topic_type
           }
         }).then(res => {
+          console.log(res);
           if (res.code === 200) {
             this.$Message.success(res.message)
             this.modal3 = false
@@ -950,8 +958,6 @@ export default {
     },
 
     handleOnMessage (data) {
-      console.log(data);
-
       if (data.status !== undefined) {
         if (data.status === 'ture') {
           this.$Message.success({
@@ -986,9 +992,11 @@ export default {
         this.score = data.score
       } else if (data.exam_release_id !== undefined) {
         this.badge = 1
-
-      } else if (data.task_release_id !== undefined) {
+        this.$store.commit('setteacher_id_exam', data.teacher_id)
+      }
+      else if (data.task_release_id !== undefined) {
         this.badgetask = 1
+        this.$store.commit('setteacher_id_task', data.teacher_id)
       }
       // this.problem = data.data
       // let _this = this

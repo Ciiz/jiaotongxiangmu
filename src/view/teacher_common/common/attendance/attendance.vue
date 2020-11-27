@@ -1,9 +1,12 @@
 <template>
-<div class="modal-content">
-  <div>
-    <AttendanceManage v-if="teacher_course_id" :teacher_course_id="teacher_course_id" :class_ids="class_ids" :course_name="course_name" :year="year" :semester="semester" :week="week" :day="day" :class_no="class_no"></AttendanceManage>
+  <div class="modal-content">
+    <div>
+      <AttendanceManage v-if="teacher_course_id" :teacher_course_id="teacher_course_id" :class_ids="class_ids"
+        :course_name="course_name" :year="year" :semester="semester" :week="week" :day="day" :class_no="class_no"
+        :group='group'>
+      </AttendanceManage>
+    </div>
   </div>
-</div>
 </template>
 <script>
 import AttendanceManage from './attendance_manage.vue'
@@ -12,6 +15,7 @@ export default {
     AttendanceManage
   },
   props: {
+    group: "",
     year: '',
     semester: {
       type: Number,
@@ -45,12 +49,10 @@ export default {
 }
 </script>
 <style lang="less" >
-
-.record-list{
+.record-list {
   margin: 10px;
 }
-.attent-count{
+.attent-count {
   margin: 10px;
 }
-
 </style>

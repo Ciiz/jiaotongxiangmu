@@ -1,28 +1,30 @@
 <template>
-<div>
-  <Row v-if="hasAttendance">
-    <Col :span="12">
+  <div>
+    <Row v-if="hasAttendance">
+      <Col :span="12">
+      <div>
+        <div style="margin-bottom: 10px;">
+          <h2>{{course_name}}</h2>
+          <Button :type="attend_status ? 'error' : 'success'"
+            @click="update_attendance_status(attend_status ? 0 : 1)">{{attend_status ? '关闭考勤' : '打开考勤'}}</Button>
+          <Button type="primary" icon="md-qr-scanner" @click="generate_qrcode">二维码</Button>
+          <Button type="primary" icon="ios-navigate-outline" @click="set_location">设置位置</Button>
+        </div>
         <div>
-          <div style="margin-bottom: 10px;">
-            <h2>{{course_name}}</h2>
-            <Button :type="attend_status ? 'error' : 'success'"  @click="update_attendance_status(attend_status ? 0 : 1)">{{attend_status ? '关闭考勤' : '打开考勤'}}</Button>
-            <Button  type="primary" icon="md-qr-scanner" @click="generate_qrcode">二维码</Button>
-            <Button  type="primary" icon="ios-navigate-outline" @click="set_location">设置位置</Button>
-          </div>
-          <div>
-            <RadioGroup v-model="leave_early_status" @on-change="handleLeaveEarlyStatusChange">
-              <Radio :label="0">正常考勤</Radio>
-              <Radio :label="1">早退考勤</Radio>
-            </RadioGroup>
-            <Button v-show="leave_early_status === 1" type="primary" size="small" @click="handleUpdateLeaveEarly">处理早退考勤数据</Button>
-            <Alert style="margin-top: 10px;">早退考勤：必须先进行正常考勤，在下课或课中的时候再切换早退考勤。考勤完之后，点击 -处理考勤数据 - 按钮完成早退考勤。</Alert>
-          </div>
-          <div style="margin:10px 0px;">
-            <span v-for="(item,index) in attendance_list" :key="index" class="record-list">
-              {{item.class_name}}
-              <Tag :color="item.status? 'green' : 'red'">{{item.status ? '考勤中':'未开启'}}</Tag>
-            </span>
-          </div>
+          <RadioGroup v-model="leave_early_status" @on-change="handleLeaveEarlyStatusChange">
+            <Radio :label="0">正常考勤</Radio>
+            <Radio :label="1">早退考勤</Radio>
+          </RadioGroup>
+          <Button v-show="leave_early_status === 1" type="primary" size="small"
+            @click="handleUpdateLeaveEarly">处理早退考勤数据</Button>
+          <Alert style="margin-top: 10px;">早退考勤：必须先进行正常考勤，在下课或课中的时候再切换早退考勤。考勤完之后，点击 -处理考勤数据 - 按钮完成早退考勤。</Alert>
+        </div>
+        <div style="margin:10px 0px;">
+          <span v-for="(item,index) in attendance_list" :key="index" class="record-list">
+            {{item.class_name}}
+            <Tag :color="item.status? 'green' : 'red'">{{item.status ? '考勤中':'未开启'}}</Tag>
+          </span>
+        </div>
         <div>
           <span class="attent-count">应到: {{expected}}</span>
           <span class="attent-count">实到: {{arrived}}</span>
@@ -32,11 +34,11 @@
           <span class="attent-count attend-leave-early">早退: {{leave_early}}</span>
         </div>
         <Button type="warning" size="small" @click="resetAttendance">重置考勤数据</Button>
-        </div>
+      </div>
       </Col>
 
       <Col :span="12">
-        <attendance-chart :option_data="option_data"></attendance-chart>
+      <attendance-chart :option_data="option_data"></attendance-chart>
       </Col>
 
     </Row>
@@ -46,7 +48,9 @@
       <div v-for="record in attendance_records" :key="record.student_id" class="record-item">
         <Poptip title="" content="content" trigger="hover">
           <Avatar :src="record.icon" />
-          <p :class="{'attend-success': record.status === 1, 'attend-late': record.status ===2, 'attend-leave-early': record.status === 3 ,'attend-obsent': record.status === 0 }">{{record.name}}</p>
+          <p
+            :class="{'attend-success': record.status === 1, 'attend-late': record.status ===2, 'attend-leave-early': record.status === 3 ,'attend-obsent': record.status === 0 }">
+            {{record.name}}</p>
           <div slot="content">
             <RadioGroup v-model="record.status" @on-change="(val) => {handleRecordStatusChange(val,record.id)}">
               <Radio :label="0">缺勤</Radio>
@@ -59,12 +63,14 @@
       </div>
     </div>
     <Spin size="large" v-if="loading" fix></Spin>
-  <Modal v-model="modal" footer-hide :title="title" :width="modal_width" @on-visible-change="handleVisiableChange">
-    <Position  :lng.sync="lng" :lat.sync="lat" :distance_range.sync="distance_range" v-if="target === 'position'" @position-change="handlePositionChange"></Position>
-    <div id="qrcode3" style="display: flex;justify-content: center;" v-show="target === 'qrcode3'"></div>
-  </Modal>
-
-</div>
+    <Modal v-model="modal" footer-hide :title="title" :width="modal_width" @on-visible-change="handleVisiableChange">
+      <Position :lng.sync="lng" :lat.sync="lat" :distance_range.sync="distance_range" v-if="target === 'position'"
+        @position-change="handlePositionChange" @modalClose='modalClose'></Position>
+      <div id="qrcode3" style="display: flex;justify-content: center; width: 600px, overflow: hidden;"
+        v-show="target === 'qrcode3'">
+      </div>
+    </Modal>
+  </div>
 </template>
 <script>
 import { generate_attendance, update_attendance, update_attend_record, handle_update_early_leave, reset_attendance } from '@/api/data'
@@ -79,6 +85,7 @@ export default {
     Position, AttendanceChart
   },
   props: {
+    group: "",
     year: '',
     semester: '',
     week: '',
@@ -102,7 +109,8 @@ export default {
       lng: '',
       lat: '',
       leave_early_status: false, // 是否是早退考勤
-      distance_range: 0
+      distance_range: 0,
+      modal: false
     }
   },
   watch: {
@@ -157,6 +165,9 @@ export default {
     }
   },
   methods: {
+    modalClose (data) {
+      this.modal = data
+    },
     gererateAttendance () {
       this.loading = true
       generate_attendance({
@@ -166,12 +177,20 @@ export default {
         semester: this.semester,
         week: this.week,
         day: this.day,
-        class_no: this.class_no
+        class_no: this.class_no,
+        group: this.group
       }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           this.attendance_list = res.data.attendance_list
-          this.lng = this.attendance_list[0].lng
-          this.lat = this.attendance_list[0].lat
+          if (this.attendance_list[0].lng === null && this.attendance_list[0].lat === null) {
+            this.lng = 116.3972282409668
+            this.lat = 39.90960456049752
+          } else {
+            this.lng = this.attendance_list[0].lng
+            this.lat = this.attendance_list[0].lat
+          }
           this.distance_range = this.attendance_list[0].distance_range
           this.attendance_records = res.data.attendance_records.sort((a, b) => { return b.status - a.status })
           this.leave_early_status = res.data.leave_early_status
@@ -192,7 +211,7 @@ export default {
       let attendance_ids = this.attendance_ids.sort().join(',')
       let expired_at = parseInt(((new Date()).getTime() + 10000) / 1000)
       let url = `${domain}${this.baseUrl}/student/attendance/qrcode_attend?attendance_ids=${attendance_ids}&expired_at=${expired_at}`
-      document.getElementById('qrcode').innerHTML = ''
+      document.getElementById('qrcode3').innerHTML = ''
       this.qrcode(url)
     },
     qrcode (url) {
@@ -254,6 +273,8 @@ export default {
     },
     handlePositionChange (lng, lat, distance_range) {
       update_attendance({ id: this.attendance_ids, update_data: { lng, lat, distance_range } }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           // this.$Message.success('设置成功!')
         }
@@ -309,13 +330,12 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.record-list{
+.record-list {
   margin: 10px;
 }
-.attent-count{
+.attent-count {
   margin: 10px;
   font-size: 16px;
   font-weight: bold;
 }
-
 </style>

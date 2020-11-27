@@ -21,7 +21,7 @@
           <div class="choose-question" v-for="(item,index) in topic" :key="index">
             <div>{{item.choose}}：</div>
             <div style="flex:1">
-              <Input type="text" placeholder="请输入答案" v-model="item.choose_content"/>
+              <Input type="text" placeholder="请输入答案" v-model="item.choose_content" />
             </div>
           </div>
           <div class="showtime" v-if="add_type==='call'">
@@ -35,30 +35,24 @@
         </TabPane>
       </Tabs>
     </div>
-    <Modal
-        v-if="add_type==='call'"
-        v-model="modal1"
-        title="抢答"
-        @on-ok="ok">
-        <p>是否确定进行抢答？</p>
+    <Modal class="racemodal" v-if="add_type==='call'" v-model="modal1" title="抢答" @on-ok="ok">
+      <p>是否确定进行抢答？</p>
     </Modal>
-    <Modal
-      v-if="add_type==='call'"
-      v-model="modal2"
-      title="选择学生"
-      @on-ok="submit">
-        <div style="font-size:14px;margin-bottom:8px;color:black;font-weight:bold">请选择（{{total}}/{{studentNumber}}）位学生:</div>
-        <div class="student">
-          <div v-for="(item,index) in online_data.students" class="className" ref="className" :key="index">
-            <h3>{{item.class_name}}</h3>
-            <ul>
-              <li v-for="(item2,index2) in item.student" class="studentName" ref="studentName" @click="select(item2,$event)" :key="index2">
-                {{item2.name}}
-              </li>
-              <div style="clear:both"></div>
-            </ul>
-          </div>
+    <Modal v-if="add_type==='call'" v-model="modal2" title="选择学生" @on-ok="submit">
+      <div style="font-size:14px;margin-bottom:8px;color:black;font-weight:bold">请选择（{{total}}/{{studentNumber}}）位学生:
+      </div>
+      <div class="student">
+        <div v-for="(item,index) in online_data.students" class="className" ref="className" :key="index">
+          <h3>{{item.class_name}}</h3>
+          <ul>
+            <li v-for="(item2,index2) in item.student" class="studentName" ref="studentName"
+              @click="select(item2,$event)" :key="index2">
+              {{item2.name}}
+            </li>
+            <div style="clear:both"></div>
+          </ul>
         </div>
+      </div>
     </Modal>
   </div>
 </template>
@@ -82,9 +76,9 @@ export default {
       selectC: '',
       selectD: '',
       topic: [{ choose: 'A', choose_content: '' },
-        { choose: 'B', choose_content: '' },
-        { choose: 'C', choose_content: '' },
-        { choose: 'D', choose_content: '' }
+      { choose: 'B', choose_content: '' },
+      { choose: 'C', choose_content: '' },
+      { choose: 'D', choose_content: '' }
       ]
     }
   },
@@ -112,6 +106,7 @@ export default {
       }
     },
     submitQuestion (e) {
+      this.$emit('closemodal', false)
       if (this.questionContent === '') {
         this.$Message.error('请输入问题')
       } else if (this.studentNumber <= 0) {
@@ -208,9 +203,9 @@ export default {
               this.reply_time = 0
               this.questionContent2 = ''
               this.topic = [{ choose: 'A', choose_content: '' },
-                { choose: 'B', choose_content: '' },
-                { choose: 'C', choose_content: '' },
-                { choose: 'D', choose_content: '' }
+              { choose: 'B', choose_content: '' },
+              { choose: 'C', choose_content: '' },
+              { choose: 'D', choose_content: '' }
               ]
             }
           })
@@ -320,35 +315,38 @@ export default {
 </script>
 
 <style>
-.student-box{
-    overflow-x: hidden;
-    overflow-y: auto;
-    width: 100%;
-    max-height: 80vh;
-    display: flex;
-    flex-wrap: wrap;
+.racemodal .ivu-modal-content {
+  z-index: 99999 !important;
 }
-.student-list{
-    margin: 5px 0;
-    height:50px;
-    line-height: 50px;
-    float: left;
+.student-box {
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-wrap: wrap;
 }
-.student-name{
-    display: inline-block;
-    width: 80px;
-    text-align: center;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 6px;
-    border: 1px solid green;
-    cursor: pointer;
-    margin-right: 20px
+.student-list {
+  margin: 5px 0;
+  height: 50px;
+  line-height: 50px;
+  float: left;
 }
-.student ul{
+.student-name {
+  display: inline-block;
+  width: 80px;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 6px;
+  border: 1px solid green;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.student ul {
   width: 100%;
 }
-.student ul li{
+.student ul li {
   float: left;
   margin: 5px 0;
   display: inline-block;
@@ -359,49 +357,50 @@ export default {
   border-radius: 6px;
   border: 1px solid black;
   cursor: pointer;
-  margin-right: 20px
+  margin-right: 20px;
 }
 
-.addmainquestion-footer{
+.addmainquestion-footer {
   float: right;
   margin-top: 16px;
   height: 31px;
   color: #000000;
 }
-.addmainquestion-footer button,.showtime button{
+.addmainquestion-footer button,
+.showtime button {
   cursor: pointer;
   padding: 5px 0;
   width: 84px;
-  border-radius:4px;
+  border-radius: 4px;
   outline: none;
   border: none;
   margin-left: 30px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
-.choose-question{
+.choose-question {
   font-size: 14px;
   display: flex;
   margin-top: 10px;
 }
-.choose-question div:nth-of-type(1){
-  margin:auto
+.choose-question div:nth-of-type(1) {
+  margin: auto;
 }
-.showtime{
+.showtime {
   float: right;
   margin-top: 20px;
   height: 32px;
   color: #000000;
 }
-.new-inputnumber{
-  width:84px;
-  height:26px;
+.new-inputnumber {
+  width: 84px;
+  height: 26px;
   text-align: center;
   border: 1px solid #000000;
   border-radius: 4px;
   margin-right: 6px;
-  vertical-align:middle
+  vertical-align: middle;
 }
-.student-box input{
+.student-box input {
   font-size: 14px;
 }
 </style>

@@ -141,7 +141,7 @@ export default {
         },
         {
           name: 'news',
-          title: '新闻动态',
+          title: '新闻动态 ',
           path: '/news'
         }
       ]

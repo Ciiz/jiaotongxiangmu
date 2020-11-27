@@ -168,59 +168,59 @@ export default {
       _this.loading = true
       _this.editor_init = true
       // console.log(_this.examId.exam_release_id);
+      _this.axios.request({
+        method: 'get',
+        url: `/index.php/Student/Exam/detail`,
+        params: {
+          student_exam_id: _this.student_exam_id,
+          hasAnswer: hs
+        }
+      }).then(res => {
+        _this.loading = false
+        let data = res.data
 
-      if (_this.examId.exam_release_id) {
-        // console.log(_this.examId);
-        _this.axios.request({
-          method: 'post',
-          url: `/index.php/Student/Exam/live_exam_detail`,
-          data: {
-            student_id: _this.examId.student_id,
-            exam_release_id: _this.examId.exam_release_id,
-            hasAnswer: hs
-          }
-        }).then(res => {
-          console.log(res);
-          // this.student_exam_id = _this.examId.exam_release_id
-          _this.loading = false
-          let data = res.data
-          if (res.code === 200) {
-            _this.student_exam = data.student_exam
-            _this.exam_status = data.exam_status_data
-            this.sty = data.exam_status_data.status
-            _this.getObjectList(data.student_exam.object)
-            _this.getSubjectList(data.student_exam.subject)
-            // // 状态是未开始就发送开始考试请求
-            // // 先判断考试进行状态,可以提交状态就显示交卷按钮，考试中就显示保存
-            _this.dealExamStatus(_this.exam_status.status)
-            _this.timeInterval()
-            _this.$emit("name", data.student_exam.exam.exam_name)
-          }
-        })
-      } else {
-        _this.axios.request({
-          method: 'get',
-          url: `/index.php/Student/Exam/detail`,
-          params: {
-            student_exam_id: _this.student_exam_id,
-            hasAnswer: hs
-          }
-        }).then(res => {
-          _this.loading = false
-          let data = res.data
+        if (res.code === 200) {
+          _this.student_exam = data.student_exam
+          _this.exam_status = data.exam_status_data
+          _this.getObjectList(data.student_exam.object)
+          _this.getSubjectList(data.student_exam.subject)
+          // // 状态是未开始就发送开始考试请求
+          // // 先判断考试进行状态,可以提交状态就显示交卷按钮，考试中就显示保存
+          _this.dealExamStatus(_this.exam_status.status)
+          _this.timeInterval()
+        }
+      })
+      // if (_this.examId.exam_release_id) {
+      //   // console.log(_this.examId);
+      //   _this.axios.request({
+      //     method: 'post',
+      //     url: `/index.php/Student/Exam/live_exam_detail`,
+      //     data: {
+      //       student_id: _this.examId.student_id,
+      //       exam_release_id: _this.examId.exam_release_id,
+      //       hasAnswer: hs
+      //     }
+      //   }).then(res => {
+      //     console.log(res);
+      //     // this.student_exam_id = _this.examId.exam_release_id
+      //     _this.loading = false
+      //     let data = res.data
+      //     if (res.code === 200) {
+      //       _this.student_exam = data.student_exam
+      //       _this.exam_status = data.exam_status_data
+      //       this.sty = data.exam_status_data.status
+      //       _this.getObjectList(data.student_exam.object)
+      //       _this.getSubjectList(data.student_exam.subject)
+      //       // // 状态是未开始就发送开始考试请求
+      //       // // 先判断考试进行状态,可以提交状态就显示交卷按钮，考试中就显示保存
+      //       _this.dealExamStatus(_this.exam_status.status)
+      //       _this.timeInterval()
+      //       _this.$emit("name", data.student_exam.exam.exam_name)
+      //     }
+      //   })
+      // } else {
 
-          if (res.code === 200) {
-            _this.student_exam = data.student_exam
-            _this.exam_status = data.exam_status_data
-            _this.getObjectList(data.student_exam.object)
-            _this.getSubjectList(data.student_exam.subject)
-            // // 状态是未开始就发送开始考试请求
-            // // 先判断考试进行状态,可以提交状态就显示交卷按钮，考试中就显示保存
-            _this.dealExamStatus(_this.exam_status.status)
-            _this.timeInterval()
-          }
-        })
-      }
+      // }
 
     },
     getObjectList (item) { // 处理客观题
@@ -371,7 +371,9 @@ export default {
         data: {
           student_exam_id: this.student_exam_id,
           exam_status,
-          answer_arr
+          answer_arr,
+          live_type: 1,
+          teacher_id: this.$store.state.user.teacher_id_exam,
         }
       }).then(res => {
         if (res.code === 200) {

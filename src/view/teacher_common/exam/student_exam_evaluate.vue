@@ -1,13 +1,14 @@
 <template>
   <div style="background:#ffffff;height:600px;overflow-y:scroll">
     <div>
-      <Collapse class="evaluate-Collapse" v-model="value">
-        <Panel name="1" v-for="(item,index) in student_exam.object" v-if="item.length!==0" :key="index">
+      <Collapse class="evaluate-Collapse" v-model="collapseVal">
+        <!-- 选择题 -->
+        <Panel v-for="(item,index) in student_exam.object" v-if="item.length!==0" :key="index">
           <span>
             {{item[0].object_type===1?'单选题':'多选题'}}
           </span>
           <span>正确：{{item[0].user_type_true_num}}/{{item.length}}</span>
-          <span>得分：{{item[0].user_type_score}}/{{item[0].total_score}}</span>
+          <span>得分：{{item[0].user_this_score}}/{{item[0].total_score}}</span>
           <p slot="content">
             <Row class="evaluate-Collapse-Row" v-for="(item2,index2) in item" :key="index2">
               <Col :span="18">
@@ -30,7 +31,8 @@
             </Row>
           </p>
         </Panel>
-        <Panel :name="index+1" v-for="(item,index) in student_exam.subject" v-if="item.length!==0" :key="index">
+        <!-- 其他答题 -->
+        <Panel v-for="(item,index) in student_exam.subject" v-if="item.length!==0" :key="index">
           <span>
             {{changeQusetionType(item[0].subject_type)}}
           </span>
@@ -71,6 +73,7 @@ export default {
   },
   data () {
     return {
+      collapseVal: null,
       exam_name: '',
       student_exam: {
         object: [],
@@ -78,7 +81,7 @@ export default {
       },
       loading: false,
       score_option_list: [],
-      value: '1'
+
     }
   },
   watch: {
@@ -167,7 +170,9 @@ export default {
     }
   },
   mounted () {
-
+    setTimeout(() => {
+      this.collapseVal = ["0", "1", "2", "3", "4", "5", "6", '7'];
+    }, 700)
 
     this.getInfo()
   }

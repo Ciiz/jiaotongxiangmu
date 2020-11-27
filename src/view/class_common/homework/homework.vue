@@ -3,64 +3,60 @@
     <button @click="back" class="homework-back">返回</button>
     <Row class="studentHomework">
       <Col style="width:52%;margin-right:20px">
-       <Divider orientation="left">
-         <span class="studentHomework-black-font">{{student_homework.homework.homework_name}}</span>
-        </Divider>
-        <div>
-          <span>所属课程：{{student_homework.homework.course_name}} </span>
-          <span>课后作业</span>
-        </div>
-        <div>授课老师：{{student_homework.homework.teacher}}</div>
-        <div style="margin-bottom:30px">截止时间：{{moment(student_homework.homework.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')}}</div>
-        <Divider orientation="left">
-         <span class="studentHomework-black-font">任务描述</span>
-        </Divider>
-        <div v-html="student_homework.homework.homework_content" style="flex:1;word-break:break-all;overflow-y:scroll"></div>
+      <Divider orientation="left">
+        <span class="studentHomework-black-font">{{student_homework.homework.homework_name}}</span>
+      </Divider>
+      <div>
+        <span>所属课程：{{student_homework.homework.course_name}} </span>
+        <span>课后作业</span>
+      </div>
+      <div>授课老师：{{student_homework.homework.teacher}}</div>
+      <div style="margin-bottom:30px">
+        截止时间：{{moment(student_homework.homework.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')}}</div>
+      <Divider orientation="left">
+        <span class="studentHomework-black-font">任务描述</span>
+      </Divider>
+      <div v-html="student_homework.homework.homework_content" style="flex:1;word-break:break-all;overflow-y:scroll">
+      </div>
       </Col>
-      <Col v-if="student_homework.submit_status===0" style="flex:1;position:relative;padding-bottom:60px;display:flex;flex-direction:column">
-        <Divider orientation="left">
-         <span class="studentHomework-black-font">作答区</span>
-        </Divider>
-        <Editor
-          class="new-editor"
-          v-model="student_homework.content"
-          :is_init.sync="editor_init"
-        ></Editor>
-        <FileUpload
-          :fileObj="{url: student_homework.file_url, name: student_homework.file_name}"
-          @on-change="(file)=>{student_homework.file_url = file.url;student_homework.file_name= file.name}"
-          :extra="{type: 'homework',token:$store.state.user.token}"
-        ></FileUpload>
-        <div class="studentHomework-bottom">
-          <!-- <button>保存(不提交)</button> -->
-          <button @click="submit">提交</button>
-        </div>
+      <Col v-if="student_homework.submit_status===0"
+        style="flex:1;position:relative;padding-bottom:60px;display:flex;flex-direction:column">
+      <Divider orientation="left">
+        <span class="studentHomework-black-font">作答区</span>
+      </Divider>
+      <Editor class="new-editor" v-model="student_homework.content" :is_init.sync="editor_init"></Editor>
+      <FileUpload :fileObj="{url: student_homework.file_url, name: student_homework.file_name}"
+        @on-change="(file)=>{student_homework.file_url = file.url;student_homework.file_name= file.name}"
+        :extra="{type: 'homework',token:$store.state.user.token}"></FileUpload>
+      <div class="studentHomework-bottom">
+        <!-- <button>保存(不提交)</button> -->
+        <button @click="submit">提交</button>
+      </div>
       </Col>
       <Col v-if="student_homework.submit_status===1" class="homework-evalute">
-        <div>
-          <div style="height:100%;display:flex;flex-direction:column">
-            <div class="studentHomework-black-font" style="margin-bottom:10px">我的回答</div>
-            <div style="word-break:break-all;flex:1;overflow-y:scroll">
-              <p v-html="student_homework.content" ></p>
-            </div>
-          </div>
-          <div class="homework-evalute-file" v-if="student_homework.file_url">
-            <a :href="student_homework.file_url" target="blank">附件</a>
+      <div>
+        <div style="height:100%;display:flex;flex-direction:column">
+          <div class="studentHomework-black-font" style="margin-bottom:10px">我的回答</div>
+          <div style="word-break:break-all;flex:1;overflow-y:scroll">
+            <p v-html="student_homework.content"></p>
           </div>
         </div>
-        <div>
-          <div class="studentHomework-black-font" v-for="score_item in teacher_evaluation.score_option" :key="score_item.index" style="margin-bottom:10px">
-            老师评价：<span style="color:#FF3333;font-weight:bold;font-size:16px;">{{score_item.score===null?'未评':score_item.score}}分</span>
-          </div>
-          <div style="overflow-y:scroll;word-break:break-all;flex:1">{{teacher_evaluation.evaluation}}</div>
+        <div class="homework-evalute-file" v-if="student_homework.file_url">
+          <a :href="student_homework.file_url" target="blank">附件</a>
         </div>
+      </div>
+      <div>
+        <div class="studentHomework-black-font" v-for="score_item in teacher_evaluation.score_option"
+          :key="score_item.index" style="margin-bottom:10px">
+          老师评价：<span
+            style="color:#FF3333;font-weight:bold;font-size:16px;">{{score_item.score===null?'未评':score_item.score}}分</span>
+        </div>
+        <div style="overflow-y:scroll;word-break:break-all;flex:1">{{teacher_evaluation.evaluation}}</div>
+      </div>
       </Col>
     </Row>
-    <Modal
-        v-model="modal1"
-        title="跳转"
-        @on-ok="ok">
-        <p>是否离开当前页面</p>
+    <Modal v-model="modal1" title="跳转" @on-ok="ok">
+      <p>是否离开当前页面</p>
     </Modal>
     <Spin size="large" v-if="loading" fix></Spin>
   </div>
@@ -206,21 +202,21 @@ export default {
 }
 </script>
 <style type="text/css" lang="less" scoped>
-  .p-text {
-    margin-top: 5px;
-  }
-  .p-title {
-    font-weight: bold;
-  }
-  .row-item {
-    margin-top: 15px;
-    margin-bottom: 15px;
-  }
-  .center {
-    text-align: right;
-    margin-top: 15px;
-  }
-  .ivu-btn {
-    margin-right: 10px;
-  }
+.p-text {
+  margin-top: 5px;
+}
+.p-title {
+  font-weight: bold;
+}
+.row-item {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.center {
+  text-align: right;
+  margin-top: 15px;
+}
+.ivu-btn {
+  margin-right: 10px;
+}
 </style>

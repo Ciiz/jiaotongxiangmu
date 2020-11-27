@@ -1,22 +1,25 @@
 <template>
   <div class="modal-content" style="height: 70vh;">
     <Row style="margin-bottom:20px;">
-    <InputNumber v-model="year" style="width: 100px" size="small" @on-change="getCourseTable()"></InputNumber>&nbsp;年&nbsp;
-    <Select v-model="semester" size="small" style="width:100px;" @on-change="getCourseTable()">
-      <Option :value="2">上半年</Option>`
-      <Option :value="1">下半年</Option>`
-    </Select>
-    课程选择:
-    <Select v-model="teacher_course_id" style="width: 200px" size="small" clearable @on-change="(val) => this.teacherCourseChange(val)">
-      <Option :value="0">所有课程</Option>
-      <Option v-for="teacher_course in this.teacher_course_list" :value="teacher_course.id" :key="teacher_course.id">{{teacher_course.course_name}}</Option>
-    </Select>
-    <Button size="small" type="primary" @click="editable = !editable">{{editable?'预览': '编辑'}}</Button>
-    <div style="float:right;">
-      <Button @click="handleWeekChange('minus')" size="small">上一周</Button>
+      <InputNumber v-model="year" style="width: 100px" size="small" @on-change="getCourseTable()"></InputNumber>
+      &nbsp;年&nbsp;
+      <Select v-model="semester" size="small" style="width:100px;" @on-change="getCourseTable()">
+        <Option :value="2">上半年</Option>`
+        <Option :value="1">下半年</Option>`
+      </Select>
+      课程选择:
+      <Select v-model="teacher_course_id" style="width: 200px" size="small" clearable
+        @on-change="(val) => this.teacherCourseChange(val)">
+        <Option :value="0">所有课程</Option>
+        <Option v-for="teacher_course in this.teacher_course_list" :value="teacher_course.id" :key="teacher_course.id">
+          {{teacher_course.course_name}}</Option>
+      </Select>
+      <Button size="small" type="primary" @click="editable = !editable">{{editable?'预览': '编辑'}}</Button>
+      <div style="float:right;">
+        <Button @click="handleWeekChange('minus')" size="small">上一周</Button>
         <InputNumber v-model="week" :max="maxWeek" :min="1" size="small"></InputNumber>
-      <Button @click="handleWeekChange('plus')" size="small">下一周</Button>
-    </div>
+        <Button @click="handleWeekChange('plus')" size="small">下一周</Button>
+      </div>
     </Row>
     <Row v-show="teacher_course_id && editable">
       <!-- <draggable
@@ -26,43 +29,47 @@
       @start="drag = true"
       @end="drag = false"
       > -->
-        <div v-for="(item,index) in course_table" :key="index" class="course-table-form-item">
-          <Select v-model="item.week_type" placeholder=""  style="width:80px" @on-change="handlecourseTableChange">
-            <Option :value="0">连续</Option>
-            <Option :value="1">单周</Option>
-            <Option :value="2">双周</Option>
-          </Select>
-          <InputNumber v-model="item.week_start" placeholder="开始周" @on-change="handlecourseTableChange"/>
-          <InputNumber v-model="item.week_end" placeholder="截止周" @on-change="handlecourseTableChange"/>
-          <Select v-model="item.day" placeholder="周几" style="width:80px"  @on-change="handlecourseTableChange">
-            <Option v-for="w in 7" :key="w" :value="w">周{{w}}</Option>
-          </Select>
-          <Select v-model="item.class_no" placeholder="第几节"  multiple style="width:230px" @on-change="handlecourseTableChange">
-            <Option v-for="c_n in 12" :key="(c_n)" :value="c_n">第{{c_n}}节</Option>
-          </Select>
-          <Input v-model="item.address" placeholder="上课地点" style="width:150px" @on-change="handlecourseTableChange"/>
-          <Select v-model="item.class" placeholder="班级"  style="width:150px" @on-change="handlecourseTableChange">
-            <Option v-for="cl in classList" :key="cl.id" :value="cl.id">{{cl.class_name}}</Option>
-          </Select>
-          <Button type="default" @click="removeTableRule(index)">删除</Button>
-          <Button type="default" @click="copyTableRule(index)">复制</Button>
-          <!-- <Button type="default" style="cursor:move;" >移动</Button> -->
-        </div>
+      <div v-for="(item,index) in course_table" :key="index" class="course-table-form-item">
+        <Select v-model="item.week_type" placeholder="" style="width:80px" @on-change="handlecourseTableChange">
+          <Option :value="0">连续</Option>
+          <Option :value="1">单周</Option>
+          <Option :value="2">双周</Option>
+        </Select>
+        <InputNumber v-model="item.week_start" placeholder="开始周" @on-change="handlecourseTableChange" />
+        <InputNumber v-model="item.week_end" placeholder="截止周" @on-change="handlecourseTableChange" />
+        <Select v-model="item.day" placeholder="周几" style="width:80px" @on-change="handlecourseTableChange">
+          <Option v-for="w in 7" :key="w" :value="w">周{{w}}</Option>
+        </Select>
+        <Select v-model="item.class_no" placeholder="第几节" multiple style="width:230px"
+          @on-change="handlecourseTableChange">
+          <Option v-for="c_n in 12" :key="(c_n)" :value="c_n">第{{c_n}}节</Option>
+        </Select>
+        <Input v-model="item.address" placeholder="上课地点" style="width:150px" @on-change="handlecourseTableChange" />
+        <Select v-model="item.class" placeholder="班级" style="width:150px" @on-change="handlecourseTableChange">
+          <Option v-for="cl in classList" :key="cl.id" :value="cl.id">{{cl.class_name}}</Option>
+        </Select>
+        <Button type="default" @click="removeTableRule(index)">删除</Button>
+        <Button type="default" @click="copyTableRule(index)">复制</Button>
+        <!-- <Button type="default" style="cursor:move;" >移动</Button> -->
+      </div>
       <!-- </draggable> -->
       <Button @click="addTableRule" type="success" icon="md-add" size="small" style="margin-right: 20px">添加</Button>
       <Button @click="submit" type="primary" size="small">保存</Button>
       <Spin fix v-show="loading"></Spin>
     </Row>
-    <table class="timetable" border="1px;" rules="all"  cellpadding="10">
+    <table class="timetable" border="1px;" rules="all" cellpadding="10">
       <caption>课表（第{{week}}周）&nbsp;当前日期:{{curDate}}</caption>
       <thead>
-          <th v-for="(item,index) in tableHead" :key="index" class="bg-gray" :class="{'day-active': (index === curDay && curDate === item.date)}">{{item.label}}<br>{{item.date}}</th>
+        <th v-for="(item,index) in tableHead" :key="index" class="bg-gray"
+          :class="{'day-active': (index === curDay && curDate === item.date)}">{{item.label}}<br>{{item.date}}</th>
       </thead>
       <tbody>
         <tr v-for="(row,index) in rowData" :key="index">
-          <td v-for="(col,index1) in row" :rowspan="col.rowspan" :colspan="col.colspan" :key="index1" :class="col.style" >
-            <div >
-              <div v-if="col.col === 1" v-html="col.class_no ? `第${col.class_no}节` : '&nbsp;'" :class="{item: row.class_no ? ture : false}"> </div>
+          <td v-for="(col,index1) in row" :rowspan="col.rowspan" :colspan="col.colspan" :key="index1"
+            :class="col.style">
+            <div>
+              <div v-if="col.col === 1" v-html="col.class_no ? `第${col.class_no}节` : '&nbsp;'"
+                :class="{item: row.class_no ? ture : false}"> </div>
               <render-desc v-else :teacher_course_id="teacher_course_id" :desc="col.desc" class="item"></render-desc>
             </div>
           </td>
@@ -97,7 +104,7 @@ function getWeekDay (dateString) {
   }
 }
 // eslint-disable-next-line standard/array-bracket-even-spacing
-const colors = ['color1', 'color2', 'color3', 'color4', 'color5', 'color6', 'color7', 'color8', 'color9', 'color10' ]
+const colors = ['color1', 'color2', 'color3', 'color4', 'color5', 'color6', 'color7', 'color8', 'color9', 'color10']
 export default {
   mixins: [modal_mixin],
   components: {
@@ -561,3 +568,7 @@ export default {
   }
 }
 </script>
+<style lang="less">
+.modal-content {
+}
+</style>

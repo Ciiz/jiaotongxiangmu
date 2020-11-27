@@ -46,7 +46,7 @@ import TeamList from './team_list_m'
 export default {
   props: {
     student_task_id: '',
-    // task_release_id: ''
+    teacher_id: ''
   },
   components: {
     TeamList
@@ -122,6 +122,8 @@ export default {
         })
     },
     submitTask () {
+      console.log(this.$store.state.user.teacher_id_task);
+
       let _this = this
       _this.axios.request({
         method: 'post',
@@ -134,9 +136,12 @@ export default {
           task_id: this.student_task.task_id,
           file_url: this.student_task.file_url,
           file_name: this.student_task.file_name,
-          live_type: 1
+          live_type: 1,
+          teacher_id: this.$store.state.user.teacher_id_task
         }
       }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           _this.$Message.success(res.message)
         }

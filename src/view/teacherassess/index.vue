@@ -1,55 +1,61 @@
 <template>
-<Row class="watcheva" style="flex:1;display:flex;flex-direction:column">
+  <Row class="watcheva" style="flex:1;display:flex;flex-direction:column">
     <!-- <div class="searchtemplete">
       <Input type="text" @on-enter='selectbtn' v-model="keyword" style="width:200px;"  placeholder="按照课程名称查询"  />
       <Button type="primary" @click="selectbtn" class="searchbtn"><Icon type="ios-search"  /></Button>
     </div> -->
-  <Row type="flex" justify="space-between" class="watcheva-header">
-    <Col>
+    <Row type="flex" justify="space-between" class="watcheva-header">
+      <Col>
       <span class="gray-c8">班级：</span>
       <Select class="new-searchSel" v-model="class_choose" placeholder="全部" clearable style="margin-right:30px">
-        <Option v-for="classitem in class_list" :value="classitem.value" :key="classitem.value">{{ classitem.label }}</Option>
+        <Option v-for="classitem in class_list" :value="classitem.value" :key="classitem.value">{{ classitem.label }}
+        </Option>
       </Select>
       <span class="gray-c8">课时：</span>
       <Select class="new-searchSel" v-model="section_choose" placeholder="全部" clearable style="margin-right:30px">
-        <Option v-for="(sectionitem,index) in section_list" :value="sectionitem.id" :key="sectionitem.id">{{index !== 0 ? '第' + sectionitem.sort + '课时' : sectionitem.sort}}</Option>
+        <Option v-for="(sectionitem,index) in section_list" :value="sectionitem.id" :key="sectionitem.id">
+          {{index !== 0 ? '第' + sectionitem.sort + '课时' : sectionitem.sort}}</Option>
       </Select>
       <button class="blueg-btn" style="width:122px" @click="exportData(1)">导出表格数据</button>
-    </Col>
-    <Col>
+      </Col>
+      <Col>
       <Breadcrumb style="float:right;margin-top:6px">
         <BreadcrumbItem>考核评价</BreadcrumbItem>
         <BreadcrumbItem>课程列表</BreadcrumbItem>
         <BreadcrumbItem>考核详情</BreadcrumbItem>
       </Breadcrumb>
-    </Col>
-  </Row>
-  <Row type="flex" justify="space-between" style="flex:1;padding-bottom:10px">
-    <Col class="watcheva-l" style="height:100%;display:flex;flex-direction:column">
+      </Col>
+    </Row>
+    <Row type="flex" justify="space-between" style="flex:1;padding-bottom:10px">
+      <Col class="watcheva-l" style="height:100%;display:flex;flex-direction:column">
       <div>
         <span style="width:106px;border-right:1px solid #FFFFFF">序号</span>
-        <span style="width:166px;border-right:1px solid #FFFFFF">学生（）</span>
+        <span style="width:166px;border-right:1px solid #FFFFFF">学生（{{course_list.length}}）</span>
         <span style="width:144px">综合成绩</span>
       </div>
       <div style="flex:1;position:relative">
         <ul>
-          <li v-for="(item,index) in course_list" class="watcheva-l-li" :key="index" @click="selectStudent($event,item)">
+          <li v-for="(item,index) in course_list" class="watcheva-l-li" :key="index"
+            @click="selectStudent($event,item)">
             <span style="width:106px">{{index+1}}</span>
             <span style="width:166px">
-              <img :src="item.icon" />{{item.name}}</span>
+              <img :src="item.icon==='' ? default_icon : item.icon" />
+              {{item.name}}
+            </span>
             <span style="width:144px">{{item.total_score}}分</span>
           </li>
         </ul>
       </div>
-    </Col>
-    <Col style="flex:1;margin-right:10px;height:100%">
+      </Col>
+      <Col style="flex:1;margin-right:10px;height:100%">
       <div class="courseware_list_table_parent">
-        <Table size="small" class="courseware_list_table" style="width:100%;height:100%" ref="selection" :columns="columns" :data="list"></Table>
+        <Table size="small" class="courseware_list_table" style="width:100%;height:100%" ref="selection"
+          :columns="columns" :data="list"></Table>
       </div>
-    </Col>
+      </Col>
+    </Row>
+    <Spin fix v-show="loading"> </Spin>
   </Row>
-  <Spin fix v-show="loading"> </Spin>
-</Row>
 </template>
 <script>
 import { student_course_score } from '@/api/data'
@@ -120,7 +126,7 @@ export default {
       class_choose: '',
       loading1: false,
       section_choose: '',
-
+      default_icon: require('@/assets/images/new_img/default.jpg'),
       loading: false,
       course_list: [],
       columns: [

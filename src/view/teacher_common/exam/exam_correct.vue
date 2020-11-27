@@ -2,10 +2,13 @@
   <div>
     <Table :loading="loading" :columns="columns" stripe :data="list" :height="$store.state.app.tableHeight-40"></Table>
     <div style="margin-top: 10px;">
-      <page :total="count" :current="page" show-sizer show-elevator :page-size="page_size" @on-page-size-change="(val) => { this.page_size = val; this.getData()}" size="small" @on-change="(page) => {this.page = page , this.getData()}"  :placement="'top'"></page>
+      <page :total="count" :current="page" show-sizer show-elevator :page-size="page_size"
+        @on-page-size-change="(val) => { this.page_size = val; this.getData()}" size="small"
+        @on-change="(page) => {this.page = page , this.getData()}" :placement="'top'"></page>
     </div>
     <Modal v-model="modal" :title="title" :width="modal_width" footer-hide>
-      <student-exam-list :targetwork_id="target_id" :target_type="'student_exam_list'" v-if="target === 'student_exam_list'" @on-refresh-parent-list="getData()"></student-exam-list>
+      <student-exam-list :targetwork_id="target_id" :target_type="'student_exam_list'"
+        v-if="target === 'student_exam_list'" @on-refresh-parent-list="getData()"></student-exam-list>
     </Modal>
   </div>
 </template>
