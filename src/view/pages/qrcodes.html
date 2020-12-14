@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>考勤</title>
+</head>
+
+<body>
+  <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script type="text/javascript">
+
+    onload = function () {
+      function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+          var str = url.substr(1);
+          strs = str.split("&");
+          for (var i = 0; i < strs.length; i++) {
+            theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+          }
+        }
+        return theRequest;
+      }
+      var Request = new Object();
+      Request = GetRequest();
+      var attendance_ids,
+        // var expired_at,
+        //   expired_at = Request['expired_at']
+        attendance_ids = Request['attendance_ids']
+      axios.get('/index.php/Api/Wechat/wx_login', {
+        params: {
+          attendance_ids: attendance_ids
+        }
+      })
+        .then(function (response) {
+          // console.log(response);
+          wx.config({
+            debug: false,
+            appId: response.data.data.appId,
+            timestamp: response.data.data.timestamp,
+            nonceStr: response.data.data.nonceStr,
+            signature: response.data.data.signature,
+            jsApiList: [
+              // 所有要调用的 API 都要加到这个列表中
+              'checkJsApi',
+              'openLocation',
+              'getLocation'
+            ]
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
+    wx.ready(function () {
+      wx.checkJsApi({
+        jsApiList: [
+          'getLocation'
+        ],
+        success: function (res) {
+          // alert(JSON.stringify(res));
+          // alert(JSON.stringify(res.checkResult.getLocation));
+          if (res.checkResult.getLocation == false) {
+            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+            return;
+          }
+        }
+      });
+      wx.getLocation({
+        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+        success: function (res) {
+          var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+          var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+          var speed = res.speed; // 速度，以米/每秒计
+          var accuracy = res.accuracy; // 位置精度
+          localStorage.setItem('lat', latitude)
+          let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx26cc61f92e8008eb&redirect_uri=' + encodeURI('https://zjymooc.etomooc.com/Api/Wechat/studentLogins?wxlat=' + latitude + '&wxlng=' + longitude + '&response_type=code&scope=snsapi_userinfo#wechat_redirect')
+          location.href = url
+          alert('是否获取地理位置 ?')
+        },
+        fail: function (res) {
+          alert('获取地理位置失败！')
+        },
+        cancel: function (res) {
+          alert('用户拒绝授权获取地理位置!');
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

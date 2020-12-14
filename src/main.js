@@ -24,8 +24,6 @@ import 'vuescroll/dist/vuescroll.css'// 引入vuescroll样式
 import 'babel-polyfill'
 // const theme = localStorage.getItem('etoTheme') || 'default'
 require(`@/assets/theme/default.less`) // 课件直播样式
-
-
 // import VueDND from 'awe-dnd'
 // Vue.use(VueDND)
 

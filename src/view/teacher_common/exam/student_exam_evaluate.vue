@@ -8,7 +8,7 @@
             {{item[0].object_type===1?'单选题':'多选题'}}
           </span>
           <span>正确：{{item[0].user_type_true_num}}/{{item.length}}</span>
-          <span>得分：{{item[0].user_this_score}}/{{item[0].total_score}}</span>
+          <span>得分：{{item[0].user_type_score}}/{{item[0].total_score}}</span>
           <p slot="content">
             <Row class="evaluate-Collapse-Row" v-for="(item2,index2) in item" :key="index2">
               <Col :span="18">
@@ -130,7 +130,18 @@ export default {
         console.log(res);
         if (res.code === 200) {
           this.$Message.success(res.message)
-          // this.$emit('success', false)
+          this.$emit('success', false)
+          this.axios.request({
+            method: 'get',
+            url: '/index.php/Teacher/Examination/student_exam_list',
+            params: {
+              exam_release_id: this.targetwork_id,
+              score_rank: ""
+            }
+          }).then(res => {
+            console.log(res);
+
+          })
         }
       })
     },

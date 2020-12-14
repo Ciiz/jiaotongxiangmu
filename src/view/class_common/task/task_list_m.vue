@@ -13,22 +13,17 @@
 import Task from './task_detail.vue'
 import TeamDiscussion from '@/view/class_common/task/team_discussion.vue'
 import modal_mixin from '@/view/mixins/modal_mixin'
+import log from 'video.js/es5/utils/log'
 export default {
   props: {
     student_courseware_id: '',
-
+    listask: {}
 
   },
   mixins: [modal_mixin],
   components: {
     Task,
     TeamDiscussion
-  },
-  watch: {
-    student_courseware_id (newVal, oldVal) {
-      this.getData()
-    },
-
   },
   data () {
     return {
@@ -75,6 +70,15 @@ export default {
       ]
     }
   },
+  watch: {
+    student_courseware_id (newVal, oldVal) {
+      this.getData()
+    },
+    listask () {
+      this.list = this.listask
+    }
+  },
+
   methods: {
 
     getData () {
@@ -88,10 +92,8 @@ export default {
           student_courseware_id: this.student_courseware_id
         }
       }).then(res => {
-        console.log(res);
 
         if (res.code === 200) {
-          // this.list = res.data.list
           this.list = res.data.list.filter(v => {
             return v.release_status === 1
           });

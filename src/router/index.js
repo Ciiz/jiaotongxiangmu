@@ -39,12 +39,13 @@ router.beforeEach((to, from, next) => {
     to.name === 'aboutwe' || to.path === '/aboutwe' ||
     to.name === 'agreement' || to.path === '/agreement' ||
     to.name === 'feedback' || to.path === '/feedback' ||
+    to.name === 'studentLogins' || to.path === '/studentLogins' ||
     to.name === 'mobileLogin' || to.path === '/mobileLogin') {
     next()
   } else {
     iView.LoadingBar.start()
     const token = getToken()
-    if (to.name === 'bind' || to.name === 'regist') {
+    if (to.name === 'bind' || to.name === 'regist' || to.name === 'studentLogins' || to.name === 'sucess_tip') {
       next()
     } else if (!token && to.name !== LOGIN_PAGE_NAME) {
       // 未登录且要跳转的页面不是登录页(如果是正式环境，跳转到授权系统)

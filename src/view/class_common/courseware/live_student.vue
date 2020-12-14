@@ -29,7 +29,12 @@
             <ul class="live-btnList">
               <li class="live-btnList-li" @click="showFilesList">
                 课件素材({{student_courseware.courseware.courseware_files.length}})</li>
-              <li class="live-btnList-li" @click="showQuestionList">教师提问({{questionList.length}})</li>
+              <li class="live-btnList-li" @click="showQuestionList">
+
+                <Badge dot :offset=[0,-4] :count="badgequestion" class="question-badge">
+                  教师提问({{questionList.length}})
+                </Badge>
+              </li>
               <li class="live-btnList-li" @click="showTaskIn">
                 <Badge dot :offset=[0,-4] :count="badgetask" class="question-badge">
                   课中任务 ({{taskinList.length}})
@@ -127,10 +132,10 @@
                   </span>
                 </div>
                 <div>
-
                   <p v-if="taskinList.length === 0" style="color:#D1D1D1">暂无课中任务</p>
                   <Row class="tab-content">
-                    <TaskList ref='task_list' :student_courseware_id="this.student_courseware_id"></TaskList>
+                    <TaskList ref='task_list' :student_courseware_id="student_courseware_id" :listask='list'>
+                    </TaskList>
                   </Row>
                 </div>
               </div>
@@ -152,6 +157,9 @@
             </div>
             <div class="live-box">
               <div style="flex:1;background: #000;padding:0 10px;padding-top:12px" v-if="mode === 'live'">
+                <vue-baberrage class="baberrage" style="z-index:1;height:100px;padding-top:10px;"
+                  :isShow="barrageIsShow" :barrageList="barrageList" :loop="barrageLoop" :boxHeight="100">
+                </vue-baberrage>
                 <video id="myVideo" style="display:none;width:100%;height:100%"
                   class="video-js vjs-default-skin vjs-big-play-centered" controls muted preload="auto">
                   <source src="" type="application/x-mpegURL">
@@ -376,7 +384,7 @@
       </RadioGroup>
       <div class="showtime">
         作答时间：{{reply_time}}秒
-        <button style="background:#15B5A8" @click="submitAnswer2()">提交111</button>
+        <button style="background:#15B5A8" @click="submitAnswer2()">提交</button>
       </div>
     </Modal>
 
@@ -420,8 +428,9 @@ export default {
       sty: '',
       badge: 0,
       badgetask: 0,
+      badgequestion: 0,
       modal3: false,
-
+      list: [],
       answertitle: '',
       answer: '',
       rob: 0,
@@ -471,9 +480,9 @@ export default {
           align: 'center',
           render: (h, params) => {
             console.log(params);
-
             let row = params.row
-            let arr = ['考试', '继续', '查看答题', '查看结果', '-']
+            console.log(row);
+            let arr = ['考试', '继续', '查看答题', '查看结果', '已过期']
             let btnText = arr[row.status]
             // 这里点击要判断
             return (
@@ -590,17 +599,8 @@ export default {
       document.getElementsByClassName('live-btnList-li')[1].style.background = '#282A30'
       document.getElementsByClassName('live-btnList-li')[1].style.color = '#397ED6'
       document.getElementsByClassName('allscreen')[1].style.display = 'block'
-      this.axios.request({
-        method: 'get',
-        url: '/index.php/Student/Quiz/get_list',
-        params: {
-          student_courseware_id: this.student_courseware_id
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          this.questionList = res.data.list
-        }
-      })
+      this.getteacherQuestion()
+      this.badgequestion = 0
     },
     showTaskIn () {
       // this.tasklistShow = true
@@ -613,6 +613,7 @@ export default {
       document.getElementsByClassName('live-btnList-li')[2].style.color = '#397ED6'
       document.getElementsByClassName('allscreen')[2].style.display = 'block'
       this.badgetask = 0
+      this.getlist_task()
 
     },
     checkNote () {
@@ -863,6 +864,8 @@ export default {
         time: data.msg.length > 5 ? 7 : data.msg.length > 10 ? 5 : 10, // 弹幕显示时长
         type: MESSAGE_TYPE.NORMAL // 弹幕样式
       })
+      console.log(this.barrageList);
+
     },
     send () {
       if (!this.msg.trim()) return
@@ -956,7 +959,23 @@ export default {
         document.webkitExitFullscreen()
       }
     },
+    // 课中任务列表的获取
+    getlist_task () {
+      this.axios.request({
+        method: 'get',
+        url: 'index.php/Student/Task/getClassMiddleTask',
+        params: {
+          student_courseware_id: this.student_courseware_id
+        }
+      }).then(res => {
 
+        if (res.code === 200) {
+          this.list = res.data.list.filter(v => {
+            return v.release_status === 1
+          });
+        }
+      })
+    },
     handleOnMessage (data) {
       if (data.status !== undefined) {
         if (data.status === 'ture') {
@@ -972,10 +991,12 @@ export default {
         }
       }
       if (data.content !== undefined) {
+        this.getteacherQuestion()
         this.problemContent = data.content
         this.teacher_id = data.teacher_id
         this.quiz_id = data.quiz_id
         this.topic_type = data.topic_type
+        this.badgequestion = 1
         if (data.topic_type === 2) {
           this.rob = data.rob
           if (this.rob === 1) {
@@ -993,10 +1014,13 @@ export default {
       } else if (data.exam_release_id !== undefined) {
         this.badge = 1
         this.$store.commit('setteacher_id_exam', data.teacher_id)
+        this.getaxamlist()
       }
       else if (data.task_release_id !== undefined) {
         this.badgetask = 1
         this.$store.commit('setteacher_id_task', data.teacher_id)
+        this.gettasklist()
+        this.getlist_task()
       }
       // this.problem = data.data
       // let _this = this
@@ -1020,6 +1044,8 @@ export default {
           this.teacher_staus = '离线'
           break
         default: {
+
+
           this.addToList(data)
           if (data.target === this.group_chat_id) {
             this.messageList.push(data)
@@ -1046,23 +1072,9 @@ export default {
       })
     },
     showTestIn () {
-      this.axios.request({
-        url: '/index.php/Student/Exam/page',
-        method: 'post',
-        data: {
-          page_size: 20,
-          page_no: 1,
-          // searchType: 0,
-          type: 2,
-          // score_status: -1,
-          courseware_id: this.courseware_id
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          this.testinList = res.data.list
-          this.badge = 0
-        }
-      })
+
+      this.getaxamlist()
+      this.badge = 0
       for (let i = 0; i < document.getElementsByClassName('allscreen').length; i++) {
         document.getElementsByClassName('allscreen')[i].style.display = 'none'
         document.getElementsByClassName('live-btnList-li')[i].style.background = '#161616'
@@ -1076,6 +1088,58 @@ export default {
       this.modal = false
       this.target = ''
       this.showTestIn()
+    },
+    // 获取课中测试的封装
+    getaxamlist () {
+      this.axios.request({
+        url: '/index.php/Student/Exam/page',
+        method: 'post',
+        data: {
+          page_size: 20,
+          page_no: 1,
+          // searchType: 0,
+          type: 2,
+          // score_status: -1,
+          courseware_id: this.courseware_id
+        }
+      }).then(res => {
+        console.log(res);
+        if (res.code === 200) {
+          this.testinList = res.data.list
+        }
+      })
+    },
+    // 获取课中任务的封装
+    gettasklist () {
+      this.axios.request({
+        method: 'get',
+        url: 'index.php/Student/Task/getClassMiddleTask',
+        params: {
+          student_courseware_id: this.student_courseware_id
+        }
+      }).then(res => {
+        if (res.code === 200) {
+          this.taskinList = res.data.list.filter(v => {
+            return v.release_status === 1
+          });
+          console.log(res);
+
+        }
+      })
+    },
+    // 获取教师提问的封装
+    getteacherQuestion () {
+      this.axios.request({
+        method: 'get',
+        url: '/index.php/Student/Quiz/get_list',
+        params: {
+          student_courseware_id: this.student_courseware_id
+        }
+      }).then(res => {
+        if (res.code === 200) {
+          this.questionList = res.data.list
+        }
+      })
     },
     getStudentCourseware () {
       if (!this.student_courseware_id) {
@@ -1111,51 +1175,9 @@ export default {
               }, 1000)
             }
           }
-
-          this.axios.request({
-            method: 'get',
-            url: '/index.php/Student/Quiz/get_list',
-            params: {
-              student_courseware_id: this.student_courseware_id
-            }
-          }).then(res => {
-            console.log(res);
-
-            if (res.code === 200) {
-              this.questionList = res.data.list
-            }
-          })
-          this.axios.request({
-            method: 'get',
-            url: 'index.php/Student/Task/getClassMiddleTask',
-            params: {
-              student_courseware_id: this.student_courseware_id
-            }
-          }).then(res => {
-            if (res.code === 200) {
-              this.taskinList = res.data.list.filter(v => {
-                return v.release_status === 1
-              });
-              console.log(res);
-              // this.taskinList = res.data.list
-            }
-          })
-          this.axios.request({
-            url: '/index.php/Student/Exam/page',
-            method: 'post',
-            data: {
-              page_size: 20,
-              page_no: 1,
-              // searchType: 0,
-              type: 2,
-              // score_status: -1,
-              courseware_id: this.courseware_id
-            }
-          }).then(res => {
-            if (res.code === 200) {
-              this.testinList = res.data.list
-            }
-          })
+          this.getteacherQuestion()
+          this.gettasklist()
+          this.getaxamlist()
           this.getPptOption()
           this.initChat()
           setTimeout(() => {
@@ -1186,9 +1208,11 @@ export default {
     }
   },
   created () {
+    console.log(this.$store.state.user.coursedatalist);
     this.getStudentCourseware()
   },
   mounted () {
+    console.log(this.$store.state.user.loginstatus);
     const that = this
     window.onresize = () => {
       return (() => {
@@ -1199,7 +1223,11 @@ export default {
     setTimeout(() => {
       this.getLiveHeight()
     }, 1500)
+
+
+
   }
+
 }
 </script>
 <style>

@@ -1,37 +1,45 @@
 <template>
   <div class="modal-content" style="height: 70vh;">
     <Row style="margin-bottom:20px;">
-    <InputNumber v-model="year" style="width: 100px" size="small" @on-change="getCourseTable()"></InputNumber>&nbsp;年&nbsp;
-    <Select v-model="semester" size="small" style="width:100px;">
-      <Option :value="2">上半年</Option>`
-      <Option :value="1">下半年</Option>`
-    </Select>
-    <div style="float:right;">
-      <Button @click="handleWeekChange('minus')" size="small">上一周</Button>
+      <InputNumber v-model="year" style="width: 100px" size="small" @on-change="getCourseTable()"></InputNumber>
+      &nbsp;年&nbsp;
+      <Select v-model="semester" size="small" style="width:100px;">
+        <Option :value="2">下学期</Option>`
+        <Option :value="1">上学期</Option>`
+      </Select>
+      <div style="float:right;">
+        <Button @click="handleWeekChange('minus')" size="small">上一周</Button>
         <InputNumber v-model="week" :max="maxWeek" :min="1" size="small"></InputNumber>
-      <Button @click="handleWeekChange('plus')" size="small">下一周</Button>
-    </div>
+        <Button @click="handleWeekChange('plus')" size="small">下一周</Button>
+      </div>
     </Row>
-    <table class="timetable" border="1px;" rules="all"  cellpadding="10">
-      <caption>课表（第{{week}}周）&nbsp;当前日期:{{curDate}} <span style="float:right">当前课时安排的周：<Button size="small" v-for="w in cur_timetable_time_weeks" :key="w" @click="week = w">{{w}}</Button></span></caption>
+    <table class="timetable" border="1px;" rules="all" cellpadding="10">
+      <caption>课表（第{{week}}周）&nbsp;当前日期:{{curDate}} <span style="float:right">当前课时安排的周：<Button size="small"
+            v-for="w in cur_timetable_time_weeks" :key="w" @click="week = w">{{w}}</Button></span></caption>
       <thead>
-          <th v-for="(item,index) in tableHead" :key="index" class="bg-gray" :class="{'day-active': (index === curDay && curDate === item.date)}">{{item.label}}</br>{{item.date}}</th>
+        <th v-for="(item,index) in tableHead" :key="index" class="bg-gray"
+          :class="{'day-active': (index === curDay && curDate === item.date)}">{{item.label}}</br>{{item.date}}</th>
       </thead>
       <tbody>
         <tr v-for="(row,index) in rowData" :key="index">
-          <td v-for="(col,index1) in row" :rowspan="col.rowspan" :colspan="col.colspan" :key="index1" :class="col.style" >
+          <td v-for="(col,index1) in row" :rowspan="col.rowspan" :colspan="col.colspan" :key="index1"
+            :class="col.style">
             <div class="item">
-              <div v-if="col.col === 1" v-html="col.class_no ? `第${col.class_no}节` : '&nbsp;'" :class="{item: row.class_no ? ture : false}"> </div>
+              <div v-if="col.col === 1" v-html="col.class_no ? `第${col.class_no}节` : '&nbsp;'"
+                :class="{item: row.class_no ? ture : false}"> </div>
               <div v-else>
                 <div v-if="col.desc.length !== 0">
-                  <div v-for="(course,index1) in col.desc" :key="index1" @click="changeTimetable(course)">
-                    <h4 >{{course.course_name}}</h4>
+                  <div v-for="(course,index1) in col.desc" :key="index1" @click="changeTimetable(course,col.class_no)">
+                    <h4>{{course.course_name}}</h4>
                     <p>{{course.address}}</p>
                     <p>{{course.class_name}}</p>
                     <div v-for="(courseware,index2) in course.coursewares" :key="index2">
                       <p>{{courseware.sort}}: {{courseware.courseware_name}}</p>
                     </div>
-                    <Tag v-if="course.cur_timetable">当前课时安排</Tag>
+
+                    <!-- <Tag v-if="course.cur_timetable">当前课时安排</Tag> -->
+                    <!-- <Tag v-if="row[col]===col.class_no">当前课时安排</Tag> -->
+
                   </div>
                 </div>
                 <div v-else>
@@ -52,6 +60,7 @@
 import renderDesc from './desc'
 import { get_term_begin, get_course_table } from '@/api/common'
 import { get_class_by_teacher_course, save_timetable } from '@/api/data'
+import log from 'video.js/es5/utils/log'
 // TODO: 添加获取学校的开学日期，根据当前日期设置当前周
 function getWeekDay (dateString) {
   let dateStringReg = /^\d{4}[/-]\d{1,2}[/-]\d{1,2}$/
@@ -72,7 +81,7 @@ function getWeekDay (dateString) {
   }
 }
 // eslint-disable-next-line standard/array-bracket-even-spacing
-const colors = ['color1', 'color2', 'color3', 'color4', 'color5', 'color6', 'color7', 'color8', 'color9', 'color10' ]
+const colors = ['color1', 'color2', 'color3', 'color4', 'color5', 'color6', 'color7', 'color8', 'color9', 'color10']
 export default {
   props: ['teacher_course_id', 'timetable_id', 'class_id'],
   components: {
@@ -80,6 +89,7 @@ export default {
   },
   data () {
     return {
+
       week: 1,
       tableHead: [
         '节/星期', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'
@@ -171,7 +181,6 @@ export default {
                 // this.week = obj.week
                 _this.cur_timetable_time_weeks.push(obj.week)
                 _this.cur_timetable_time_weeks = Array.from(new Set(_this.cur_timetable_time_weeks))
-
                 desc.cur_timetable = true
               }
               let courseware_index = desc.coursewares.findIndex((el) => { return el.courseware_name === obj.courseware_name })
@@ -310,6 +319,8 @@ export default {
           arr.push(col_arr)
         }
       }
+
+
       return arr
     },
     getWeekData (data, week) {
@@ -370,7 +381,6 @@ export default {
           }
         }
       }
-
       function dealDesc (col, item, rowspan) {
         col.rowspan = rowspan
         col.style.clitem = true
@@ -378,7 +388,6 @@ export default {
         col.style[color] = true
         col.desc.push(item.desc)
       }
-
       for (let w = 0; w < this.weekData.length; w++) {
         for (let r = 0; r < this.rowData.length; r++) {
           for (let c = 0; c < this.rowData[r].length; c++) {
@@ -447,7 +456,7 @@ export default {
         }
       })
     },
-    changeTimetable (course) {
+    changeTimetable (course, class_no) {
       this.is_refresh = false
       let index = this.cur_timetable_list.findIndex((val) => {
         return (val.week === course.week && val.day === course.day && val.class.sort().join(',') === course.class_no.sort().join(','))
@@ -470,6 +479,8 @@ export default {
         timetable_id: this.timetable_id,
         timetable_time_list: this.cur_timetable_list
       }).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           this.$Message.success(res.message)
           this.getCourseTable()
@@ -521,7 +532,10 @@ export default {
   },
   mounted () {
     this.getSemter()
-    this.getCourseTable()
+    setTimeout(() => {
+      this.getCourseTable()
+    }, 1000)
+
   }
 }
 </script>

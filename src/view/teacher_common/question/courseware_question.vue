@@ -144,8 +144,9 @@ export default {
           }).then(res => {
             this.$Message.success('添加成功')
             this.$emit('closeModal')
-            this.questionContent = ''
+            this.questionContent = ""
             this.studentNumber = 0
+
           })
         }
       }
@@ -176,6 +177,12 @@ export default {
               }
             }).then(res => {
               if (res.code === 200) {
+                this.questionContent2 = ''
+                this.topic = [{ choose: 'A', choose_content: '' },
+                { choose: 'B', choose_content: '' },
+                { choose: 'C', choose_content: '' },
+                { choose: 'D', choose_content: '' }
+                ]
                 this.$Message.success('提问成功')
                 this.$emit('changeTime', this.questionTime)
                 this.$emit('closeQList')
@@ -294,6 +301,7 @@ export default {
         if (res.code === 200) {
           this.$emit('closeQList')
           this.$Message.success('提问成功')
+          this.questionContent = ''
         } else {
           this.$Message.error(res.message)
         }

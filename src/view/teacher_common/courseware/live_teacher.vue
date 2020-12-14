@@ -100,7 +100,7 @@
                           <span v-if="in_test_item.release_status === 1"
                             @click="unrelease('test',in_test_item.exam_release_id)">撤回</span>
                           <span v-if="in_test_item.release_status === 1"
-                            @click="release_id = in_test_item.exam_release_id,isshowhomeworkcheck = true">查询</span>
+                            @click="release_id = in_test_item.exam_release_id,isshowhomeworkcheck = true">批改</span>
                           <span v-if="in_test_item.release_status === 1" @click="analyze(in_test_item)">分析</span>
                         </div>
                       </div>
@@ -1382,7 +1382,19 @@ export default {
         this.handlePageChange()
       }
     },
-
+    // 封装获取的课程信息
+    getcoursemassage () {
+      this.axios.request({
+        method: 'post',
+        url: '/index.php/Teacher/Courseware/live_info',
+        data: {
+          id: this.courseware_id,
+          class_id: this.class_id,
+          live_status: this.live_status,
+          course_status: this.course_status
+        }
+      })
+    },
     /***
      * 任务，作业，测试发布
      * @release_type =>task    任务发布
@@ -1412,6 +1424,10 @@ export default {
           if (res.code === 200) {
             this.$Message.success(res.message)
             this.getInfo()
+            this.getcoursemassage().then(res => {
+              console.log(res);
+              this.$store.commit('setcoursedatalist', res.data)
+            })
           }
         })
       } else if (this.release_type === 'homework') {
@@ -1518,8 +1534,10 @@ export default {
           course_status: this.course_status
         }
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.code === 200) {
+          this.$store.commit('setcoursedatalist', res.data)
+          console.log(this.$store.state.user.coursedatalist);
           this.teacher_course_id = res.data.courseware_info.teacher_course_id
           let domain = window.location.protocol + '//' + window.location.host
           this.qrcode(`${domain}/#/live_public?courseware_id=${res.data.courseware_info.id}`)
@@ -1535,7 +1553,7 @@ export default {
           if (res.data.homework_list['0']) this.homework = this.getArray(res.data.homework_list['0'], 'homework_name')
           if (this.list_title === '课中任务') {
             this.courseware_list = this.task.in
-            console.log(this.courseware_list);
+
           } else if (this.list_title === '课中测试') {
             this.courseware_list = this.test.in
           } else if (this.list_title === '课后任务') {
@@ -1584,8 +1602,7 @@ export default {
           status: m
         }
       }).then(res => {
-        console.log(res);
-
+        // console.log(res);
         if (res.code === 200) {
           this.online_data = res.data
         }
@@ -1687,9 +1704,8 @@ export default {
     },
     // 在线的信息传递
     handleOnMessage (data) {
-      console.log(data);
       if (data.data !== undefined) {
-        this.problemAnswer = data.data
+        this.problemAnswer = data.data  //提问
       } else if (data.task !== undefined) {
         this.taskAnswer = data.task
         this.$Message.info({
@@ -1823,7 +1839,6 @@ export default {
         }
       }).then(res => {
         console.log(res);
-
         if (res.code === 200) {
           this.questionAllQuestionList = res.data.list
         }
@@ -2049,6 +2064,7 @@ export default {
     // }
   },
   mounted () {
+
     // this.courseware_id = this.$route.query.courseware_id
     // this.class_id = this.$route.query.class_id
     this.getonlineStudent()

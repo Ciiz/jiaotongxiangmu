@@ -25,21 +25,22 @@
       <Row type="flex" style="flex:1;overflow:hidden">
         <Col :span="12" style="height:100%;overflow-y:scroll;margin-right:20px;padding:10px;background:#ffffff">
         <div style="border:1px solid #EEEEEE">
+
           <Row v-for="(item,index) in list" :key="index"
             style="color:#666666;font-size:14px;line-height:60px;text-align:center">
             <Col :span="1">{{index+1}}</Col>
-            <Col :span="5" v-if="target_type==='student_task_list'">
+            <Col :span="5" v-if="target_type==='student_task_list'" style="display: flex;justify-content: flex-start;">
             <span v-if="release_type === 2">
               <img :src="item.icon===''? default_icon : item.icon"
-                style="margin:14px 0;vertical-align:middle;border-radius:50%;display:inline-block;width:32px;height:32px;margin-right:10px" />
-              {{item.name}}
+                style="margin:14px 0;vertical-align:middle;border-radius:50%;display:inline-block;width:32px;height:32px;margin-right:10px;margin-left:10px" />
+              <span>{{item.name}}</span>
             </span>
             <span v-if="release_type === 1">小组{{item.team_id}}（组长：{{item.name}}）</span>
             </Col>
-            <Col :span="5" v-else>
+            <Col :span="5" v-else style="display: flex;justify-content: flex-start;">
             <span v-if="release_type === 2">
               <img :src="item.icon===''? default_icon : item.icon"
-                style="margin:14px 0;vertical-align:middle;border-radius:50%;display:inline-block;width:32px;height:32px;margin-right:10px" />
+                style="margin:14px 0;vertical-align:middle;border-radius:50%;display:inline-block;width:32px;height:32px;margin-right:10px;margin-left:10px" />
               {{item.name}}
             </span>
             <span v-if="release_type === 1">小组{{item.team_id}}（组长：{{item.name}}）</span>
@@ -61,6 +62,7 @@
               @click="openEvaluate(item,index)">{{item.score_status===1?'查看':'评价'}}</button>
             </Col>
           </Row>
+
         </div>
         </Col>
         <Col style="padding:20px;height:100%;flex:1;background:#ffffff;overflow-y:scroll">
@@ -111,7 +113,6 @@
           <StudentExamEvaluate @changeExam="changePage" :examIndex="currentIndex" :student_exam_id="target_id"
             :targetwork_id='targetwork_id' v-if="target === 'student_exam_list' && modal"
             @success="modal = false ; getData()"></StudentExamEvaluate>
-
           <StudentTaskEvaluate @changeTask='changePage' :taskIndex="currentIndex" :student_task_id="target_id"
             v-if="target === 'student_task_list' && modal" @success="modal = false ; getData()"></StudentTaskEvaluate>
 
@@ -176,6 +177,8 @@ export default {
   methods: {
     changeRank (e, r) {
       console.log(r);
+      console.log(e);
+
       for (let i = 0; i < document.getElementsByClassName('correct-iscorrect2')[0].children.length; i++) {
         document.getElementsByClassName('correct-iscorrect2')[0].children[i].style.color = '#666666'
         document.getElementsByClassName('correct-iscorrect2')[0].children[i].style.background = '#ffffff'
@@ -250,8 +253,6 @@ export default {
           if (res.code === 200) {
             this.list = res.data.list
             this.correct_status = res.data.correct_status
-            console.log(this.correct_status);
-
             this.release_type = 2
             this.objective_question = res.data.exam_info.objective_question
             this.subjective_question = res.data.exam_info.subjective_question
@@ -313,7 +314,7 @@ export default {
         if (res.code === 200) {
           this.$Message.success(res.message)
           this.$emit('on-refresh-parent-list')
-          location.reload()
+          // location.reload()
           // this.axios.request({
           //   method: 'get',
           //   url: '/index.php/Teacher/Examination/student_exam_list',

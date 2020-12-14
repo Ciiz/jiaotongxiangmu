@@ -27,7 +27,8 @@
         <div>所属课程：{{student_exam.exam.course_name}}
           {{student_exam.exam.type===1?'课前':(student_exam.exam.type===2?'课中':'课后')}}测试</div>
         <div>授课老师：{{student_exam.exam.teacher}}</div>
-        <div>截止时间：{{moment(student_exam.exam_release.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')}}</div>
+        <div v-if="student_exam.exam_release">
+          截止时间：{{moment(student_exam.exam_release.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')}}</div>
         <div class="studentExam-t-score" v-if="sty===3">{{student_exam.user_total_score}}分</div>
       </div>
       <div class="studentExam-l-b">
@@ -38,10 +39,19 @@
           </div>
           <p style="line-height:24px" class="black-c">{{objectList[selectquestionIndex].content}}</p>
           <!-- 0：未开始，1：考试中，2：已交卷，3：已批改 4:逾期 -->
-          <CheckboxGroup class="studentExam-select-itemList" v-model="seletIn" v-if="sty===1||sty===0">
-            <Checkbox v-for="(item,index) in changeOption(objectList[selectquestionIndex].option)" :key="index"
-              :label="changeSel(index)">{{changeSel(index)+'.'+item}}</Checkbox>
-          </CheckboxGroup>
+
+          <div v-if="objectList[selectquestionIndex].object_type===1">
+            <RadioGroup class="studentExam-select-itemList" vertical v-model="seletIn" v-if="sty===1||sty===0">
+              <Radio v-for="(item,index) in changeOption(objectList[selectquestionIndex].option)" :key="index"
+                :label="changeSel(index)">{{changeSel(index)+'.'+item}}</Radio>
+            </RadioGroup>
+          </div>
+          <div v-else>
+            <CheckboxGroup class="studentExam-select-itemList" v-model="seletIn" v-if="sty===1||sty===0">
+              <Checkbox v-for="(item,index) in changeOption(objectList[selectquestionIndex].option)" :key="index"
+                :label="changeSel(index)">{{changeSel(index)+'.'+item}}</Checkbox>
+            </CheckboxGroup>
+          </div>
           <CheckboxGroup class="studentExam-select-itemList" v-model="seletIn" v-if="sty===2||sty===4">
             <Checkbox v-for="(item,index) in changeOption(objectList[selectquestionIndex].option)" disabled :key="index"
               :label="changeSel(index)">{{changeSel(index)+'.'+item}}</Checkbox>
@@ -176,9 +186,10 @@ export default {
           hasAnswer: hs
         }
       }).then(res => {
+        console.log(res);
+
         _this.loading = false
         let data = res.data
-
         if (res.code === 200) {
           _this.student_exam = data.student_exam
           _this.exam_status = data.exam_status_data
@@ -365,6 +376,8 @@ export default {
       }
       let _this = this
       let answer_arr = this.getAnswerArr(this.student_exam)
+      console.log(answer_arr);
+
       _this.axios.request({
         method: 'post',
         url: '/index.php/Student/Exam/submitExam',
@@ -385,6 +398,7 @@ export default {
     getAnswerArr (student_exam) {
       let answer_arr = []
       if (this.objectList.length !== 0) {
+        console.log(this.objectList);
         this.objectList.forEach(item => {
           let { content, examination_detail_id, student_examination_id, video_url } = item.student_answer
           answer_arr.push({
@@ -392,7 +406,7 @@ export default {
             examination_detail_id,
             student_examination_id,
             video_url,
-            type: 'obj'
+            type: "obj"
           })
         })
       }
@@ -404,8 +418,6 @@ export default {
     },
     ok () {
       this.$emit('closeModal')
-
-
     }
   },
   mounted () {

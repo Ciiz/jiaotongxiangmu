@@ -195,13 +195,22 @@
         </div>
       </Form>
     </div>
+    <!-- 
+    <Modal v-model="model" footer-hide :title="title" :width="modal_width">
+      <div id="qrcodeId" style="display: flex;justify-content: center; width: 600px, overflow: hidden;">
+      </div>
+    </Modal> -->
+
   </div>
 </template>
 <script>
+// import QRCode from 'qrcodejs2'
+// import modal_mixin from '@/view/mixins/modal_mixin'
 import { tourist_register } from "@/api/common"
 import { f } from 'tree-table-vue'
 import log from 'video.js/es5/utils/log'
 export default {
+  // mixins: [modal_mixin],
   name: 'LoginForm',
   props: {
     reset_passwordtwoRules: {
@@ -308,7 +317,8 @@ export default {
       succeed_tip: false,
       reset_password_show: false,
       userId: '',
-      succeed_tip2: false
+      succeed_tip2: false,
+      model: false
 
     }
   },
@@ -453,9 +463,27 @@ export default {
       })
     },
     goLogin () {
+
+      // this.model = true
+      // this.get_qr_code()
       let url = 'https://open.weixin.qq.com/connect/qrconnect?appid=wx9ee7d665d55be992&redirect_uri=' + encodeURI('https://zjymooc.etomooc.com/Api/Wechat/login?type=' + this.form.user_type + '&scope=snsapi_login#wechat_redirect')
+
+      // let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx26cc61f92e8008eb&redirect_uri=' + encodeURI('https://zjymooc.etomooc.com/Api/Wechat/login?type=' + this.form.user_type + '&response_type=code&scope=snsapi_userinfo#wechat_redirect')
       location.href = url
-    }
+    },
+    // get_qr_code () {
+    //   let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx26cc61f92e8008eb&redirect_uri=' + encodeURI('https://zjymooc.etomooc.com/Api/Wechat/login?type=' + this.form.user_type + '&response_type=code&scope=snsapi_userinfo#wechat_redirect')
+    //   document.getElementById('qrcodeId').innerHTML = ''
+    //   new QRCode('qrcodeId', {
+    //     width: 600,
+    //     height: 600,
+    //     text: url, // 二维码地址
+    //     colorDark: '#000',
+    //     colorLight: '#fff',
+    //     correctLevel: QRCode.CorrectLevel.Q
+    //   })
+    // },
+
   },
   mounted () {
     this.getSchoolList()

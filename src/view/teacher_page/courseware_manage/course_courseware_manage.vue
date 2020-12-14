@@ -1,12 +1,16 @@
 <template>
   <div style="flex:1;display:flex;flex-direction:column">
-    <button class="blueC-btn" v-if="courseId !== ''" style="width:116px;margin-bottom:10px" @click="open('courseware_add', 'add', '新建课件')">
+    <button class="blueC-btn" v-if="courseId !== ''" style="width:116px;margin-bottom:10px"
+      @click="open('courseware_add', 'add', '新建课件')">
       新增课件
     </button>
-    <courseware-list @showAddCourseware='showAddCourseware' :release_status="release_status" :teacher_course_id="courseId" :editable="true" ref="courseware_list">
+    <courseware-list @showAddCourseware='showAddCourseware' :release_status="release_status"
+      :teacher_course_id="courseId" :editable="true" ref="courseware_list">
     </courseware-list>
-    <Modal v-model="modal" :title="title" :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen" :mask-closable="false">
-      <courseware-add v-if="target === 'courseware_add' && modal" isneworeditor="新增课件" :send_course_id='courseId'  @success="$refs.courseware_list.getData(true);modal = false"></courseware-add>
+    <Modal v-model="modal" :title="title" :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen"
+      :mask-closable="false">
+      <courseware-add v-if="target === 'courseware_add' && modal" isneworeditor="新增课件" :send_course_id='courseId'
+        @success="$refs.courseware_list.getData(true);modal = false"></courseware-add>
     </Modal>
   </div>
 </template>
@@ -14,7 +18,7 @@
 import coursewareList from '@/view/teacher_common/courseware/courseware_list.vue'
 import coursewareAdd from '@/view/teacher_common/courseware/courseware_edit.vue'
 import modal_mixin from '@/view/mixins/modal_mixin'
-export default{
+export default {
   components: {
     coursewareList,
     coursewareAdd

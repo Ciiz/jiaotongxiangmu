@@ -34,12 +34,16 @@ export default {
     passwordUserId: '', //游客登陆的id
     examInfo: {}, //作业批改的测试信息
     teacher_id_task: "",
-    teacher_id_exam: ""
+    teacher_id_exam: "",
+    coursedatalist: {},
 
   },
   // 同步操作
   mutations: {
+    setcoursedatalist (state, data) {
+      state.coursedatalist = data
 
+    },
     setteacher_id_exam (state, id) {
       state.teacher_id_exam = id
     },

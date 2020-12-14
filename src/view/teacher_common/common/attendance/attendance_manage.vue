@@ -8,7 +8,9 @@
           <Button :type="attend_status ? 'error' : 'success'"
             @click="update_attendance_status(attend_status ? 0 : 1)">{{attend_status ? '关闭考勤' : '打开考勤'}}</Button>
           <Button type="primary" icon="md-qr-scanner" @click="generate_qrcode">二维码</Button>
+          <!-- <Button type="primary" icon="md-qr-scanner" @click="$router.push({name:'studentLogins'})">点击</Button> -->
           <Button type="primary" icon="ios-navigate-outline" @click="set_location">设置位置</Button>
+
         </div>
         <div>
           <RadioGroup v-model="leave_early_status" @on-change="handleLeaveEarlyStatusChange">
@@ -40,7 +42,6 @@
       <Col :span="12">
       <attendance-chart :option_data="option_data"></attendance-chart>
       </Col>
-
     </Row>
 
     <div class="attend-record-container">
@@ -73,6 +74,7 @@
   </div>
 </template>
 <script>
+// import '@/assets/js/wx.js'
 import { generate_attendance, update_attendance, update_attend_record, handle_update_early_leave, reset_attendance } from '@/api/data'
 import QRCode from 'qrcodejs2'
 import live from '@/view/common/live'
@@ -80,6 +82,7 @@ import modal_mixin from '@/view/mixins/modal_mixin'
 import Position from './position.vue'
 import AttendanceChart from './attendance_chart.vue'
 export default {
+
   mixins: [live, modal_mixin],
   components: {
     Position, AttendanceChart
@@ -110,9 +113,11 @@ export default {
       lat: '',
       leave_early_status: false, // 是否是早退考勤
       distance_range: 0,
-      modal: false
+      modal: false,
+      QRCode_data: {}
     }
   },
+
   watch: {
     teacher_course_id (n, o) {
       this.teacher_course_id && this.gererateAttendance()
@@ -164,13 +169,15 @@ export default {
       ]
     }
   },
+
   methods: {
+
     modalClose (data) {
       this.modal = data
     },
     gererateAttendance () {
       this.loading = true
-      generate_attendance({
+      generate_attendance({ //生成考勤记录，并获取考勤记录对应的学生考勤信息
         teacher_course_id: this.teacher_course_id,
         class_ids: this.class_ids,
         year: this.year,
@@ -181,7 +188,6 @@ export default {
         group: this.group
       }).then(res => {
         console.log(res);
-
         if (res.code === 200) {
           this.attendance_list = res.data.attendance_list
           if (this.attendance_list[0].lng === null && this.attendance_list[0].lat === null) {
@@ -210,7 +216,9 @@ export default {
       let domain = window.location.protocol + '//' + window.location.host
       let attendance_ids = this.attendance_ids.sort().join(',')
       let expired_at = parseInt(((new Date()).getTime() + 10000) / 1000)
-      let url = `${domain}${this.baseUrl}/student/attendance/qrcode_attend?attendance_ids=${attendance_ids}&expired_at=${expired_at}`
+      // let url = `${domain}${this.baseUrl}/student/attendance/qrcode_attend?attendance_ids=${attendance_ids}&expired_at=${expired_at}`
+      // let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx26cc61f92e8008eb&redirect_uri=' + encodeURI('https://zjymooc.etomooc.com/Api/Wechat/login?type=2' + '&response_type=code&scope=snsapi_userinfo#wechat_redirect')
+      let url = `https://zjymooc.etomooc.com/qrcodes.html?attendance_ids=${attendance_ids}&expired_at=${expired_at}`
       document.getElementById('qrcode3').innerHTML = ''
       this.qrcode(url)
     },
@@ -221,7 +229,8 @@ export default {
         height: 600,
         text: url, // 二维码地址
         colorDark: '#000',
-        colorLight: '#fff'
+        colorLight: '#fff',
+        correctLevel: QRCode.CorrectLevel.Q
       })
     },
     update_attendance_status (status) {
@@ -318,7 +327,14 @@ export default {
       })
     }
   },
+
   mounted () {
+    // (function () {
+    //   var hm = document.createElement("script");
+    //   hm.src = "http://res.wx.qq.com/open/js/jweixin-1.0.0.js";
+    //   var s = document.getElementsByTagName("script")[0];
+    //   s.parentNode.insertBefore(hm, s);
+    // })();
     setTimeout(() => {
       this.teacher_course_id && this.gererateAttendance()
     }, 200)

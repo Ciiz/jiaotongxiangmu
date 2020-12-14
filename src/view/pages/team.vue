@@ -69,7 +69,7 @@
               <div class="teacher_team_item_r">
                 <span>{{item.name}}</span>
                 <span>{{item.major_name}}</span>
-                <span>{{item.school_name}}</span>
+                <span class="teacher_team_item_style">{{item.school_name}}</span>
               </div>
             </div>
             <div class="teacher_team_item_buttom">
@@ -349,6 +349,12 @@ export default {
               flex-direction: column;
               margin-left: 15px;
               justify-content: space-around;
+              .teacher_team_item_style {
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                overflow: hidden;
+              }
               span:nth-child(1) {
                 font-size: 16px;
                 font-family: Microsoft YaHei;
@@ -356,14 +362,12 @@ export default {
                 color: #333333;
               }
               span:nth-child(2) {
-                height: 12px;
                 font-size: 14px;
                 font-family: Microsoft YaHei;
                 font-weight: 400;
                 color: #666666;
               }
               span:nth-child(3) {
-                height: 13px;
                 font-size: 14px;
                 font-family: Microsoft YaHei;
                 font-weight: 400;

@@ -1,15 +1,16 @@
 <template>
   <div>
-      <video controls :src="vedioSrc" style="width:100%"></video>
-      <span class="red-EE" style="float:right;cursor:pointer" @click="modal4=true" v-if="userType===1">删除</span>
-      <span class="blue-cg" style="float:right;cursor:pointer" @click="modal1=true" v-if="userType===2">笔记</span>
-      <div style="clear:both"></div>
-      <Modal v-model="modal4" title="删除视频" class="vedioDeleteModal" @on-ok="deleteVedio1">
-        <p>确定删除当前视频？</p>
-      </Modal>
-      <Modal v-model="modal1" title="课件笔记" width="700" class="vedioDeleteModal" @on-ok="deleteVedio1" footer-hide draggable>
-        <courseNote v-if="modal1===true" :upload_courseware_id="upload_courseware_id" style="height:600px"></courseNote>
-      </Modal>
+    <video controls :src="vedioSrc" style="width:100%"></video>
+    <span class="red-EE" style="float:right;cursor:pointer" @click="modal4=true" v-if="userType===1">删除</span>
+    <span class="blue-cg" style="float:right;cursor:pointer" @click="modal1=true" v-if="userType===2">笔记</span>
+    <div style="clear:both"></div>
+    <Modal v-model="modal4" title="删除视频" class="vedioDeleteModal" @on-ok="deleteVedio1">
+      <p>确定删除当前视频？</p>
+    </Modal>
+    <Modal v-model="modal1" title="课件笔记" width="700" class="vedioDeleteModal" @on-ok="deleteVedio1" footer-hide
+      draggable>
+      <courseNote v-if="modal1===true" :upload_courseware_id="upload_courseware_id" style="height:600px"></courseNote>
+    </Modal>
   </div>
 </template>
 <script>
@@ -48,7 +49,7 @@ export default {
 }
 </script>
 <style>
-  .vedioDeleteModal .ivu-modal-wrap{
-    z-index: 3010!important;
-  }
+.vedioDeleteModal .ivu-modal-wrap {
+  z-index: 5010 !important;
+}
 </style>

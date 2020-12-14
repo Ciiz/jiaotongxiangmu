@@ -28,7 +28,11 @@
             <div style="font-size:14px;color:#26282F;margin-bottom:10px" v-show="choose!==''">选择{{choose}}的同学:</div>
             <ul class="select-student-list">
               <li v-for="(item2,index) in detailList" :key="index" style="margin:6px 4px">
-                <div><img :src="item2.icon" style="width:28px;height:28px;border-radius:50%" /></div>
+                <div>
+                  <img :src="item2.icon ===''? default_icon : item2.icon"
+                    style="width:28px;height:28px;border-radius:50%" />
+
+                </div>
                 <div>
                   {{item2.name}}
                 </div>
@@ -49,7 +53,8 @@ export default {
     return {
       selectList: [],
       detailList: [],
-      choose: ''
+      choose: '',
+      default_icon: require('@/assets/images/new_img/default.jpg')
     }
   },
   watch: {

@@ -27,6 +27,27 @@ const common = [
     },
     component: () => import('@/view/user/regist.vue')
   },
+  // 二维码登录账号绑定
+  {
+    path: '/studentLogins',
+    name: 'studentLogins',
+    meta: {
+      title: '账号绑定',
+      hideInMenu: true
+    },
+    component: () => import('@/view/user/studentLogins.vue')
+  },
+  // 扫码后成功的提示
+
+  {
+    path: '/sucess_tip',
+    name: 'sucess_tip',
+    meta: {
+      title: '账号绑定',
+      hideInMenu: true
+    },
+    component: () => import('@/view/user/sucess_tip.vue')
+  },
   {
     path: '/bind',
     name: 'bind',
@@ -999,8 +1020,8 @@ const mobileTeacher = [
       keepAlive: true
     },
     component: () => import('@/view/mobile_page/components/m_index/m_index_course.vue')
-
   },
+
   // 视频课程详情
   {
     name: 'm_index_videoCourse',
@@ -1010,7 +1031,6 @@ const mobileTeacher = [
       keepAlive: true
     },
     component: () => import('@/view/mobile_page/show/view/index/m_index_videoCourse.vue')
-
   },
   {
 

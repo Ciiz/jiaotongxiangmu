@@ -3,20 +3,31 @@
     <Row class="search-bar">
       <Input type="text" v-model="keyword" placeholder="请输入搜索内容" class="new-searchSel"></Input>
       <button @click="getData(true)" class="blue-btn" style="width:80px;transform: translate(-20px,2px);">搜索</button>
-      <button @click="open('homework_edit','','添加作业')" class="blueC-btn"  style="margin-left:15px;" v-if="editable">添加作业</button>
-      <button @click="open('homework_select','','选择作业', 400)" class="green-btn" style="margin-left:15px;width:104px"  v-if="editable">选择作业</button>
+      <button @click="open('homework_edit','','添加作业')" class="blueC-btn" style="margin-left:15px;"
+        v-if="editable">添加作业</button>
+      <button @click="open('homework_select','','选择作业', 400)" class="green-btn" style="margin-left:15px;width:104px"
+        v-if="editable">选择作业</button>
       <slot name="search-bar"></slot>
     </Row>
-  <Table :loading="loading" ref="selection" class="homework_release_list_table" :columns="columns" :data="list" :height="$store.state.app.tableHeight" stripe border></Table>
-  <Row>
-    <page :total="total" :current="page"  :page-size="page_size" size="small" show-elevator @on-change="(page) => {this.page=page;this.getData()}"  :placement="'top'"></page>
-  </Row>
-    <Modal v-model="modal" :title="title" :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen" :mask-closable='false'>
-      <HomeworkReleaseDetail :homework_release_id="target_id" v-if="target === 'homework_release_detail'"></HomeworkReleaseDetail>
-      <student-exam-list style="height:700px" :targetwork_id="target_id" @closeModal="modal=false" :target_type="'student_homework_list'" v-if="target === 'student_homework_list'"></student-exam-list>
-      <HomeworkEvaluationEdit :id="target_id" v-if="target === 'homework_evaluation_edit'" @success="modal = false;"></HomeworkEvaluationEdit>
-      <HomeworkEdit :timetable_id="timetable_id"  :type="type" :homework_release_id="target_id" :courseware_id="courseware_id" v-if="target === 'homework_edit'" @success="modal = false; getData(true); target = ''"></HomeworkEdit>
-      <HomeworkSelect :timetable_id="timetable_id"  :type="type" :courseware_id="courseware_id" v-if="target === 'homework_select'" @success="modal = false; getData(true); target = ''"></HomeworkSelect>
+    <Table :loading="loading" ref="selection" class="homework_release_list_table" :columns="columns" :data="list"
+      :height="$store.state.app.tableHeight" stripe border></Table>
+    <Row>
+      <page :total="total" :current="page" :page-size="page_size" size="small" show-elevator
+        @on-change="(page) => {this.page=page;this.getData()}" :placement="'top'"></page>
+    </Row>
+    <Modal v-model="modal" :title="title" :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen"
+      :mask-closable='false'>
+      <HomeworkReleaseDetail :homework_release_id="target_id" v-if="target === 'homework_release_detail'">
+      </HomeworkReleaseDetail>
+      <student-exam-list style="height:700px" :targetwork_id="target_id" @closeModal="modal=false"
+        :target_type="'student_homework_list'" v-if="target === 'student_homework_list'"></student-exam-list>
+      <HomeworkEvaluationEdit :id="target_id" v-if="target === 'homework_evaluation_edit'" @success="modal = false;">
+      </HomeworkEvaluationEdit>
+      <HomeworkEdit :timetable_id="timetable_id" :type="type" :homework_release_id="target_id"
+        :courseware_id="courseware_id" v-if="target === 'homework_edit'"
+        @success="modal = false; getData(true); target = ''"></HomeworkEdit>
+      <HomeworkSelect :timetable_id="timetable_id" :type="type" :courseware_id="courseware_id"
+        v-if="target === 'homework_select'" @success="modal = false; getData(true); target = ''"></HomeworkSelect>
     </Modal>
   </div>
 </template>
@@ -28,7 +39,7 @@ import HomeworkEvaluationEdit from '@/view/teacher_common/homework/homework_eval
 import HomeworkEdit from '@/view/teacher_common/homework/homework_edit.vue'
 import HomeworkSelect from '@/view/teacher_common/homework/homework_select.vue'
 import { ReleaseMap, ReleaseColorMap } from '@/view/mixins/str_map'
-export default{
+export default {
   props: {
     type: '',
     courseware_id: '',
@@ -102,7 +113,7 @@ export default{
                 <button class="blueText-btn" v-show={row.release_status === 1} onClick={() => { this.open('student_homework_list', row.homework_release_id, `${row.homework_name}-作业作答列表`) }}>批改</button>
                 <button class="redText-btn" onClick={() => { this.del(row.id) }} v-show={this.editable}>删除</button>
               </div>
-            // <Button type='warning' size="small" onClick={() => { this.open('homework_evaluation_edit', row.id, '作业-评分维度编辑', 600) }} v-show={this.editable}>评分维度</Button>
+              // <Button type='warning' size="small" onClick={() => { this.open('homework_evaluation_edit', row.id, '作业-评分维度编辑', 600) }} v-show={this.editable}>评分维度</Button>
             )
           }
         }
@@ -188,5 +199,4 @@ export default{
 }
 </script>
 <style lang="less">
-
 </style>

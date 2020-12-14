@@ -4,8 +4,10 @@
       <InputNumber v-model="year" style="width: 100px" size="small" @on-change="getCourseTable()"></InputNumber>
       &nbsp;年&nbsp;
       <Select v-model="semester" size="small" style="width:100px;" @on-change="getCourseTable()">
-        <Option :value="2">上半年</Option>`
-        <Option :value="1">下半年</Option>`
+        <!-- <Option :value="2">上半年</Option>`
+        <Option :value="1">下半年</Option>` -->
+        <Option :value="2">下学期</Option>`
+        <Option :value="1">上学期</Option>`
       </Select>
       课程选择:
       <Select v-model="teacher_course_id" style="width: 200px" size="small" clearable
@@ -175,6 +177,8 @@ export default {
       let _this = this
       _this.loading = true
       get_course_table(this.teacher_course_id, this.year, this.semester).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           this.course_table = res.data.course_table
           this.timetable_data = res.data.timetable_data
@@ -301,17 +305,23 @@ export default {
             if (this.semester === 1) {
               if (mm > 9 || mm < 3) {
                 d = Math.round((date1.valueOf() - date2.valueOf()) / 86400000)
+
+                console.log(d);
               } else {
                 d = 1
               }
             } else {
               if (mm <= 9 && mm >= 3) {
+                console.log(date2.valueOf());
+
                 d = Math.round((date1.valueOf() - date2.valueOf()) / 86400000)
               } else {
                 d = 1
               }
             }
             let week = Math.ceil((d + ((date2.getDay() + 1) - 1)) / 7)
+
+
             this.curWeek = week
             this.term_begins = res.data.term_begins
             this.dealTableHeader(this.curWeek)
@@ -570,5 +580,9 @@ export default {
 </script>
 <style lang="less">
 .modal-content {
+  /deep/.ivu-message {
+    z-index: 999999 !important;
+    background-color: red;
+  }
 }
 </style>

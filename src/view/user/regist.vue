@@ -5,15 +5,10 @@
       <Card icon="log-in" title="账号绑定" :bordered="false">
         <div class="form-con">
           <Row>
-            <Form
-              ref="info"
-              :model="info"
-              :rules="rules"
-              :label-width="80"
-            >
+            <Form ref="info" :model="info" :rules="rules" :label-width="80">
               <FormItem label="学校" prop="school">
-                <Select v-model="info.school" placeholder="选择学校" >
-                    <Option :value="item.id" v-for="item in schoolList" :key="item.id">{{item.school_name}}</Option>
+                <Select v-model="info.school" placeholder="选择学校">
+                  <Option :value="item.id" v-for="item in schoolList" :key="item.id">{{item.school_name}}</Option>
                 </Select>
               </FormItem>
               <FormItem label="账号" prop="account">
@@ -82,6 +77,7 @@ export default {
       }
     },
     handleSubmit ({ userName, password, user_type, school }) {
+      console.log(school);
       this.handleLogin({ userName, password, user_type, school }).then(res => {
         this.getUserInfo().then(res => {
           this.$router.push({
@@ -92,6 +88,8 @@ export default {
     },
     submit () {
       this.$refs['info'].validate((valid) => {
+        console.log(this.info.school);
+
         if (valid) {
           this.axios.request({
             method: 'post',
@@ -136,41 +134,41 @@ export default {
 </script>
 
 <style scoped lang="less">
-  .regist {
-    overflow: auto;
-    width: 100%;
-    height: 100%;
-    background: #abccff;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-  }
-  .regist-con {
-    position: absolute;
-    right: 50%;
-    top: 20%;
-    -webkit-transform: translateY(-60%);
-    transform: translateX(50%);
-    width: 500px;
-  }
-  .regist-con .form-con {
-    padding: 10px 0 0;
-  }
-  .regist-con .regist-tip {
-    font-size: 10px;
-    text-align: center;
-    color: #c3c3c3;
-  }
-  .regist .title {
-    color: #fff;
-    text-align: center;
-    margin-bottom: 50px;
-  }
-  .bg-left{
-    width: 50%;
-    height: 100vh;
-    background-image: url('../../assets/images/loginbg.png');
-    background-size: cover;
-    background-position: right;
-  }
+.regist {
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  background: #abccff;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.regist-con {
+  position: absolute;
+  right: 50%;
+  top: 20%;
+  -webkit-transform: translateY(-60%);
+  transform: translateX(50%);
+  width: 500px;
+}
+.regist-con .form-con {
+  padding: 10px 0 0;
+}
+.regist-con .regist-tip {
+  font-size: 10px;
+  text-align: center;
+  color: #c3c3c3;
+}
+.regist .title {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 50px;
+}
+.bg-left {
+  width: 50%;
+  height: 100vh;
+  background-image: url("../../assets/images/loginbg.png");
+  background-size: cover;
+  background-position: right;
+}
 </style>

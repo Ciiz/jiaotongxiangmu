@@ -74,9 +74,13 @@ export default {
       // map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
     },
     dragend: function (e) {
+
+
       this.handlePositionChange(e.point.lng, e.point.lat, this.distance_range)
     },
     dbclick: function (e) {
+
+
       this.handlePositionChange(e.point.lng, e.point.lat, this.distance_range)
     },
     handlePositionChange (lng, lat, distance_range) {

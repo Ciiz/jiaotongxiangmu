@@ -1,5 +1,5 @@
 <template>
-  <div style="background:#ffffff;height:100%;width:100%;position:relative">
+  <div class="courseware_lists" style="background:#ffffff;height:100%;width:100%;position:relative">
     <div style="height:100%;width:100%;padding:10px;position:absolute">
       <Row class="search-bar">
         <!-- <Button type="primary" size="small" @click="getData(true)" style="margin-left:15px;">搜索</Button> -->
@@ -560,8 +560,11 @@ td + .my-table-cell {
     padding: 0px !important;
   }
 }
+// .courseware_lists .ivu-modal-wrap {
+//   z-index: 5000 !important;
+// }
 .courseware_list_modal .ivu-modal-wrap {
-  z-index: 3000 !important;
+  z-index: 5000 !important;
 }
 .courseware_list_modal2 .ivu-modal-mask {
   z-index: 2000 !important;

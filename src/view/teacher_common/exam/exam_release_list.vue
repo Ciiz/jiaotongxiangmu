@@ -111,7 +111,6 @@ export default {
                 <button class="blueText-btn" onClick={() => { this.$emit('showAddCourseware', this.timetable_id, row.exam_release_id, 1, this.courseware_id, this.teacher_course_id, this.type, this.courseware_name) }} v-show={this.editable}>编辑</button>
                 <button class="blueText-btn" v-show={row.release_status === 1} onClick={() => { this.open('student_exam_list', row.exam_release_id, `${row.exam_name}-试题作答列表`, 1200) }}>批改</button>
                 <button class="redText-btn" onClick={() => { this.del(row.id) }} v-show={this.editable}>删除</button>
-
               </div>
             )
           }

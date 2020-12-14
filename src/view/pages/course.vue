@@ -236,8 +236,7 @@ export default {
       Select_list: [], // 本校课程的渲染数组
       comamnd_Select_list: [], // 推荐课程的渲染数组
       goodrideo: '全部',
-      myschool: '全部'
-
+      myschool: '全部',
     }
   },
   watch: {

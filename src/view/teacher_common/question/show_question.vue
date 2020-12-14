@@ -92,7 +92,7 @@ export default {
 
 <style>
 .question-modal .ivu-modal-wrap {
-  z-index: 3010 !important;
+  z-index: 5010 !important;
 }
 .question-modal .ivu-modal-mask {
   z-index: 2000 !important;

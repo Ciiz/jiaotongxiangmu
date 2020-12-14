@@ -14,7 +14,6 @@
       <div style="position:relative">
         <mt-field class="loginfield" placeholder="请输入您的密码" :type="showPassword===true?'text':'password'" disableClear
           v-model="password"></mt-field>
-
         <img src="@/assets/images/mobile_student/showPassword.png" v-show="!showPassword" @click="showPassword=true">
         <img src="@/assets/images/mobile_student/unshowPassword.png" v-show="showPassword"
           @click="showPassword=false" />
