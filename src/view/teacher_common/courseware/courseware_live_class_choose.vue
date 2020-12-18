@@ -34,6 +34,7 @@ export default {
   },
   methods: {
     confirm () {
+      console.log(this.course_status);
       this.$router.push({ path: '/live_teacher', query: { courseware_id: this.courseware_id, class_id: this.class_id, live_status: this.live_status, course_status: this.course_status } })
     },
     handleVisiableChange (isShow) {

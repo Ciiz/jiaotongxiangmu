@@ -10,6 +10,7 @@
           <Button type="primary" icon="md-qr-scanner" @click="generate_qrcode">二维码</Button>
           <!-- <Button type="primary" icon="md-qr-scanner" @click="$router.push({name:'studentLogins'})">点击</Button> -->
           <Button type="primary" icon="ios-navigate-outline" @click="set_location">设置位置</Button>
+          <Button on type="success" icon="ios-navigate-outline" @click="generate_qrcode_teacher">获取位置</Button>
 
         </div>
         <div>
@@ -64,12 +65,19 @@
       </div>
     </div>
     <Spin size="large" v-if="loading" fix></Spin>
-    <Modal v-model="modal" footer-hide :title="title" :width="modal_width" @on-visible-change="handleVisiableChange">
+    <Modal v-model="modal" footer-hide :title="title" @on-cancel="cancel" :width="modal_width"
+      @on-visible-change="handleVisiableChange">
       <Position :lng.sync="lng" :lat.sync="lat" :distance_range.sync="distance_range" v-if="target === 'position'"
         @position-change="handlePositionChange" @modalClose='modalClose'></Position>
+
       <div id="qrcode3" style="display: flex;justify-content: center; width: 600px, overflow: hidden;"
         v-show="target === 'qrcode3'">
       </div>
+
+      <div id="qrcode_teacher" style="display: flex;justify-content: center; width: 600px, overflow: hidden;"
+        v-show="target === 'qrcode_teacher'">
+      </div>
+
     </Modal>
   </div>
 </template>
@@ -96,10 +104,11 @@ export default {
     class_no: '',
     teacher_course_id: '',
     course_name: '',
-    class_ids: {
-      type: Array,
-      default: () => { return [] }
-    }
+    // class_ids: {
+    //   type: Array,
+    //   default: () => { return [] }
+    // }
+    class_ids: ''
   },
   data () {
     return {
@@ -171,7 +180,9 @@ export default {
   },
 
   methods: {
-
+    cancel () {
+      this.gererateAttendance()
+    },
     modalClose (data) {
       this.modal = data
     },
@@ -204,13 +215,33 @@ export default {
         }
       })
     },
+    generate_qrcode_teacher () {
+      this.open('qrcode_teacher', '', '老师定位码', 650)
+      this.get_teacher_code()
+    },
     generate_qrcode () {
       // 生成二维码,  5秒刷新一次
       this.open('qrcode3', '', '考勤码', 650)
       this.get_qr_code()
-      // this.interval_id = setInterval(() => {
-      //   this.get_qr_code()
-      // }, 5000)
+    },
+    get_teacher_code () {
+      let domain = window.location.protocol + '//' + window.location.host
+      let attendance_ids = this.attendance_ids.sort().join(',')
+      // let expired_at = parseInt(((new Date()).getTime() + 10000) / 1000)
+      let url = `https://zjymooc.etomooc.com/teacher_qrcodes.html?attendance_ids=${attendance_ids}`
+      document.getElementById('qrcode_teacher').innerHTML = ''
+      this.qrcode_teacher(url)
+    },
+    qrcode_teacher (url) {
+      // eslint-disable-next-line no-new
+      new QRCode('qrcode_teacher', {
+        width: 600,
+        height: 600,
+        text: url, // 二维码地址
+        colorDark: '#000',
+        colorLight: '#fff',
+        correctLevel: QRCode.CorrectLevel.Q
+      })
     },
     get_qr_code () {
       let domain = window.location.protocol + '//' + window.location.host

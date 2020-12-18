@@ -59,6 +59,7 @@
       <Button @click="submit" type="primary" size="small">保存</Button>
       <Spin fix v-show="loading"></Spin>
     </Row>
+
     <table class="timetable" border="1px;" rules="all" cellpadding="10">
       <caption>课表（第{{week}}周）&nbsp;当前日期:{{curDate}}</caption>
       <thead>
@@ -178,7 +179,6 @@ export default {
       _this.loading = true
       get_course_table(this.teacher_course_id, this.year, this.semester).then(res => {
         console.log(res);
-
         if (res.code === 200) {
           this.course_table = res.data.course_table
           this.timetable_data = res.data.timetable_data

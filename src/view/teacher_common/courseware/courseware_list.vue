@@ -409,6 +409,7 @@ export default {
           release_status: this.release_status
         }
       }).then(res => {
+        console.log(res);
         if (res.code === 200) {
           this.list = res.data.courseware_list
           this.total = res.data.pages * this.page_size

@@ -2,79 +2,86 @@
   <div class="modal-content">
     <Form :model="task_release" :label-width="100" :rules="rules" ref="task_release">
       <FormItem label="课件上课时间：">
-        <Input v-model="class_begin_time" readonly disabled  style="width: 200px"></Input>
+        <Input v-model="class_begin_time" readonly disabled style="width: 200px"></Input>
       </FormItem>
       <FormItem label="发布时间：" prop="start_time">
-        <DatePicker :value="task_release.start_time" format="yyyy-MM-dd HH:mm:ss"   type="datetime"  @on-change="(fmt_date, date) => {task_release.start_time = fmt_date}"   placeholder="开始时间" style="width: 200px"></DatePicker>
-        <p  v-show="type === 1">提示：课前任务可在设置的开始时间自动发布！</p>
+        <DatePicker :value="task_release.start_time" format="yyyy-MM-dd HH:mm:ss" type="datetime"
+          @on-change="(fmt_date, date) => {task_release.start_time = fmt_date}" placeholder="开始时间" style="width: 200px">
+        </DatePicker>
+        <p v-show="type === 1">提示：课前任务可在设置的开始时间自动发布！</p>
       </FormItem>
       <FormItem label="结束时间：" prop="end_time">
-        <DatePicker :value="task_release.end_time" format="yyyy-MM-dd HH:mm:ss"   @on-change="(fmt_date, date) => {task_release.end_time = fmt_date}" type="datetime" placeholder="结束时间" style="width: 200px"></DatePicker>
+        <DatePicker :value="task_release.end_time" format="yyyy-MM-dd HH:mm:ss"
+          @on-change="(fmt_date, date) => {task_release.end_time = fmt_date}" type="datetime" placeholder="结束时间"
+          style="width: 200px"></DatePicker>
       </FormItem>
       <Divider orientation="left" v-if="!editable" size="small">该任务有其他班级使用 或者 当前班级已发布，以下信息不可编辑</Divider>
       <FormItem label="任务名称：" prop="task_name">
-        <Input v-model="task_release.task_name" style="width: 200px;"  placeholder="任务名称" v-if="editable"></Input>
+        <Input v-model="task_release.task_name" style="width: 200px;" placeholder="任务名称" v-if="editable"></Input>
         <p v-else>{{task_release.task_name}}</p>
       </FormItem>
       <FormItem label="任务类型：" prop="release_type">
         <RadioGroup v-model="task_release.release_type" v-if="editable">
-          <Radio :label="2">个人</Radio><!--课中只能个人任务-->
-          <Radio :label="1" >小组</Radio>
+          <Radio :label="2">个人</Radio>
+          <!--课中只能个人任务-->
+          <Radio :label="1">小组</Radio>
         </RadioGroup>
         <p v-else>{{task_release.release_type === 1 ? '小组' : '个人'}}</p>
       </FormItem>
-      <FormItem label="发布方式：" prop="is_auto_release"  v-if="editable">
+      <FormItem label="发布方式：" prop="is_auto_release" v-if="editable">
         <RadioGroup v-model="task_release.is_auto_release">
           <Radio :label="1">自动发布</Radio>
           <Radio :label="0">在课堂中手动发布</Radio>
         </RadioGroup>
       </FormItem>
       <FormItem label="小组分配：" v-if="task_release.release_type === 1">
-         <TaskTeamManage ref="team"  v-model="task_release.students" :team_list.sync="team_list" ></TaskTeamManage>
+        <TaskTeamManage ref="team" v-model="task_release.students" :team_list.sync="team_list"></TaskTeamManage>
       </FormItem>
       <FormItem label="评分维度:">
-          <div class="score-item-container" v-if="editable">
-            <div v-for="(score_option,index1) in task_release.option" :key="index1" class="score-item">
-              <div >
-                <Input v-model="score_option.option_name" style="width: 250px;" class="score-option-input" size="small" placeholder="维度名称"  >
-                  <Button type="default" slot="prepend" @click="task_release.option.splice(index1,1)"  size="small" >删除</Button>
-                  <InputNumber placeholder="权重"  slot="append" v-model="score_option.weight" size="small"></InputNumber>
-                </Input>
-              </div>
+        <div class="score-item-container" v-if="editable">
+          <div v-for="(score_option,index1) in task_release.option" :key="index1" class="score-item">
+            <div>
+              <Input v-model="score_option.option_name" style="width: 250px;" class="score-option-input" size="small"
+                placeholder="维度名称">
+              <Button type="default" slot="prepend" @click="task_release.option.splice(index1,1)"
+                size="small">删除</Button>
+              <InputNumber placeholder="权重" slot="append" v-model="score_option.weight" size="small"></InputNumber>
+              </Input>
             </div>
-            <Button size="small" type="dashed" icon="md-add" @click="addScoreOption(task_release.option)" v-show="editable"></Button>
           </div>
-          <div v-else>
-            <span  v-for="(score_option,index1) in task_release.option" :key="index1" style="margin-right: 20px;">
-              <span>{{score_option.option_name}}:</span>
-              <span>{{score_option.weight}}</span>
-            </span>
-          </div>
+          <Button size="small" type="dashed" icon="md-add" @click="addScoreOption(task_release.option)"
+            v-show="editable"></Button>
+        </div>
+        <div v-else>
+          <span v-for="(score_option,index1) in task_release.option" :key="index1" style="margin-right: 20px;">
+            <span>{{score_option.option_name}}:</span>
+            <span>{{score_option.weight}}</span>
+          </span>
+        </div>
       </FormItem>
       <FormItem label="评分人权重：" v-if="task_release.release_type === 1">
-        <div style="width: 120px;display:inline-block" v-for="item in task_release.evaluate_weight" :key="item.evaluate_type">
+        <div style="width: 120px;display:inline-block" v-for="item in task_release.evaluate_weight"
+          :key="item.evaluate_type">
           {{evaluateTypeMap[item.evaluate_type]}}:
-          <InputNumber style="width: 100px;" v-model="item.evaluate_weight" v-if="editable&&evaluateTypeMap[item.evaluate_type]==='教师评'"></InputNumber>
+          <InputNumber style="width: 100px;" v-model="item.evaluate_weight"
+            v-if="editable&&evaluateTypeMap[item.evaluate_type]==='教师评'"></InputNumber>
           <p v-else>{{item.evaluate_weight}}</p>
         </div>
       </FormItem>
       <FormItem label="任务内容：" prop="content">
         <div v-show="editable">
-          <Editor
-            v-model="task_release.content"
-            :is_init.sync="editor_init"
-            :height="400"
-          >
+          <Editor v-model="task_release.content" :is_init.sync="editor_init" :height="400">
           </Editor>
         </div>
         <div v-html="task_release.content" v-show="!editable"></div>
       </FormItem>
     </Form>
     <div class="modal-footer">
-        <Button type="primary" @click="submit">保存</Button>
+      <Button type="primary" @click="submit">保存</Button>
     </div>
     <Modal v-model="modal" :title="title" :width="modal_width" :footer-hide="footerHide">
-      <TaskEvaluationEdit :id="target_id" v-if="target === 'task_evaluation_edit'" @success="$emit('success')"></TaskEvaluationEdit>
+      <TaskEvaluationEdit :id="target_id" v-if="target === 'task_evaluation_edit'" @success="$emit('success')">
+      </TaskEvaluationEdit>
     </Modal>
     <Spin fix v-if="loading"></Spin>
   </div>
@@ -87,7 +94,7 @@ import TaskEvaluationEdit from '@/view/teacher_common/task/task_evaluation_edit.
 import { evaluateTypeMap } from '@/view/mixins/str_map'
 import TaskTeamManage from '@/view/teacher_common/task/task_team_manage'
 import { get_students_by_timetable_id } from '@/api/data'
-export default{
+export default {
   props: {
     task_release_id: '',
     timetable_id: '',
@@ -233,7 +240,7 @@ export default{
             { evaluate_type: 4, evaluate_weight: 0 }
           ],
           option: [{ option_name: '分数', weight: 100 }],
-          students: [ ]
+          students: []
         }
 
         this.getStudents()
@@ -344,5 +351,4 @@ export default{
 }
 </script>
 <style lang="less">
-
 </style>

@@ -143,7 +143,7 @@
                       <span style="word-break:break-all">{{item.content}}</span>
                     </li>
                   </ul>
-                  <button class="add-question" @click="isshowAddquestion=true">+ &nbsp;&nbsp;添加问题</button>
+                  <button class="add-question" @click="Addquestion">+ &nbsp;&nbsp;添加问题</button>
                 </div>
               </div>
             </div>
@@ -297,6 +297,7 @@
                   </div>
                   </Col>
                 </Row>
+
                 <Row class="pdfcard-bottom2">
                   <Col :span="2">
                   <img src="@/assets/images/new_img/qrCode.png" @click="qrModal = true" />
@@ -329,6 +330,7 @@
                   </div>
                   </Col>
                 </Row>
+
               </div>
             </div>
             <!-- 弹幕讨论 -->
@@ -341,8 +343,9 @@
                 <div id="chat">
                   <div v-for="item in chatlist" :key="item.id" class="chat-item">
                     <div class="userInfo" style=" word-break: break-all">
-                      <Avatar :src="item.msg.extra.userInfo.avator" style="margin-right:8px;margin-bottom:4px"
-                        @on-error="e => { e.target.src = errorImg }" />
+                      <Avatar :src="item.msg.extra.userInfo.avator ===''? default_icon : item.msg.extra.userInfo.avator"
+                        style="margin-right:8px;margin-bottom:4px" />
+                      <!-- @on-error="e => { e.target.src = errorImg }" -->
                       <span style="color:#3B88E8;">{{item.msg.extra.userInfo.name}}: </span>
                       <span v-html="item.msg.msg" style="color:#A4A4A4"></span>
                     </div>
@@ -521,9 +524,9 @@
           </Modal>
           <!-- 添加问题 -->
           <Modal v-model="isshowAddquestion" :width="620" footer-hide>
-            <coursewareQuestion :online_data='online_student' :courseware_id='courseware_id'
-              :group_chat_id='group_chat_id' :showTime="showTime" :add_type="'call'" @changeTime='changeTime'
-              @closeQList='closeQList' @closemodal='closemodal'></coursewareQuestion>
+            <coursewareQuestion :online_data='online_student' :onlinedatastudent='online_data_student'
+              :courseware_id='courseware_id' :group_chat_id='group_chat_id' :showTime="showTime" :add_type="'call'"
+              @changeTime='changeTime' @closeQList='closeQList' @closemodal='closemodal'></coursewareQuestion>
           </Modal>
 
           <!-- 显示已有客观题 -->
@@ -598,12 +601,18 @@
           <Modal v-model="modal" :title="title" width="1100px" :styles="{top: '0px'}" footer-hide>
             <CourseTable :teacher_course_id="target_id" v-if="target === 'course_table' && modal"></CourseTable>
           </Modal>
-          <Modal v-model="modal4" title="请选择要考勤的时间" width="300px" footer-hide>
-            <ul>
+          <Modal v-model="modal4" title="请选择要考勤的时间" width="400px" footer-hide>
+            <!-- <ul>
               <li v-for="(item,index) in courseTimeList" :key="index" style="font-size:16px;margin:4px 0">
                 <span style="cursor:pointer" @click="doAtten(item)">第{{item.class}}节</span>
               </li>
-            </ul>
+            </ul> -->
+            <div v-for="(item,index) in courseTimeList" :key="index">
+              <RadioGroup v-model="disabledGroup" @on-change='radiochange'>
+                <Radio :label="i" v-for="(v,i) in item" :key="i">第{{v}}节 </Radio>
+              </RadioGroup>
+            </div>
+            <Button type="primary" style="margin: 12px 156px 0 156px;" @click="doAttens">确定</Button>
           </Modal>
           <Modal v-model="modal3" title="考勤" width="1000" footer-hide>
             <Attendance v-if="target == 'attend'&& modal3" :teacher_course_list='attenDetailList'
@@ -640,6 +649,7 @@ import { handle_ppt_option } from '@/api/common'
 export default {
   data () {
     return {
+      disabledGroup: '',
       teacher_course_id: '',
       pdfWidth: '',
       iscanvas: false, // 是否开启画笔
@@ -680,10 +690,10 @@ export default {
       isshowAddquestion: false,
       alreadyQuestion: [],
       screenWidth: document.body.clientWidth,
-      class_id: this.$route.query.class_id,
+      // class_id: this.$route.query.class_id,
       courseware_id: this.$route.query.courseware_id,
       live_status: this.$route.query.live_status,
-      course_status: this.$route.query.course_status,
+      // course_status: this.$route.query.course_status,
       showdiscuss: true,
       problemAnswer: [],
       taskAnswer: {},
@@ -795,6 +805,7 @@ export default {
       },
       // pdf
       src: '',
+      class_list: [],
       numPages: undefined,
       page: 1,
       loadedRatio: 0,
@@ -821,6 +832,10 @@ export default {
       chatlist: [],
       courseware_name: '', // 当前课件名称
       material_list: [],
+      online_data_student: {
+        student_num1: '',
+        student_num2: ''
+      },
       material_total: [],
       material: [], // 课件素材
       unpdf: true, // 判断src是否为pdf，true：是
@@ -843,6 +858,12 @@ export default {
   },
   mixins: [modal_mixin, live],
   computed: {
+    class_id () {
+      return this.$route.query.class_id
+    },
+    course_status () {
+      return this.$route.query.course_status
+    },
     currentdate () {
       var myDate = new Date()
       let yy = myDate.getFullYear()
@@ -872,7 +893,8 @@ export default {
     }
   },
   created () {
-    console.log(333);
+
+    // console.log(this.$route.query.class_id);
 
     if (!window.localStorage.getItem('sendbarrage')) { // 弹幕发送间隔初始化
       window.localStorage.setItem('sendbarrage', new Date().getTime().toString().slice(8)) // 设置缓存(分钟+毫秒：00000-99999)
@@ -884,6 +906,7 @@ export default {
       this.chat_scrollTop()
     })
   },
+
   watch: {
     problemAnswer: {
       handler (newValue, oldValue) {
@@ -977,14 +1000,39 @@ export default {
     }
   },
   methods: {
+    radiochange (e) {
+
+      this.courseTimeList.forEach(v => {
+        this.classNo = v[e]
+      })
+
+    },
     amendclose (data) {
       this.isshowAnswer = data
+    },
+    Addquestion () {
+      this.isshowAddquestion = true
+      this.axios.request({
+        method: 'get',
+        url: '/index.php/home/live/get_online_user',
+        params: {
+          group: this.group_chat_id,
+          status: 1
+        }
+      }).then(res => {
+        console.log(res);
+        if (res.code === 200) {
+          this.online_data_student.student_num1 = res.data.online_count
+          this.online_data_student.student_num2 = res.data.online_count
+        }
+      })
+
     },
     closemodal (data) {
       this.isshowAddquestion = data
     },
     deleteQuestion (e, i) {
-      if (event && event.stopPropagation) {
+      if (event && event.stopPropagation) { //阻止事件冒泡
         event.stopPropagation() // 非IE浏览器
       } else {
         event.cancelBubble = true // IE浏览器
@@ -1222,7 +1270,7 @@ export default {
       let data = getdata.msg
       this.barrageList.push({
         id: ++this.currentId, // 弹幕id
-        avatar: data.extra.userInfo.avator !== '' ? data.extra.userInfo.avator : '../../../assets/images/default.jpg', // 头像
+        avatar: data.extra.userInfo.avator !== '' ? data.extra.userInfo.avator : this.default_icon, // 头像
         msg: data.msg, // 弹幕信息
         time: data.msg.length > 5 ? 7 : data.msg.length > 10 ? 5 : 10, // 弹幕显示时长
         type: MESSAGE_TYPE.NORMAL // 弹幕样式
@@ -1299,26 +1347,45 @@ export default {
           }
         }
       })
-      this.year = new Date().getFullYear()
-      this.axios.request({
-        method: 'post',
-        url: '/home/course/getDayClassTime',
-        data: {
-          teacher_course_id: this.teacher_course_id,
-          semester: this.semester,
-          year: this.year,
-          courseware_id: this.courseware_id
-        }
-      }).then(res => {
-        this.courseTimeList = res.data.list
-        this.modal4 = true
-      })
-    },
-    doAtten (item) {
-      this.attenDetailList = item
-      this.target = 'attend'
+      setTimeout(() => {
+        console.log(this.semester);
+        this.year = new Date().getFullYear()
+        this.axios.request({
+          method: 'post',
+          url: '/home/course/getDayClassTime',
+          data: {
+            teacher_course_id: this.teacher_course_id,
+            semester: this.semester,
+            year: this.year,
+            courseware_id: this.courseware_id
+          }
+        }).then(res => {
+          console.log(res);
+          this.class_list = res.data.list
+          var arr = []
+          res.data.list.forEach(v => {
+            return arr = [v.class.replace(/\"/g, "").split(",")]
+          })
+          this.courseTimeList = arr
+          this.modal4 = true
+        })
+      }, 500)
 
-      this.modal3 = true
+    },
+    // doAtten (item) {
+    //   this.attenDetailList = item
+    //   this.target = 'attend'
+    //   this.modal3 = true
+    // },
+    doAttens () {
+      this.class_list.map(v => {
+        return v.class = this.classNo
+      })
+      this.class_list.forEach(v => {
+        this.attenDetailList = v
+        this.target = 'attend'
+        this.modal3 = true
+      })
     },
     // 考试结果分析
     analyze (row) {
@@ -1602,7 +1669,7 @@ export default {
           status: m
         }
       }).then(res => {
-        // console.log(res);
+        console.log(res);
         if (res.code === 200) {
           this.online_data = res.data
         }
@@ -1644,6 +1711,7 @@ export default {
         let _this = this
         let _pdf = document.querySelector('.pdfcard')
         _this.scrollTop = _pdf.scrollTop
+        console.log(_this.scrollTop);
         handle_ppt_option({
           option_obj: {
             type: 'ppt',
@@ -1651,7 +1719,10 @@ export default {
             scrollTop: this.scrollTop
           },
           group: this.group_chat_id
-        }).then(res => { })
+        }).then(res => {
+          console.log(res);
+
+        })
       }
     },
     send () {
@@ -2064,6 +2135,7 @@ export default {
     // }
   },
   mounted () {
+    console.log(this.course_status);
 
     // this.courseware_id = this.$route.query.courseware_id
     // this.class_id = this.$route.query.class_id
@@ -2080,6 +2152,8 @@ export default {
     this.initChat()
     let _pdf = document.querySelector('.pdfcard')
     _pdf.onscroll = function () {
+      console.log(33);
+
       _this.handleScroll()
     }
     setTimeout(() => {

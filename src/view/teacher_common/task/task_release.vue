@@ -8,10 +8,10 @@
         </RadioGroup>
       </FormItem>
       <FormItem label="小组人数：" v-if="task_release.release_type === 1">
-        <InputNumber v-model="task_release.team_size" ></InputNumber>
+        <InputNumber v-model="task_release.team_size"></InputNumber>
       </FormItem>
       <FormItem label="评分人权重：" v-if="task_release.release_type === 1">
-        <Row  v-for="item in task_release.evaluate_weight" :key="item.evaluate_type">
+        <Row v-for="item in task_release.evaluate_weight" :key="item.evaluate_type">
           {{item.label}}: <InputNumber style="width: 100px;" v-model="item.evaluate_weight"></InputNumber>
         </Row>
       </FormItem>
@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-export default{
+export default {
   props: {
     task_release_id: '',
     release_type: 0

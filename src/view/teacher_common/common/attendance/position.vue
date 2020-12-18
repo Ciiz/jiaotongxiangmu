@@ -14,7 +14,9 @@
     <baidu-map :center="{lng:lng,lat:lat}" @ready="mapReady" :zoom="zoom" @dblclick="dbclick" class="bm-view"
       ak="2NSf0hRUjyORiH1CDMWPrrlUNE53k8mi">
       <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" :showZoomInfo="true"></bm-navigation>
+      <!-- 定位 -->
       <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
+      <!-- 标记 点 -->
       <bm-marker @dragend="dragend" :position="{lng:lng,lat:lat}" :dragging="true" :clicking="true"
         :icon="{url: locationIcon, size: {width: 40, height: 40}}"></bm-marker>
       <bm-local-search :keyword="keyword" :auto-viewport="true" :location="location"></bm-local-search>

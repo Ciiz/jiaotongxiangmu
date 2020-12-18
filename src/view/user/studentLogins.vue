@@ -16,6 +16,10 @@
         </mt-field>
         <mt-field label="姓名" placeholder="请输入姓名" v-model="username">
         </mt-field>
+        <mt-radio v-model="test" :options="options">
+        </mt-radio>
+        <!-- <mt-radio title="radio list" v-model="value" :options="['optionA', 'optionB', 'optionC']">
+        </mt-radio> -->
       </div>
       <div class="qrecode_submit"><span @click="submit">提交</span></div>
     </div>
@@ -36,6 +40,7 @@
 export default {
   data () {
     return {
+      test: '',
       username: '',
       password: '',
       number: '',
@@ -55,18 +60,41 @@ export default {
       wx_id: '',
       lat: '',
       lng: '',
-      attendance_ids: ''
+      attendance_ids: '',
+      showTest: '',
+      options: [{
+        label: '老师',
+        value: '1'
+      },
+      {
+        label: '学生',
+        value: '2'
+      }
+
+      ]
     }
   },
+  watch: {
+    test (val) {
+      this.test = val;
+      for (var i = 0; i < this.options.length; i++) {
+        if (val == this.options[i].value) {
+          if (this.options[i].label === '老师') this.showTest = '1'
+          else this.showTest = '2'
 
+        }
+      }
+    }
+  },
   methods: {
+
     submit () {
       this.axios.request({
         method: 'post',
         url: '/index.php/Api/Wechat/wxgzh_bind_user',
         data: {
           wx_id: this.wx_id,
-          type: 2,
+          type: this.showTest,
           account: this.number,
           password: this.password,
           school_id: this.selectId,

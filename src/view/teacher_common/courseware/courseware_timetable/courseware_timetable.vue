@@ -89,7 +89,6 @@ export default {
   },
   data () {
     return {
-
       week: 1,
       tableHead: [
         '节/星期', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'

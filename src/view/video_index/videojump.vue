@@ -707,6 +707,10 @@ export default {
               font-family: Microsoft YaHei;
               font-weight: 400;
               color: #030303;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              overflow: hidden;
             }
             .video_likeList_itemCenter_user {
               font-size: 12px;

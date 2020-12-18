@@ -266,8 +266,10 @@
                 <div id="chat">
                   <div v-for="item in messageList" :key="item.id" class="chat-item">
                     <div class="userInfo" style=" word-break: break-all">
-                      <Avatar :src="item.msg.extra.userInfo.avator" style="margin-right:8px;margin-bottom:4px"
-                        @on-error="e => { e.target.src = errorImg }" />
+                      <Avatar
+                        :src="item.msg.extra.userInfo.avator ==='' ? default_icon : item.msg.extra.userInfo.avator "
+                        style="margin-right:8px;margin-bottom:4px" />
+                      <!-- @on-error="e => { e.target.src = errorImg }" -->
                       <span class="name mine">{{item.msg.extra.userInfo.name}}:</span>
                       <span v-html="item.msg.msg" class="msg"></span>
                     </div>
@@ -423,7 +425,7 @@ export default {
       issureSaveNote: false,
       newNoteId: '',
       reply_time: '',
-
+      default_icon: require('@/assets/images/new_img/default.jpg'),
       quiz_id: '',
       sty: '',
       badge: 0,
@@ -859,7 +861,7 @@ export default {
       let data = getdata.msg
       this.barrageList.push({
         id: ++this.currentId, // 弹幕id
-        avatar: data.extra.userInfo.avator !== '' ? data.extra.userInfo.avator : '../../../assets/images/default.jpg', // 头像
+        avatar: data.extra.userInfo.avator !== '' ? data.extra.userInfo.avator : this.default_icon, // 头像
         msg: data.msg, // 弹幕信息
         time: data.msg.length > 5 ? 7 : data.msg.length > 10 ? 5 : 10, // 弹幕显示时长
         type: MESSAGE_TYPE.NORMAL // 弹幕样式

@@ -36,7 +36,7 @@ export default {
         }
       }).then(res => {
         if (res.code === 200) {
-          console.log(res)
+          // console.log(res)
         }
       })
     },
@@ -48,7 +48,7 @@ export default {
         }
       }).then(res => {
         if (res.code === 200) {
-          console.log(res)
+          // console.log(res)
         }
       })
     },
@@ -138,18 +138,35 @@ export default {
           extra: extra
         }
       }
-      _this.axios.request({
-        method: 'post',
-        url: '/home/websocket/sendToGroup',
-        data: {
-          group: _this.group_chat_id,
-          message: message
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          _this.msg = ''
-        }
-      })
+      if (this.$store.state.user.userInfo.userType === 1) {
+        _this.axios.request({
+          method: 'post',
+          url: '/home/websocket/sendToGroup',
+          data: {
+            group: _this.group_chat_id,
+            message: message,
+            type: 1
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            _this.msg = ''
+          }
+        })
+      } else {
+        _this.axios.request({
+          method: 'post',
+          url: '/home/websocket/sendToGroup',
+          data: {
+            group: _this.group_chat_id,
+            message: message
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            _this.msg = ''
+          }
+        })
+      }
+
     }
   },
   beforeDestroy () {

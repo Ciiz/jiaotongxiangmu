@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     start_attend (item) {
+      console.log(this.teacher_course_list);
       this.week = this.teacher_course_list.week
       this.day = this.teacher_course_list.day
       this.class_no = this.teacher_course_list.class

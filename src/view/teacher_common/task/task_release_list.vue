@@ -153,13 +153,24 @@ export default {
     },
     release (item) {
       if (item.release_status === 0) { // 发布
-        task_release(item.task_release_id).then(res => {
-          console.log(res);
-          if (res.code === 200) {
-            this.$Message.success(res.message)
-            this.getData()
+        this.axios.request({
+          method: 'post',
+          url: '/index.php/Teacher/Task/release',
+          data: {
+            task_release_id: item.task_release_id
           }
+        }).then(res => {
+          console.log(res);
+          this.$Message.success(res.message)
+          this.getData()
         })
+        // task_release(item.task_release_id).then(res => {
+        //   console.log(res);
+        //   if (res.code === 200) {
+        //     this.$Message.success(res.message)
+        //     this.getData()
+        //   }
+        // })
       } else {
         this.$Modal.confirm({
           title: '确定要撤回任务吗？',
