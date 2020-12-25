@@ -10,8 +10,7 @@
           <Button type="primary" icon="md-qr-scanner" @click="generate_qrcode">二维码</Button>
           <!-- <Button type="primary" icon="md-qr-scanner" @click="$router.push({name:'studentLogins'})">点击</Button> -->
           <Button type="primary" icon="ios-navigate-outline" @click="set_location">设置位置</Button>
-          <Button on type="success" icon="ios-navigate-outline" @click="generate_qrcode_teacher">获取位置</Button>
-
+          <Button on type="success" icon="ios-navigate-outline" @click="generate_qrcode_teacher">获取教师位置</Button>
         </div>
         <div>
           <RadioGroup v-model="leave_early_status" @on-change="handleLeaveEarlyStatusChange">

@@ -158,7 +158,7 @@
             <div class="live-box">
               <div style="flex:1;background: #000;padding:0 10px;padding-top:12px" v-if="mode === 'live'">
                 <vue-baberrage class="baberrage" style="z-index:1;height:100px;padding-top:10px;"
-                  :isShow="barrageIsShow" :barrageList="barrageList" :loop="barrageLoop" :boxHeight="100">
+                  :isShow="barrageIsShow" :barrageList="barrageList" :loop="barrageLoop" :boxHeight="150">
                 </vue-baberrage>
                 <video id="myVideo" style="display:none;width:100%;height:100%"
                   class="video-js vjs-default-skin vjs-big-play-centered" controls muted preload="auto">
@@ -1233,6 +1233,11 @@ export default {
 }
 </script>
 <style>
+.baberrage-item {
+  font-size: 24px;
+  font-family: Microsoft YaHei;
+  font-weight: 600;
+}
 .live-student-bottom-r img {
   margin-left: 20px;
 }

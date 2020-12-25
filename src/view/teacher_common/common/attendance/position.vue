@@ -81,8 +81,6 @@ export default {
       this.handlePositionChange(e.point.lng, e.point.lat, this.distance_range)
     },
     dbclick: function (e) {
-
-
       this.handlePositionChange(e.point.lng, e.point.lat, this.distance_range)
     },
     handlePositionChange (lng, lat, distance_range) {

@@ -29,17 +29,16 @@
                 :class="{item: row.class_no ? ture : false}"> </div>
               <div v-else>
                 <div v-if="col.desc.length !== 0">
-                  <div v-for="(course,index1) in col.desc" :key="index1" @click="changeTimetable(course,col.class_no)">
+                  <div v-for="(course,index1) in col.desc" :key="index1" @click="changeTimetable(course,col.class_no)"
+                    class="timetable_select">
                     <h4>{{course.course_name}}</h4>
                     <p>{{course.address}}</p>
                     <p>{{course.class_name}}</p>
                     <div v-for="(courseware,index2) in course.coursewares" :key="index2">
                       <p>{{courseware.sort}}: {{courseware.courseware_name}}</p>
                     </div>
-
                     <!-- <Tag v-if="course.cur_timetable">当前课时安排</Tag> -->
                     <!-- <Tag v-if="row[col]===col.class_no">当前课时安排</Tag> -->
-
                   </div>
                 </div>
                 <div v-else>
@@ -318,8 +317,6 @@ export default {
           arr.push(col_arr)
         }
       }
-
-
       return arr
     },
     getWeekData (data, week) {
@@ -456,12 +453,15 @@ export default {
       })
     },
     changeTimetable (course, class_no) {
+      // document.querySelector('.clitem').style.color = 'red'
+
       this.is_refresh = false
       let index = this.cur_timetable_list.findIndex((val) => {
         return (val.week === course.week && val.day === course.day && val.class.sort().join(',') === course.class_no.sort().join(','))
       })
       if (index !== -1) { // 取消
         this.cur_timetable_list.splice(index, 1)
+
       } else { // 新增
         this.cur_timetable_list.push({
           year: course.year,
@@ -479,9 +479,13 @@ export default {
         timetable_time_list: this.cur_timetable_list
       }).then(res => {
         console.log(res);
-
         if (res.code === 200) {
-          this.$Message.success(res.message)
+          if (res.data.timetable_time_id === false) {
+            this.$Message.warning('取消成功！')
+          } else {
+            this.$Message.success('添加成功！')
+          }
+
           this.getCourseTable()
           setTimeout(() => {
             this.rowData = this.getRowData()

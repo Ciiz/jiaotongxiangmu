@@ -355,7 +355,7 @@ export default {
             let classList = row.class_list
             return (
               <div class='action-item'>
-                <Button type='info' size="small" onClick={() => { this.open('courseware_live_class_choose', { classList: classList, courseware_id: row.id, live_status: 1 }, '班级选择', 300) }} v-show={!this.editable}>课室上课</Button>
+                <Button type='info' size="small" onClick={() => { this.getData(), this.open('courseware_live_class_choose', { classList: classList, courseware_id: row.id, live_status: 1 }, '班级选择', 300) }} v-show={!this.editable}>课室上课</Button>
                 <Button type='info' size="small" onClick={() => { this.open('courseware_live_class_choose', { classList: classList, courseware_id: row.id, live_status: 3 }, '班级选择', 300) }} v-show={!this.editable}>直播上课</Button>
                 <button class="orange-btn" onClick={() => { this.multipleRelease(row, 1) }} v-show={this.editable && row.class_list.length !== 0}>发布</button>
                 <button class="blueText-btn" onClick={() => { this.multipleRelease(row, 0) }} v-show={this.editable && row.class_list.length !== 0}>撤回</button>
@@ -415,6 +415,7 @@ export default {
           this.total = res.data.pages * this.page_size
           this.class_list = res.data.class_list ? res.data.class_list : []
           this.course_status = res.data.course_status
+          console.log(this.course_status);
         }
         this.loading = false
       })

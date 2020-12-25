@@ -1275,6 +1275,8 @@ export default {
         time: data.msg.length > 5 ? 7 : data.msg.length > 10 ? 5 : 10, // 弹幕显示时长
         type: MESSAGE_TYPE.NORMAL // 弹幕样式
       })
+
+
     },
     // 教师新增
 
@@ -1329,48 +1331,43 @@ export default {
       })
     },
     // 打开考勤班级选择
-    openAtten () {
+    async  openAtten () {
       let time = new Date()
-      this.axios.request({
+      let res = await this.axios.request({
         method: 'post',
         url: '/home/course/getShcoolTerm',
         data: {
         }
-      }).then(res => {
-        for (let i = 0; i < res.data.list.length; i++) {
-          if (res.data.list[i].semester === 1) {
-            if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
-              this.semester = 2
-            } else {
-              this.semester = 1
-            }
+      })
+      for (let i = 0; i < res.data.list.length; i++) {
+        if (res.data.list[i].semester === 1) {
+          if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
+            this.semester = 2
+          } else {
+            this.semester = 1
           }
         }
-      })
-      setTimeout(() => {
-        console.log(this.semester);
-        this.year = new Date().getFullYear()
-        this.axios.request({
-          method: 'post',
-          url: '/home/course/getDayClassTime',
-          data: {
-            teacher_course_id: this.teacher_course_id,
-            semester: this.semester,
-            year: this.year,
-            courseware_id: this.courseware_id
-          }
-        }).then(res => {
-          console.log(res);
-          this.class_list = res.data.list
-          var arr = []
-          res.data.list.forEach(v => {
-            return arr = [v.class.replace(/\"/g, "").split(",")]
-          })
-          this.courseTimeList = arr
-          this.modal4 = true
+      }
+      console.log(this.semester);
+      this.year = new Date().getFullYear()
+      await this.axios.request({
+        method: 'post',
+        url: '/home/course/getDayClassTime',
+        data: {
+          teacher_course_id: this.teacher_course_id,
+          semester: this.semester,
+          year: this.year,
+          courseware_id: this.courseware_id
+        }
+      }).then(res => {
+        this.class_list = res.data.list
+        var arr = []
+        res.data.list.forEach(v => {
+          return arr = [v.class.replace(/\"/g, "").split(",")]
         })
-      }, 500)
-
+        this.courseTimeList = arr
+        this.modal4 = true
+      })
     },
     // doAtten (item) {
     //   this.attenDetailList = item
@@ -1604,7 +1601,7 @@ export default {
         // console.log(res);
         if (res.code === 200) {
           this.$store.commit('setcoursedatalist', res.data)
-          console.log(this.$store.state.user.coursedatalist);
+
           this.teacher_course_id = res.data.courseware_info.teacher_course_id
           let domain = window.location.protocol + '//' + window.location.host
           this.qrcode(`${domain}/#/live_public?courseware_id=${res.data.courseware_info.id}`)
@@ -1712,6 +1709,7 @@ export default {
         let _pdf = document.querySelector('.pdfcard')
         _this.scrollTop = _pdf.scrollTop
         console.log(_this.scrollTop);
+
         handle_ppt_option({
           option_obj: {
             type: 'ppt',
@@ -2135,8 +2133,6 @@ export default {
     // }
   },
   mounted () {
-    console.log(this.course_status);
-
     // this.courseware_id = this.$route.query.courseware_id
     // this.class_id = this.$route.query.class_id
     this.getonlineStudent()
@@ -2166,6 +2162,11 @@ export default {
 }
 </script>
 <style>
+.baberrage-item {
+  font-family: Microsoft YaHei;
+  font-weight: 600;
+  font-size: 24px;
+}
 .finnish-class {
   width: 100%;
   height: 10%;

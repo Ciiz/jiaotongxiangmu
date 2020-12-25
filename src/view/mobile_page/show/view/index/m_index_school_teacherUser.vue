@@ -134,18 +134,17 @@ export default {
     }
   },
   async  mounted () {
-    console.log(this.$route.params.id);
     if (this.userType === 1) {
       let res = await get_taechermassge(this.$route.params.id)
       console.log(res)
       this.teacher_massge = res.data.teacher_list
-      // this.isfollow = res.data.teacher_list.isfollow
+
       this.course_list = res.data.course_list
     } else if (this.userType === 2) {
       let res = await student_massges(this.$route.params.id)
       console.log(res)
       this.teacher_massge = res.data.teacher_list
-      // this.isfollow = res.data.teacher_list.isfollow
+
       this.course_list = res.data.course_list
     } else if (this.userType === 3) {
       Toast({

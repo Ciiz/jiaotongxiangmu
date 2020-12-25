@@ -463,9 +463,11 @@ div.homelist_radio div.ivu-radio-group label.ivu-radio-wrapper.ivu-radio-group-i
   width: 100%;
   border-color: #e4e3e3;
 }
+
 .timetable td {
   width: 11%;
   padding: 5px;
+
 }
 .timetable .text-center {
   text-align: center;

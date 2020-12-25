@@ -5,15 +5,14 @@
         <TabPane label="添加主观题" name="name1">
           <Input type="textarea" v-model="questionContent" :rows="12" placeholder="请输入问题内容" />
           <div class="addmainquestion-footer" v-if="add_type==='call'">
-            <span
-              style="margin-top:20px;margin-right:17px;line-height:20px">在线人数：{{onlinedatastudent.student_num1}}</span>
-            回答人数：<input type="number" v-model="onlinedatastudent.student_num2" class="new-inputnumber" />
+            <span style="margin-top:20px;margin-right:17px;line-height:20px">在线人数：{{online_data.online_count}}</span>
+            回答人数：<input type="number" v-model="studentNumber" class="new-inputnumber" />
             <button @click="submitQuestion" style="background:#3B88E8">随机发布</button>
             <button @click="submitQuestion" style="background:#15B5A8">指定学生</button>
             <button @click="submitQuestion" style="background:#49951B">抢答</button>
           </div>
           <div class="addmainquestion-footer" v-if="add_type==='save'">
-            回答人数：<input type="number" v-model="onlinedatastudent.student_num2" class="new-inputnumber" />
+            回答人数：<input type="number" v-model="studentNumber" class="new-inputnumber" />
             <button @click="submitQuestion" style="background:#15B5A8">保存</button>
           </div>
         </TabPane>
@@ -41,7 +40,7 @@
     </Modal>
     <Modal v-if="add_type==='call'" v-model="modal2" title="选择学生" @on-ok="submit">
       <div style="font-size:14px;margin-bottom:8px;color:black;font-weight:bold">
-        请选择（{{total}}/{{onlinedatastudent.student_num2}}）位学生:
+        请选择（{{total}}/{{studentNumber}}）位学生:
       </div>
       <div class="student">
         <div v-for="(item,index) in online_data.students" class="className" ref="className" :key="index">
@@ -61,7 +60,7 @@
 
 <script>
 export default {
-  props: ['online_data', 'courseware_id', 'group_chat_id', 'add_type', 'showTime', 'onlinedatastudent'],
+  props: ['online_data', 'courseware_id', 'group_chat_id', 'add_type', 'showTime'],
   data () {
     return {
       students: [],
@@ -76,7 +75,7 @@ export default {
       selectB: '',
       selectC: '',
       selectD: '',
-
+      studentNumber: 1,
       topic: [{ choose: 'A', choose_content: '' },
       { choose: 'B', choose_content: '' },
       { choose: 'C', choose_content: '' },
@@ -91,8 +90,8 @@ export default {
   methods: {
     select (val, event) {
       if (event.currentTarget.style.borderColor !== 'red') {
-        if (this.total >= this.onlinedatastudent.student_num2) {
-          this.$Message.error('最多只能选择' + this.onlinedatastudent.student_num2 + '名学生')
+        if (this.total >= this.studentNumber) {
+          this.$Message.error('最多只能选择' + this.studentNumber + '名学生')
         } else {
           event.currentTarget.style.borderColor = 'red'
           this.students.push(val.id)
@@ -112,14 +111,14 @@ export default {
       this.$emit('closemodal', false)
       if (this.questionContent === '') {
         this.$Message.error('请输入问题')
-      } else if (this.onlinedatastudent.student_num2 <= 0) {
+      } else if (this.studentNumber <= 0) {
         this.$Message.error('提问人数不能小于1')
       } else {
         if (this.add_type === 'call') {
           if (this.showTime !== '') {
             this.$Message.error('正在全体作答中')
           } else {
-            if (this.onlinedatastudent.student_num2 > this.online_data.online_count) {
+            if (this.studentNumber > this.online_data.online_count) {
               this.$Message.error('提问人数不能大于在线人数')
             } else {
               if (e.target.innerText === '抢答') {
@@ -141,14 +140,14 @@ export default {
               quiz_id: '',
               courseware_id: this.courseware_id,
               content: this.questionContent,
-              answer_num: this.onlinedatastudent.student_num2,
+              answer_num: this.studentNumber,
               type: 1
             }
           }).then(res => {
             this.$Message.success('添加成功')
             this.$emit('closeModal')
             this.questionContent = ""
-            this.onlinedatastudent.student_num2 = 0
+            this.studentNumber = 0
 
           })
         }
@@ -230,9 +229,9 @@ export default {
     random () {
       this.modal2 = true
       this.clear()
-      this.total = this.onlinedatastudent.student_num2
+      this.total = this.studentNumber
       let o = 0
-      while (o < this.onlinedatastudent.student_num2) {
+      while (o < this.studentNumber) {
         var a = 0
         var num1 = Math.floor(Math.random() * this.online_data.students.length)
         var num2 = Math.floor(Math.random() * this.online_data.students[num1].student.length)
@@ -255,7 +254,7 @@ export default {
       }
     },
     submit () {
-      if (parseInt(this.total) === parseInt(this.onlinedatastudent.student_num2)) {
+      if (parseInt(this.total) === parseInt(this.studentNumber)) {
         this.axios.request({
           method: 'post',
           url: 'index.php/Teacher/Quiz/save',
@@ -268,7 +267,7 @@ export default {
             courseware_id: this.courseware_id,
             group: this.group_chat_id,
             content: this.questionContent,
-            answer_num: this.onlinedatastudent.student_num2,
+            answer_num: this.studentNumber,
             type: 0
           }
         }).then(res => {
@@ -280,7 +279,7 @@ export default {
           }
         })
       } else {
-        this.$Message.error('请选择' + this.onlinedatastudent.student_num2 + '位学生')
+        this.$Message.error('请选择' + this.studentNumber + '位学生')
       }
     },
     issure () {
@@ -298,7 +297,7 @@ export default {
           courseware_id: this.courseware_id,
           group: this.group_chat_id,
           content: this.questionContent,
-          answer_num: this.onlinedatastudent.student_num2,
+          answer_num: this.studentNumber,
           type: 0
         }
       }).then(res => {

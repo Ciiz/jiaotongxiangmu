@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import coursewareQuestion from '@/view/teacher_common/question/courseware_question.vue'
+import coursewareQuestion from '@/view/teacher_common/question/courseware_question_side.vue'
 export default {
   components: { coursewareQuestion },
   props: ['courseware_id'],
