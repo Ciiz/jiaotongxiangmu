@@ -13,6 +13,7 @@ export default {
           timetable_id
         }
       }).then(res => {
+        console.log(res);
         if (res.code === 200) {
           let time = res.data.time
           this.class_begin_time = this.moment(time * 1000).format('YYYY-MM-DD')

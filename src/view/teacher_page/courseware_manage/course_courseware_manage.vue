@@ -38,25 +38,25 @@ export default {
   methods: {
     showAddCourseware (timetable_id, target_id, action_type, courseware_id, teacher_course_id, type, courseware_name) {
       this.$emit('showAddCourseware', timetable_id, target_id, action_type, courseware_id, teacher_course_id, type, courseware_name)
+    },
+    getTeacherCourseList () {
+      this.axios.request({
+        method: 'get',
+        url: '/index.php/Teacher/Courseware/index',
+        params: {
+        }
+      }).then(res => {
+        if (res.code === 200) {
+          this.teacher_course_list = res.data.course_list
+          if (this.teacher_course_list.length > 0) {
+            this.courseId = this.teacher_course_list[0].teacher_course_id
+          }
+        }
+      })
     }
-    // getTeacherCourseList () {
-    //   this.axios.request({
-    //     method: 'get',
-    //     url: '/index.php/Teacher/Courseware/index',
-    //     params: {
-    //     }
-    //   }).then(res => {
-    //     if (res.code === 200) {
-    //       this.teacher_course_list = res.data.course_list
-    //       if (this.teacher_course_list.length > 0) {
-    //         this.courseId = this.teacher_course_list[0].teacher_course_id
-    //       }
-    //     }
-    //   })
-    // }
   },
   mounted () {
-    // this.getTeacherCourseList()
+    this.getTeacherCourseList()
   }
 }
 </script>

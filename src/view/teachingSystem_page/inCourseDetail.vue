@@ -1,48 +1,63 @@
 <template>
-<div style="height:100%;padding:20px 200px;">
-  <div style="width:100%;height:100%;position:relative">
-    <div class="ab-scroll">
-      <div style="margin-bottom:10px">
-        <button class="blueText-btn" @click="$emit('closeCourseDetail')">返回</button>
-      </div>
-      <Row type="flex" style="min-height:450px">
-        <Col style="text-align:center;background:#000;flex:1" v-if="chapter_class.file_url&&showAllCourseDetailType===''">
-          <video :src="chapter_class.file_url" v-if="['mp4','ogg', 'avi', 'rmvb'].indexOf(content_type)!==-1" id="video" controls autoplay style="width:100%;height:100%;"></video>
-          <div v-else-if="['mp3','pdf','swf'].indexOf(content_type)!==-1" style="height:100%;width:100%;background:#000;">
-            <embed :src="chapter_class.file_url"   style="width:100%;height:100%"></embed>
+  <div style="height:100%;padding:20px 200px;">
+    <div style="width:100%;height:100%;position:relative">
+      <div class="ab-scroll">
+        <div style="margin-bottom:10px">
+          <button class="blueText-btn" @click="$emit('closeCourseDetail')">返回</button>
+        </div>
+        <Row type="flex" style="min-height:450px">
+          <Col style="text-align:center;background:#000;flex:1"
+            v-if="chapter_class.file_url&&showAllCourseDetailType===''">
+          <video :src="chapter_class.file_url" v-if="['mp4','ogg', 'avi', 'rmvb'].indexOf(content_type)!==-1" id="video"
+            controls autoplay style="width:100%;height:100%;"></video>
+          <div v-else-if="['mp3','pdf','swf'].indexOf(content_type)!==-1"
+            style="height:100%;width:100%;background:#000;">
+            <embed :src="chapter_class.file_url" style="width:100%;height:100%"></embed>
           </div>
-          <div v-else-if="['ppt','pptx','xlsx','xls','doc','docx'].indexOf(content_type)!==-1" style="height:100%;width:100%;background:#000;">
-            <iframe :src='`https://view.officeapps.live.com/op/view.aspx?src=${chapter_class.file_url}`' width='100%' height='100%' frameborder='1'></iframe>
+          <div v-else-if="['ppt','pptx','xlsx','xls','doc','docx'].indexOf(content_type)!==-1"
+            style="height:100%;width:100%;background:#000;">
+            <iframe :src='`https://view.officeapps.live.com/op/view.aspx?src=${chapter_class.file_url}`' width='100%'
+              height='100%' frameborder='1'></iframe>
           </div>
           <div v-else class="embed-tips" style="width:100%">
             格式不支持
             <a :href="file_url" target="blank">文件：{{chapter_class.file_url | filtFileName}}</a>
           </div>
-        </Col>
-        <Col style="text-align:center;background:#000;flex:1;font-size:16px;color:#ffffff;height:400px" v-if="!chapter_class.file_url&&showAllCourseDetailType===''">
+          </Col>
+          <Col style="text-align:center;background:#000;flex:1;font-size:16px;color:#ffffff;height:400px"
+            v-if="!chapter_class.file_url&&showAllCourseDetailType===''">
           <span>暂无素材资源</span>
-        </Col>
-        <Col style="text-align:center;background:#000;flex:1;font-size:16px;color:#ffffff;" v-if="showAllCourseDetailType!==''">
-          <Krpano :pano_id="showAllCourseDetailId" v-if="showAllCourseDetailType === 'krpano'" :editable.sync="showAllCourseDetailEdit"></Krpano>
-          <KrpanoVideo :pano_id="showAllCourseDetailId" v-if="showAllCourseDetailType === 'krpano_video'" :editable.sync="showAllCourseDetailEdit"></KrpanoVideo>
-        </Col>
-        <Col style="width:325px;margin-left:20px;display:flex;flex-direction:column">
-          <div style="width:100%;border-radius:5px 5px 0 0;line-height:54px;height:54px;background:#28303A;border:1px solid #404040;font-size:14px;color:#c4c4c4;text-align:center" >课程章节列表</div>
-          <Tree :data="chapter_class_list" children-key="child" class="new-tree" @on-select-change="changeDetail" style="background:#F4F4F4;flex:1;overflow-y:scroll"></Tree>
-        </Col>
-      </Row>
-      <div v-if="showAllCourseDetailType===''">
-        <h2 style="font-size:22px;color:#222222;margin:10px 0">{{chapter_class.title}}</h2>
-        <div style="font-size:14px;color:#666666;word-break:break-all;margin-bottom:20px" v-html="chapter_class.content"></div>
-      </div>
-      <div style="flex:1">
-        <div style="font-size:16px;color:#222222;border-bottom:1px solid #EEEEEE;padding:10px 0;margin-bottom:20px">评论列表</div>
-        <chapterDiscuss :chapter_id="showAllCourseDetailId?showAllCourseDetailId:t_id" :type="showAllCourseDetailType===''?1:2"></chapterDiscuss>
+          </Col>
+          <Col style="text-align:center;background:#000;flex:1;font-size:16px;color:#ffffff;"
+            v-if="showAllCourseDetailType!==''">
+          <Krpano :pano_id="showAllCourseDetailId" v-if="showAllCourseDetailType === 'krpano'"
+            :editable.sync="showAllCourseDetailEdit"></Krpano>
+          <KrpanoVideo :pano_id="showAllCourseDetailId" v-if="showAllCourseDetailType === 'krpano_video'"
+            :editable.sync="showAllCourseDetailEdit"></KrpanoVideo>
+          </Col>
+          <Col style="width:325px;margin-left:20px;display:flex;flex-direction:column">
+          <div
+            style="width:100%;border-radius:5px 5px 0 0;line-height:54px;height:54px;background:#28303A;border:1px solid #404040;font-size:14px;color:#c4c4c4;text-align:center">
+            课程章节列表</div>
+          <Tree :data="chapter_class_list" children-key="child" class="new-tree" @on-select-change="changeDetail"
+            style="background:#F4F4F4;flex:1;overflow-y:scroll"></Tree>
+          </Col>
+        </Row>
+        <div v-if="showAllCourseDetailType===''">
+          <h2 style="font-size:22px;color:#222222;margin:10px 0">{{chapter_class.title}}</h2>
+          <div style="font-size:14px;color:#666666;word-break:break-all;margin-bottom:20px"
+            v-html="chapter_class.content"></div>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:16px;color:#222222;border-bottom:1px solid #EEEEEE;padding:10px 0;margin-bottom:20px">
+            评论列表</div>
+          <chapterDiscuss :chapter_id="showAllCourseDetailId?showAllCourseDetailId:t_id"
+            :type="showAllCourseDetailType===''?1:2"></chapterDiscuss>
+        </div>
       </div>
     </div>
-  </div>
 
-</div>
+  </div>
 </template>
 <script>
 import { getSuffix } from '@/libs/util'
@@ -55,7 +70,7 @@ export default {
   components: {
     chapterDiscuss,
     Krpano,
-    KrpanoVideo },
+    KrpanoVideo  },
   props: {
     id: '',
     course_id: '',
@@ -155,7 +170,7 @@ export default {
     },
     updateProgress (item) {
       this.$emit('update_progress', item.status === 1 ? 100 : parseInt(item.study_time / item.video_time * 100))
-      update_study_progress({ chapter_class_id: item.id, video_time: item.video_time, study_time: item.study_time, status: item.status, teacher_course_id: this.teacher_course_id }).then(res => {})
+      update_study_progress({ chapter_class_id: item.id, video_time: item.video_time, study_time: item.study_time, status: item.status, teacher_course_id: this.teacher_course_id }).then(res => { })
     },
     getData () {
       if (this.$store.state.user.userInfo.userType === 1) {
@@ -224,11 +239,11 @@ export default {
 }
 </script>
 <style>
-  .dic{
-    font-size: 18px;
-    font-weight: bold;
-    padding: 10px 5px;
-    border-bottom: 1px solid rgb(232, 234, 236);
-    margin-top: 20px
-  }
+.dic {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 5px;
+  border-bottom: 1px solid rgb(232, 234, 236);
+  margin-top: 20px;
+}
 </style>

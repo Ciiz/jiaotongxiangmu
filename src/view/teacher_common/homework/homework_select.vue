@@ -2,7 +2,7 @@
   <div class="modal-content-default">
     <Form :label-width="100" :model="homework_release" :rules="rules" ref="homework_release">
       <FormItem label="课件上课时间">
-        <Input v-model="class_begin_time" readonly disabled  style="width: 200px"></Input>
+        <Input v-model="class_begin_time" readonly disabled style="width: 200px"></Input>
       </FormItem>
       <FormItem label="作业">
         <Select v-model="homework_release.id" style="width: 200px">
@@ -10,20 +10,24 @@
         </Select>
       </FormItem>
       <FormItem label="发布时间" prop="start_time">
-        <DatePicker :value="homework_release.start_time" transfer  @on-change="(fmt_date, date) => {homework_release.start_time = fmt_date}"  type="datetime" placeholder="开始时间" style="width: 200px"></DatePicker>
+        <DatePicker :value="homework_release.start_time" transfer
+          @on-change="(fmt_date, date) => {homework_release.start_time = fmt_date}" type="datetime" placeholder="开始时间"
+          style="width: 200px"></DatePicker>
       </FormItem>
       <FormItem label="结束时间" prop="end_time">
-        <DatePicker :value="homework_release.end_time" transfer  @on-change="(fmt_date, date) => {homework_release.end_time = fmt_date}" type="datetime" placeholder="结束时间" style="width: 200px"></DatePicker>
+        <DatePicker :value="homework_release.end_time" transfer
+          @on-change="(fmt_date, date) => {homework_release.end_time = fmt_date}" type="datetime" placeholder="结束时间"
+          style="width: 200px"></DatePicker>
       </FormItem>
     </Form>
     <div class="modal-footer">
-       <Button type="primary" @click="submit">确定</Button>
+      <Button type="primary" @click="submit">确定</Button>
     </div>
   </div>
 </template>
 <script>
 import class_begin from '@/view/mixins/class_begin'
-export default{
+export default {
   props: {
     courseware_id: '',
     timetable_id: '',

@@ -404,9 +404,10 @@ input::-webkit-input-placeholder {
 }
 
 .new-editor .w-e-text-container{
-  height: inherit!important;
+  // height: inherit!important;
   flex: 1;
   min-height: 300px;
+
 }
 .new-editor .w-e-text-container .w-e-text{
   min-height: 300px;
@@ -549,7 +550,8 @@ input::-webkit-input-placeholder {
 }
 .timetable-btn{
   display: inline-block;
-  width: 120px;
+
+  width: 90px;
   height: 30px;
   text-align: center;
   line-height: 30px;
@@ -558,7 +560,7 @@ input::-webkit-input-placeholder {
   color: #FFFFFF;
   cursor: pointer;
   margin-left: 30px;
-  z-index: 99999;
+  // z-index: 99999;
 }
 .addcourse{
   display: inline-block;
@@ -769,6 +771,7 @@ input::-webkit-input-placeholder {
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
+  padding-bottom: 30px;
 }
 .course-detail-searchInp{
   height: 30px;
@@ -976,11 +979,23 @@ input::-webkit-input-placeholder {
 
 /*作业批改*/
 .correct{
+    
   // padding: 20px;
   background: #f2f2f2;
   min-width: 1260px;
   position: relative;
+  width: 100%;
+  display: flex;
 }
+.correct_newLeft{
+  margin-top: 20px;
+      width: 260px;
+      height: 100%;
+      overflow-y: auto;
+      padding-bottom: 40px;
+      background-color: #fff;
+}
+
 .correct-iscorrect{
   font-size: 14px;
   color: #666666;
@@ -1008,6 +1023,7 @@ input::-webkit-input-placeholder {
   cursor: pointer;
   border-radius:5px 5px 0px 0px;
   margin-right: 6px;
+
 }
 .correct-iscorrect2-back{
   width:51px;
@@ -1036,10 +1052,31 @@ input::-webkit-input-placeholder {
   padding: 20px 10px;
   background-color: #ffffff;
 }
+.correct_newLeftStudent{
+  margin-right: 20px;
+    ul{
+      overflow-y: auto;
+       cursor:pointer;
+        width: 250px;
+        height: 100%;
+        background-color:#fff;
+        padding: 10px 10px;
+    
+        li{
+            height: 60px;
+            font-weight: normal;
+            font-size: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+        li:hover{
+         color:rgba(59,155,255,1);
+        }
+    }
+}
 .correct-list{
-  // display: flex;
-  // align-items:flex-start;
-  // flex-wrap:wrap;
   background-color: #ffffff;
   width: 100%;
   height: 100%;
@@ -1047,8 +1084,10 @@ input::-webkit-input-placeholder {
   overflow: none;
   overflow-y: scroll;
 }
+
 .correct-list>li{
   float: left;
+
 }
 .correct-list .showdetail{
   padding: 10px;
@@ -1063,6 +1102,10 @@ input::-webkit-input-placeholder {
   font-size:18px;
   font-weight:bold;
   color:rgba(34,34,34,1);
+  display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 1;
+overflow: hidden;
 }
 .correct-list .ccourse,.correct-list .cclass{
   font-size: 14px;
@@ -1112,7 +1155,7 @@ input::-webkit-input-placeholder {
   position:absolute;
   display:flex;
   flex-direction:column;
-  z-index: 100;
+  z-index: 1000;
   background: #eeeeee;
   padding: 20px;
 }
@@ -2047,6 +2090,7 @@ input::-webkit-input-placeholder {
   position: relative;
   height:100%;
   background:#ffffff;
+  // width: 400px;
 }
 .ul-list{
   margin-bottom: 30px;

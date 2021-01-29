@@ -82,6 +82,8 @@ export default {
           align: 'center',
           width: 200,
           render: (h, params) => {
+            console.log(params);
+
             let row = params.row
             return <span>第{row.week}周 星期{row.day} <span>第{row.class_no}节</span></span>
           }

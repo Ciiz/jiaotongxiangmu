@@ -1,14 +1,16 @@
 <template>
   <div class="courseware_lists" style="background:#ffffff;height:100%;width:100%;position:relative">
+    <Progress :percent="percent" v-if="progress_show && percent !== 0"></Progress>
     <div style="height:100%;width:100%;padding:10px;position:absolute">
       <Row class="search-bar">
         <!-- <Button type="primary" size="small" @click="getData(true)" style="margin-left:15px;">搜索</Button> -->
         <slot name="search-bar"></slot>
       </Row>
       <div class="courseware_list_table_parent">
-        <Table :loading="loading" ref="selection" class="courseware_list_table" :columns="columns" :data="list" stripe
-          border></Table>
+        <Table :loading="loading" ref="selection" class="courseware_list_table" :columns="columns"
+          :data="$store.state.user.CoursewareTimetable" stripe border></Table>
       </div>
+
     </div>
 
     <Modal v-model="modal" class="courseware_list_modal" :title="title" :width="modal_width" :footer-hide="footerHide"
@@ -32,7 +34,8 @@
         :send_course_id='teacher_course_id' @success="getData(true),modal = false"></coursewarePreview>
       <CoursewareTimetable v-if="target === 'courseware_timetable' && modal" :timetable_id="target_id.timetable_id"
         :class_id="target_id.class_id" :teacher_course_id="teacher_course_id" @success="modal = false"
-        @error="modal = false"></CoursewareTimetable>
+        @timetable_change='timetable_change' @error="modal = false">
+      </CoursewareTimetable>
     </Modal>
     <Modal v-model="showQuestion" title="问题列表" :width="700" footer-hide class="courseware_list_modal2">
       <showQuestion :courseware_id='courseware_id'></showQuestion>
@@ -76,6 +79,8 @@ export default {
   },
   data () {
     return {
+      percent: 0,
+      progress_show: false,
       modal3: false,
       vedioSrc: '',
       vedioName: '',
@@ -151,7 +156,7 @@ export default {
                 {
                   row.class_list.map(item => {
                     return <div class="item table-item-option">
-                      <span style="color:#3B9BFF" onClick={() => { this.open('courseware_timetable', { timetable_id: item.timetable_id, class_id: item.class_id }, `${row.courseware_name} - ${item.class_name} - 课时安排`, 1000, true, false, '0px') }}>查看</span>
+                      <span style="color:#3B9BFF" onClick={() => { this.open('courseware_timetable', { timetable_id: item.timetable_id, class_id: item.class_id }, `${row.courseware_name} - ${item.class_name} - 课时安排`, 1000, true, false, '0px') }}>{item.timetable_time_id == null ? '安排' : '修改'}</span>
                     </div>
                   })
                 }
@@ -300,6 +305,7 @@ export default {
                           }
                         },
                         props: {
+                          onProgress: this.Progress,
                           action: this.action_url,
                           onSuccess: this.uploadVideo,
                           onFormatError: this.formatError,
@@ -376,6 +382,31 @@ export default {
     }
   },
   methods: {
+    async timetable_change () {
+      let res = await this.axios.request({
+        url: '/index.php/Teacher/Courseware/index',
+        method: 'get',
+        params: {
+          page: this.page,
+          keyword: this.keyword,
+          teacher_course_id: this.teacher_course_id,
+          release_status: this.release_status
+        }
+      })
+      this.$store.commit('setCoursewareTimetable', res.data.courseware_list)
+    },
+    Progress (e, res) { //上传进度条
+      this.progress_show = true
+      if (this.progress_show) {
+        this.percent = e.percent
+      }
+      if (e.percent === 100) {
+        setTimeout(() => {
+          this.progress_show = false
+        }, 1000)
+      }
+
+    },
     uploadVideo (res) { // 上传录制视频
       if (res.code === 200) {
         this.$Message.success(res.message)
@@ -412,10 +443,10 @@ export default {
         console.log(res);
         if (res.code === 200) {
           this.list = res.data.courseware_list
+          this.$store.commit('setCoursewareTimetable', res.data.courseware_list)
           this.total = res.data.pages * this.page_size
           this.class_list = res.data.class_list ? res.data.class_list : []
           this.course_status = res.data.course_status
-          console.log(this.course_status);
         }
         this.loading = false
       })
@@ -481,7 +512,6 @@ export default {
         }
       }).then(res => {
         console.log(res);
-
         if (res.code === 200) {
           this.$Message.success(res.message)
           this.getData()
@@ -517,6 +547,7 @@ export default {
     }
   },
   mounted () {
+    // console.log(this.teacher_course_id);
     this.getData(true)
     this.columns = this.editable ? this.columns.filter((item) => { return (typeof item.showInEdit === 'undefined' || item.showInEdit === true) })
       : this.columns.filter((item) => { return (typeof item.showInEdit === 'undefined' || item.showInEdit === false) })

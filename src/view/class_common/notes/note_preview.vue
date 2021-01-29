@@ -193,6 +193,6 @@ export default {
   margin-right: 20px;
 }
 .noteDeleteModal .ivu-modal-wrap {
-  z-index: 5011 !important;
+  z-index: 6011 !important;
 }
 </style>

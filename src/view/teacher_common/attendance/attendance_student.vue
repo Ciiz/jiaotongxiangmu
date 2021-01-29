@@ -6,9 +6,10 @@
           <span style="font-size:16px;font-weight:bold" v-if="Object.keys(attendanceInfo).length!==0">
             {{attendanceInfo[0].year}}年&nbsp;{{attendanceInfo[0].semester===2?'上半年':'下半年'}}
           </span>
-            <Table :data="attendanceInfo" width='600' :columns="columns" style="position:relative;width:504px"></Table>
+          <Table :data="attendanceInfo" width='600' :columns="columns" style="position:relative;width:504px"></Table>
         </div>
-        <attendance-chart :option_data="option_data" style="margin:20px auto" v-if="Object.keys(attendanceInfo).length!==0"></attendance-chart>
+        <attendance-chart :option_data="option_data" style="margin:20px auto"
+          v-if="Object.keys(attendanceInfo).length!==0"></attendance-chart>
       </div>
     </div>
     <Modal v-model="modal1" footer-hide>

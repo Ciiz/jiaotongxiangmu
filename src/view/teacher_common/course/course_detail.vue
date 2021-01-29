@@ -110,6 +110,7 @@ export default {
       this.loading = true
       course_detail(this.courseId).then(res => {
         this.loading = false
+        console.log(res);
         if (res.code === 200) {
           this.course = res.data
         }

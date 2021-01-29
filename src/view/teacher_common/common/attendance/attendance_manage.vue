@@ -14,8 +14,8 @@
         </div>
         <div>
           <RadioGroup v-model="leave_early_status" @on-change="handleLeaveEarlyStatusChange">
-            <Radio :label="0">正常考勤</Radio>
-            <Radio :label="1">早退考勤</Radio>
+            <Radio :label="0">课前考勤</Radio>
+            <Radio :label="1">课中考勤</Radio>
           </RadioGroup>
           <Button v-show="leave_early_status === 1" type="primary" size="small"
             @click="handleUpdateLeaveEarly">处理早退考勤数据</Button>
@@ -68,11 +68,9 @@
       @on-visible-change="handleVisiableChange">
       <Position :lng.sync="lng" :lat.sync="lat" :distance_range.sync="distance_range" v-if="target === 'position'"
         @position-change="handlePositionChange" @modalClose='modalClose'></Position>
-
       <div id="qrcode3" style="display: flex;justify-content: center; width: 600px, overflow: hidden;"
         v-show="target === 'qrcode3'">
       </div>
-
       <div id="qrcode_teacher" style="display: flex;justify-content: center; width: 600px, overflow: hidden;"
         v-show="target === 'qrcode_teacher'">
       </div>

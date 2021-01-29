@@ -14,13 +14,13 @@
       <Homework @closeModal='closeModal' :exam_score_status="exam_score_status"
         :student_homework_id="student_homework_id" v-if="target === 'homework'" @success="handleSuccess"></Homework>
     </Modal>
-    <Modal v-model="modal3" title="视频录制" :width="1100" footer-hide :mask-closable='false'>
-      <coursewareVedio :vedioSrc="vedioSrc" :vedioName="vedioName" :upload_courseware_id="upload_courseware_id">
+    <Modal v-model="modal3" title="视频录制" :width="1100" footer-hide :mask-closable='false' fullscreen>
+      <coursewareVedio :vedioSrc="vedioSrc" :vedioName="vedioName" :upload_courseware_id="upload_courseware_id"
+        v-if="modal3">
       </coursewareVedio>
     </Modal>
   </Row>
 </template>
-
 <script>
 // import Evaluate from '@/view/class_common/courseware/evaluate'
 import modal_mixin from '@/view/mixins/modal_mixin'
@@ -76,11 +76,11 @@ export default {
           title: '课件',
           key: 'courseware_name',
           align: 'center',
-          minWidth: 250,
+          width: 450,
           render: (h, params) => {
             return (
               <div>
-                <p >第{params.row.sort}课时：{params.row.courseware_name}</p>
+                <p>第{params.row.sort}课时：{params.row.courseware_name}</p>
               </div>
             )
           }
@@ -89,11 +89,12 @@ export default {
           title: '上课时间',
           key: '',
           align: 'center',
-          width: 250,
+
+          minWidth: 250,
           render: (h, params) => {
             return (
               <div>
-                <p >{params.row.class_time}</p>
+                <span>{params.row.class_time}</span>
               </div>
             )
           }
@@ -190,7 +191,7 @@ export default {
           }
         },
         {
-          title: '操作3',
+          title: '操作',
           key: 'action',
           width: 290,
           align: 'center',
@@ -309,9 +310,14 @@ export default {
 }
 .c_list .ivu-table-cell > div {
   position: relative;
+  margin: 0 auto;
 }
 .c_list .ivu-table-cell {
   overflow: initial;
+}
+.c_list .ivu-table-cell p {
+  padding-left: 140px;
+  text-align: left;
 }
 .homeWorkItem {
   text-align: left;

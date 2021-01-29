@@ -1,5 +1,5 @@
 <template>
-    <div ref="dom" class="chart-container"></div>
+  <div ref="dom" class="chart-container"></div>
 </template>
 
 <script>
@@ -79,7 +79,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.chart-container{
+.chart-container {
   width: 300px;
   height: 300px;
   margin: 0px auto;

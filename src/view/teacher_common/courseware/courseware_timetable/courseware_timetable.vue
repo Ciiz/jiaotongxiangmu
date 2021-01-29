@@ -3,9 +3,9 @@
     <Row style="margin-bottom:20px;">
       <InputNumber v-model="year" style="width: 100px" size="small" @on-change="getCourseTable()"></InputNumber>
       &nbsp;年&nbsp;
-      <Select v-model="semester" size="small" style="width:100px;">
-        <Option :value="2">下学期</Option>`
-        <Option :value="1">上学期</Option>`
+      <Select v-model="semester" size="small" style="width:115px;">
+        <Option :value="1">上学期(下半年)</Option>`
+        <Option :value="2">下学期(上半年)</Option>`
       </Select>
       <div style="float:right;">
         <Button @click="handleWeekChange('minus')" size="small">上一周</Button>
@@ -35,7 +35,7 @@
                     <p>{{course.address}}</p>
                     <p>{{course.class_name}}</p>
                     <div v-for="(courseware,index2) in course.coursewares" :key="index2">
-                      <p>{{courseware.sort}}: {{courseware.courseware_name}}</p>
+                      <p>{{courseware.sort}}:{{courseware.courseware_name}}</p>
                     </div>
                     <!-- <Tag v-if="course.cur_timetable">当前课时安排</Tag> -->
                     <!-- <Tag v-if="row[col]===col.class_no">当前课时安排</Tag> -->
@@ -88,6 +88,7 @@ export default {
   },
   data () {
     return {
+      isshow: '',
       week: 1,
       tableHead: [
         '节/星期', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'
@@ -97,6 +98,7 @@ export default {
       weekData: [], // 当前周的数据
       maxWeek: 30,
       year: (new Date().getMonth() + 1) < 3 ? (new Date().getFullYear() - 1) : new Date().getFullYear(),
+      // year: new Date().getFullYear(),
       semester: '',
       loading: false,
       curDate: this.moment().format('YYYY-M-D'),
@@ -112,6 +114,7 @@ export default {
       cur_timetable_list: [], // 当前timetable的时间安排
       is_refresh: true, // 用来判断是否改变当前周
       cur_timetable_time_weeks: [] // 当前课程已经设置的周
+
     }
   },
   computed: {
@@ -253,8 +256,13 @@ export default {
       return new Promise((resolve, reject) => {
         get_term_begin(this.teacher_course_id, this.year, semester).then(res => {
           if (res.code === 200 && res.data.term_begins) {
-            let yy = this.year
             let mm = new Date().getMonth() + 1
+            let yy
+            if (mm < 3) {
+              yy = this.year + 1
+            } else {
+              yy = this.year
+            }
             let dd = new Date().getDate()
             let date1 = new Date(yy + '-' + mm + '-' + dd)
             let date2 = new Date(res.data.term_begins * 1000)
@@ -453,15 +461,15 @@ export default {
       })
     },
     changeTimetable (course, class_no) {
-      // document.querySelector('.clitem').style.color = 'red'
-
+      setTimeout(() => {
+        this.$emit('timetable_change')
+      }, 1000)
       this.is_refresh = false
       let index = this.cur_timetable_list.findIndex((val) => {
         return (val.week === course.week && val.day === course.day && val.class.sort().join(',') === course.class_no.sort().join(','))
       })
       if (index !== -1) { // 取消
         this.cur_timetable_list.splice(index, 1)
-
       } else { // 新增
         this.cur_timetable_list.push({
           year: course.year,
@@ -471,6 +479,7 @@ export default {
           class: course.class_no
         })
       }
+
       this.cur_timetable_list.forEach(item => {
         item.timetable_id = this.timetable_id
       })
@@ -480,12 +489,16 @@ export default {
       }).then(res => {
         console.log(res);
         if (res.code === 200) {
+
+          this.$emit('timetable_time_id', res.data.timetable_time_id)
+          this.isshow = res.data.timetable_time_id
+          console.log(this.isshow);
           if (res.data.timetable_time_id === false) {
             this.$Message.warning('取消成功！')
           } else {
-            this.$Message.success('添加成功！')
-          }
+            this.$Message.success('操作成功！')
 
+          }
           this.getCourseTable()
           setTimeout(() => {
             this.rowData = this.getRowData()
@@ -504,15 +517,23 @@ export default {
         data: {
         }
       }).then(res => {
-        for (let i = 0; i < res.data.list.length; i++) {
-          if (res.data.list[i].semester === 1) {
-            if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
-              this.semester = 2
-            } else {
-              this.semester = 1
-            }
-          }
+        let top_semester_9 = this.moment(res.data.list[0].term_begins * 1000).format('M')
+        let buttom_semester_3 = this.moment(res.data.list[1].term_begins * 1000).format('M')
+        let now_time = this.moment(Date.parse(time)).format('M')
+        if (now_time < buttom_semester_3 || now_time > top_semester_9) {
+          this.semester = 1
+        } else if (now_time >= buttom_semester_3 && now_time <= top_semester_9) {
+          this.semester = 2
         }
+        // for (let i = 0; i < res.data.list.length; i++) {
+        //   if (res.data.list[i].semester === 1) {
+        //     if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
+        //       this.semester = 2
+        //     } else {
+        //       this.semester = 1
+        //     }
+        //   }
+        // }
       })
     },
     getCourseTable () {

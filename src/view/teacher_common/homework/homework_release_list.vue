@@ -15,12 +15,14 @@
       <page :total="total" :current="page" :page-size="page_size" size="small" show-elevator
         @on-change="(page) => {this.page=page;this.getData()}" :placement="'top'"></page>
     </Row>
-    <Modal v-model="modal" :title="title" :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen"
+
+    <Modal v-model="modal" :title="title" width="1100" :footer-hide="footerHide" :fullscreen="fullscreen"
       :mask-closable='false'>
       <HomeworkReleaseDetail :homework_release_id="target_id" v-if="target === 'homework_release_detail'">
       </HomeworkReleaseDetail>
       <student-exam-list style="height:700px" :targetwork_id="target_id" @closeModal="modal=false"
-        :target_type="'student_homework_list'" v-if="target === 'student_homework_list'"></student-exam-list>
+        :target_type="'student_homework_list'" v-if="target === 'student_homework_list'">
+      </student-exam-list>
       <HomeworkEvaluationEdit :id="target_id" v-if="target === 'homework_evaluation_edit'" @success="modal = false;">
       </HomeworkEvaluationEdit>
       <HomeworkEdit :timetable_id="timetable_id" :type="type" :homework_release_id="target_id"

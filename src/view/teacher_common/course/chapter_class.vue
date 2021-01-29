@@ -1,24 +1,21 @@
 <template>
-<Row>
-  <!-- 添加的时候请求 -->
-  <Button type="success" @click="addRoot" size="small" style="margin-right:30px" v-show="editable"> + 添加章</Button>
-  <Tree :data="chapter_class_list" :render="renderContent" children-key="child" class="course-tree"></Tree>
-  <Modal v-model="modal"
-      :title="title"
-      :width="modal_width"
-      :mask-closable="false"
-      footer-hide
-      :fullscreen="fullscreen"
-  >
-    <ChapterClassEdit :id="target_id" :course_id="course_id" v-if="target === 'chapter_class_edit' && modal" @success="modal = false;getData()"></ChapterClassEdit>
-    <ChapterClassDetail :id="target_id" :course_id="course_id" v-if="target === 'chapter_class_detail' && modal" ></ChapterClassDetail>
-    <ClassList :chapter_id="target_id" :course_id="course_id" v-if="target === 'class_list' && modal"></ClassList>
-  </Modal>
-  <Modal v-model="modal2" title="修改章节名" :mask-closable="false" @on-ok="changename">
-    <span>请输入要修改的名称：</span><Input type="text" v-model="info.title"/>
-  </Modal>
-  <Spin fix v-show="loading"> </Spin>
-</Row>
+  <Row>
+    <!-- 添加的时候请求 -->
+    <Button type="success" @click="addRoot" size="small" style="margin-right:30px" v-show="editable"> + 添加章</Button>
+    <Tree :data="chapter_class_list" :render="renderContent" children-key="child" class="course-tree"></Tree>
+    <Modal v-model="modal" :title="title" :width="modal_width" :mask-closable="false" footer-hide
+      :fullscreen="fullscreen">
+      <ChapterClassEdit :id="target_id" :course_id="course_id" v-if="target === 'chapter_class_edit' && modal"
+        @success="modal = false;getData()"></ChapterClassEdit>
+      <ChapterClassDetail :id="target_id" :course_id="course_id" v-if="target === 'chapter_class_detail' && modal">
+      </ChapterClassDetail>
+      <ClassList :chapter_id="target_id" :course_id="course_id" v-if="target === 'class_list' && modal"></ClassList>
+    </Modal>
+    <Modal v-model="modal2" title="修改章节名" :mask-closable="false" @on-ok="changename">
+      <span>请输入要修改的名称：</span><Input type="text" v-model="info.title" />
+    </Modal>
+    <Spin fix v-show="loading"> </Spin>
+  </Row>
 </template>
 
 <script>
@@ -114,7 +111,7 @@ export default {
     }) {
       return (
         <div class="chapter-class-item" onClick={() => { if (data.child === undefined || data.child.length === 0) { this.showDetail(data) } }}>
-          <span class="chapter-class-item-name">{ `${data.sort}：${data.title}` }</span>
+          <span class="chapter-class-item-name">{`${data.sort}：${data.title}`}</span>
           <span class="option-item" v-show={this.editable}>
             <Button type="text" size="small" onClick={(e) => { e.stopPropagation(); this.changeInfo(data) }}>编辑</Button>
             <Button type="text" size="small" onClick={(e) => { e.stopPropagation(); this.del(root, node, data) }}>删除</Button>
@@ -193,24 +190,24 @@ export default {
 </script>
 
 <style lang="less">
-.chapter-class-item{
+.chapter-class-item {
   padding: 10px;
   display: flex;
   width: 90%;
-  cursor:pointer;
-  &:hover{
+  cursor: pointer;
+  &:hover {
     box-shadow: 1px 2px 3px #ccc;
   }
-  .option-item{
-    float:right;
+  .option-item {
+    float: right;
   }
 }
-.chapter-class-item-name{
+.chapter-class-item-name {
   line-height: 24px;
   flex: 1;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   display: inline-block;
 }
 </style>

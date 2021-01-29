@@ -24,7 +24,7 @@ export default {
     wx_id: '',
     userInfo_icon: '',
     messageList: [],
-    courseData: [],
+    courseData: {},
     bindType: 0,
     currentTab: '',
     schoolMesage: '',
@@ -36,10 +36,14 @@ export default {
     teacher_id_task: "",
     teacher_id_exam: "",
     coursedatalist: {},
+    CoursewareTimetable: []
 
   },
   // 同步操作
   mutations: {
+    setCoursewareTimetable (state, data) {
+      state.CoursewareTimetable = data
+    },
     setcoursedatalist (state, data) {
       state.coursedatalist = data
 

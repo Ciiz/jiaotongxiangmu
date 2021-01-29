@@ -35,12 +35,12 @@
         <div class="sjx-t2"></div>
         <li class="menu-l">
           <ul class="menu-l-tab">
-            <router-link v-if="userType===1" v-for="(item) in teacher_tab" :key="item.title" :to="{path: item.path}"
+            <router-link v-if="userType===1" v-for="(item,index) in teacher_tab" :key="index" :to="{path: item.path}"
               active-class="allTab-active" class="menuTabtitle" @click.native="changeTab($event)">
               <img :src="item.imgsrc">
               <span>{{item.title}}</span>
             </router-link>
-            <router-link v-if="userType===2" v-for="(item) in student_tab" :key="item.title" :to="{path: item.path}"
+            <router-link v-if="userType===2" v-for="(item,index) in student_tab" :key="index" :to="{path: item.path}"
               active-class="allTab-active" class="menuTabtitle" @click.native="changeTab($event)">
               <img :src="item.imgsrc">
               <span>{{item.title}}</span>
@@ -66,7 +66,7 @@
     </Header>
     <div style="clear:both"></div>
     <Layout style="height:100%;background:#2E3640;margin-left:4px;position:relative">
-      <div class="infoModal-full" @click="closeInfoCenter($event)">
+      <div class="infoModal-full" @click="closeInfoCenters($event)">
         <div class="infoModal">
           <Spin v-if="infoloading" fix></Spin>
           <div class="infoModal-l">
@@ -79,7 +79,7 @@
             </div>
             <!-- 信息中心 -->
             <div class="infoModal-l-list" v-if="infoCenter==='people'">
-              <Row type="flex" v-for="(item,index) in chatList" v-if="item.delete_status===1" :key="index+'chatList'"
+              <Row type="flex" v-for="(item,index) in chatList" v-if="item.delete_status===1" :key="index"
                 class="infoModal-l-list-l" @click.native="selectCurrentInfo($event,item)">
                 <Col>
                 <Badge :offset=[-4,6] :count="item.unread">
@@ -103,6 +103,7 @@
                 <Icon type="md-close" size="20" class="infoModal-content-md-close" @click="showDeleteDiscuss(item)" />
                 </Col>
               </Row>
+
             </div>
             <!-- 系统通知 -->
             <div class="infoModal-l-list" v-if="infoCenter==='system'">
@@ -170,6 +171,7 @@
               </div>
             </div>
           </div>
+
           <div class="infoModal-r" v-else-if="infoTitle==='上课提醒'">
             <div class="infoModal-r-title">
               <span>{{infoTitle}}</span>
@@ -239,7 +241,7 @@
               <Input type="textarea" placeholder="话题描述" v-model="discussAboutContent" :rows='5' />
               <div>参与班级：
                 <Select v-model="selectClaaaList" multiple style="width:200px;margin:14px 0">
-                  <Option v-for="item in classList" :value="item.id" :key="item.id">{{ item.class_name }}</Option>
+                  <Option v-for="(item,index) in classList" :value="item.id" :key="index">{{ item.class_name }}</Option>
                 </Select>
               </div>
               <div>
@@ -361,11 +363,11 @@
           </span>
           </Col>
           <Col>
-          <span @click="open('course_table','','课程表编辑',1100)" v-show="bind_type === 0" class="timetable-btn">
+          <!-- <span @click="open('course_table','','课程表编辑',1100)" v-show="bind_type === 0" class="timetable-btn">
             <img src="@/assets/images/teachingSystem/coursewaretable.png"
               style="margin-right:10px;vertical-align:text-top" />
             课程表
-          </span>
+          </span> -->
           <span @click="showSelectCourseModal" v-show="bind_type === 2" class="selectcourse">
             添加课程
           </span>
@@ -398,17 +400,26 @@
             <ul class="mycourse-slider">
               <li v-for="(item,index) in list" class="mycourse"
                 :class="$store.state.user.courseData.id===item.id?'mycourse-slider-active':''" v-if="userType===1"
-                :key="item.id" @click="selectCourse(item,index)">
+                :key="index" @click="selectCourse(item,index)">
                 <span>{{index+1}}</span>
                 <img :src="item.img" />
                 <span class="mycourse-slider-title-d">
                   <p style="font-size:16px">{{item.course_name}}</p>
-                  <p style="color:#73787F">专业：{{item.major_name}}</p>
+                  <div style="display:flex;justify-content:space-between;align-items:center;color:#73787F">
+                    <span>专业：{{item.major_name}}</span>
+                    <span @click="open('course_table',{course_ids:item.teacher_course_id},'课程表编辑',1100)"
+                      v-show="bind_type === 0" class="timetable-btn">
+                      <img src="@/assets/images/teachingSystem/coursewaretable.png"
+                        style="margin-right:10px;vertical-align:text-top" />
+                      课程表
+                    </span>
+                  </div>
+
                 </span>
               </li>
               <li v-for="(item,index) in list" class="mycourse"
                 :class="$store.state.user.courseData.id===item.id?'mycourse-slider-active':''" v-if="userType===2"
-                :key="item.id" @click="selectCourse(item,index)">
+                :key="index" @click="selectCourse(item,index)">
                 <span>{{index+1}}</span>
                 <img :src="item.img" />
                 <span class="mycourse-slider-title-m">
@@ -497,8 +508,9 @@
           <courseDetailEdit :course_id="target_id" v-if="target === 'course_detail_edit' && modal" @success="getData()">
           </courseDetailEdit>
           <SchoolCourse v-if="target === 'school_course'" @bind-course="getData()"></SchoolCourse>
-          <CourseTable :teacher_course_id="target_id" v-if="target === 'course_table' && modal"></CourseTable>
-
+          <CourseTable :teacher_course_id="target_id" v-if="target === 'course_table' && modal"
+            :course_ids='target_id.course_ids'>
+          </CourseTable>
           <CourseTableStudent :teacher_course_id="target_id" v-if="target === 'course_table_student' && modal">
           </CourseTableStudent>
         </Modal>
@@ -556,7 +568,7 @@ import homeworkExam from '@/view/single-page/homework_exam.vue'
 import inCourseDetail from '@/view/teachingSystem_page/inCourseDetail.vue'
 import { my_course } from '@/api/student'
 import { sendDiscussTeacher, sendInfoTeacher, sendInfoStudent, sendInfoGroup, sendDiscussStudent } from '@/api/chat'
-
+import log from 'video.js/es5/utils/log'
 export default {
   components: {
     CourseTableStudent,
@@ -603,7 +615,7 @@ export default {
           this.currentSelect = ''
           this.unshowOpenImg()
           this.course_namet = 'userInfoCenter'
-        } else if (n === '作业批改') {
+        } else if (n === '批改') {
           this.currentSelect = ''
           this.unshowOpenImg()
           this.course_namet = 'correct'
@@ -677,6 +689,7 @@ export default {
   },
   data () {
     return {
+      timer: null,
       toCorrectType: '',
       toCorrectId: '',
       toTasktId: '',
@@ -783,7 +796,7 @@ export default {
           path: '/teachingSystem/course_courseware_manage'
         },
         {
-          title: '作业批改',
+          title: '批改',
           imgsrc: require('@/assets/images/teachingSystem/correct.png'),
           path: '/teachingSystem/correct'
         },
@@ -846,6 +859,7 @@ export default {
     returnHome () {
       this.$store.commit('setuserMessagess', false)
       this.$router.push({ name: 'index' })
+      this.clearTimer()
     },
     logout () {
       this.handleLogOut().then(() => {
@@ -887,9 +901,9 @@ export default {
             page: 1,
             keyword: this.keyword,
             type: this.bind_type
-            // type: 4
           }
         }).then(res => {
+          console.log(res);
           if (res.code === 200) {
             this.list = res.data.course_list
             for (let i in this.list) {
@@ -944,6 +958,7 @@ export default {
       this.changeCourseId = i
     },
     selectCourse (item, index) {
+      console.log(item);
       if (this.showSelectCourse === true) {
         this.modal1 = true
       } else {
@@ -954,6 +969,7 @@ export default {
           this.$router.push({ path: '/teachingSystem/StudentCourse/course_coursewares' })
         }
         this.course_namet = item.course_name
+        console.log(item);
         this.$store.commit('setcourseData', item)
       }
     },
@@ -971,9 +987,21 @@ export default {
       document.getElementsByClassName('myCourse-slider')[0].style.transform = 'translateX(0px)'
     },
     changeTab (e) {
+      this.clearTimer()
+      document.getElementsByClassName('infoModal-full')[0].style.display = 'none'
+      document.getElementsByClassName('sjx-t')[0].style.display = 'none'
+      document.getElementsByClassName('sjx-t2')[0].style.display = 'none'
+      let item = document.getElementsByClassName('infoModal-l-list-l')
+      for (let i = 0; i < item.length; i++) {
+        item[i].style.background = '#E4E4E4'
+      }
+      this.infoTitle = ''
+      this.answerList = []
+      this.taskgroup = ''
+
       let itemText
       if (e.currentTarget.innerText === '前往批改>>') {
-        itemText = '作业批改'
+        itemText = '批改'
         document.getElementsByClassName('infoModal-full')[0].style.display = 'none'
         document.getElementsByClassName('sjx-t')[0].style.display = 'none'
         document.getElementsByClassName('sjx-t2')[0].style.display = 'none'
@@ -995,6 +1023,7 @@ export default {
           this.routersto = true
           this.getData()
         } else if (itemText === '课程管理') {
+          console.log('课程管理');
           this.$store.commit('setbindType', 4)
           this.bind_type = 4
           this.showT = true
@@ -1038,6 +1067,7 @@ export default {
       this.$router.push({ path: '/teachingSystem/correct', query: { toCorrectType: a, toCorrectId: item.obj_id } })
     },
     toReply (e, item) {
+
       this.changeTab(e)
       if (item.type === 55) {
         this.$store.commit('setcurrentTab', '我的任务')
@@ -1104,8 +1134,12 @@ export default {
       this.courdetail = 'bd'
     },
     selectCurrentInfo (e, it) { // 选择消息
-      console.log(e);
+      if (e && e.stopPropagation) {
+        e.stopPropagation(); // 非IE浏览器
+      } else {
+        e.cancelBubble = true; //IE浏览器
 
+      }
       if (it.table_type === 2) {
         this.infoTitle = e.currentTarget.childNodes[1].childNodes[0].childNodes[0].innerText
       } else if (it.table_type === 1) {
@@ -1444,11 +1478,15 @@ export default {
       }
       this.showUserDiscuss()
     },
-    showInfo (e) { // 点击消息中心或系统通知时
-      console.log(e);
 
+    clearTimer () {//清除定时器
+      clearInterval(this.timer);
+      this.timer = null;
+    },
+    showInfo (e) { // 点击消息中心或系统通知时
       if (e.target.innerText === '消息中心') {
         this.showUserDiscuss()
+        // this.showchatList()
         this.data.message_total = 0
       } else {
         this.infoCenter = 'system'
@@ -1486,10 +1524,16 @@ export default {
       document.getElementsByClassName('sjx-t')[0].style.display = 'block'
       this.chatList = []
       if (this.userType === 1) {
-        this.showProblem()
-        this.showDiscussAbout()
+        // this.showProblem()
+        // this.showDiscussAbout()
+        this.timer = setInterval(() => {  //创建定时器
+          this.showchatList()
+        }, 2000);
       } else {
-        this.showProblemStudent()
+        this.timer = setInterval(() => {  //创建定时器
+          this.showProblemStudent()
+        }, 2000);
+
       }
       document.getElementsByClassName('infoModal-full')[0].style.display = 'block'
       setTimeout(() => {
@@ -1541,10 +1585,12 @@ export default {
         }
       }, 1000)
     },
-    closeInfoCenter (e) {
+    closeInfoCenters (e) {
       // 关闭消息
-      this.$store.commit('setuserMessagess', false)
       if (e.target.className === 'infoModal-full') {
+        console.log('点击了');
+        this.clearTimer()
+        this.$store.commit('setuserMessagess', false)
         document.getElementsByClassName('infoModal-full')[0].style.display = 'none'
         document.getElementsByClassName('sjx-t')[0].style.display = 'none'
         document.getElementsByClassName('sjx-t2')[0].style.display = 'none'
@@ -1556,6 +1602,7 @@ export default {
         this.answerList = []
         this.taskgroup = ''
       }
+
     },
     getSystemInfo (r, p) { // 获取系统信息
       if (this.userType === 1) {
@@ -1608,95 +1655,126 @@ export default {
         })
       }
     },
-    showDiscussAbout () { // 教师端话题列表获取
+    showchatList () {
       this.axios.request({
-        url: '/Teacher/Topic/topic_list',
+        url: '/index.php/Teacher/TaskQuestion/topic_question_list',
         method: 'get',
         params: {
           page: 1,
           page_size: 10000
         }
       }).then(res => {
-        console.log(res);
-        if (res.code === 200) {
-          if (res.data !== null) {
-            for (let i = 0; i < res.data.list.length; i++) {
-              this.chatList.push(res.data.list[i])
-            }
-          }
+        let arr = res.data.datalist.question_list
+        arr.push(...res.data.datalist.topic_list)
+        this.chatList = arr
+      })
+    },
+    // showDiscussAbout () { // 教师端话题列表获取
+    //   this.axios.request({
+    //     url: '/Teacher/Topic/topic_list',
+    //     method: 'get',
+    //     params: {
+    //       page: 1,
+    //       page_size: 10000
+    //     }
+    //   }).then(res => {
+    //     console.log(res);
+    //     if (res.code === 200) {
+    //       if (res.data !== null) {
+    //         for (let i = 0; i < res.data.list.length; i++) {
+    //           this.chatList.push(res.data.list[i])
+    //         }
+    //       }
 
-        }
-      })
-    },
-    showProblem () { // 教师端消息中心显示消息列表
+    //     }
+    //   })
+    // },
+    // showProblem () { // 教师端消息中心显示消息列表
+    //   this.axios.request({
+    //     url: '/index.php/Teacher/TaskQuestion/question_list',
+    //     method: 'get',
+    //     params: {
+    //       page: 1,
+    //       rows: 10000
+    //     }
+    //   }).then(res => {
+    //     console.log(res);
+    //     if (res.code === 200) {
+    //       for (let i = 0; i < res.data.question_list.length; i++) {
+    //         this.chatList.push(res.data.question_list[i])
+    //       }
+    //     }
+    //   })
+    // },
+    showStudent_messgess () {
       this.axios.request({
-        url: '/index.php/Teacher/TaskQuestion/question_list',
+        url: 'Student/Topic/student_topic_list',
         method: 'get',
         params: {
-          page: 1,
-          rows: 10000
+          page_no: 1,
+          page_size: 10000
         }
       }).then(res => {
         console.log(res);
-        if (res.code === 200) {
-          for (let i = 0; i < res.data.question_list.length; i++) {
-            this.chatList.push(res.data.question_list[i])
-          }
-        }
+        let arr = res.data.datalist.question_list
+        arr.push(...res.data.datalist.task_list)
+        arr.push(...res.data.datalist.topic_list)
+        this.chatList = arr
       })
     },
-    showTeacherInfo () { // 学生端消息中心显示消息列表
-      this.axios.request({
-        url: '/index.php/Student/Task/question_list',
-        method: 'get',
-        params: {
-          page_no: 1,
-          page_size: 10000
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          for (let i = 0; i < res.data.question_list.length; i++) {
-            this.chatList.push(res.data.question_list[i])
-          }
-        }
-      })
-    },
-    showDiscussStudent () { // 学生端消息中心学生讨论列表
-      this.axios.request({
-        url: '/index.php/Student/StudentTask/task_list',
-        method: 'get',
-        params: {
-          page_no: 1,
-          page_size: 10000
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          for (let i = 0; i < res.data.list.length; i++) {
-            this.chatList.push(res.data.list[i])
-          }
-        }
-      })
-    },
-    showTopiclistStudent () { // 学生端话题列表
-      this.axios.request({
-        url: '/index.php/Student/Topic/topic_list',
-        method: 'get',
-        params: {
-          page_no: 1,
-          page_size: 10000
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          for (let i = 0; i < res.data.list.length; i++) {
-            this.chatList.push(res.data.list[i])
-          }
-        }
-      })
-    },
+    // showTeacherInfo () { // 学生端消息中心显示消息列表
+    //   this.axios.request({
+    //     url: '/index.php/Student/Task/question_list',
+    //     method: 'get',
+    //     params: {
+    //       page_no: 1,
+    //       page_size: 10000
+    //     }
+    //   }).then(res => {
+    //     if (res.code === 200) {
+    //       for (let i = 0; i < res.data.question_list.length; i++) {
+    //         this.chatList.push(res.data.question_list[i])
+    //       }
+    //     }
+    //   })
+    // },
+    // showDiscussStudent () { // 学生端消息中心学生讨论列表
+    //   this.axios.request({
+    //     url: '/index.php/Student/StudentTask/task_list',
+    //     method: 'get',
+    //     params: {
+    //       page_no: 1,
+    //       page_size: 10000
+    //     }
+    //   }).then(res => {
+    //     if (res.code === 200) {
+    //       for (let i = 0; i < res.data.list.length; i++) {
+    //         this.chatList.push(res.data.list[i])
+    //       }
+    //     }
+    //   })
+    // },
+    // showTopiclistStudent () { // 学生端话题列表
+    //   this.axios.request({
+    //     url: '/index.php/Student/Topic/topic_list',
+    //     method: 'get',
+    //     params: {
+    //       page_no: 1,
+    //       page_size: 10000
+    //     }
+    //   }).then(res => {
+    //     if (res.code === 200) {
+    //       for (let i = 0; i < res.data.list.length; i++) {
+    //         this.chatList.push(res.data.list[i])
+    //       }
+    //     }
+    //   })
+    // },
     showProblemStudent () {
-      this.showTeacherInfo()
-      this.showDiscussStudent()
-      this.showTopiclistStudent()
+      this.showStudent_messgess()
+      // this.showTeacherInfo()
+      // this.showDiscussStudent()
+      // this.showTopiclistStudent()
     },
     sendInfo () {
       if (this.discussinfo === '') {
@@ -1721,6 +1799,7 @@ export default {
     },
     sendInfoTeacher () { // 教师端个人发送信息
       sendInfoTeacher(this.sendId, this.discussinfo).then(res => {
+        console.log(res);
         if (res.code === 200) {
           this.resetDiscussInfo()
           this.getProblemDiscuss()
@@ -1957,7 +2036,7 @@ export default {
       } else if (this.currentTab === '个人信息') {
         this.currentSelect = ''
         this.course_namet = 'userInfoCenter'
-      } else if (this.currentTab === '作业批改') {
+      } else if (this.currentTab === '批改') {
         this.currentSelect = ''
         this.course_namet = 'correct'
       } else {
@@ -1995,6 +2074,11 @@ export default {
     }
     this.setHomeRoute(routers)
     this.$store.state.user.userInfo.userType === 2 ? this.getUnreadMessageCount() : this.sendunread()
+  },
+  // 最后在beforeDestroy()生命周期内清除定时器：
+  beforeDestroy () {
+    clearInterval(this.timer);
+    this.timer = null;
   }
 }
 </script>

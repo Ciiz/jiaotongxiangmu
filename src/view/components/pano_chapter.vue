@@ -3,12 +3,12 @@
     <Row>
       <Button size="small" @click="edit('')" type="success" icon="md-add" v-if="pano_editable">新增</Button>
     </Row>
-    <div  class="chapter-item" v-for="(item,index) in chapters" :key="item.id" @click.stop="detail(item)">
+    <div class="chapter-item" v-for="(item,index) in chapters" :key="item.id" @click.stop="detail(item)">
       <div class="img">
         <img :src="item.img" alt />
       </div>
       <div class="content" style="height:initial">
-        <Button type="primary" size="small"  v-if="pano_editable"  @click.stop="edit(item)">编辑</Button>
+        <Button type="primary" size="small" v-if="pano_editable" @click.stop="edit(item)">编辑</Button>
         <Button type="error" size="small" @click.stop="del(item,index)" v-if="pano_editable">删除</Button>
         <p style="height:36px">第{{item.sort}}章：{{item.pano_name}}</p>
       </div>
@@ -17,8 +17,11 @@
     <Row>
       <Modal v-model="modal" :title="title" :footer-hide="footerHide" :width="modal_width" :fullscreen="true">
         <Krpano :pano_id="target_id" v-if="target === 'krpano' && modal" :editable.sync="pano_editable"></Krpano>
-        <KrpanoVideo :pano_id="target_id" v-if="target === 'krpano_video' && modal" :editable.sync="pano_editable" @success="modal = false ; getData()"></KrpanoVideo>
-        <inCourseDetail v-if="modal&&target==='showAllCourseDetail'" @closeCourseDetail="closeCourseDetail" :showAllCourseDetailId="showAllCourseDetailId" :showAllCourseDetailCId='showAllCourseDetailCId' :showAllCourseDetailEdit='pano_editable' :showAllCourseDetailType='showAllCourseDetailType'></inCourseDetail>
+        <KrpanoVideo :pano_id="target_id" v-if="target === 'krpano_video' && modal" :editable.sync="pano_editable"
+          @success="modal = false ; getData()"></KrpanoVideo>
+        <inCourseDetail v-if="modal&&target==='showAllCourseDetail'" @closeCourseDetail="closeCourseDetail"
+          :showAllCourseDetailId="showAllCourseDetailId" :showAllCourseDetailCId='showAllCourseDetailCId'
+          :showAllCourseDetailEdit='pano_editable' :showAllCourseDetailType='showAllCourseDetailType'></inCourseDetail>
         <div v-if="target === 'pano'">
           <Form :modal="pano" v-if="pano.pano_type === 1" :label-width="80">
             <FormItem label="类型">
@@ -34,18 +37,11 @@
               <InputNumber v-model="pano.sort"></InputNumber>
             </FormItem>
             <FormItem label="封面">
-              <ImageUpload
-                v-model="pano.img"
-                :extra="{type: 'pano',token:$store.state.user.token}"
-              ></ImageUpload>
+              <ImageUpload v-model="pano.img" :extra="{type: 'pano',token:$store.state.user.token}"></ImageUpload>
             </FormItem>
             <FormItem label="全景图">
-              <ImageUploadList
-                :extra="{type: 'pano_file',token:$store.state.user.token}"
-                v-model="pano.pano_img_url"
-                :wh_scale="{width: 2, height: 1}"
-                :maxLength="10"
-              ></ImageUploadList>
+              <ImageUploadList :extra="{type: 'pano_file',token:$store.state.user.token}" v-model="pano.pano_img_url"
+                :wh_scale="{width: 2, height: 1}" :maxLength="10"></ImageUploadList>
             </FormItem>
           </Form>
 
@@ -63,27 +59,21 @@
               <InputNumber v-model="pano.sort"></InputNumber>
             </FormItem>
             <FormItem label="封面">
-              <ImageUpload
-                v-model="pano.img"
-                :extra="{type: 'pano',token:$store.state.user.token}"
-              ></ImageUpload>
+              <ImageUpload v-model="pano.img" :extra="{type: 'pano',token:$store.state.user.token}"></ImageUpload>
             </FormItem>
             <FormItem label="视频">
 
-              <FileUpload
-                :fileObj="{url: pano.video_url, name: ''}"
+              <FileUpload :fileObj="{url: pano.video_url, name: ''}"
                 @on-change="(file)=>{pano.video_url = file.url;pano.file_name= file.name}"
-                :extra="{type: 'pano.video',token:$store.state.user.token}"
-                :format="['mp4']"
-              >
+                :extra="{type: 'pano.video',token:$store.state.user.token}" :format="['mp4']">
               </FileUpload>
             </FormItem>
           </Form>
         </div>
         <Spin fix v-if="saving">保存中....请稍后</Spin>
-          <div slot="footer" >
-            <Button @click="store" size="small" type="primary">保存</Button>
-          </div>
+        <div slot="footer">
+          <Button @click="store" size="small" type="primary">保存</Button>
+        </div>
       </Modal>
     </Row>
   </div>
@@ -289,32 +279,32 @@ export default {
 }
 </script>
 <style lang="less">
-  .chapter-item {
-    cursor: pointer;
-    width: 200px;
+.chapter-item {
+  cursor: pointer;
+  width: 200px;
+  overflow: hidden;
+  margin: 10px;
+  display: inline-block;
+  .img {
     overflow: hidden;
-    margin: 10px;
-    display: inline-block;
-    .img {
-      overflow: hidden;
+    width: 100%;
+    height: 100px;
+    img {
       width: 100%;
-      height: 100px;
-      img {
-        width: 100%;
-      }
-    }
-    .content {
-      // height: 42px;
-      padding: 10px;
-      p {
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-      }
-    }
-    &:hover{
-      box-shadow: 1px 2px 3px #ccc;
     }
   }
+  .content {
+    // height: 42px;
+    padding: 10px;
+    p {
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+    }
+  }
+  &:hover {
+    box-shadow: 1px 2px 3px #ccc;
+  }
+}
 </style>

@@ -2,7 +2,7 @@
   <div>
     <div v-if="desc.length !== 0" @click="attend(desc)">
       <div v-for="(course,index) in desc" :key="index">
-        <h4 >{{course.course_name}}</h4>
+        <h4>{{course.course_name}}</h4>
         <p>{{course.class_name}}</p>
         <p>{{course.address}}</p>
         <div v-for="(courseware,index1) in course.coursewares" :key="index1">

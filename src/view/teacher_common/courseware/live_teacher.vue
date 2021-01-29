@@ -484,7 +484,6 @@
                 :targetwork_id="release_id" :target_type='"student_homework_list"'></StudentExamList>
             </Modal>
           </div>
-
           <!-- 测试结果分析 -->
           <Modal v-model="isshowanalyze" title="考试结果分析" footer-hide fullscreen v-show="isgetinfo">
             <div v-if="isshowanalyze">
@@ -614,6 +613,7 @@
             </div>
             <Button type="primary" style="margin: 12px 156px 0 156px;" @click="doAttens">确定</Button>
           </Modal>
+
           <Modal v-model="modal3" title="考勤" width="1000" footer-hide>
             <Attendance v-if="target == 'attend'&& modal3" :teacher_course_list='attenDetailList'
               :teacher_course_id="teacher_course_id" :year="year" :class_ids="class_id" :semester="semester"
@@ -667,7 +667,8 @@ export default {
       collapseVal: [],
       courseTimeList: [], // 考勤时间列表
       attenDetailList: [], // 考勤课时信息
-      year: '',
+      // year: '',
+      year: (new Date().getMonth() + 1) < 3 ? (new Date().getFullYear() - 1) : new Date().getFullYear(),
       semester: '',
       tt: 0,
       modal: false,
@@ -1339,17 +1340,29 @@ export default {
         data: {
         }
       })
-      for (let i = 0; i < res.data.list.length; i++) {
-        if (res.data.list[i].semester === 1) {
-          if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
-            this.semester = 2
-          } else {
-            this.semester = 1
-          }
-        }
+      let top_semester_9 = this.moment(res.data.list[0].term_begins * 1000).format('M')
+      let buttom_semester_3 = this.moment(res.data.list[1].term_begins * 1000).format('M')
+      let now_time = this.moment(Date.parse(time)).format('M')
+      if (now_time < buttom_semester_3 || now_time > top_semester_9) {
+        this.semester = 1
+      } else if (now_time >= buttom_semester_3 && now_time <= top_semester_9) {
+        this.semester = 2
       }
-      console.log(this.semester);
-      this.year = new Date().getFullYear()
+
+
+      // for (let i = 0; i < res.data.list.length; i++) {
+      //   console.log(this.moment(res.data.list[i].term_begins * 1000).format('YYYY-MM-DD'));
+      //   if (res.data.list[i].semester === 1) {
+      //     if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
+      //       this.semester = 2
+      //     } else {
+      //       this.semester = 1
+      //     }
+      //   }
+      // }
+
+      // this.year = new Date().getFullYear()
+
       await this.axios.request({
         method: 'post',
         url: '/home/course/getDayClassTime',
@@ -1360,6 +1373,7 @@ export default {
           courseware_id: this.courseware_id
         }
       }).then(res => {
+        console.log(res);
         this.class_list = res.data.list
         var arr = []
         res.data.list.forEach(v => {
@@ -1598,13 +1612,12 @@ export default {
           course_status: this.course_status
         }
       }).then(res => {
-        // console.log(res);
+        console.log(res);
         if (res.code === 200) {
           this.$store.commit('setcoursedatalist', res.data)
-
           this.teacher_course_id = res.data.courseware_info.teacher_course_id
           let domain = window.location.protocol + '//' + window.location.host
-          this.qrcode(`${domain}/#/live_public?courseware_id=${res.data.courseware_info.id}`)
+          this.qrcode(`${domain}/#/live_public?courseware_id=${res.data.courseware_info.id}&course_id=${res.data.courseware_info.course_id}`)
           this.qrcode2(this.camera_url)
           this.material_list = []
           this.src = res.data.courseware_info.file_url
@@ -1736,6 +1749,8 @@ export default {
       //   this.$Message.error('发送太频繁，休息一下再发送吧')
       //   return false
       // }
+
+
       if (this.msg === '') {
         this.$Message.error('输入内容不能为空')
         return false
@@ -2133,6 +2148,8 @@ export default {
     // }
   },
   mounted () {
+    console.log(this.course_status);
+
     // this.courseware_id = this.$route.query.courseware_id
     // this.class_id = this.$route.query.class_id
     this.getonlineStudent()

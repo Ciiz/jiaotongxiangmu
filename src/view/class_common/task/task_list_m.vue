@@ -3,7 +3,7 @@
     <!-- 课中任务列表 -->
     <Table :data="list" size="small" :columns="columns"></Table>
     <Modal v-model="modal" :title="title" width="800" footer-hide :mask-closable="false">
-      <Task :student_task_id="target_id" v-if="target === 'task'"></Task>
+      <Task :student_task_id="target_id" v-if="target === 'task'" @modal_close='modal_close'></Task>
       <TeamDiscussion :student_task_id="target_id" ref="team_discussion" v-if="target === 'team_discussion'">
       </TeamDiscussion>
     </Modal>
@@ -58,7 +58,7 @@ export default {
           title: '操作',
           align: 'center',
           render: (h, params) => {
-            console.log(params);
+
             return (
               <div style="text-align:center">
                 <Button size="small" type="primary" style="margin:2px 0" onClick={() => { this.open('task', params.row.id, '任务详情') }}>查看</Button>
@@ -80,7 +80,9 @@ export default {
   },
 
   methods: {
-
+    modal_close (data) {
+      this.modal = data
+    },
     getData () {
       if (!this.student_courseware_id) {
         return false

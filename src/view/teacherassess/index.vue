@@ -11,7 +11,7 @@
         <Option v-for="classitem in class_list" :value="classitem.value" :key="classitem.value">{{ classitem.label }}
         </Option>
       </Select>
-      <span class="gray-c8">课时：</span>
+      <span class="gray-c8">章节：</span>
       <Select class="new-searchSel" v-model="section_choose" placeholder="全部" clearable style="margin-right:30px">
         <Option v-for="(sectionitem,index) in section_list" :value="sectionitem.id" :key="sectionitem.id">
           {{index !== 0 ? '第' + sectionitem.sort + '课时' : sectionitem.sort}}</Option>
@@ -101,6 +101,7 @@ export default {
         }
       }
       this.section_list = allArr
+      console.log(this.section_list);
       this.section_choose = ''
     },
     section_choose (newval) {
@@ -136,9 +137,10 @@ export default {
           align: 'center',
           minWidth: 250,
           render: (h, params) => {
+            let row = params.row
             return (
-              <div>
-
+              <div class="align-top">
+                <span class="blue-cg">{row.sort}</span>
               </div>
             )
           }
@@ -212,7 +214,8 @@ export default {
     },
     exportData () {
       this.$refs.selection.exportCsv({
-        filename: `${this.currentStudent}`
+        filename: `${this.currentStudent}`,
+
       })
     },
     getInfo () {
@@ -259,6 +262,7 @@ export default {
           for (let i in data) {
             this.course_list.push(data[i])
           }
+          console.log(this.course_list);
         }
         this.loading = false
       })
@@ -267,13 +271,17 @@ export default {
       for (let i = 0; i < document.getElementsByClassName('watcheva-l-li').length; i++) {
         document.getElementsByClassName('watcheva-l-li')[i].style.background = '#CCCCCC'
       }
+
       e.currentTarget.style.background = '#ffffff'
       this.currentStudent = item.name
+
       this.student_course_id = item.student_course_id
     },
     getData () {
       this.loading = true
       student_course_score(this.student_course_id).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           this.list = Object.values(res.data.courseware)
         }

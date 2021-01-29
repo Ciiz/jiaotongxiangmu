@@ -18,10 +18,8 @@
         </mt-field>
         <mt-radio v-model="test" :options="options">
         </mt-radio>
-        <!-- <mt-radio title="radio list" v-model="value" :options="['optionA', 'optionB', 'optionC']">
-        </mt-radio> -->
       </div>
-      <div class="qrecode_submit"><span @click="submit">提交</span></div>
+      <div class="qrecode_submit" @click="submit"><span>提交</span></div>
     </div>
     <mt-popup v-model="popupVisible" v-if="popupVisible===true" popup-transition="popup-fade" closeOnClickModal="true"
       position="bottom" style="width:100%">
@@ -36,6 +34,7 @@
   </div>
 </template>
 <script>
+import { Toast } from 'mint-ui';
 // import axios from './loginaxios'
 export default {
   data () {
@@ -104,6 +103,27 @@ export default {
           attendance_ids: this.attendance_ids
         }
       }).then(res => {
+        if (this.selectName.trim() === '') {
+          Toast({
+            message: '请选择院校！',
+            duration: 2000
+          })
+          return
+        }
+        if (this.number.trim() === '' || this.password.trim() === '' || this.username.trim() === '') {
+          Toast({
+            message: '内容不能为空！',
+            duration: 2000
+          })
+          return
+        }
+        if (this.showTest === '') {
+          Toast({
+            message: '请选择用户类型！',
+            duration: 2000
+          })
+          return
+        }
         // if (res.code === 200) {
         //   alert('成功')
         //   this.$router.push({ name: 'sucess_tip' })

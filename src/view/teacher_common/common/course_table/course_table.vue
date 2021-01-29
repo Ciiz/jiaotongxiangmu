@@ -3,11 +3,11 @@
     <Row style="margin-bottom:20px;">
       <InputNumber v-model="year" style="width: 100px" size="small" @on-change="getCourseTable()"></InputNumber>
       &nbsp;年&nbsp;
-      <Select v-model="semester" size="small" style="width:100px;" @on-change="getCourseTable()">
+      <Select v-model="semester" size="small" style="width:115px;" @on-change="getCourseTable()">
         <!-- <Option :value="2">上半年</Option>`
         <Option :value="1">下半年</Option>` -->
-        <Option :value="2">下学期</Option>`
-        <Option :value="1">上学期</Option>`
+        <Option :value="2">下学期(上半年)</Option>`
+        <Option :value="1">上学期(下半年)</Option>`
       </Select>
       课程选择:
       <Select v-model="teacher_course_id" style="width: 200px" size="small" clearable
@@ -44,7 +44,7 @@
         </Select>
         <Select v-model="item.class_no" placeholder="第几节" multiple style="width:230px"
           @on-change="handlecourseTableChange">
-          <Option v-for="c_n in 12" :key="(c_n)" :value="c_n">第{{c_n}}节</Option>
+          <Option v-for="c_n in 12" :key="(c_n)" :value="c_n">第{{c_n}}节 </Option>
         </Select>
         <Input v-model="item.address" placeholder="上课地点" style="width:150px" @on-change="handlecourseTableChange" />
         <Select v-model="item.class" placeholder="班级" style="width:150px" @on-change="handlecourseTableChange">
@@ -71,8 +71,17 @@
           <td v-for="(col,index1) in row" :rowspan="col.rowspan" :colspan="col.colspan" :key="index1"
             :class="col.style">
             <div>
-              <div v-if="col.col === 1" v-html="col.class_no ? `第${col.class_no}节` : '&nbsp;'"
-                :class="{item: row.class_no ? ture : false}"> </div>
+              <div v-if="col.col === 1" :class="{item: row.class_no ? ture : false}">
+                <span>{{col.class_no ? `第${col.class_no}节` : '&nbsp;'}}</span>
+                <p v-if="col.class_no">
+                  <span v-for="(v,i) in classtime_list" :key="i">
+                    <span v-if="v.id==col.class_no">
+                      时间:{{v.time}}
+                    </span>
+                  </span>
+                </p>
+                <p v-else></p>
+              </div>
               <render-desc v-else :teacher_course_id="teacher_course_id" :desc="col.desc" class="item"></render-desc>
             </div>
           </td>
@@ -113,8 +122,10 @@ export default {
   components: {
     renderDesc
   },
+  props: ['course_ids'],
   data () {
     return {
+      value_time: '',
       week: 1,
       tableHead: [
         '节/星期', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'
@@ -125,6 +136,7 @@ export default {
       weekData: [], // 当前周的数据
       maxWeek: 30,
       year: (new Date().getMonth() + 1) < 3 ? (new Date().getFullYear() - 1) : new Date().getFullYear(),
+      // year: new Date().getFullYear(),
       semester: '',
       loading: false,
       curDate: this.moment().format('YYYY-M-D'),
@@ -138,7 +150,8 @@ export default {
       teacher_course_id: '',
       timetable_data: [],
       teacher_course: {},
-      editable: false
+      editable: false,
+      classtime_list: []
     }
   },
   computed: {
@@ -164,6 +177,29 @@ export default {
     }
   },
   methods: {
+    async gettable_time () {
+      console.log(this.semester);
+      let res = await this.axios.request({
+        url: 'home/course/classtime_list',
+        method: 'get',
+        params: {
+          page: 1,
+          pagesize: 20,
+          year: this.year,
+          semester: this.semester,
+          teacher_course_id: this.teacher_course_id
+        }
+      })
+      this.classtime_list = res.data.data.classtime
+    },
+    handleOk () {
+      console.log(this.value_time);
+    },
+    handleChange (time) {
+      this.value_time = time;
+      console.log(this.value_time);
+
+    },
     handleWeekChange (action) {
       if (action === 'minus' && this.week > 1) {
         this.week--
@@ -178,11 +214,11 @@ export default {
       let _this = this
       _this.loading = true
       get_course_table(this.teacher_course_id, this.year, this.semester).then(res => {
-        console.log(res);
         if (res.code === 200) {
           this.course_table = res.data.course_table
           this.timetable_data = res.data.timetable_data
           _this.getDateWeek(_this.semester).then(week => {
+
             _this.week = week
             _this.getData(this.formatData(this.course_table, this.timetable_data))
             _this.loading = false
@@ -284,6 +320,8 @@ export default {
       })
       _this.weekData = _this.getWeekData(_this.tableData, this.week)
       _this.rowData = _this.getRowData()
+
+
       _this.dealTimetableData()
     },
     getDateWeek (semester) { // 获取当前日期是当前学期的第几周
@@ -296,34 +334,36 @@ export default {
       return new Promise((resolve, reject) => {
         get_term_begin(this.teacher_course_id, this.year, semester).then(res => {
           if (res.code === 200 && res.data.term_begins !== 1) {
-            let yy = this.year
             let mm = new Date().getMonth() + 1
+            let yy
+            if (mm < 3) {
+              yy = this.year + 1
+            } else {
+              yy = this.year
+            }
             let dd = new Date().getDate()
             let date1 = new Date(yy + '-' + mm + '-' + dd)
             let date2 = new Date(res.data.term_begins * 1000)
             let d
-            if (this.semester === 1) {
+            if (this.semester === 1) { //上
               if (mm > 9 || mm < 3) {
                 d = Math.round((date1.valueOf() - date2.valueOf()) / 86400000)
 
-                console.log(d);
               } else {
                 d = 1
               }
-            } else {
+            } else {//下
+              d = Math.round((date1.valueOf() - date2.valueOf()) / 86400000)
               if (mm <= 9 && mm >= 3) {
-                console.log(date2.valueOf());
-
                 d = Math.round((date1.valueOf() - date2.valueOf()) / 86400000)
               } else {
                 d = 1
               }
             }
             let week = Math.ceil((d + ((date2.getDay() + 1) - 1)) / 7)
-
-
             this.curWeek = week
             this.term_begins = res.data.term_begins
+
             this.dealTableHeader(this.curWeek)
             resolve(week)
           } else {
@@ -337,6 +377,9 @@ export default {
             reject('获取开学日期失败,默认第一周')
           }
         })
+        // if (mm < 3) {
+        //   this.year = this.year - 1
+        // }
       })
     },
     getSemter () { // 获取当前学期
@@ -347,14 +390,14 @@ export default {
         data: {
         }
       }).then(res => {
-        for (let i = 0; i < res.data.list.length; i++) {
-          if (res.data.list[i].semester === 1) {
-            if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
-              this.semester = 2
-            } else {
-              this.semester = 1
-            }
-          }
+        console.log(res);
+        let top_semester_9 = this.moment(res.data.list[0].term_begins * 1000).format('M')
+        let buttom_semester_3 = this.moment(res.data.list[1].term_begins * 1000).format('M')
+        let now_time = this.moment(Date.parse(time)).format('M')
+        if (now_time < buttom_semester_3 || now_time > top_semester_9) {
+          this.semester = 1
+        } else if (now_time >= buttom_semester_3 && now_time <= top_semester_9) {
+          this.semester = 2
         }
       })
     },
@@ -385,6 +428,7 @@ export default {
           arr.push(col_arr)
         }
       }
+      console.log(arr);
       return arr
     },
     getWeekData (data, week) { // 获取当周的数据
@@ -565,6 +609,8 @@ export default {
         course_table_data: this.course_table
       }
       save_course_table(data).then(res => {
+        console.log(res);
+
         if (res.code === 200) {
           this.$Message.success(res.message)
         }
@@ -572,6 +618,10 @@ export default {
     }
   },
   mounted () {
+    setTimeout(() => {
+      this.gettable_time()
+    }, 500)
+    this.teacher_course_id = this.course_ids
     this.getSemter()
     this.getClassList()// 比getCourseTable获取慢会报错
     this.getTeacherCourseList()

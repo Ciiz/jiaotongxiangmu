@@ -28,7 +28,7 @@
 <script>
 import courseDetail from '@/view/teacher_common/course/course_detail.vue'
 import modal_mixin from '@/view/mixins/modal_mixin'
-
+import log from 'video.js/es5/utils/log'
 export default {
   components: {
     courseDetail
@@ -52,6 +52,8 @@ export default {
       this.$emit('showAllCourseDetail', i, t, d, ci)
     },
     action (item, type) {
+      console.log(item);
+
       let url = ''
       let title = ''
       switch (type) {
@@ -89,6 +91,7 @@ export default {
             url,
             data: { course_id: item.id }
           }).then(res => {
+            console.log(res);
             if (res.code === 200) {
               this.$Message.success(res.message)
               if (this.course.release_status === 0) {
@@ -143,6 +146,10 @@ export default {
     course () {
       return this.$store.state.user.courseData
     }
+  },
+  mounted () {
+    console.log(this.course);
+
   }
 }
 </script>

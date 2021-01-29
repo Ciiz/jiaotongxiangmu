@@ -1,32 +1,19 @@
 <template>
-    <div>
-        <Progress :percent="percent" v-if="progress_show && percent !== 0"></Progress>
-        <Upload
-          :ref="upload_file"
-          :format="format"
-          :max-size="maxsize"
-          name='file'
-          style="display:inline-block;"
-          :action="action_url"
-          :on-success="success"
-          :on-progress='progress'
-          :on-error="error"
-          :before-upload="beforeupload"
-          :on-remove="onremove"
-          :on-format-error="formaterror"
-          :on-exceeded-size="exceededsize"
-          :show-upload-list="showlist"
-          :data="data_type"
-        >
-          <div v-if="krpano !== true">
-            <Button type="primary">{{btnname}}</Button>
-          </div>
-          <div v-else>
-            <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-            <p>{{btnname}}（支持拖拽上传或者点击选择文件上传）</p>
-          </div>
-        </Upload>
-    </div>
+  <div>
+    <Progress :percent="percent" v-if="progress_show && percent !== 0"></Progress>
+    <Upload :ref="upload_file" :format="format" :max-size="maxsize" name='file' style="display:inline-block;"
+      :action="action_url" :on-success="success" :on-progress='progress' :on-error="error" :before-upload="beforeupload"
+      :on-remove="onremove" :on-format-error="formaterror" :on-exceeded-size="exceededsize" :show-upload-list="showlist"
+      :data="data_type">
+      <div v-if="krpano !== true">
+        <Button type="primary">{{btnname}}</Button>
+      </div>
+      <div v-else>
+        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+        <p>{{btnname}}（支持拖拽上传或者点击选择文件上传）</p>
+      </div>
+    </Upload>
+  </div>
 </template>
 <script>
 import upload_mixin from '_c/mixins/upload_mixin'
@@ -65,10 +52,10 @@ export default {
       type: Object,
       token: String
     },
-    needprogress: {
-      type: Boolean,
-      default: false
-    }
+    // needprogress: {
+    //   type: Boolean,
+    //   default: false
+    // }
   },
   data () {
     return {
@@ -77,11 +64,13 @@ export default {
       progress_show: false
     }
   },
-  created () {
-    this.progress_show = this.needprogress
-  },
+  // created () {
+  //   this.progress_show = this.needprogress
+  // },
   methods: {
     progress (e, res) {
+
+      this.progress_show = true
       if (this.progress_show) {
         this.percent = e.percent
       }
@@ -117,6 +106,7 @@ export default {
     },
     success (res, file) {
       if (res.code === 200) {
+        this.$Message.success('上传成功！')
         this.$emit('upload_file_success', res)
       }
     }

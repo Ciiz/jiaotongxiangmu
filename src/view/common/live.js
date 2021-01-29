@@ -10,7 +10,7 @@ export default {
   methods: {
     initChat () {
       var _this = this
-      _this.ws = new WebSocket(this.$config.gatewayWrokerHost)
+      _this.ws = new WebSocket(this.$config.gatewayWrokerHost)  //直播，聊天的gatewayworker地址
       _this.ws.onopen = () => {
         this.intervalId = setInterval(() => { // 心跳检测
           _this.ws.send('heart beat\n')
@@ -19,7 +19,7 @@ export default {
       _this.ws.onmessage = e => {
         // json数据转换成js对象
         let data = JSON.parse(e.data)
-        console.log(data);
+        // console.log(data);
 
         this.handleOnMessage(data)
         this.getHistory = false
@@ -183,7 +183,7 @@ export default {
     }
   },
   mounted () {
-    console.log(this.userType);
+    // console.log(this.userType);
 
   }
 

@@ -56,7 +56,7 @@ export default {
           render: (h, params) => {
             return (
               <div>
-                <img src={params.row.img} width='50' height='50' style='margin-top:5px;'/>
+                <img src={params.row.img} width='50' height='50' style='margin-top:5px;' />
               </div>
             )
           }

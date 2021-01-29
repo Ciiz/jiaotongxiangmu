@@ -3,9 +3,9 @@
     <Row style="margin-bottom:20px;">
       <InputNumber v-model="year" style="width: 100px" size="small" @on-change="getCourseTable()"></InputNumber>
       &nbsp;年&nbsp;
-      <Select v-model="semester" size="small" style="width:100px;">
-        <Option :value="2">上半年</Option>`
-        <Option :value="1">下半年</Option>`
+      <Select v-model="semester" size="small" style="width:115px;">
+        <Option :value="1">上学期(下半年)</Option>`
+        <Option :value="2">下学期(上半年)</Option>`
       </Select>
       <div style="float:right;">
         <Button @click="handleWeekChange('minus')" size="small">上一周</Button>
@@ -233,9 +233,15 @@ export default {
       */
       return new Promise((resolve, reject) => {
         get_term_begin(this.teacher_course_id, this.year, semester).then(res => {
+          console.log(res.data.term_begins);
           if (res.code === 200 && res.data.term_begins !== 1) {
-            let yy = this.year
             let mm = new Date().getMonth() + 1
+            let yy
+            if (mm < 3) {
+              yy = this.year + 1
+            } else {
+              yy = this.year
+            }
             let dd = new Date().getDate()
             let date1 = new Date(yy + '-' + mm + '-' + dd)
             let date2 = new Date(res.data.term_begins * 1000)
@@ -344,15 +350,29 @@ export default {
         data: {
         }
       }).then(res => {
-        for (let i = 0; i < res.data.list.length; i++) {
-          if (res.data.list[i].semester === 1) {
-            if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
-              this.semester = 2
-            } else {
-              this.semester = 1
-            }
-          }
+        let top_semester_9 = this.moment(res.data.list[0].term_begins * 1000).format('M')
+        let buttom_semester_3 = this.moment(res.data.list[1].term_begins * 1000).format('M')
+        let now_time = this.moment(Date.parse(time)).format('M')
+        if (now_time < buttom_semester_3 || now_time > top_semester_9) {
+          this.semester = 1
+        } else if (now_time >= buttom_semester_3 && now_time <= top_semester_9) {
+          this.semester = 2
         }
+        // for (let i = 0; i < res.data.list.length; i++) {
+        //   if (res.data.list[i].semester === 1) {
+        //     if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
+        //       this.semester = 2
+        //     } else {
+        //       this.semester = 1
+        //     }
+        //   }
+        // }
+        // let mm = new Date().getMonth() + 1
+        // if (mm >= 3 && mm <= 9) {
+        //   this.semester = 2
+        // } else {
+        //   this.semester = 1
+        // }
       })
     },
     dealTimetableData () { // 处理后的课表数据

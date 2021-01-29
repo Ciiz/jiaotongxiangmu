@@ -155,10 +155,11 @@ export default {
           formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
+          // bottom: 10,
+          // left: 'center',
           orient: 'vertical',
           right: 'right',
-          // bottom: 10,
-          // data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+          // data: ['直接访问', '邮件营销', '联盟广告',]
           data: this.major
         },
         series: [
@@ -166,7 +167,7 @@ export default {
             name: '专业名称',
             type: 'pie',
             radius: '55%',
-            center: ['40%', '50%'],
+            center: ['50%', '50%'],
             data: this.majorlist,
             emphasis: {
               itemStyle: {
@@ -208,7 +209,6 @@ export default {
   mounted () {
 
     loveMe().then(res => {
-      console.log(res)
       this.fanList = res.data.data.student
       this.majorlist = res.data.data.major.map(v => {
         return {

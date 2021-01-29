@@ -4,7 +4,7 @@
       <div class="select-course-header-l">
         <span class="select-course-header-l-title">添加自选课程</span>
         <span class="select-course-header-l-ib">
-          <Input class="new-searchSel" placeholder="请输入课程关键词"  v-model="keyword"></Input>
+          <Input class="new-searchSel" placeholder="请输入课程关键词" v-model="keyword"></Input>
           <button class="blue-btn" style="transform: translate(-22px,2px)" @click="selectbtn">搜索</button>
           <span class="gray-c8">专业：</span>
           <Select class="new-searchSel" v-model="classid" placeholder="班级" clearable style="margin-right:30px">
@@ -25,15 +25,16 @@
             <li v-for="(item,index) in course_list" :key="index">
               <Row type="flex" justify="space-between">
                 <Col>
-                  <img :src="item.img" style="width:88px;height:88px;margin-right:20px"/>
+                <img :src="item.img" style="width:88px;height:88px;margin-right:20px" />
                 </Col>
                 <Col class="select-course-content-li-r">
-                  <div>{{item.course_name}}</div>
-                  <div class="gray-c8">类型：{{item.course_type===1?"普通课程":"全景课程"}}</div>
-                  <div>
-                    <button class="blackBorderCC-btn" style="margin-right:10px;color:#888888" @click="showCourse(item)">课程信息</button>
-                    <button class="blue-btn" @click="handlebind(item)">绑定课程</button>
-                  </div>
+                <div>{{item.course_name}}</div>
+                <div class="gray-c8">类型：{{item.course_type===1?"普通课程":"全景课程"}}</div>
+                <div>
+                  <button class="blackBorderCC-btn" style="margin-right:10px;color:#888888"
+                    @click="showCourse(item)">课程信息</button>
+                  <button class="blue-btn" @click="handlebind(item)">绑定课程</button>
+                </div>
                 </Col>
               </Row>
             </li>

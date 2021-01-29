@@ -2,31 +2,40 @@
   <div>
     <Row class="search-bar">
       搜索课程：
-      <Input type="text" v-model="keyword" placeholder="请输入搜索内容"  style="width:200px">
-        <Icon type="ios-search" slot="suffix" @click="getData(true)"/>
+      <Input type="text" v-model="keyword" placeholder="请输入搜索内容" style="width:200px">
+      <Icon type="ios-search" slot="suffix" @click="getData(true)" />
       </Input>
       <slot name="search-bar"></slot>
-      <div style="display:inline-block;margin-left: 10px;margin-right:10px" >
-        <RadioGroup v-model="bind_type" type="button" v-if="editable" >
+      <div style="display:inline-block;margin-left: 10px;margin-right:10px">
+        <RadioGroup v-model="bind_type" type="button" v-if="editable">
           <Radio :label="4">所有</Radio>
           <Radio :label="1">被分配</Radio>
           <Radio :label="2">自选</Radio>
           <Radio :label="3">自建</Radio>
         </RadioGroup>
       </div>
-      <Button  type="success" icon="md-hand" @click="open('course_choose_list', '', '选择课程')" v-show="bind_type === 2">选择课程</Button>
-      <Button  type="success" icon="md-add" @click="open('course_detail_edit', '', '新建课程')" v-show="bind_type === 3">新增课程</Button>
+      <Button type="success" icon="md-hand" @click="open('course_choose_list', '', '选择课程')"
+        v-show="bind_type === 2">选择课程</Button>
+      <Button type="success" icon="md-add" @click="open('course_detail_edit', '', '新建课程')"
+        v-show="bind_type === 3">新增课程</Button>
     </Row>
-  <Table :loading="loading" ref="selection" :columns="columns" :data="list" :height="$store.state.app.tableHeight"></Table>
-  <Row class="table-bottom-teacher">
-    <page :total="total" :current="page" style="text-align:center;" :page-size="page_size" size="small" @on-change="(page) => {this.page =  page , this.getData()}"  :placement="'top'"></page>
-  </Row>
-    <Modal v-model="modal" :title="title" :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen" :mask-closable='false'>
-      <courseDetailEdit :course_id="target_id" v-if="target === 'course_detail_edit' && modal" @success="getData()"></courseDetailEdit>
+    <Table :loading="loading" ref="selection" :columns="columns" :data="list" :height="$store.state.app.tableHeight">
+    </Table>
+    <Row class="table-bottom-teacher">
+      <page :total="total" :current="page" style="text-align:center;" :page-size="page_size" size="small"
+        @on-change="(page) => {this.page =  page , this.getData()}" :placement="'top'"></page>
+    </Row>
+    <Modal v-model="modal" :title="title" :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen"
+      :mask-closable='false'>
+      <courseDetailEdit :course_id="target_id" v-if="target === 'course_detail_edit' && modal" @success="getData()">
+      </courseDetailEdit>
       <courseDetail :course_id="target_id" v-if="target === 'course_detail'"></courseDetail>
-      <courseStudents :teacher_course_id="target_id" v-if="target === 'course_students' && modal" @close="modal = false"></courseStudents>
-      <courseChooseList :course_id="target_id" v-if="target === 'course_choose_list' && modal" @bind-success="getData()"></courseChooseList>
-      <attendance-list :teacher_course_id="target_id" v-if="target === 'attendance_list' && modal" @bind-success="getData()"></attendance-list>
+      <courseStudents :teacher_course_id="target_id" v-if="target === 'course_students' && modal"
+        @close="modal = false"></courseStudents>
+      <courseChooseList :course_id="target_id" v-if="target === 'course_choose_list' && modal"
+        @bind-success="getData()"></courseChooseList>
+      <attendance-list :teacher_course_id="target_id" v-if="target === 'attendance_list' && modal"
+        @bind-success="getData()"></attendance-list>
     </Modal>
   </div>
 </template>
@@ -38,7 +47,7 @@ import courseDetail from '@/view/teacher_common/course/course_detail.vue'
 import courseStudents from '@/view/teacher_common/course/course_students.vue'
 import courseChooseList from '@/view/teacher_common/course/course_choose_list.vue'
 import AttendanceList from '@/view/teacher_common/attendance/attendance_list.vue'
-export default{
+export default {
   props: {
     bind_type: '',
     editable: Boolean
@@ -68,7 +77,7 @@ export default{
                   setTimeout(() => {
                     params.row.style = this.imgtest(e.path[0].width, e.path[0].height)
                   }, 0)
-                }} class={`img_${params.row.style}`}/>
+                }} class={`img_${params.row.style}`} />
               </div>
             )
           }

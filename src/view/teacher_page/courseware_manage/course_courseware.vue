@@ -21,7 +21,7 @@ export default {
   },
   watch: {
     t_id (n, o) {
-      this.getTeacherCourseList()
+      // this.getTeacherCourseList()
     }
   },
   // 从vuex仓库获取数据，用computed来监听，可以避免刷新页面时候的异步时间差问题
@@ -32,25 +32,26 @@ export default {
   },
   mixins: [modal_mixin],
   methods: {
-    getTeacherCourseList () {
-      this.loading = true
-      this.axios.request({
-        method: 'get',
-        url: '/index.php/Teacher/Courseware/index',
-        params: {
-          teacher_course_id: this.t_id
-          // release_status: 1
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          this.loading = false
-          this.teacher_course_list = res.data.course_list
-        }
-      })
-    }
+    // getTeacherCourseList () {
+    //   this.loading = true
+    //   this.axios.request({
+    //     method: 'get',
+    //     url: '/index.php/Teacher/Courseware/index',
+    //     params: {
+    //       teacher_course_id: this.t_id
+    //       // release_status: 1
+    //     }
+    //   }).then(res => {
+    //     if (res.code === 200) {
+    //       this.loading = false
+    //       this.teacher_course_list = res.data.course_list
+    //     }
+    //   })
+    // }
   },
   mounted () {
-    this.getTeacherCourseList()
+
+    // this.getTeacherCourseList()
   }
 }
 </script>

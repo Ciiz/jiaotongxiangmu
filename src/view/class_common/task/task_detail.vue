@@ -13,11 +13,12 @@
             <Editor v-model="student_task.submit_content" :is_init.sync="editor_init">
             </Editor>
             <FileUpload :fileObj="{url: student_task.file_url, name: student_task.file_name}"
+              @handleprogress='handleprogress'
               @on-change="(file)=>{student_task.file_url = file.url; student_task.file_name= file.name}"
               :extra="{type: 'task',token:$store.state.user.token}">
             </FileUpload>
             <Button style="float:right;margin-top:15px;" size="small" type="primary" @click="submitTask"
-              :disabled="student_task.score_status === 1">{{submitTxt}}</Button>
+              :disabled="score_status_show === 1">{{submitTxt}}</Button>
           </Row>
         </div>
         <Row v-if="student_task.is_team_leader">
@@ -53,6 +54,7 @@ export default {
   },
   data () {
     return {
+      score_status_show: '',
       tab: 'task',
       members: [],
       is_show: false,
@@ -68,10 +70,10 @@ export default {
   computed: {
     submitTxt () {
       let txt = '提交'
-      if (this.student_task.submit_status === 1 && this.student_task.score_status === 0) {
+      if (this.student_task.submit_status === 1 && this.score_status_show === 0) {
         txt = '修改'
       }
-      if (this.student_task.submit_status === 1 && this.student_task.score_status === 1) {
+      if (this.student_task.submit_status === 1 && this.score_status_show === 1) {
         txt = '已评分了,不能修改'
       }
       return txt
@@ -83,6 +85,9 @@ export default {
     },
   },
   methods: {
+    handleprogress (e) {
+
+    },
     getStudentTask () {
       if (!this.student_task_id) {
         return false
@@ -98,12 +103,11 @@ export default {
           }
         })
         .then(res => {
-          // console.log(res);
+          console.log(res);
           let data = res.data
           if (res.code === 200) {
             _this.student_task = data.student_task
-            console.log(_this.student_task);
-
+            this.score_status_show = data.student_task.score_status
             if (!data.student_task) { // 没有课中任务
               _this.student_task = ''
               return false
@@ -122,8 +126,6 @@ export default {
         })
     },
     submitTask () {
-      console.log(this.$store.state.user.teacher_id_task);
-
       let _this = this
       _this.axios.request({
         method: 'post',
@@ -141,9 +143,9 @@ export default {
         }
       }).then(res => {
         console.log(res);
-
         if (res.code === 200) {
           _this.$Message.success(res.message)
+          this.$emit('modal_close', false)
         }
       })
     }

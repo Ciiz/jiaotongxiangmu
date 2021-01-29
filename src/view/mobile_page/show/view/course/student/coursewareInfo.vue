@@ -13,8 +13,10 @@
           <div>{{live_status===0?'未上课':(live_status===2?'已结束':'正在上课')}}</div>
         </div>
         <div><button class="m-b-btn-b" v-if="live_status.toString()==='2'">课堂回顾</button></div>
-        <div><button class="m-b-btn-b" v-if="live_status.toString()==='1'||live_status.toString()==='3'" @click="entryLive(1)">进入</button></div>
-        <div><button class="m-w-btn-b2" v-if="live_status.toString()==='0'||live_status.toString()==='2'" @click="entryLive(2)">查看PDF课件</button></div>
+        <div><button class="m-b-btn-b" v-if="live_status.toString()==='1'||live_status.toString()==='3'"
+            @click="entryLive(1)">进入</button></div>
+        <div><button class="m-w-btn-b2" v-if="live_status.toString()==='0'||live_status.toString()==='2'"
+            @click="entryLive(2)">查看PDF课件</button></div>
       </div>
       <div class="courseTask">
         <div>课前</div>
@@ -103,5 +105,4 @@ export default {
 }
 </script>
 <style>
-
 </style>

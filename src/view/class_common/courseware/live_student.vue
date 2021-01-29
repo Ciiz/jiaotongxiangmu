@@ -169,6 +169,13 @@
               </div>
               <!-- pdf -->
               <div class="live-box-contain" v-if="mode === 'pdf'">
+                <div style="z-index:1000;height:100%;display:flex;justify-content:center;align-items:center;"
+                  v-if="end_stutus">
+                  <div style="display:flex; flex-direction: column;justify-content: center;align-items: center;">
+                    <img src="@/assets/images/teachingSystem/liveend.png" alt="">
+                    <span style="font-size:16px;font-weight: 400;font-family: Microsoft YaHei;">老师暂时不在线啦~</span>
+                  </div>
+                </div>
                 <div class="pdfcard" ref="pdfcard" @dblclick="fullScreen('pdf')">
                   <div id="pdf" v-if="unpdf" style="align-self:center">
                     <!-- 弹幕组件：vue-baberrage -->
@@ -411,6 +418,7 @@ export default {
   },
   data () {
     return {
+      end_stutus: false,
       student_courseware_id: this.$route.query.student_courseware_id,
       mode: this.$route.query.mode,
       unpdf: true, // 判断src是否为pdf，true：是
@@ -978,6 +986,28 @@ export default {
         }
       })
     },
+    // 获取老师在线状态
+    get_status_teacher () {
+      this.axios.request({
+        method: 'get',
+        url: 'home/websocket/teacherOnline',
+        params: {
+          group: this.group_chat_id
+        }
+      }).then(res => {
+        console.log(res.data.data.teacher.online_type);
+
+        if (res.data.data.teacher.online_type == 1) {
+          this.teacher_staus = '离线'
+          console.log('离线');
+
+        } else if (res.data.data.teacher.online_type == 2) {
+          this.teacher_staus = '在线'
+          console.log('在线');
+        }
+
+      })
+    },
     handleOnMessage (data) {
       if (data.status !== undefined) {
         if (data.status === 'ture') {
@@ -1027,6 +1057,7 @@ export default {
       // this.problem = data.data
       // let _this = this
       // 监听websocket消息
+
       let type = data.type || ''
       switch (type) {
         // Events.php中返回的init类型的消息，将client_id发给后台进行uid绑定
@@ -1040,14 +1071,17 @@ export default {
           }
           break
         case 'online':
-          this.teacher_staus = '在线'
+          setTimeout(() => {
+            this.get_status_teacher()
+          }, 1000)
           break
         case 'offline':
-          this.teacher_staus = '离线'
+          this.end_stutus = true
+          setTimeout(() => {
+            this.get_status_teacher()
+          }, 1000)
           break
         default: {
-
-
           this.addToList(data)
           if (data.target === this.group_chat_id) {
             this.messageList.push(data)
@@ -1202,6 +1236,7 @@ export default {
       } else {
         return false
       }
+
     },
     getLiveHeight () {
       for (let i = 0; i < document.getElementsByClassName('live-btnList-li').length; i++) {
@@ -1214,7 +1249,8 @@ export default {
     this.getStudentCourseware()
   },
   mounted () {
-    console.log(this.$store.state.user.loginstatus);
+
+
     const that = this
     window.onresize = () => {
       return (() => {

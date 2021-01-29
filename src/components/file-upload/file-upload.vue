@@ -1,38 +1,28 @@
 <template>
-    <div class="iconUpload">
-      <Row>
-          <Upload
-              :ref="uploadRef"
-              :show-upload-list="false"
-              :on-success="handleSuccess"
-              :format="format"
-              :on-format-error="handleFormatError"
-              :on-exceeded-size="handleMaxSize"
-              :name="name"
-              :max-size="maxSize"
-              :before-upload="handleBeforeUpload"
-              :action="action_url"
-              :data="extra"
-              >
-            <Button icon="ios-cloud-upload-outline" size="small">上传</Button>
-          </Upload>
-          <Alert show-icon style="margin-top:10px;">支持的类型：{{format.join('、')}}</Alert>
-          <ul class="ivu-upload-list">
-            <li class="ivu-upload-list-file ivu-upload-list-file-finish" v-for="(item,index) in uploadList" :key="index">
-              <template v-if="item.status === 'finished'">
-                <span>
-                  <i class="ivu-icon ivu-icon-ios-film"></i>
-                  <a :href="item.url" target="blank" >{{item | filtFileName}}</a>
-                </span>
-                <i class="ivu-icon ivu-icon-ios-close ivu-upload-list-remove" style="" @click="handleRemove(item)"></i>
-              </template>
-              <template v-else>
-                  <Progress :percent="item.percentage" hide-info></Progress>
-              </template>
-            </li>
-          </ul>
-      </Row>
-    </div>
+  <div class="iconUpload">
+    <Row>
+      <Upload :ref="uploadRef" :show-upload-list="false" :on-success="handleSuccess" :format="format"
+        :on-progress='progress' :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :name="name"
+        :max-size="maxSize" :before-upload="handleBeforeUpload" :action="action_url" :data="extra">
+        <Button icon="ios-cloud-upload-outline" size="small">上传</Button>
+      </Upload>
+      <Alert show-icon style="margin-top:10px;">支持的类型：{{format.join('、')}}</Alert>
+      <ul class="ivu-upload-list">
+        <li class="ivu-upload-list-file ivu-upload-list-file-finish" v-for="(item,index) in uploadList" :key="index">
+          <template v-if="item.status === 'finished'">
+            <span>
+              <i class="ivu-icon ivu-icon-ios-film"></i>
+              <a :href="item.url" target="blank">{{item | filtFileName}}</a>
+            </span>
+            <i class="ivu-icon ivu-icon-ios-close ivu-upload-list-remove" style="" @click="handleRemove(item)"></i>
+          </template>
+          <template v-else>
+            <Progress :percent="item.percentage" hide-info></Progress>
+          </template>
+        </li>
+      </ul>
+    </Row>
+  </div>
 </template>
 <script>
 // 先做单个的
@@ -100,6 +90,10 @@ export default {
   },
   methods: {
     // ==================文件上传==============
+    progress (e) {
+      console.log(e.percent);
+      this.$emit('handleprogress', e.percent)
+    },
     handleRemove (file) {
       const fileList = this.$refs[this.uploadRef].fileList
       this.$refs[this.uploadRef].fileList.splice(fileList.indexOf(file), 1)
@@ -155,43 +149,43 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-  .demo-upload-list{
-    display: inline-block;
-    width: 60px;
-    height: 60px;
-    text-align: center;
-    line-height: 60px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #fff;
-    position: relative;
-    box-shadow: 0 1px 1px rgba(0,0,0,.2);
-    margin-right: 4px;
-  }
-  .demo-upload-list img{
-    width: 100%;
-    height: 100%;
-  }
-  .demo-upload-list-cover{
-    display: none;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0,0,0,.6);
-  }
-  .demo-upload-list:hover .demo-upload-list-cover{
-    display: block;
-  }
-  .demo-upload-list-cover i{
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    margin: 0 2px;
-  }
-  .iconUpload{
-    margin-top:10px;
-  }
+.demo-upload-list {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  margin-right: 4px;
+}
+.demo-upload-list img {
+  width: 100%;
+  height: 100%;
+}
+.demo-upload-list-cover {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+.demo-upload-list:hover .demo-upload-list-cover {
+  display: block;
+}
+.demo-upload-list-cover i {
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 0 2px;
+}
+.iconUpload {
+  margin-top: 10px;
+}
 </style>

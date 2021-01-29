@@ -25,7 +25,6 @@
       <Row type="flex" style="flex:1;overflow:hidden">
         <Col :span="12" style="height:100%;overflow-y:scroll;margin-right:20px;padding:10px;background:#ffffff">
         <div style="border:1px solid #EEEEEE">
-
           <Row v-for="(item,index) in list" :key="index"
             style="color:#666666;font-size:14px;line-height:60px;text-align:center">
             <Col :span="1">{{index+1}}</Col>
@@ -62,6 +61,7 @@
               @click="openEvaluate(item,index)">{{item.score_status===1?'查看':'评价'}}</button>
             </Col>
           </Row>
+          <Row v-if="list.length===0">暂无学生！</Row>
 
         </div>
         </Col>
@@ -115,7 +115,6 @@
             @success="modal = false ; getData()"></StudentExamEvaluate>
           <StudentTaskEvaluate @changeTask='changePage' :taskIndex="currentIndex" :student_task_id="target_id"
             v-if="target === 'student_task_list' && modal" @success="modal = false ; getData()"></StudentTaskEvaluate>
-
           <StudentHomeworkEvaluate @changeHomwork="changePage" :homeworkIndex="currentIndex"
             :student_homework_id="target_id" v-if="target === 'student_homework_list' && modal"
             @success="modal = false ; getData()"></StudentHomeworkEvaluate>

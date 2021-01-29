@@ -21,6 +21,7 @@
         :icon="{url: locationIcon, size: {width: 40, height: 40}}"></bm-marker>
       <bm-local-search :keyword="keyword" :auto-viewport="true" :location="location"></bm-local-search>
     </baidu-map>
+    <Spin size="large" v-if="loading" fix></Spin>
     <Modal v-model="modal" :title="title" :width="modal_width">
       <AttendanceAddress v-if="target === 'address'" @update-list="getAddressList"></AttendanceAddress>
     </Modal>
@@ -63,6 +64,7 @@ export default {
       locationIcon: locationIcon,
       address_id: '',
       address_list: [],
+      loading: false,
 
     }
   },
@@ -70,14 +72,13 @@ export default {
     modalClose () {
       this.$emit('modalClose', false)
     },
-    mapReady: function ({ BMap, map }) {
+    mapReady: function ({ BMap, map }) {  //地图加载完成
       map.enableScrollWheelZoom() // 启用滚轮放大缩小，默认禁用
       map.disableDoubleClickZoom() // 禁用双击放大
       // map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+      this.loading = false
     },
     dragend: function (e) {
-
-
       this.handlePositionChange(e.point.lng, e.point.lat, this.distance_range)
     },
     dbclick: function (e) {
@@ -106,6 +107,7 @@ export default {
     }
   },
   mounted () {
+    this.loading = true
     this.getAddressList()
   }
 }

@@ -10,50 +10,26 @@
     </div>
     <mt-tab-container v-model="submit_status" style="flex:1;overflow-y:scroll;margin-top:3px">
       <mt-tab-container-item id="0">
-        <mt-cell
-          class="m-homework-cell"
-          @click.native="linkTo(item,'homework')"
-          v-for="(item,index) in homeworkList"
-          :key="index"
-          :title="item.homework_name"
-          :label="'发布老师：'+' '+' 截止时间：'+moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')"
-          is-link
-          >
+        <mt-cell class="m-homework-cell" @click.native="linkTo(item,'homework')" v-for="(item,index) in homeworkList"
+          :key="index" :title="item.homework_name"
+          :label="'发布老师：'+' '+' 截止时间：'+moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')" is-link>
           <span slot="icon" class="m-blue-tag">作业</span>
         </mt-cell>
-        <mt-cell
-          @click.native="linkTo2(item)"
-          class="m-homework-cell"
-          v-for="(item,index) in examlist"
-          :key="index"
-          :title="item.exam_name"
-          :label="'发布老师：'+' '+' 截止时间：'+moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')"
-          is-link
-          >
+        <mt-cell @click.native="linkTo2(item)" class="m-homework-cell" v-for="(item,index) in examlist" :key="index"
+          :title="item.exam_name" :label="'发布老师：'+' '+' 截止时间：'+moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')"
+          is-link>
           <span slot="icon" class="m-blue-tag" style="background:#FF7272">测试</span>
         </mt-cell>
       </mt-tab-container-item>
       <mt-tab-container-item id="1">
-        <mt-cell
-          class="m-homework-cell"
-          @click.native="linkTo(item,'homework')"
-          v-for="(item,index) in homeworkList"
-          :key="index"
-          :title="item.homework_name"
-          :label="'发布老师：'+' '+' 截止时间：'+moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')"
-          is-link
-          >
+        <mt-cell class="m-homework-cell" @click.native="linkTo(item,'homework')" v-for="(item,index) in homeworkList"
+          :key="index" :title="item.homework_name"
+          :label="'发布老师：'+' '+' 截止时间：'+moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')" is-link>
           <span slot="icon" class="m-blue-tag">作业</span>
         </mt-cell>
-        <mt-cell
-          class="m-homework-cell"
-          @click.native="linkTo2(item)"
-          v-for="(item,index) in examlist"
-          :key="index"
-          :title="item.exam_name"
-          :label="'发布老师：'+' '+' 截止时间：'+moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')"
-          is-link
-          >
+        <mt-cell class="m-homework-cell" @click.native="linkTo2(item)" v-for="(item,index) in examlist" :key="index"
+          :title="item.exam_name" :label="'发布老师：'+' '+' 截止时间：'+moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm')"
+          is-link>
           <span slot="icon" class="m-blue-tag" style="background:#FF7272">测试</span>
         </mt-cell>
       </mt-tab-container-item>

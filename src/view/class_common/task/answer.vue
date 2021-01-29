@@ -6,36 +6,30 @@
       </div>
       <Row type="flex" class="anwser-task">
         <Col style="margin-right:20px;flex:1">
-          <newtaskDetail :student_task_id="student_task_id"></newtaskDetail>
+        <newtaskDetail :student_task_id="student_task_id"></newtaskDetail>
         </Col>
         <Col style="width:800px;display:flex;flex-direction:column;padding-bottom:90px">
-          <Divider orientation="left"><span class="black-b">作答区</span></Divider>
-            <div v-if="student_task.submit_status===1" style="color:red;margin-bottom:10px">（已提交）</div>
-            <Editor
-              class="new-editor"
-              v-model="student_task.submit_content"
-              :is_init.sync="editor_init"
-              v-if="student_task.submit_status === 0"
-            >
-            </Editor>
-          <div v-html="student_task.submit_content" v-if="student_task.submit_status === 1" style="flex:1;word-break:break-all"></div>
-          <FileUpload
-            :fileObj="{url: student_task.file_url, name: student_task.file_name}"
-            @on-change="(file)=>{student_task.file_url = file.url;student_task.file_name= file.name}"
-            :extra="{type: 'task',token:$store.state.user.token}"
-            v-if="student_task.submit_status === 0"
-          >
-          </FileUpload>
-          <div v-if="student_task.submit_status === 1">
-            附件：<a :href="student_task.file_url" target="_blank">{{student_task.file_url}}</a>
-          </div>
-          <div class="studentHomework-bottom" style="margin-bottom:10px" v-if="student_task.submit_status === 0">
-            <!-- <button>保存(不提交)</button> -->
-            <button @click="submit">提交</button>
-          </div>
+        <Divider orientation="left"><span class="black-b">作答区</span></Divider>
+        <div v-if="student_task.submit_status===1" style="color:red;margin-bottom:10px">（已提交）</div>
+        <Editor class="new-editor" v-model="student_task.submit_content" :is_init.sync="editor_init"
+          v-if="student_task.submit_status === 0">
+        </Editor>
+        <div v-html="student_task.submit_content" v-if="student_task.submit_status === 1"
+          style="flex:1;word-break:break-all"></div>
+        <FileUpload :fileObj="{url: student_task.file_url, name: student_task.file_name}"
+          @on-change="(file)=>{student_task.file_url = file.url;student_task.file_name= file.name}"
+          :extra="{type: 'task',token:$store.state.user.token}" v-if="student_task.submit_status === 0">
+        </FileUpload>
+        <div v-if="student_task.submit_status === 1">
+          附件：<a :href="student_task.file_url" target="_blank">{{student_task.file_url}}</a>
+        </div>
+        <div class="studentHomework-bottom" style="margin-bottom:10px" v-if="student_task.submit_status === 0">
+          <!-- <button>保存(不提交)</button> -->
+          <button @click="submit">提交</button>
+        </div>
         </Col>
       </Row>
-        <Spin size="large" v-if="loading" fix></Spin>
+      <Spin size="large" v-if="loading" fix></Spin>
     </div>
   </div>
 </template>
@@ -110,22 +104,44 @@ export default {
 }
 </script>
 <style type="text/css" lang="less" scoped>
-.p-text{
+.p-text {
   margin-top: 5px;
 }
-.p-title{
+.p-title {
   font-weight: bold;
 }
-.row-item{
+.row-item {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-.center{
+.center {
   text-align: right;
   margin-top: 15px;
 }
-.ivu-btn{
+.ivu-btn {
   margin-right: 10px;
 }
+/deep/.ql-container {
+  box-sizing: border-box;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  height: 60%;
+  margin: 0px;
+  overflow-y: hidden;
+  position: relative;
+}
 
+/deep/.ql-editor {
+  box-sizing: border-box;
+  line-height: 1.42;
+  height: 95%;
+  outline: none;
+  overflow-y: scroll;
+  padding: 0px 15px;
+  tab-size: 4;
+  -moz-tab-size: 4;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
 </style>

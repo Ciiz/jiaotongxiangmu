@@ -5,18 +5,15 @@
     </div> -->
     <div style="margin:20px 30px;width:174px">
       <div class="gray-c">本课程总成绩：</div>
-      <div style="text-align:center"><span class="red-EE" style="font-size:54px">{{course.course_score}}</span><span class="red-EE">分</span></div>
-      <div style="margin-bottom:6px"><span>课程进度：</span><span class="blue-c">{{course.class_hour_progress_info.is_finish}}/{{course.class_hour_progress_info.all}}</span></div>
+      <div style="text-align:center"><span class="red-EE" style="font-size:54px">{{course.course_score}}</span><span
+          class="red-EE">分</span></div>
+      <div style="margin-bottom:6px"><span>课程进度：</span><span
+          class="blue-c">{{course.class_hour_progress_info.is_finish}}/{{course.class_hour_progress_info.all}}</span>
+      </div>
       <!-- <div><span>当前排名：</span><span class="blue-c">8</span></div> -->
     </div>
     <div class="courseware_list_table_parent" style="margin-right:10px">
-      <Table
-        class="courseware_list_table"
-        size="large"
-        :loading="loading"
-        :columns="columns"
-        :data="list"
-      ></Table>
+      <Table class="courseware_list_table" size="large" :loading="loading" :columns="columns" :data="list"></Table>
     </div>
     <Modal v-model="modal" :title="title" width="800" footer-hide>
     </Modal>
@@ -45,14 +42,14 @@ export default {
       total_weight: 100,
       columns: [
         {
-          title: '课时',
+          title: '章节',
           key: 'sort',
           align: 'center',
           width: 100,
           render: (h, params) => {
             return (
               <div>
-                课时{params.row.sort}
+                章节{params.row.sort}
               </div>
             )
           }
