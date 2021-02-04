@@ -101,7 +101,7 @@ export default {
         }
       }
       this.section_list = allArr
-      console.log(this.section_list);
+
       this.section_choose = ''
     },
     section_choose (newval) {
@@ -154,7 +154,7 @@ export default {
             let row = params.row
             return (
               <div class="align-top">
-                <span class="blue-cg">{row.score.before_score}</span>
+                <span class="blue-cg">{row.before_score}</span>
               </div>
             )
           }
@@ -168,7 +168,7 @@ export default {
             let row = params.row
             return (
               <div class="align-top">
-                <span class="blue-cg">{row.score.in_score}</span>
+                <span class="blue-cg">{row.in_score}</span>
               </div>
             )
           }
@@ -182,7 +182,7 @@ export default {
             let row = params.row
             return (
               <div class="align-top">
-                <span class="blue-cg">{row.score.after_score}</span>
+                <span class="blue-cg">{row.after_score}</span>
               </div>
             )
           }
@@ -193,7 +193,7 @@ export default {
           align: 'center',
           width: 150,
           render (h, params) {
-            return <span class="blue-cg">{params.row.score.total_score}</span>
+            return <span class="blue-cg">{params.row.total_score}</span>
           }
         }
       ]
@@ -256,13 +256,15 @@ export default {
           keyword
         }
       }).then(res => {
+        console.log(res);
         if (res.code === 200) {
           this.course_list = []
           let data = res.data
+          this.list = data
+          console.log(this.list);
           for (let i in data) {
             this.course_list.push(data[i])
           }
-          console.log(this.course_list);
         }
         this.loading = false
       })
@@ -271,19 +273,18 @@ export default {
       for (let i = 0; i < document.getElementsByClassName('watcheva-l-li').length; i++) {
         document.getElementsByClassName('watcheva-l-li')[i].style.background = '#CCCCCC'
       }
-
       e.currentTarget.style.background = '#ffffff'
       this.currentStudent = item.name
-
       this.student_course_id = item.student_course_id
     },
     getData () {
       this.loading = true
       student_course_score(this.student_course_id).then(res => {
         console.log(res);
-
         if (res.code === 200) {
           this.list = Object.values(res.data.courseware)
+          console.log(this.list);
+
         }
         this.loading = false
       })

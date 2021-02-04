@@ -34,20 +34,6 @@
                   </div>
                   <span>重播</span>
                 </div>
-                <div class="video_end_topRight_zan">
-                  <div class="video_end_topRight_zan1">
-                    <img src="@/assets/images/public/zan.png" alt="">
-                    <img src="@/assets/images/public/quxiaozan.png" alt="">
-                  </div>
-                  <span>点赞</span>
-                </div>
-                <div class="video_end_topRight_cai">
-                  <div class="video_end_topRight_cai1">
-                    <img src="@/assets/images/public/cai.png" alt="">
-                    <img src="@/assets/images/public/cai.png" alt="">
-                  </div>
-                  <span>踩</span>
-                </div>
               </div>
               <div style="width:16%"></div>
             </div>

@@ -13,14 +13,14 @@
             <div class="partner_lists_header_right2">
               教师数量
               <div class="partner_icon1">
-                <Icon type="md-arrow-dropup" color="red" size="8" />
-                <Icon type="md-arrow-dropdown" size="8" />
+                <Icon type="md-arrow-dropup" color="red" size="8" @click="handledropup_teacher(3)" />
+                <Icon type="md-arrow-dropdown" size="8" @click="handledropup_teacher(4)" />
               </div>
             </div>
             <div class="partner_lists_header_right3">课程数量
               <div class="partner_icon2">
-                <Icon type="md-arrow-dropup" color="red" size="8" />
-                <Icon type="md-arrow-dropdown" size="8" />
+                <Icon type="md-arrow-dropup" color="red" size="8" @click="handledropup(1)" />
+                <Icon type="md-arrow-dropdown" size="8" @click="handledropup(2)" />
               </div>
             </div>
           </div>
@@ -60,25 +60,54 @@
 </template>
 
 <script>
+import vPinyin from '@/view/mobile_page/components/m_index/vue-py2'
 export default {
   name: 'partner',
 
   data () {
     return {
-      schoolList: []
+      schoolList: [],
+      value_type: 1
     }
   },
 
   methods: {
-    compare (property) {
-      return function (a, b) {
-        var value1 = a[property]
-        var value2 = b[property]
-        return value2 - value1 // value2>value1---降序  value1>value2 ---升序
-      }
+    handledropup (value) {
+      this.getSchoolList(value)
     },
-    getSchoolList () {
-      // 获取学校列表
+    handledropup_teacher (value) {
+      this.getSchoolList(value)
+    },
+    compare (property) {
+      if (this.value_type == 1) {
+        return function (a, b) {
+          var value1 = a[property]
+          var value2 = b[property]
+          return value2 - value1 // value2>value1---降序  value1>value2 ---升序
+        }
+      } else if (this.value_type == 2) {
+        return function (a, b) {
+          var value1 = a[property]
+          var value2 = b[property]
+          return value1 - value2
+        }
+      } else if (this.value_type == 3) {
+        return function (a, b) {
+          var value1 = a[property]
+          var value2 = b[property]
+          return value2 - value1 // value2>value1---降序  value1>value2 ---升序
+        }
+      } else if (this.value_type == 4) {
+        return function (a, b) {
+          var value1 = a[property]
+          var value2 = b[property]
+          return value1 - value2 // value2>value1---降序  value1>value2 ---升序
+        }
+      }
+
+    },
+    getSchoolList (value) {
+      // 获取学校列表 
       this.schoolList = []
       this.axios
         .request({
@@ -87,14 +116,49 @@ export default {
         })
         .then(res => {
           console.log(res);
-
           if (res.code === 200) {
-            // this.schoolList = res.data.list
+            let arr = []
+            let blocks = [] // 新列表
+            let p, c
+            let d = {}
+            res.data.list.forEach(item => {
+              p = vPinyin.chineseToPinYin(item.school_name)
+              c = p.charCodeAt(0) // charCodeAt() 方法可返回指定位置的字符的 Unicode 编码。这个返回值是 0 - 65535 之间的整数。
+              if (c > 97 && c < 123) {
+                if (!d[p]) {
+                  d[p] = []
+                }
+                d[p].push(item)
+              }
+            })
+            for (let [k, v] of Object.entries(d)) { blocks.push({ title: k.toUpperCase(), city: v }) } blocks.sort((a, b) => a.title.charCodeAt(0) - b.title.charCodeAt(0))
+            console.log(blocks);
+            blocks.forEach((v) => {
+              arr.push(...v.city)
+            })
+            this.schoolList = arr
             var course_num = []
             var course_num = res.data.list.map(v => {
               return v
             })
-            this.schoolList = course_num.sort(this.compare('course_num')) // 排序
+
+            if (value === 1) {
+              this.value_type = 1
+              this.schoolList = course_num.sort(this.compare('course_num')) // 排序
+
+            } else if (value === 2) {
+              this.value_type = 2
+              this.schoolList = course_num.sort(this.compare('course_num')) // 排序
+
+            } else if (value === 3) {
+              this.value_type = 3
+              this.schoolList = course_num.sort(this.compare('teacher_num')) // 排序
+            } else if (value === 4) {
+              this.value_type = 4
+              this.schoolList = course_num.sort(this.compare('teacher_num')) // 排序
+            }
+
+
           }
         })
     }

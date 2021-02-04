@@ -25,8 +25,22 @@
           <td v-for="(col,index1) in row" :rowspan="col.rowspan" :colspan="col.colspan" :key="index1"
             :class="col.style">
             <div class="item">
-              <div v-if="col.col === 1" v-html="col.class_no ? `第${col.class_no}节` : '&nbsp;'"
-                :class="{item: row.class_no ? ture : false}"> </div>
+              <!-- <div v-if="col.col === 1" v-html="col.class_no ? `第${col.class_no}节` : '&nbsp;'"
+                :class="{item: row.class_no ? ture : false}">
+              </div> -->
+              <div v-if="col.col === 1" :class="{item: row.class_no ? ture : false}">
+
+                <span>{{col.class_no ? `第${col.class_no}节` : '&nbsp;'}}</span>
+
+                <p v-if="col.class_no">
+                  <span v-for="(v,i) in classtime_list" :key="i">
+                    <span v-if="v.id==col.class_no">
+                      时间:{{v.time}}
+                    </span>
+                  </span>
+                </p>
+                <p v-else></p>
+              </div>
               <div v-else>
                 <div v-if="col.desc.length !== 0">
                   <div v-for="(course,index1) in col.desc" :key="index1" @click="changeTimetable(course,col.class_no)"
@@ -88,6 +102,7 @@ export default {
   },
   data () {
     return {
+      classtime_list: [],
       isshow: '',
       week: 1,
       tableHead: [
@@ -135,6 +150,20 @@ export default {
     }
   },
   methods: {
+    async gettable_time () {
+      let res = await this.axios.request({
+        url: 'home/course/classtime_list',
+        method: 'get',
+        params: {
+          page: 1,
+          pagesize: 20,
+          year: this.year,
+          semester: this.semester,
+          teacher_course_id: this.teacher_course_id
+        }
+      })
+      this.classtime_list = res.data.data.classtime
+    },
     handleWeekChange (action) {
       if (action === 'minus' && this.week > 1) {
         this.week--
@@ -552,13 +581,12 @@ export default {
       })
     }
   },
-  created () {
-  },
   mounted () {
     this.getSemter()
     setTimeout(() => {
       this.getCourseTable()
-    }, 1000)
+      this.gettable_time()
+    }, 500)
 
   }
 }

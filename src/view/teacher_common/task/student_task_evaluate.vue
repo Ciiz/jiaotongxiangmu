@@ -7,7 +7,7 @@
       <span v-if="student_task.submit_status === 0">未提交</span>
       <div v-html="student_task.submit_content"></div>
       <div v-if="student_task.file_url" style="font-size:14px;margin-bottom:10px">
-        文件:<a :href="student_task.file_url" target="blank">----附件----</a>
+        文件:<a :href="student_task.file_url" target="blank">----{{student_task.file_name}}----</a>
       </div>
     </div>
     <div v-for="score_item in score_option" :key="score_item.index">

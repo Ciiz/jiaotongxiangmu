@@ -16,6 +16,7 @@
         </Editor>
         <div v-html="student_task.submit_content" v-if="student_task.submit_status === 1"
           style="flex:1;word-break:break-all"></div>
+
         <FileUpload :fileObj="{url: student_task.file_url, name: student_task.file_name}"
           @on-change="(file)=>{student_task.file_url = file.url;student_task.file_name= file.name}"
           :extra="{type: 'task',token:$store.state.user.token}" v-if="student_task.submit_status === 0">
@@ -24,7 +25,6 @@
           附件：<a :href="student_task.file_url" target="_blank">{{student_task.file_url}}</a>
         </div>
         <div class="studentHomework-bottom" style="margin-bottom:10px" v-if="student_task.submit_status === 0">
-          <!-- <button>保存(不提交)</button> -->
           <button @click="submit">提交</button>
         </div>
         </Col>
@@ -66,6 +66,8 @@ export default {
       _this.loading = true
       _this.editor_init = true
       student_task_detail(student_task_id).then(res => {
+        console.log(res);
+
         _this.loading = false
         let data = res.data
         if (res.code === 200) {

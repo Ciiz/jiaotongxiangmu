@@ -353,10 +353,11 @@
                 </div>
                 <div class="chat_box_bottom">
                   <div class="prohibit-discuss-btn" @click="prohibitDiscuss">
-                    <img src="@/assets/images/new_img/prohibit-discuss.png"
-                      style="vertical-align:middle;margin-right:10px">
-                    <span class="prohibit-discuss-des" v-if="online_data.groupstatus===1">全部禁言</span>
-                    <span class="prohibit-discuss-des" v-if="online_data.groupstatus!==1">解除禁言</span>
+                    <img src="@/assets/images/public/saying.svg" v-if="online_data.groupstatus===1"
+                      style="vertical-align:middle;margin-right:10px;height:15px;width:15px">
+                    <img src="@/assets/images/public/banneding.svg" v-else
+                      style="vertical-align:middle;margin-right:10px;height:15px;width:15px">
+                    <span class="prohibit-discuss-des">{{ online_data.groupstatus===1? '发言中' : '禁言中'}} </span>
                   </div>
                   <div class="input-s">
                     <input :maxlength="30" type="text" @keyup.enter="send" v-model="msg" class="chat-input"
@@ -393,9 +394,7 @@
                     </ul>
                   </Panel>
                 </Collapse>
-                <!-- <div class="prohibit-discuss-btn" @click="prohibitDiscuss" v-if="course_status===1">
-                  <span class="prohibit-discuss-des">考勤</span>
-                </div> -->
+
               </Card>
             </div>
             </Col>
@@ -1896,21 +1895,28 @@ export default {
     //   return false
     // },
     prohibitDiscuss () {
-      let o = document.getElementsByClassName('prohibit-discuss-des')[0].innerText
-      if (o === '全部禁言') {
-        document.getElementsByClassName('prohibit-discuss-des')[0].innerText = '解除禁言'
+      if (this.online_data.groupstatus === 1) {
+        this.axios.request({
+          method: 'post',
+          url: '/index.php/home/live/banned',
+          data: {
+            group: this.group_chat_id
+          }
+        }).then(res => {
+          this.online_data.groupstatus = 0
+        })
       } else {
-        document.getElementsByClassName('prohibit-discuss-des')[0].innerText = '全部禁言'
+        this.axios.request({
+          method: 'post',
+          url: '/index.php/home/live/banned',
+          data: {
+            group: this.group_chat_id
+          }
+        }).then(res => {
+          this.online_data.groupstatus = 1
+        })
       }
-      this.axios.request({
-        method: 'post',
-        url: '/index.php/home/live/banned',
-        data: {
-          group: this.group_chat_id
-        }
-      }).then(res => {
 
-      })
     },
     getQuestionList () {
       this.axios.request({

@@ -29,7 +29,7 @@ export default {
   },
   ucfirst: function (l1) {
     if (l1.length > 0) {
-      var first = l1.substr(0, 1).toUpperCase() //大写
+      var first = l1.substr(0, 1).toLocaleLowerCase() //小写
       var spare = l1.substr(1, l1.length)
       return first + spare
     }

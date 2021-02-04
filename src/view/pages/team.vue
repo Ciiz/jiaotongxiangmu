@@ -9,16 +9,23 @@
 
     <Row class="team_school">
       <col>
-      <Button type="info">
-        <span>全部</span>
-      </Button>
-      <div class="team_school_list">
-        <span v-for="(item,index) in schoolList" :key="index"><a href="#"
-            @click="handleSchoolList(index)">{{item.school_name}}</a></span>
-        <router-link to="partner">
-          <Icon type="md-arrow-dropdown" size="20" color="#000" />
-        </router-link>
+      <span
+        style="margin-bottom:30px;width:75px;height:30px;border-radius: 10px;cursor:pointer;display: flex;align-items:center;justify-content: center;"
+        :class="{colortaem:ststus_color}" @click="handleSchoolList('全部')">全部</span>
+      <div class="team_school_list" style="cursor:pointer">
 
+        <span v-for="(item,index) in schoolList" :key="index" class="allschool_listItem"
+          :class="{colorIndex:index_color===index}"><span
+            @click="handleSchoolList(index)">{{item.school_name}}</span></span>
+        <!-- <Dropdown style="margin-left: 20px">
+          <Icon type="md-arrow-dropdown" size="20" color="#000" />
+          <DropdownMenu slot="list" type="flex" class="schoolyard_DropdownMenu">
+            <DropdownItem v-for="(v,i) in DropdownItem_schoolList" :key="i" @click.native="handleSchoolList(i)"
+              :class="{colorIndex:index_color==i}">
+              {{v.school_name}}
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown> -->
       </div>
       </col>
     </Row>
@@ -40,20 +47,7 @@
           </Input>
         </div>
         <div class="teacher_team_select_r">
-          <!-- <div class="teacher_team_course">
-            课程数量
-            <div class="partner_icon1">
-              <Icon type="md-arrow-dropup" color="red" size="8" />
-              <Icon type="md-arrow-dropdown" size="8" />
-            </div>
-          </div>
-          <div class="teacher_team_course">
-            关注学生
-            <div class="partner_icon1">
-              <Icon type="md-arrow-dropup" color="red" size="8" />
-              <Icon type="md-arrow-dropdown" size="8" />
-            </div>
-          </div> -->
+
         </div>
       </div>
       </col>
@@ -81,9 +75,7 @@
         <div class="teacher_team_btn" v-if="moreteacherList.length>8" @click="handlemore">查看更多</div>
       </div>
       </col>
-
     </Row>
-
   </div>
 </template>
 
@@ -102,7 +94,9 @@ export default {
       moreteacherList: [],
       teacherSelect: [],
       searchvalue: '',
-
+      DropdownItem_schoolList: [],
+      index_color: null,
+      ststus_color: false
     }
   },
   computed: {
@@ -114,18 +108,68 @@ export default {
     },
   },
   methods: {
+    // handleschoolList (ind) {
+    //   this.index_color = ind
+    //   schoolCourseList(
+    //     this.DropdownItem_schoolList[ind].id
+    //   ).then(res => {
+    //     if (res.data.list.length == 0) {
+    //       this.$Message.error('该学校暂时没有课程推荐...')
+    //     }
+    //     this.schoolCourse = res.data.list
+    //     var arr = [];
+    //     var arr2 = [];
+    //     res.data.list.forEach((v, i) => {
+    //       if (v.is_charge === 1) {
+    //         arr.push(v)
+    //         this.newCourseAll = arr
+    //         if (arr.length > 10) {
+    //           this.newCourse = arr.slice(0, 10)
+    //         } else {
+    //           this.newCourse = arr
+    //         }
+    //       }
+    //       if (v.is_charge === 0) {
+    //         arr2.push(v)
+    //         this.freeCourseAll = arr2
+    //         if (arr2.length > 10) {
+    //           this.freeCourse = arr2.slice(0, 10)
+    //         } else {
+    //           this.freeCourse = arr2
+    //         }
+    //       }
+    //     })
+    //   })
+    // },
     handleSchoolList (index) {
-      taecherList_nologin(this.schoolList[index].id).then(res => {
-        console.log(res);
+      if (index === '全部') {
+        this.ststus_color = true
+        this.index_color = null
+        taecherList_nologin().then(res => {
+          if (res.data.teacher_list.length > 8) {
+            this.teacherList = res.data.teacher_list.slice(0, 8)
+          } else {
+            this.teacherList = res.data.teacher_list
+          }
+          this.moreteacherList = res.data.teacher_list
+          this.teacherSelect = res.data.teacher_list
+        })
+      } else {
+        this.ststus_color = false
+        this.index_color = index
+        taecherList_nologin(
+          this.schoolList[index].id
+        ).then(res => {
+          if (res.data.teacher_list.length > 8) {
+            this.teacherList = res.data.teacher_list.slice(0, 8)
+          } else {
+            this.teacherList = res.data.teacher_list
+          }
+          this.moreteacherList = res.data.teacher_list
+          this.teacherSelect = res.data.teacher_list
+        })
+      }
 
-        if (res.data.teacher_list.length > 8) {
-          this.teacherList = res.data.teacher_list.slice(0, 8)
-        } else {
-          this.teacherList = res.data.teacher_list
-        }
-        this.moreteacherList = res.data.teacher_list
-        this.teacherSelect = res.data.teacher_list
-      })
 
 
 
@@ -185,11 +229,11 @@ export default {
 
           if (res.code === 200) {
             if (res.data.list.length >= 8) {
-              res.data.list.length = 8
+              this.schoolList = res.data.list.slice(0, 8)
+            } else {
               this.schoolList = res.data.list
-              console.log(res)
             }
-            this.schoolList = res.data.list
+            this.DropdownItem_schoolList = res.data.list
           }
         })
     },
@@ -216,6 +260,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.colortaem {
+  background: #32b6ff;
+  color: #fff;
+}
+.colorIndex {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #32b6ff;
+  border-radius: 10px;
+}
 .team {
   .Divider {
     width: 1200px;
@@ -235,12 +291,6 @@ export default {
 
       background: url(../../assets/images/login-bg.jpg) center center;
     }
-    img {
-      // border-radius: 4px;
-      // // height: 100%;
-      // width: 1200px;
-      // width: 100%;
-    }
   }
   .team_school {
     margin: 40px auto;
@@ -248,17 +298,19 @@ export default {
 
     display: flex;
     align-items: center;
-    // justify-content: space-around;
-    // justify-content: space-between;
-
     .team_school_list {
-      flex: 1;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      // justify-content: space-around;
-      justify-content: space-between;
-      margin-left: 20px;
 
+      .allschool_listItem {
+        height: 30px;
+        margin: 0 30px;
+        padding: 0 7px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+      }
       span {
         a {
           color: #000;

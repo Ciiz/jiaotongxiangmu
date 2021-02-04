@@ -72,7 +72,9 @@
             :class="col.style">
             <div>
               <div v-if="col.col === 1" :class="{item: row.class_no ? ture : false}">
+
                 <span>{{col.class_no ? `第${col.class_no}节` : '&nbsp;'}}</span>
+
                 <p v-if="col.class_no">
                   <span v-for="(v,i) in classtime_list" :key="i">
                     <span v-if="v.id==col.class_no">
@@ -390,7 +392,6 @@ export default {
         data: {
         }
       }).then(res => {
-        console.log(res);
         let top_semester_9 = this.moment(res.data.list[0].term_begins * 1000).format('M')
         let buttom_semester_3 = this.moment(res.data.list[1].term_begins * 1000).format('M')
         let now_time = this.moment(Date.parse(time)).format('M')
@@ -428,7 +429,7 @@ export default {
           arr.push(col_arr)
         }
       }
-      console.log(arr);
+
       return arr
     },
     getWeekData (data, week) { // 获取当周的数据
@@ -588,10 +589,21 @@ export default {
       let copy = JSON.parse(JSON.stringify(this.course_table[index]))
       this.course_table.push(copy)
     },
+    // compare (property) {
+    //   return function (a, b) {
+    //     var value1 = a[property]
+    //     var value2 = b[property]
+    //     return value2 - value1// value2>value1---降序  value1>value2 ---升序
+    //   }
+    // },
     getTeacherCourseList () {
       get_teacher_course_list().then(res => {
         if (res.code === 200) {
           this.teacher_course_list = res.data.list
+          // var newarr = []
+          // res.data.list.forEach((v, i) => {
+          //   newarr = res.data.list.sort(this.compare('i')) // 排序
+          // })
         }
       })
     },

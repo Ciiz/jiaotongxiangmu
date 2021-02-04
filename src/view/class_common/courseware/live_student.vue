@@ -170,7 +170,7 @@
               <!-- pdf -->
               <div class="live-box-contain" v-if="mode === 'pdf'">
                 <div style="z-index:1000;height:100%;display:flex;justify-content:center;align-items:center;"
-                  v-if="end_stutus">
+                  v-if="teacher_staus==='离线'">
                   <div style="display:flex; flex-direction: column;justify-content: center;align-items: center;">
                     <img src="@/assets/images/teachingSystem/liveend.png" alt="">
                     <span style="font-size:16px;font-weight: 400;font-family: Microsoft YaHei;">老师暂时不在线啦~</span>
@@ -418,7 +418,6 @@ export default {
   },
   data () {
     return {
-      end_stutus: false,
       student_courseware_id: this.$route.query.student_courseware_id,
       mode: this.$route.query.mode,
       unpdf: true, // 判断src是否为pdf，true：是
@@ -1076,7 +1075,7 @@ export default {
           }, 1000)
           break
         case 'offline':
-          this.end_stutus = true
+
           setTimeout(() => {
             this.get_status_teacher()
           }, 1000)

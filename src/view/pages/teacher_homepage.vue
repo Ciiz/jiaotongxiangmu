@@ -175,6 +175,7 @@ export default {
         align-items: center;
         justify-content: center;
         margin-bottom: 10px;
+        cursor: pointer;
       }
       .teacher_homepageHeader_r2 {
         font-size: 12px;

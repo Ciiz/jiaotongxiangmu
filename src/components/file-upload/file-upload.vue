@@ -91,7 +91,6 @@ export default {
   methods: {
     // ==================文件上传==============
     progress (e) {
-      console.log(e.percent);
       this.$emit('handleprogress', e.percent)
     },
     handleRemove (file) {
@@ -101,8 +100,10 @@ export default {
     },
     handleSuccess (res, file) {
       if (res.code === 200) {
+        console.log(res);
+
         file.url = res.data.url
-        file.name = res.data.file_name
+        file.name = res.data.upload_name
         file.status = 'finished'
         this.$emit('on-change', { url: file.url, name: file.name })
         this.$Message.success('上传成功！')
