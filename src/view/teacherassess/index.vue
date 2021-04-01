@@ -8,13 +8,16 @@
       <Col>
       <span class="gray-c8">班级：</span>
       <Select class="new-searchSel" v-model="class_choose" placeholder="全部" clearable style="margin-right:30px">
-        <Option v-for="classitem in class_list" :value="classitem.value" :key="classitem.value">{{ classitem.label }}
+        <Option v-for="classitem in class_list" :value="classitem.value" :key="classitem.value"
+          @click.native="handle_choose(classitem.label)">{{ classitem.label }}
         </Option>
       </Select>
-      <span class="gray-c8">章节：</span>
+      <span class="gray-c8">课件：</span>
       <Select class="new-searchSel" v-model="section_choose" placeholder="全部" clearable style="margin-right:30px">
         <Option v-for="(sectionitem,index) in section_list" :value="sectionitem.id" :key="sectionitem.id">
-          {{index !== 0 ? '第' + sectionitem.sort + '课时' : sectionitem.sort}}</Option>
+          {{sectionitem.courseware_name}}</Option>
+        <!-- <Option v-for="(sectionitem,index) in section_list" :value="sectionitem.id" :key="sectionitem.id">
+          {{index !== 0 ? '第' + sectionitem.sort + '课时' : sectionitem.sort}}</Option> -->
       </Select>
       <button class="blueg-btn" style="width:122px" @click="exportData(1)">导出表格数据</button>
       </Col>
@@ -49,8 +52,10 @@
       </Col>
       <Col style="flex:1;margin-right:10px;height:100%">
       <div class="courseware_list_table_parent">
-        <Table size="small" class="courseware_list_table" style="width:100%;height:100%" ref="selection"
-          :columns="columns" :data="list"></Table>
+        <Table size="small" class="courseware_list_table" v-if="courswareID" style="width:100%;height:100%"
+          ref="selection" :columns="columns3" :data="list"></Table>
+        <Table size="small" class="courseware_list_table" v-else style="width:100%;height:100%" ref="selection"
+          :columns="iscourse===true? columns : columns2" :data="list"></Table>
       </div>
       </Col>
     </Row>
@@ -60,6 +65,7 @@
 <script>
 import { student_course_score } from '@/api/data'
 import modal_mixin from '@/view/mixins/modal_mixin'
+import log from 'video.js/es5/utils/log'
 export default {
   computed: {
     courseId () {
@@ -85,7 +91,8 @@ export default {
       }
       this.section_list.unshift({
         id: 0,
-        sort: '课程总成绩'
+        // sort: '课程总成绩',
+        courseware_name: '课程总成绩'
       })
       // 数组去重
       let allArr = []
@@ -101,10 +108,11 @@ export default {
         }
       }
       this.section_list = allArr
-
       this.section_choose = ''
     },
     section_choose (newval) {
+      this.currentStudent = ''
+      this.courswareID = newval
       if (newval !== '' && newval !== undefined) {
         this.refreshData()
         this.get_list_info(this.class_choose, newval)
@@ -117,6 +125,10 @@ export default {
   mixins: [modal_mixin],
   data () {
     return {
+      courswareID: '',
+      classitem_num: '',
+      iscourse: false,
+      student_score: '',
       currentStudent: '',
       modal: false,
       list: [],
@@ -133,16 +145,60 @@ export default {
       columns: [
         {
           key: 'sort',
-          title: '课时',
+          title: '序号',
+          align: 'center',
+          minWidth: 200,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top" >
+                <span class="blue-cg" >{row.sort}</span>
+              </div >
+            )
+          }
+        },
+        {
+          key: 'name',
+          title: '学生',
+          align: 'center',
+          minWidth: 200,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top" >
+                <span class="blue-cg">{row.name}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'student_score',
+          title: '综合成绩',
+          align: 'center',
+          minWidth: 200,
+          render: (h, params) => {
+            let row = params.row
+            // console.log(row);
+            return (
+              <div class="align-top" >
+                <span class="blue-cg">{row.student_score}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'courseware_name',
+          title: '课件',
           align: 'center',
           minWidth: 250,
           render: (h, params) => {
             let row = params.row
             return (
               <div class="align-top">
-                <span class="blue-cg">{row.sort}</span>
+                <span class="blue-cg">{row.courseware_name}</span>
               </div>
             )
+
           }
         },
         {
@@ -196,6 +252,242 @@ export default {
             return <span class="blue-cg">{params.row.total_score}</span>
           }
         }
+      ],
+      columns2: [
+        {
+          key: 'sort',
+          title: '序号',
+          align: 'center',
+          minWidth: 200,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top" >
+                <span class="blue-cg" >{row.sort}</span>
+              </div >
+            )
+          }
+        },
+        {
+          key: 'name',
+          title: '学生',
+          align: 'center',
+          minWidth: 200,
+          render: (h, params) => {
+            let row = params.row
+            // console.log(row);
+            return (
+              <div class="align-top" >
+                <span class="blue-cg">{row.name}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'student_score',
+          title: '综合成绩',
+          align: 'center',
+          minWidth: 200,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top" >
+                <span class="blue-cg">{row.student_score}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'course_name',
+          title: '课程',
+          align: 'center',
+          minWidth: 250,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top">
+                <span class="blue-cg">{row.course_name}</span>
+              </div>
+            )
+
+          }
+        },
+        {
+          key: 'before_score',
+          title: '课前',
+          align: 'center',
+          width: 150,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top">
+                <span class="blue-cg">{row.before_score}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'in_score',
+          title: '课中',
+          align: 'center',
+          width: 150,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top">
+                <span class="blue-cg">{row.in_score}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'after_score',
+          title: '课后',
+          width: 150,
+          align: 'center',
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top">
+                <span class="blue-cg">{row.after_score}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'total_score',
+          title: '总分',
+          align: 'center',
+          width: 150,
+          render (h, params) {
+            return <span class="blue-cg">{params.row.total_score}</span>
+          }
+        }
+      ],
+      columns3: [
+        {
+          key: 'sort',
+          title: '序号',
+          align: 'center',
+          minWidth: 200,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top" >
+                <span class="blue-cg" >{row.sort}</span>
+              </div >
+            )
+          }
+        },
+        {
+          key: 'name',
+          title: '学生',
+          align: 'center',
+          minWidth: 200,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top" >
+                <span class="blue-cg">{row.name}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'student_score',
+          title: '综合成绩',
+          align: 'center',
+          minWidth: 150,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top" >
+                <span class="blue-cg">{row.student_score}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'course_name',
+          title: '课程',
+          align: 'center',
+          minWidth: 150,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top">
+                <span class="blue-cg">{row.course_name}</span>
+              </div>
+            )
+
+          }
+        },
+        {
+          key: 'courseware_name',
+          title: '课件',
+          align: 'center',
+          minWidth: 150,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top">
+                <span class="blue-cg">{row.courseware_name}</span>
+              </div>
+            )
+
+          }
+        },
+        {
+          key: 'before_score',
+          title: '课前',
+          align: 'center',
+          minWidth: 150,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top">
+                <span class="blue-cg">{row.before_score}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'in_score',
+          title: '课中',
+          align: 'center',
+          minWidth: 150,
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top">
+                <span class="blue-cg">{row.in_score}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'after_score',
+          title: '课后',
+          minWidth: 150,
+          align: 'center',
+          render: (h, params) => {
+            let row = params.row
+            return (
+              <div class="align-top">
+                <span class="blue-cg">{row.after_score}</span>
+              </div>
+            )
+          }
+        },
+        {
+          key: 'total_score',
+          title: '总分',
+          align: 'center',
+          minWidth: 150,
+          render (h, params) {
+            return <span class="blue-cg">{params.row.total_score}</span>
+          }
+        }
       ]
     }
   },
@@ -206,6 +498,10 @@ export default {
     }
   },
   methods: {
+    handle_choose (classitem) {
+
+      this.classitem_num = classitem
+    },
     refreshData () {
       for (let i = 0; i < document.getElementsByClassName('watcheva-l-li').length; i++) {
         document.getElementsByClassName('watcheva-l-li')[i].style.background = '#CCCCCC'
@@ -214,8 +510,7 @@ export default {
     },
     exportData () {
       this.$refs.selection.exportCsv({
-        filename: `${this.currentStudent}`,
-
+        filename: `${this.currentStudent}` + ' ' + `${this.classitem_num}`,
       })
     },
     getInfo () {
@@ -238,6 +533,7 @@ export default {
                 label: data[i].class_name
               })
             }
+            this.handle_choose(this.class_list[0].label)
             this.class_choose = this.class_list[0].value
           }
         }
@@ -245,6 +541,7 @@ export default {
       })
     },
     get_list_info (class_id, coursware_id, keyword) {
+      this.iscourse = false
       this.loading = true
       this.axios.request({
         method: 'get',
@@ -256,12 +553,10 @@ export default {
           keyword
         }
       }).then(res => {
-        console.log(res);
         if (res.code === 200) {
           this.course_list = []
           let data = res.data
           this.list = data
-          console.log(this.list);
           for (let i in data) {
             this.course_list.push(data[i])
           }
@@ -270,21 +565,28 @@ export default {
       })
     },
     selectStudent (e, item) {
+      this.courswareID = ''
+      this.iscourse = true
       for (let i = 0; i < document.getElementsByClassName('watcheva-l-li').length; i++) {
         document.getElementsByClassName('watcheva-l-li')[i].style.background = '#CCCCCC'
       }
       e.currentTarget.style.background = '#ffffff'
       this.currentStudent = item.name
       this.student_course_id = item.student_course_id
+      this.student_score = item.total_score
     },
     getData () {
       this.loading = true
-      student_course_score(this.student_course_id).then(res => {
-        console.log(res);
+      this.axios.request({
+        method: 'get',
+        url: '/teacher/score/get_score_by_student',
+        params: {
+          student_score: this.student_score,
+          student_course_id: this.student_course_id
+        }
+      }).then(res => {
         if (res.code === 200) {
           this.list = Object.values(res.data.courseware)
-          console.log(this.list);
-
         }
         this.loading = false
       })
@@ -295,3 +597,10 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+/deep/.ivu-table-column-center:nth-child(1),
+/deep/.ivu-table-column-center:nth-child(2),
+/deep/.ivu-table-column-center:nth-child(3) {
+  display: none;
+}
+</style>

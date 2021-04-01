@@ -38,7 +38,6 @@
         <Button type="warning" size="small" @click="resetAttendance">重置考勤数据</Button>
       </div>
       </Col>
-
       <Col :span="12">
       <attendance-chart :option_data="option_data"></attendance-chart>
       </Col>
@@ -114,7 +113,7 @@ export default {
       attendance_str: '', // 当前开启考勤的考勤记录： 格式： attendance_id1,id2
       attendance_list: [],
       attendance_records: [],
-      interval_id: null,
+      timer: null,
       lng: '',
       lat: '',
       leave_early_status: false, // 是否是早退考勤
@@ -211,6 +210,35 @@ export default {
           this.loading = false
         }
       })
+      this.timer = setInterval(() => {
+        generate_attendance({ //生成考勤记录，并获取考勤记录对应的学生考勤信息
+          teacher_course_id: this.teacher_course_id,
+          class_ids: this.class_ids,
+          year: this.year,
+          semester: this.semester,
+          week: this.week,
+          day: this.day,
+          class_no: this.class_no,
+          group: this.group
+        }).then(res => {
+          console.log(res);
+          if (res.code === 200) {
+            // this.interval_id=
+            this.attendance_list = res.data.attendance_list
+            if (this.attendance_list[0].lng === null && this.attendance_list[0].lat === null) {
+              this.lng = 116.3972282409668
+              this.lat = 39.90960456049752
+            } else {
+              this.lng = this.attendance_list[0].lng
+              this.lat = this.attendance_list[0].lat
+            }
+            this.distance_range = this.attendance_list[0].distance_range
+            this.attendance_records = res.data.attendance_records.sort((a, b) => { return b.status - a.status })
+            this.leave_early_status = res.data.leave_early_status
+            this.loading = false
+          }
+        })
+      }, 3000)
     },
     generate_qrcode_teacher () {
       this.open('qrcode_teacher', '', '老师定位码', 650)
@@ -295,7 +323,7 @@ export default {
     },
     handleVisiableChange (visiable) {
       if (!visiable && this.target === 'qrcode3') {
-        clearInterval(this.interval_id)
+        // clearInterval(this.timer)
       }
     },
     handleRecordStatusChange (status, record_id) {
@@ -368,8 +396,8 @@ export default {
     }, 200)
     this.initChat()
   },
-  beforeDestroy () {
-    clearInterval(this.interval_id)
+  destroyed () {
+    clearInterval(this.timer)
   }
 }
 </script>

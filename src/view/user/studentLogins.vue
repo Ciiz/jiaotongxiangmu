@@ -35,6 +35,7 @@
 </template>
 <script>
 import { Toast } from 'mint-ui';
+import log from 'video.js/es5/utils/log';
 // import axios from './loginaxios'
 export default {
   data () {

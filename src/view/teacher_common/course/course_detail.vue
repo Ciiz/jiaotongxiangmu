@@ -4,8 +4,11 @@
       <studentCourseShow :c_id="c_id" @closeModal="closeModal"></studentCourseShow>
     </div>
     <Spin size="large" v-if="loading" fix></Spin>
+
+    <!-- <span v-if="course==={}" class="black-c bold-w">请选择一门课程！</span> -->
     <Row class="courseware-detail-content">
       <Col :span='12' class="courseware-detail-content-l">
+
       <div>
         <span class="black-c bold-w">课程名称：</span>
         <span class="gray-c">{{course.course_name}}</span>
@@ -103,6 +106,7 @@ export default {
       this.$emit('showAllCourseDetail', i, t, d, ci)
     },
     getTeacherCourse () {
+
       if (this.showCourse === true) {
         this.showCourse = false
       }
@@ -113,12 +117,22 @@ export default {
         console.log(res);
         if (res.code === 200) {
           this.course = res.data
+          console.log(this.course.course_type);
+
         }
       })
     }
   },
+
+  activated () {
+
+    // console.log('出发了');
+
+
+  },
   mounted () {
     this.getTeacherCourse()
+
   }
 }
 </script>

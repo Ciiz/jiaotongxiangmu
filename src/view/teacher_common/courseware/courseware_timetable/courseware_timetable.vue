@@ -330,7 +330,7 @@ export default {
     getRowData () {
       let arr = []
       for (let row = 1; row <= 14; row++) {
-        if (row % 5 === 0) { // 下午晚上分割
+        if (row % 5 === 0) { // 下午晚上分割 
           arr.push([
             { row: row, col: 1, colspan: 8, day: 0, desc: '&nbsp;', class_no: 0 }
           ])
@@ -497,6 +497,8 @@ export default {
       let index = this.cur_timetable_list.findIndex((val) => {
         return (val.week === course.week && val.day === course.day && val.class.sort().join(',') === course.class_no.sort().join(','))
       })
+      console.log(course.semester);
+
       if (index !== -1) { // 取消
         this.cur_timetable_list.splice(index, 1)
       } else { // 新增
@@ -508,7 +510,6 @@ export default {
           class: course.class_no
         })
       }
-
       this.cur_timetable_list.forEach(item => {
         item.timetable_id = this.timetable_id
       })
@@ -518,7 +519,6 @@ export default {
       }).then(res => {
         console.log(res);
         if (res.code === 200) {
-
           this.$emit('timetable_time_id', res.data.timetable_time_id)
           this.isshow = res.data.timetable_time_id
           console.log(this.isshow);
@@ -546,23 +546,14 @@ export default {
         data: {
         }
       }).then(res => {
-        let top_semester_9 = this.moment(res.data.list[0].term_begins * 1000).format('M')
-        let buttom_semester_3 = this.moment(res.data.list[1].term_begins * 1000).format('M')
+        let buttom_semester_3 = this.moment(res.data.list[0].term_begins * 1000).format('M')
+        let top_semester_9 = this.moment(res.data.list[1].term_begins * 1000).format('M')
         let now_time = this.moment(Date.parse(time)).format('M')
         if (now_time < buttom_semester_3 || now_time > top_semester_9) {
           this.semester = 1
         } else if (now_time >= buttom_semester_3 && now_time <= top_semester_9) {
           this.semester = 2
         }
-        // for (let i = 0; i < res.data.list.length; i++) {
-        //   if (res.data.list[i].semester === 1) {
-        //     if (Date.parse(time) / 1000 < res.data.list[i].term_begins) {
-        //       this.semester = 2
-        //     } else {
-        //       this.semester = 1
-        //     }
-        //   }
-        // }
       })
     },
     getCourseTable () {

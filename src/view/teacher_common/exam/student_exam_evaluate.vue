@@ -127,9 +127,9 @@ export default {
           score_list: this.score_option_list
         }
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.code === 200) {
-          this.$Message.success(res.message)
+          this.$Message.success('提交成功')
           this.$emit('success', false)
           this.axios.request({
             method: 'get',
@@ -139,7 +139,7 @@ export default {
               score_rank: ""
             }
           }).then(res => {
-            console.log(res);
+            // console.log(res);
 
           })
         }
@@ -147,7 +147,40 @@ export default {
     },
     nextExam () {
       let i = this.examIndex + 1
-      this.$emit('changeExam', i)
+      // this.submit()
+      this.axios.request({
+        method: 'post',
+        url: '/index.php/Teacher/Examination/score_update',
+        data: {
+          student_exam_id: this.student_exam_id,
+          evaluation_list: '',
+          score_list: this.score_option_list
+        }
+      }).then(res => {
+        // console.log(res);
+        if (res.message === "操作成功！") {
+          console.log(888);
+          this.$emit('changeExam', i)
+          this.axios.request({
+            method: 'get',
+            url: '/index.php/Teacher/Examination/student_exam_list',
+            params: {
+              exam_release_id: this.targetwork_id,
+              score_rank: ""
+            }
+          }).then(res => {
+            // console.log(res);
+
+          })
+        } else if (res.message === "请输入评价！") {
+
+        }
+        // if (res.code === 200) {
+
+        //   // this.$emit('success', false)
+
+        // }
+      })
     },
     lastExam () {
       let i = this.examIndex - 1

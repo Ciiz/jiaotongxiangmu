@@ -8,44 +8,61 @@
     <div class="all_option">
       <Row class="allschool_and_major">
         <col>
-        <span
-          style="margin-bottom:30px;width:75px;height:30px;border-radius: 10px;cursor:pointer;display: flex;align-items:center;justify-content: center;"
-          :class="{colorall:ststus_color}" @click="handleschoolList('全部')">全部</span>
-        <div class="allschool_list" style="cursor:pointer">
-          <span v-for="(item,index) in schoolList" :key="index" class="allschool_listItem"
-            :class="{colorIndex:index_color===index}">
-            <span href="#" @click="handleschoolList(index)">{{item.school_name}}</span>
-          </span>
-          <!-- <Dropdown style="margin-left: 20px">
-            <Icon type="md-arrow-dropdown" size="20" color="#000" />
-            <DropdownMenu slot="list" type="flex" class="schoolyard_DropdownMenu">
-              <DropdownItem v-for="(v,i) in DropdownItem_schoolList" :key="i" @click.native="handleschoolList(i)"
-                :class="{colorIndex:index_color===i}">
-                {{v.school_name}}
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown> -->
+        <div style="display:flex;justify-content:space-between;width:100%">
+          <div style="display:flex;width:100%">
+            <span
+              style="width:75px;height:30px;border-radius: 5px;cursor:pointer;display: flex;align-items:center;justify-content: center;"
+              :class="{colorall:ststus_color}" @click="handleschoolList('全部')">全部</span>
+            <div class="allschool_list" style="cursor:pointer">
+
+              <span v-for="(item,index) in schoolList" :key="index" class="allschool_listItem"
+                :class="{colorIndex:index_color===index}">
+                <span href="#" @click="handleschoolList(index)">{{item.school_name}}</span>
+              </span>
+            </div>
+          </div>
+          <div ref="DropdownMenu">
+            <div @click="isshows=!isshows">
+              <Icon type="md-arrow-dropup" size="24" v-if="isshows" />
+              <Icon type="md-arrow-dropdown" size="24" v-else />
+            </div>
+            <div class="DropdownMenu" v-show="isshows">
+              <div class="DropdownMenu_item">
+                <span v-for="(v,i) in DropdownItem_schoolList" :key="i" class="allschool_listItem"
+                  :class="{coloritem:index_color===i}" @click="handleschoolList(i)">{{v.school_name}}</span>
+              </div>
+            </div>
+          </div>
         </div>
         </col>
       </Row>
       <Divider />
       <Row class="allschool_and_major">
         <col>
-        <span
-          style="width:44px;height:30px;border-radius: 10px;cursor:pointer;display: flex;align-items:center;justify-content: center;"
-          :class="{colorall:ststus_color_major}" @click="handleMajorList('全部')">全部</span>
-        <div class="allschool_list" style="cursor:pointer">
-          <span v-for="(item,index) in majorList" :key="index" class="allschool_listItem2"
-            :class="{colorIndex:major_color===index}"><span @click="handleMajorList(index)">{{item.major_name}}</span>
-          </span>
-          <!-- <Dropdown style="margin-left: 20px">
-            <Icon type="md-arrow-dropdown" size="20" color="#000" />
-            <DropdownMenu slot="list" type="flex" class="schoolyard_DropdownMenu">
-              <DropdownItem v-for="(v,i) in majorListAll" :key="i" @click.native="handleMajorList(i)"
-                :class="{colorIndex:major_color===i}">{{v.major_name}}
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown> -->
+        <div style="display:flex;justify-content:space-between;width:100%">
+          <div style="display:flex;width:100%">
+            <span
+              style="width:75px;height:30px;border-radius: 5px;cursor:pointer;display: flex;align-items:center;justify-content: center;"
+              :class="{colorall:ststus_color_major}" @click="handleMajorList('全部')">全部</span>
+            <div class="allschool_list" style="cursor:pointer">
+              <span v-for="(item,index) in majorList" :key="index" class="allschool_listItem2"
+                :class="{colorIndex:major_color===index}">
+                <span href="#" @click="handleMajorList(index)">{{item.major_name}}</span>
+              </span>
+            </div>
+          </div>
+          <div ref="DropdownMenu2">
+            <div @click="isshows2=!isshows2">
+              <Icon type="md-arrow-dropup" size="24" v-if="isshows2" />
+              <Icon type="md-arrow-dropdown" size="24" v-else />
+            </div>
+            <div class="DropdownMenu" v-show="isshows2">
+              <div class="DropdownMenu_item">
+                <span v-for="(v,i) in majorListAll" :key="i" class="allschool_listItem"
+                  :class="{coloritem:major_color===i}" @click="handleMajorList(i)">{{v.major_name}}</span>
+              </div>
+            </div>
+          </div>
         </div>
         </col>
 
@@ -149,6 +166,8 @@ export default {
 
   data () {
     return {
+      isshows: false,
+      isshows2: false,
       commandCourseList: [],
       majorList: [],
       // getData: [],
@@ -203,8 +222,23 @@ export default {
   },
 
   methods: {
+    handle_icon (e) {
+      if (this.$refs.DropdownMenu.contains(e.target)) {
+        return
+      } else {
+        this.isshows = false
+      }
+    },
+    handle_icon2 (e) {
+      if (this.$refs.DropdownMenu2.contains(e.target)) {
+        return
+      } else {
+        this.isshows2 = false
+      }
+    },
     // 单选
     handle_Radio (value) {
+      console.log(value);
       if (value === "视频") {
         value = 1
       }
@@ -256,35 +290,12 @@ export default {
       this.ststus_color = false
       this.index_color = null
       if (index === '全部') {
-        this.ststus_color_major = true
-        this.major_color = false
-        if (majorcourse.length == 0) {
-          this.$Message.error('该专业暂时没有课程推荐...')
-        }
-        var arr = [];
-        var arr2 = [];
-        majorcourse.forEach((v, i) => {
-          if (v.is_charge === 1) {
-            arr.push(v)
-            this.newCourseAll = arr
-            if (arr.length > 10) {
-              this.newCourse = arr.slice(0, 10)
-            } else {
-              this.newCourse = arr
-            }
-          }
-          if (v.is_charge === 0) {
-            arr2.push(v)
-            this.freeCourseAll = arr2
-            if (arr2.length > 10) {
-              this.freeCourse = arr2.slice(0, 10)
-            } else {
-              this.freeCourse = arr2
-            }
-          }
-        })
+        // this.ststus_color_major = true
+        // this.major_color = false
 
       } else {
+        console.log(this.major_color);
+
         this.ststus_color_major = false
         this.major_color = index
         var majorcourse = this.schoolCourse.filter(v => {
@@ -322,37 +333,37 @@ export default {
       this.ststus_color_major = false
       this.major_color = null
       if (ind === '全部') {
-        this.ststus_color = true
-        this.index_color = null
-        schoolCourseList('').then(res => {
-          if (res.data.list.length == 0) {
-            this.$Message.error('该学校暂时没有课程推荐...')
+        // this.ststus_color = true
+        // this.index_color = null
+        // schoolCourseList('').then(res => {
+        //   if (res.data.list.length == 0) {
+        //     this.$Message.error('该学校暂时没有课程推荐...')
 
-          }
-          this.schoolCourse = res.data.list
-          var arr = [];
-          var arr2 = [];
-          res.data.list.forEach((v, i) => {
-            if (v.is_charge === 1) {
-              arr.push(v)
-              this.newCourseAll = arr
-              if (arr.length > 10) {
-                this.newCourse = arr.slice(0, 10)
-              } else {
-                this.newCourse = arr
-              }
-            }
-            if (v.is_charge === 0) {
-              arr2.push(v)
-              this.freeCourseAll = arr2
-              if (arr2.length > 10) {
-                this.freeCourse = arr2.slice(0, 10)
-              } else {
-                this.freeCourse = arr2
-              }
-            }
-          })
-        })
+        //   }
+        //   this.schoolCourse = res.data.list
+        //   var arr = [];
+        //   var arr2 = [];
+        //   res.data.list.forEach((v, i) => {
+        //     if (v.is_charge === 1) {
+        //       arr.push(v)
+        //       this.newCourseAll = arr
+        //       if (arr.length > 10) {
+        //         this.newCourse = arr.slice(0, 10)
+        //       } else {
+        //         this.newCourse = arr
+        //       }
+        //     }
+        //     if (v.is_charge === 0) {
+        //       arr2.push(v)
+        //       this.freeCourseAll = arr2
+        //       if (arr2.length > 10) {
+        //         this.freeCourse = arr2.slice(0, 10)
+        //       } else {
+        //         this.freeCourse = arr2
+        //       }
+        //     }
+        //   })
+        // })
       } else {
         this.ststus_color = false
         this.index_color = ind
@@ -468,13 +479,14 @@ export default {
       })
         .then(res => {
           console.log(res);
-
-          if (res.data.list.length >= 12) {
-            res.data.list.length = 12
+          this.majorListAll = res.data.list
+          if (res.data.list.length >= 8) {
+            this.majorList = res.data.list.slice(0, 8)
+          } else {
             this.majorList = res.data.list
           }
-          this.majorList = res.data.list
-          this.majorListAll = res.data.list
+
+
 
         })
     },
@@ -505,18 +517,22 @@ export default {
         .then(res => {
           console.log(res);
           if (res.code === 200) {
-            // if (res.data.list.length >= 8) {
-            //   this.schoolList = res.data.list.slice(0, 8)
-            // } else {
-            //   this.schoolList = res.data.list
-            // }
+            if (res.data.list.length >= 6) {
+              this.schoolList = res.data.list.slice(0, 6)
+            } else {
+              this.schoolList = res.data.list
+            }
             this.DropdownItem_schoolList = res.data.list
-            this.schoolList = res.data.list
+            // this.schoolList = res.data.list
           }
         })
     }
   },
+
   mounted () {
+
+    document.addEventListener('click', this.handle_icon)
+    document.addEventListener('click', this.handle_icon2)
     // this.getData()
     this.getSchoolList()
     this.get_command_course()
@@ -530,6 +546,10 @@ export default {
     // ) {
     //   this.getData()
     // }
+  },
+  destroyed () {
+    document.removeEventListener('click', this.handle_icon)
+    document.removeEventListener('click', this.handle_icon2)
   }
 }
 </script>
@@ -539,13 +559,16 @@ export default {
   background: #32b6ff;
   color: #fff;
 }
+.coloritem {
+  color: #32b6ff;
+}
 .colorIndex {
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #32b6ff;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 /deep/.ivu-tabs-nav {
   width: 100%;
@@ -671,19 +694,44 @@ export default {
   }
   .all_option {
     width: 1200px;
+
     margin: 40px auto;
-
-    .allschool_and_major {
-      display: flex;
-      align-items: center;
-
-      .allschool_list {
+    position: relative;
+    // overflow: hidden;
+    .DropdownMenu {
+      // width: 1200px;
+      width: 100%;
+      background-color: #ffffff;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+      border-radius: 4px;
+      z-index: 1000;
+      position: absolute;
+      left: 10px;
+      top: 50px;
+      padding: 10px;
+      .DropdownMenu_item {
         display: flex;
         flex-wrap: wrap;
-        align-items: center;
+        cursor: pointer;
+        span {
+          width: 20%;
+          padding: 5px 0;
+        }
+      }
+    }
+    .allschool_and_major {
+      // display: flex;
+      // align-items: center;
+      width: 100%;
+      .allschool_list {
+        display: flex;
+        // align-items: center;
+        width: 100%;
         .allschool_listItem2 {
           height: 30px;
-          margin: 0 30px;
+          width: 12.5%;
+          // margin: 0 30px;
           display: flex;
           padding: 0 7px;
           justify-content: center;
@@ -691,42 +739,12 @@ export default {
         }
         .allschool_listItem {
           height: 30px;
-          margin: 0 30px;
+          width: 16.6%;
+          // margin: 0 30px;
           padding: 0 7px;
           display: flex;
-          justify-content: flex-start;
+          justify-content: center;
           align-items: center;
-        }
-        a:hover {
-          color: #2ba4e7ff;
-        }
-        .schoolyard_DropdownMenu {
-          display: flex;
-          flex-wrap: wrap;
-          // min-height: 300px;
-          justify-content: flex-start;
-          /deep/.ivu-dropdown-item {
-            padding: 0;
-            margin: 10px 10px;
-            height: 24px;
-          }
-        }
-        /deep/.ivu-select-dropdown {
-          width: 1200px;
-          background-color: #fff;
-          position: absolute;
-          left: 0 !important;
-          // opacity: 0.6;
-          display: flex;
-          top: 30px !important;
-        }
-        span {
-          // margin: 0 17px;
-          // font-size: 13px;
-          a {
-            color: #000;
-            // font-size: 12px;
-          }
         }
       }
 

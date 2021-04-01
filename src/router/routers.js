@@ -417,7 +417,7 @@ const indexRouter = [
             name: 'student_courseware_detail',
             meta: {
               title: '课程详情',
-              keepAlive: true
+              keepAlive: false
             },
             component: () => import('@/view/class_common/course/course_detail')
           }
@@ -428,7 +428,7 @@ const indexRouter = [
         name: 'teacher_course',
         meta: {
           title: '课程管理',
-          keepAlive: true
+          keepAlive: false
         },
         component: () => import('@/view/teacher_page/course_manage/course_manage.vue')
       },

@@ -126,8 +126,6 @@ export default {
           path: '/personal/wallet'
         }
       ],
-      // course_list: [],
-      // teacher_list: {},
       couseList: []
     }
   },
@@ -146,41 +144,15 @@ export default {
     get_Course () {
       get_Course().then(res => {
         if (res.code === 200) {
-          console.log(res);
-
-          this.couseList = res.data.data
+          this.couseList = res.data.data.splice(0, 6)
         }
 
       })
     },
 
-    // getteacher_message () {
-    //   if (this.userType === 1) {
-    //     teacher_message(this.userId).then(res => {
-    //       console.log(res);
-    //       this.teacher_list = res.data.teacher_list
-    //       this.course_list = res.data.course_list
-    //     })
-    //   }
-    //   else {
-    //     student_message(this.userId).then(res => {
-    //       console.log(res);
-
-    //     })
-
-    //   }
-    // }
-
   },
   mounted () {
     this.get_Course()
-    // this.getteacher_message()
-
-    // setTimeout(() => {
-    //   if (this.userType === 2) {
-    //     this.personal_tab.splice(4, 1)
-    //   }
-    // }, 1000)
 
   }
 

@@ -26,7 +26,8 @@ export const save_course_table = ({ teacher_course_id, course_table_data, year, 
       course_table_data,
       year,
       semester,
-      teacher_course_id
+      teacher_course_id,
+      // week,
     },
     method: 'post'
   })
@@ -207,7 +208,7 @@ export const student_course_score = (student_course_id) => {
     method: 'get',
     url: '/teacher/score/get_score_by_student',
     params: {
-      student_course_id
+      student_course_id,
     }
   })
 }

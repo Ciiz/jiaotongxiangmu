@@ -6,7 +6,7 @@
           <img :src="userInfo.icon" alt="">
           <Upload :action="action_url" :format="format" :max-size="maxsize"
             :data="{type:'icon',token:$store.state.user.token}" :on-exceeded-size="exceededsize" name='file'
-            :on-format-error="formaterror" :on-success="handleSuccess">
+            :on-format-error="formaterror" :on-success="handleSuccess" :show-upload-list='false'>
             <div style="cursor:pointer;">更改头像</div>
           </Upload>
         </div>
@@ -19,7 +19,6 @@
       </FormItem>
       <FormItem label="姓名：">
         <div class="userInfo_style"> {{userInfo.name}}</div>
-
       </FormItem>
       <FormItem label="职业：">
         <div class="userInfo_style">{{userInfo.major_name}}</div>
@@ -53,8 +52,24 @@
           还没有绑定微信
         </div>
       </FormItem>
+      <FormItem label='简介：'>
+        <div v-show="synopsis_show" style="display:flex;flex-wrap:wrap;">
+          <span>
+            <span>{{userInfo.profile}}</span>
+            <span style="display: inline-block;margin-left: 5px;vertical-align: middle;" @click="handleisshow">
+              <img src="@/assets/images/public/fill.svg" @click="handleisshow" alt=""
+                style="width:15px;height:15px;display: inline-block"><a href="#">填写</a></span>
+          </span>
+        </div>
+        <div class="userInfo_synopsis" v-show="isshow">
+          <Input v-model="value" type="textarea" :rows="4" style="width:475px;margin-bottom:15px;"
+            placeholder="请输入..." />
+          <span><Button type="primary" @click="handle_save">保存</Button> <Button
+              @click="handle_cancel">取消</Button></span>
+        </div>
+      </FormItem>
     </Form>
-    <div class="password_tip" v-if="confirmshow">
+    <div class="password_tip" v-show="confirmshow">
       <div class="form">
         <Form>
           <Icon type="md-close" class="iocn" @click="handleicon" />
@@ -83,12 +98,16 @@
 import { student_message } from '@/api/student'
 import { teacher_message, update_info, updateUserWechatId } from '@/api/user'
 import upload_mixin from '_c/mixins/upload_mixin'
+import { f } from 'tree-table-vue'
+import log from 'video.js/es5/utils/log'
 export default {
   mixins: [upload_mixin],
   name: 'personaldata',
-
   data () {
     return {
+      value: '',
+      synopsis_show: true,
+      isshow: false,
       confirmshow: false,
       password: '',
       userInfo: {},
@@ -96,7 +115,6 @@ export default {
       infolist: {
         icon: '',
         account: ''
-
       },
       maxsize: 307200,
       format: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'pcd', 'webp'],
@@ -107,7 +125,6 @@ export default {
         sex: '',
         email: '',
         icon: ''
-
       }
     }
   },
@@ -126,6 +143,31 @@ export default {
     }
   },
   methods: {
+    async handle_save () {
+      let res = await this.axios.request({
+        method: 'post',
+        url: '/index.php/Teacher/User/update_info',
+        data: {
+          profile: this.value
+        }
+      })
+      console.log(res);
+      if (res.code == 200) {
+        this.isshow = false
+        this.synopsis_show = true
+        this.userInfo.profile = this.value
+        this.$Message.success('保存成功！');
+      }
+    },
+    handle_cancel () {
+      this.isshow = false
+      this.synopsis_show = true
+      this.value = ''
+    },
+    handleisshow () {
+      this.isshow = true
+      this.synopsis_show = false
+    },
     handleicon () {
       this.confirmshow = false
     },
@@ -165,8 +207,6 @@ export default {
       })
     },
     handleSuccess (res, file) {
-      console.log(res)
-      console.log(file)
       if (res.code === 200) {
         this.userInfo.icon = res.data.url
         this.userdata.alipay_account = this.userInfo.alipay_account
@@ -175,7 +215,6 @@ export default {
         this.userdata.icon = this.userInfo.icon
         this.userdata.mobile = this.userInfo.mobile
         update_info(this.userdata).then(response => {
-          console.log(response)
           if (response.code === 200) {
             this.$Message.success('上传成功！')
             this.$store.commit('userInfo_icon', this.userInfo.icon)
@@ -221,6 +260,8 @@ export default {
     getteacher_message () {
       if (this.userType === 1) {
         teacher_message(this.userId).then(res => {
+          console.log(res);
+
           this.userInfo = res.data.teacher_list
           this.infolist.account = res.data.teacher_list.account
           console.log(this.userInfo.wx_id)
@@ -253,11 +294,21 @@ export default {
 </script>
 
 <style lang='less' scoped>
+/deep/.ivu-input-disabled {
+  resize: none;
+  border: none;
+}
+/deep/.ivu-input[disabled] {
+  background-color: #fff;
+  border: none;
+}
 .personaldata {
+  height: 600px;
   width: 100%;
   position: relative;
   overflow: hidden;
   .password_tip {
+    z-index: 99;
     background-color: #fff;
     width: 300px;
     height: 200px;
@@ -267,13 +318,11 @@ export default {
     justify-content: space-around;
     box-shadow: 1px 1px 9px #222;
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 99;
+    left: 60%;
+    top: -383px;
+    // transform: translate(-50%, -50%);
     position: relative;
     overflow: hidden;
-
     .iocn {
       position: absolute;
       top: 4px;
@@ -316,6 +365,10 @@ export default {
       color: #009aff;
       margin-left: 60px;
     }
+  }
+  .userInfo_synopsis {
+    display: flex;
+    flex-direction: column;
   }
   .userInfo_password {
     display: flex;

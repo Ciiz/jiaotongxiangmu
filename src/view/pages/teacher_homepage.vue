@@ -8,8 +8,9 @@
         </div>
         <div class="teacher_homepageHeader_lText">
           <span>{{teacher_list.name}}</span>
-          <span>{{teacher_list.major_name}}</span>
+          <span>专业：{{teacher_list.major_name}}</span>
           <span>{{teacher_list.school_name}}</span>
+          <span style="width:800px"> 简介：{{teacher_list.profile}}</span>
         </div>
       </div>
       <div class="teacher_homepageHeader_r">

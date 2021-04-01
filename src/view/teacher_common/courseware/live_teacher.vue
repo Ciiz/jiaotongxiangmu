@@ -254,7 +254,6 @@
                         </Select>
                       </div>
                     </div>
-
                     <pdf ref="pdf" :src="src" :page="page" @progress="loadedRatio = $event" @error="error"
                       @num-pages="numPages = $event" @link-clicked="page = $event" style="width:100%;">
                     </pdf>
@@ -326,6 +325,7 @@
                     <img src="@/assets/images/new_img/close-barrage.png" @click="barrageIsShow = false"
                       v-show="barrageIsShow" />
                     <img src="@/assets/images/new_img/ergeType.png" @click="ergeTypeChange()" />
+
                     <img src="@/assets/images/new_img/enlarge.png" @click="fullScreen('pdf')" />
                   </div>
                   </Col>
@@ -352,12 +352,13 @@
                   </div>
                 </div>
                 <div class="chat_box_bottom">
+
                   <div class="prohibit-discuss-btn" @click="prohibitDiscuss">
-                    <img src="@/assets/images/public/saying.svg" v-if="online_data.groupstatus===1"
+                    <img src="@/assets/images/public/banneding.svg" v-if="online_data.groupstatus===1"
                       style="vertical-align:middle;margin-right:10px;height:15px;width:15px">
-                    <img src="@/assets/images/public/banneding.svg" v-else
+                    <img src="@/assets/images/public/saying.svg" v-else
                       style="vertical-align:middle;margin-right:10px;height:15px;width:15px">
-                    <span class="prohibit-discuss-des">{{ online_data.groupstatus===1? '发言中' : '禁言中'}} </span>
+                    <span class="prohibit-discuss-des">{{ online_data.groupstatus===1? '禁言中' : '发言中'}} </span>
                   </div>
                   <div class="input-s">
                     <input :maxlength="30" type="text" @keyup.enter="send" v-model="msg" class="chat-input"
@@ -625,6 +626,7 @@
   </div>
 </template>
 <script>
+import { getLoginExe } from '@/api/user'
 import pdf from 'vue-pdf'
 import modal_mixin from '@/view/mixins/modal_mixin'
 import { _debounce, fullScreen } from '@/libs/util'
@@ -1322,6 +1324,17 @@ export default {
         }
       }).then(res => {
         if (res.code === 200) {
+          let id = this.$store.state.user.userInfo.schoolId
+          let userType = this.$store.state.user.userInfo.userType
+          let account = this.$store.state.user.userInfo.account
+          let data = {
+            class_type: '0',
+            is_class: account + '_' + userType + '_' + id
+          }
+          getLoginExe(data).then(res2 => {
+            console.log(res2);
+          })
+
           this.$Message.success(res.message)
           setTimeout(() => {
             // window.location.href = '/user_center/teacher1/course_courseware#/user_center/teacher1/MyCourse'
@@ -1339,8 +1352,8 @@ export default {
         data: {
         }
       })
-      let top_semester_9 = this.moment(res.data.list[0].term_begins * 1000).format('M')
-      let buttom_semester_3 = this.moment(res.data.list[1].term_begins * 1000).format('M')
+      let buttom_semester_3 = this.moment(res.data.list[0].term_begins * 1000).format('M')
+      let top_semester_9 = this.moment(res.data.list[1].term_begins * 1000).format('M')
       let now_time = this.moment(Date.parse(time)).format('M')
       if (now_time < buttom_semester_3 || now_time > top_semester_9) {
         this.semester = 1
@@ -1373,6 +1386,10 @@ export default {
         }
       }).then(res => {
         console.log(res);
+        if (res.data === null) {
+          this.$Message.error('请先把课程表安排好再考勤！')
+          return
+        }
         this.class_list = res.data.list
         var arr = []
         res.data.list.forEach(v => {
@@ -1512,9 +1529,11 @@ export default {
           method: 'post',
           url: '/index.php/Teacher/Homework/release',
           data: {
-            homework_release_id: this.release_id
+            homework_release_id: this.release_id,
+            group: this.group_chat_id
           }
         }).then(res => {
+          console.log(res);
           if (res.code === 200) {
             this.$Message.success(res.message)
             this.getInfo()
@@ -1611,7 +1630,7 @@ export default {
           course_status: this.course_status
         }
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.code === 200) {
           this.$store.commit('setcoursedatalist', res.data)
           this.teacher_course_id = res.data.courseware_info.teacher_course_id
@@ -1675,12 +1694,15 @@ export default {
         url: '/index.php/home/live/get_online_user',
         params: {
           group: this.group_chat_id,
-          status: m
+          status: m,
+          group_s: this.group_chat_id + 's'
+
         }
       }).then(res => {
         console.log(res);
         if (res.code === 200) {
           this.online_data = res.data
+
         }
       })
     },
@@ -1716,12 +1738,11 @@ export default {
       console.log(err)
     },
     handlePageChange () {
+      console.log(9999);
       if (this.isshare) {
         let _this = this
         let _pdf = document.querySelector('.pdfcard')
         _this.scrollTop = _pdf.scrollTop
-        console.log(_this.scrollTop);
-
         handle_ppt_option({
           option_obj: {
             type: 'ppt',
@@ -1730,8 +1751,7 @@ export default {
           },
           group: this.group_chat_id
         }).then(res => {
-          console.log(res);
-
+          console.log(res)
         })
       }
     },
@@ -1916,7 +1936,6 @@ export default {
           this.online_data.groupstatus = 1
         })
       }
-
     },
     getQuestionList () {
       this.axios.request({

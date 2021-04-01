@@ -906,6 +906,7 @@ export default {
           console.log(res);
           if (res.code === 200) {
             this.list = res.data.course_list
+            console.log(this.list);
             for (let i in this.list) {
               this.list[i]['style'] = 'width'
               this.list[i].img += '?nocache=' + new Date().getTime()
@@ -957,7 +958,7 @@ export default {
       this.showAddCourse = true
       this.changeCourseId = i
     },
-    selectCourse (item, index) {
+    selectCourse (item) {
       console.log(item);
       if (this.showSelectCourse === true) {
         this.modal1 = true
@@ -969,7 +970,7 @@ export default {
           this.$router.push({ path: '/teachingSystem/StudentCourse/course_coursewares' })
         }
         this.course_namet = item.course_name
-        console.log(item);
+
         this.$store.commit('setcourseData', item)
       }
     },
@@ -1227,6 +1228,8 @@ export default {
         i--
       }
       this.answerList = this.answer.slice(-(i * 10))
+      console.log(this.answerList);
+
       this.$nextTick(function () {
         document.getElementsByClassName('ab-scroll')[0].scrollTop = 10 / this.answerList.length * document.getElementsByClassName('ab-scroll')[0].scrollHeight
       })
@@ -1304,6 +1307,8 @@ export default {
           page_size: 1000
         }
       }).then(res => {
+        console.log('问题聊天记录');
+
         if (res.code === 200) {
           this.resdata = res.data.list
           for (let item in this.resdata) {
@@ -1336,6 +1341,7 @@ export default {
           page_size: 1000
         }
       }).then(res => {
+        console.log('话题内容');
         if (res.code === 200) {
           this.resdata = res.data.list
           for (let item in this.resdata) {
@@ -1722,54 +1728,7 @@ export default {
         this.chatList = arr
       })
     },
-    // showTeacherInfo () { // 学生端消息中心显示消息列表
-    //   this.axios.request({
-    //     url: '/index.php/Student/Task/question_list',
-    //     method: 'get',
-    //     params: {
-    //       page_no: 1,
-    //       page_size: 10000
-    //     }
-    //   }).then(res => {
-    //     if (res.code === 200) {
-    //       for (let i = 0; i < res.data.question_list.length; i++) {
-    //         this.chatList.push(res.data.question_list[i])
-    //       }
-    //     }
-    //   })
-    // },
-    // showDiscussStudent () { // 学生端消息中心学生讨论列表
-    //   this.axios.request({
-    //     url: '/index.php/Student/StudentTask/task_list',
-    //     method: 'get',
-    //     params: {
-    //       page_no: 1,
-    //       page_size: 10000
-    //     }
-    //   }).then(res => {
-    //     if (res.code === 200) {
-    //       for (let i = 0; i < res.data.list.length; i++) {
-    //         this.chatList.push(res.data.list[i])
-    //       }
-    //     }
-    //   })
-    // },
-    // showTopiclistStudent () { // 学生端话题列表
-    //   this.axios.request({
-    //     url: '/index.php/Student/Topic/topic_list',
-    //     method: 'get',
-    //     params: {
-    //       page_no: 1,
-    //       page_size: 10000
-    //     }
-    //   }).then(res => {
-    //     if (res.code === 200) {
-    //       for (let i = 0; i < res.data.list.length; i++) {
-    //         this.chatList.push(res.data.list[i])
-    //       }
-    //     }
-    //   })
-    // },
+
     showProblemStudent () {
       this.showStudent_messgess()
       // this.showTeacherInfo()
@@ -1825,6 +1784,7 @@ export default {
         if (res.code === 200) {
           this.resetDiscussInfo()
           this.getProblemDiscussStudent()
+
         }
       })
     },
@@ -1832,6 +1792,7 @@ export default {
       sendInfoGroup(this.taskgroup, this.discussinfo, this.student_task_id).then(res => {
         if (res.code === 200) {
           this.resetDiscussInfo()
+
         }
       })
     },
@@ -2016,6 +1977,10 @@ export default {
     }
   },
   mounted () {
+    setTimeout(() => {
+      this.selectCourse(this.list[0])
+    }, 1000)
+
     if (this.$store.state.user.userMessagess == true) {
       this.infoCenter = 'system'
       document.getElementsByClassName('sjx-t')[0].style.display = 'none'

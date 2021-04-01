@@ -13,8 +13,8 @@
 
     </div>
 
-    <Modal v-model="modal" class="courseware_list_modal" :title="title" :width="modal_width" :footer-hide="footerHide"
-      :fullscreen="fullscreen">
+    <Modal v-model="modal" class="courseware_list_modal" class-name="vertical-center-modal" :title="title"
+      :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen" @on-cancel='visiblechange(target)'>
       <TaskReleaseList v-if="target === 'task_release_list' && modal" :type="target_id.type"
         :courseware_id="target_id.courseware_id" :timetable_id="target_id.timetable_id"
         :release_status="target_id.release_status" :editable="editable"></TaskReleaseList>
@@ -25,9 +25,10 @@
         :type="target_id.type" :teacher_course_id="teacher_course_id" :courseware_id="target_id.courseware_id"
         :timetable_id="target_id.timetable_id" :release_status="target_id.release_status"
         :courseware_name="target_id.courseware_name" :editable="editable"></ExamReleaseList>
-      <CoursewareLiveClassChoose v-if="target === 'courseware_live_class_choose' && modal"
+      <CoursewareLiveClassChoose v-if="target === 'courseware_live_class_choose' && modal" :ischange='ischange'
         :course_status="course_status" :classList="target_id.classList" :courseware_id="target_id.courseware_id"
-        :live_status="target_id.live_status" @finished="modal = false"></CoursewareLiveClassChoose>
+        :timetable_id='target_id.timetable_id' :live_status="target_id.live_status" @finished="modal = false">
+      </CoursewareLiveClassChoose>
       <courseware-add v-if="target === 'courseware_editor' && modal" isneworeditor="编辑课件" :rowid='target_id'
         :send_course_id='teacher_course_id' @success="getData(true),modal = false"></courseware-add>
       <coursewarePreview v-if="target === 'coursewarePreview'&& modal" isneworeditor="预览课件" :rowid='target_id'
@@ -37,7 +38,13 @@
         @timetable_change='timetable_change' @error="modal = false">
       </CoursewareTimetable>
     </Modal>
-    <Modal v-model="showQuestion" title="问题列表" :width="700" footer-hide class="courseware_list_modal2">
+    <!-- <Modal v-model="modal2" class="courseware_list_modal" :width="modal_width" :footer-hide="footerHide"
+      :fullscreen="fullscreen">
+      <CoursewareLiveClassChoose v-if="target === 'courseware_live_class_choose' && modal2"
+        :course_status="course_status" :classList="target_id.classList" :courseware_id="target_id.courseware_id"
+        :live_status="target_id.live_status" @finished="modal2 = false"></CoursewareLiveClassChoose>
+    </Modal> -->
+    <Modal v-model="showQuestion" title="问题列表" :width="700" :title="title" footer-hide class="courseware_list_modal2">
       <showQuestion :courseware_id='courseware_id'></showQuestion>
     </Modal>
     <Modal v-model="modal3" title="视频录制" :width="1100" footer-hide>
@@ -79,6 +86,7 @@ export default {
   },
   data () {
     return {
+      ischange: 0,
       percent: 0,
       progress_show: false,
       modal3: false,
@@ -88,6 +96,7 @@ export default {
       vedioClass_id: '',
       course_status: 0,
       showQuestion: false,
+      modal2: false,
       page: 1,
       page_size: 7,
       total: 0,
@@ -359,17 +368,19 @@ export default {
           render: (h, params) => {
             let row = params.row
             let classList = row.class_list
+            console.log(classList);
+
             return (
               <div class='action-item'>
-                <Button type='info' size="small" onClick={() => { this.getData(), this.open('courseware_live_class_choose', { classList: classList, courseware_id: row.id, live_status: 1 }, '班级选择', 300) }} v-show={!this.editable}>课室上课</Button>
-                <Button type='info' size="small" onClick={() => { this.open('courseware_live_class_choose', { classList: classList, courseware_id: row.id, live_status: 3 }, '班级选择', 300) }} v-show={!this.editable}>直播上课</Button>
+                <Button type='info' size="small" onClick={() => { this.getData(), this.open('courseware_live_class_choose', { classList: classList, courseware_id: row.id, live_status: 1 }, '班级选择', 345) }} v-show={!this.editable}>课室上课</Button>
+                <Button type='info' size="small" onClick={() => { this.open('courseware_live_class_choose', { classList: classList, courseware_id: row.id, live_status: 3 }, '班级选择', 345) }} v-show={!this.editable}>直播上课</Button>
                 <button class="orange-btn" onClick={() => { this.multipleRelease(row, 1) }} v-show={this.editable && row.class_list.length !== 0}>发布</button>
                 <button class="blueText-btn" onClick={() => { this.multipleRelease(row, 0) }} v-show={this.editable && row.class_list.length !== 0}>撤回</button>
                 <span v-show={this.editable}>
                   <button class="blueText-btn" onClick={() => { this.open('courseware_editor', row.id, '编辑课件') }} v-show={this.editable}>编辑</button>
                   <button class="redText-btn" onClick={() => { this.isremove(row) }} v-show={this.editable}>删除</button>
                 </span>
-              </div>
+              </div >
             )
           }
         }
@@ -382,6 +393,13 @@ export default {
     }
   },
   methods: {
+    visiblechange (e) {
+      if (e === 'courseware_live_class_choose') {
+        console.log('测试');
+      }
+
+
+    },
     async timetable_change () {
       let res = await this.axios.request({
         url: '/index.php/Teacher/Courseware/index',
@@ -447,6 +465,8 @@ export default {
           this.total = res.data.pages * this.page_size
           this.class_list = res.data.class_list ? res.data.class_list : []
           this.course_status = res.data.course_status
+
+
         }
         this.loading = false
       })
@@ -556,6 +576,15 @@ export default {
 }
 </script>
 <style lang="less">
+.vertical-center-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .ivu-modal {
+    top: 0;
+  }
+}
 .table-item {
   .item {
     padding: 5px;

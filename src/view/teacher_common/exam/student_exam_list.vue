@@ -108,8 +108,8 @@
           <div v-html="data_info.homework_content"></div>
         </Row>
         </Col>
-        <Modal class="fistIndex-modal" v-model="modal" :title="title" :width="900" :footer-hide="footerHide"
-          :fullscreen="fullscreen">
+        <Modal class="fistIndex-modal" class-name="vertical-center-modal" v-model="modal" :title="title" :width="900"
+          :footer-hide="footerHide" :fullscreen="fullscreen">
           <StudentExamEvaluate @changeExam="changePage" :examIndex="currentIndex" :student_exam_id="target_id"
             :targetwork_id='targetwork_id' v-if="target === 'student_exam_list' && modal"
             @success="modal = false ; getData()"></StudentExamEvaluate>
@@ -349,3 +349,14 @@ export default {
   }
 }
 </script>
+<style lang="less">
+.vertical-center-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .ivu-modal {
+    top: 0;
+  }
+}
+</style>

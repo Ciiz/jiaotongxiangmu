@@ -6,8 +6,8 @@
       <button class="blueC-btn" style="margin-left:15px;"
         @click="$emit('showAddCourseware',timetable_id,target_id,1,courseware_id,teacher_course_id,type,courseware_name)"
         v-if="editable">添加测试</button>
-      <button class="green-btn" style="margin-left:15px;width:104px" @click="open('exam_select','','选择测试', 400)"
-        v-if="editable">选择测试</button>
+      <!-- <button class="green-btn" style="margin-left:15px;width:104px" @click="open('exam_select','','选择测试', 400)"
+        v-if="editable">选择测试</button> -->
       <slot name="search-bar"></slot>
     </Row>
     <Table :loading="loading" ref="selection" class="exam_release_list_table" :columns="columns" :data="list"

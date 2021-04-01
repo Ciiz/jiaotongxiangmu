@@ -228,33 +228,66 @@ export default {
       this.modal2 = true
     },
     random () {
-      this.modal2 = true
-      this.clear()
-      this.total = this.onlinedatastudent.student_num2
-      let o = 0
-      while (o < this.onlinedatastudent.student_num2) {
-        var a = 0
-        var num1 = Math.floor(Math.random() * this.online_data.students.length)
-        var num2 = Math.floor(Math.random() * this.online_data.students[num1].student.length)
-        if (this.students.length === 0) {
-          this.students.push(this.online_data.students[num1].student[num2].id)
-          this.$refs.className[num1].childNodes[1].childNodes[num2].style.borderColor = 'red'
-          o = 1
-        } else {
-          for (var i = 0; i < this.students.length; i++) {
-            if (this.online_data.students[num1].student[num2].id !== this.students[i]) {
-              a++
-            }
-          }
-          if (a === this.students.length) {
-            o++
-            this.$refs.className[num1].childNodes[1].childNodes[num2].style.borderColor = 'red'
-            this.students.push(this.online_data.students[num1].student[num2].id)
-          }
-        }
+      // this.modal2 = true
+      // this.clear()
+      // let o = 0
+      // var num = Math.round(Math.random() * this.online_data.students[0].student.length)  
+      // var id = this.online_data.students[0].student[num].id   随机的id
+      var arr = [];
+      for (var i = 0; i < this.online_data.students[0].student.length; i++) {
+        console.log(i);
+        arr.push(this.online_data.students[0].student[i].id)
       }
+      console.log(arr);
+      this.axios.request({
+        method: 'post',
+        url: 'index.php/Teacher/Quiz/save',
+        data: {
+          student_ids: arr,
+          rob: 2,
+          topic_type: 2,
+          reply_time: '',
+          quiz_id: '',
+          courseware_id: this.courseware_id,
+          group: this.group_chat_id,
+          content: this.questionContent,
+          answer_num: this.onlinedatastudent.student_num2,
+          type: 0
+        }
+      }).then(res => {
+        console.log(res);
+        if (res.code === 200) {
+          this.$emit('closeQList')
+          this.$Message.success('提问成功')
+        } else {
+          this.$Message.error(res.message)
+        }
+      })
+      // while (o < this.onlinedatastudent.student_num2) {
+      //   var a = 0
+      //   var num1 = Math.floor(Math.random() * this.online_data.students.length)
+      //   console.log(num1);
+      //   var num2 = Math.floor(Math.random() * this.online_data.students[num1].student.length)
+      //   if (this.students.length === 0) {
+      //     this.students.push(this.online_data.students[num1].student[num2].id)
+      //     this.$refs.className[num1].childNodes[1].childNodes[num2].style.borderColor = 'red'
+      //     o = 1
+      //   } else {
+      //     for (var i = 0; i < this.students.length; i++) {
+      //       if (this.online_data.students[num1].student[num2].id !== this.students[i]) {
+      //         a++
+      //       }
+      //     }
+      //     if (a === this.students.length) {
+      //       o++
+      //       this.$refs.className[num1].childNodes[1].childNodes[num2].style.borderColor = 'red'
+      //       this.students.push(this.online_data.students[num1].student[num2].id)
+      //     }
+      //   }
+      // }
     },
     submit () {
+      this.total = this.onlinedatastudent.student_num2
       if (parseInt(this.total) === parseInt(this.onlinedatastudent.student_num2)) {
         this.axios.request({
           method: 'post',

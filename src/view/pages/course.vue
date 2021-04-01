@@ -181,7 +181,9 @@
             <li v-for="(item,index) in teacherList" :key="index" class="index-teacher-item"
               @click="$router.push({ path: `/teacher_homepage/${item.teacher_id}`})">
               <div>
-                <img :src="item.icon" />
+
+                <img src="@/assets/images/u=3730772664,138405132&fm=26&gp=0.jpg" v-if="item.icon===''" />
+                <img :src="item.icon" v-else />
               </div>
               <div class="teacher_recommend">
                 <div style="font-size:16px;color:#000000;font-weight:bold;margin-top:10px">{{item.name}}</div>

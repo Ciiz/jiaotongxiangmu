@@ -4,20 +4,22 @@
       <h2>任务内容：</h2>
       <div v-html="student_task.task.content"></div>
       <h2>组员：</h2>
-      <p><span v-for="(item, index) in members" :key="item.id" :class="{'leader': item.is_team_leader}">{{item.name}}{{item.is_team_leader === 1 ? '(组长)' : ''}} {{index === members.length-1? '' : '、'}}</span></p>
+      <p><span v-for="(item, index) in members" :key="item.id"
+          :class="{'leader': item.is_team_leader}">{{item.name}}{{item.is_team_leader === 1 ? '(组长)' : ''}}
+          {{index === members.length-1? '' : '、'}}</span></p>
     </div>
     <div style="padding: 10px; border: 1px solid #ccc; */">
       <div class="chat-container-disc" id="chat-container-disc">
-        <a href="javascript:void(0)" style="margin: 10px;text-align:center;display:block;" @click="getHistoryMessages()" v-if="!loading && noMore===false">{{!loading ? '加载更多..' : '加载中'}}</a>
+        <a href="javascript:void(0)" style="margin: 10px;text-align:center;display:block;" @click="getHistoryMessages()"
+          v-if="!loading && noMore===false">{{!loading ? '加载更多..' : '加载中'}}</a>
         <p v-if="noMore" style="text-align:center;color: #999;">没有更多了~！</p>
         <!-- <transition-group name="list"> -->
         <div v-for="(item,index) in messageList" :key="index" class="chat-item">
           <div class="chat-user">
             <Avatar :src="item.msg.extra.userInfo.avator" />
-            <span
-              class="name"
-              :class="{'spec': item.msg.extra.userInfo.type == 'teacher', 'mine': item.msg.extra.userInfo.type == 'student' && item.from == $store.state.user.userInfo.userId, 'leader': item.msg.extra.userInfo.id ==  leader.id}"
-            >{{(item.msg.extra.userInfo.type == 'student' && item.from == $store.state.user.userInfo.userId) ? '我' : item.msg.extra.userInfo.name}} {{item.msg.extra.userInfo.name ===  leader.name ? '(组长)' : ''}}:</span>
+            <span class="name"
+              :class="{'spec': item.msg.extra.userInfo.type == 'teacher', 'mine': item.msg.extra.userInfo.type == 'student' && item.from == $store.state.user.userInfo.userId, 'leader': item.msg.extra.userInfo.id ==  leader.id}">{{(item.msg.extra.userInfo.type == 'student' && item.from == $store.state.user.userInfo.userId) ? '我' : item.msg.extra.userInfo.name}}
+              {{item.msg.extra.userInfo.name ===  leader.name ? '(组长)' : ''}}:</span>
             <span class="time">({{item.sendTime | timeFrom}})</span>
           </div>
           <div v-html="item.msg.msg" class="msg"></div>
@@ -25,7 +27,7 @@
         <!-- </transition-group> -->
       </div>
     </div>
-    <Input type="textarea" style="margin-top:15px;" placeholder="请输入...." v-model="msg"/>
+    <Input type="textarea" style="margin-top:15px;" placeholder="请输入...." v-model="msg" />
     <Button type="primary" size="small" @click="send()" style="margin-top:10px;">发送</Button>
   </div>
 </template>
@@ -173,18 +175,18 @@ export default {
     margin-bottom: 15px;
     display: flex;
     word-break: break-all;
-    .msg{
+    .msg {
       margin-left: 42px;
       padding: 5px;
       background: #ddd;
       border-radius: 5px;
       display: inline;
-      flex:1
+      flex: 1;
     }
-    .chat-user{
+    .chat-user {
       display: flex;
       align-items: center;
-      .ivu-avatar{
+      .ivu-avatar {
         margin-right: 10px;
       }
       .name {
@@ -196,18 +198,19 @@ export default {
     }
   }
 }
-.leader{
-  color: blueviolet!important;
+.leader {
+  color: blueviolet !important;
 }
-.spec{
-  color:cadetblue;
+.spec {
+  color: cadetblue;
 }
 
 .list-item {
   display: inline-block;
   margin-right: 10px;
 }
-.list-enter-active, .list-leave-active {
+.list-enter-active,
+.list-leave-active {
   transition: all 1s;
 }
 .list-enter, .list-leave-to
@@ -215,7 +218,7 @@ export default {
   opacity: 0;
   transform: translateY(30px);
 }
-.mine{
-  color:cadetblue;
+.mine {
+  color: cadetblue;
 }
 </style>

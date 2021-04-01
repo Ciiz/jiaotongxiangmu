@@ -874,7 +874,6 @@ export default {
         type: MESSAGE_TYPE.NORMAL // 弹幕样式
       })
       console.log(this.barrageList);
-
     },
     send () {
       if (!this.msg.trim()) return

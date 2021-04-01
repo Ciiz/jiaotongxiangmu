@@ -5,8 +5,8 @@
       <button @click="getData(true)" class="blue-btn" style="width:80px;transform: translate(-20px,2px);">搜索</button>
       <button @click="open('task_edit','','添加任务')" class="blueC-btn" style="margin-left:15px;"
         v-if="editable">添加任务</button>
-      <button @click="open('task_select','','选择任务')" class="green-btn" style="margin-left:15px;width:104px"
-        v-if="editable">选择任务</button>
+      <!-- <button @click="open('task_select','','选择任务')" class="green-btn" style="margin-left:15px;width:104px"
+        v-if="editable">选择任务</button> -->
       <slot name="search-bar"></slot>
     </Row>
     <Table :loading="loading" ref="selection" class="task_release_list_table" :columns="columns" :data="list"

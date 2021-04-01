@@ -9,23 +9,30 @@
 
     <Row class="team_school">
       <col>
-      <span
-        style="margin-bottom:30px;width:75px;height:30px;border-radius: 10px;cursor:pointer;display: flex;align-items:center;justify-content: center;"
-        :class="{colortaem:ststus_color}" @click="handleSchoolList('全部')">全部</span>
-      <div class="team_school_list" style="cursor:pointer">
-
-        <span v-for="(item,index) in schoolList" :key="index" class="allschool_listItem"
-          :class="{colorIndex:index_color===index}"><span
-            @click="handleSchoolList(index)">{{item.school_name}}</span></span>
-        <!-- <Dropdown style="margin-left: 20px">
-          <Icon type="md-arrow-dropdown" size="20" color="#000" />
-          <DropdownMenu slot="list" type="flex" class="schoolyard_DropdownMenu">
-            <DropdownItem v-for="(v,i) in DropdownItem_schoolList" :key="i" @click.native="handleSchoolList(i)"
-              :class="{colorIndex:index_color==i}">
-              {{v.school_name}}
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown> -->
+      <div style="display:flex;justify-content:space-between;width:100%">
+        <div style="display:flex;width:100%">
+          <span
+            style="width:75px;height:30px;border-radius: 5px;cursor:pointer;display: flex;align-items:center;justify-content: center;"
+            :class="{colortaem:ststus_color}" @click="handleSchoolList('全部')">全部</span>
+          <div class="allschool_list" style="cursor:pointer">
+            <span v-for="(item,index) in schoolList" :key="index" class="allschool_listItem2"
+              :class="{colorIndex:index_color===index}">
+              <span href="#" @click="handleSchoolList(index)">{{item.school_name}}</span>
+            </span>
+          </div>
+        </div>
+        <div ref="DropdownMenu2">
+          <div @click="isshows=!isshows">
+            <Icon type="md-arrow-dropup" size="24" v-if="isshows" />
+            <Icon type="md-arrow-dropdown" size="24" v-else />
+          </div>
+          <div class="DropdownMenu" v-show="isshows">
+            <div class="DropdownMenu_item">
+              <span v-for="(v,i) in DropdownItem_schoolList" :key="i" class="allschool_listItem"
+                :class="{coloritem:index_color===i}" @click="handleSchoolList(i)">{{v.school_name}}</span>
+            </div>
+          </div>
+        </div>
       </div>
       </col>
     </Row>
@@ -40,7 +47,6 @@
             <Option v-for="item in majorList" :value="item.major_name" :key="item.major_id">{{ item.major_name }}
             </Option>
           </Select>
-
           <Input placeholder="" style="width: auto;margin-left:50px ;" v-model="searchvalue"
             @keyup.enter.native="handlesearch">
           <Icon type="ios-search" slot="suffix" @click.native="handlesearch" />
@@ -54,15 +60,17 @@
       <col>
       <div class="teacher_team_big">
         <div class="teacher_team_father">
+          <div v-if="teacherList.length===0"> 暂无教师推荐！</div>
           <div class="teacher_team_item" v-for="(item,index) in teacherList" :key="index"
             @click="$router.push({ path: `/teacher_homepage/${item.id}`})">
             <div class="teacher_team_item_top">
               <div class="teacher_team_item_img">
-                <img :src="item.icon" alt="">
+                <img src="@/assets/images/u=3730772664,138405132&fm=26&gp=0.jpg" alt="" v-if="item.icon===''">
+                <img :src="item.icon" v-else alt="">
               </div>
               <div class="teacher_team_item_r">
                 <span>{{item.name}}</span>
-                <span>{{item.major_name}}</span>
+                <span>专业：{{item.major_name}}</span>
                 <span class="teacher_team_item_style">{{item.school_name}}</span>
               </div>
             </div>
@@ -87,6 +95,7 @@ export default {
 
   data () {
     return {
+      isshows: false,
       schoolList: [],
       majorList: [],
       model1: '',
@@ -96,7 +105,9 @@ export default {
       searchvalue: '',
       DropdownItem_schoolList: [],
       index_color: null,
-      ststus_color: false
+      ststus_color: false,
+      id: ''
+
     }
   },
   computed: {
@@ -108,58 +119,41 @@ export default {
     },
   },
   methods: {
-    // handleschoolList (ind) {
-    //   this.index_color = ind
-    //   schoolCourseList(
-    //     this.DropdownItem_schoolList[ind].id
-    //   ).then(res => {
-    //     if (res.data.list.length == 0) {
-    //       this.$Message.error('该学校暂时没有课程推荐...')
-    //     }
-    //     this.schoolCourse = res.data.list
-    //     var arr = [];
-    //     var arr2 = [];
-    //     res.data.list.forEach((v, i) => {
-    //       if (v.is_charge === 1) {
-    //         arr.push(v)
-    //         this.newCourseAll = arr
-    //         if (arr.length > 10) {
-    //           this.newCourse = arr.slice(0, 10)
-    //         } else {
-    //           this.newCourse = arr
-    //         }
-    //       }
-    //       if (v.is_charge === 0) {
-    //         arr2.push(v)
-    //         this.freeCourseAll = arr2
-    //         if (arr2.length > 10) {
-    //           this.freeCourse = arr2.slice(0, 10)
-    //         } else {
-    //           this.freeCourse = arr2
-    //         }
-    //       }
-    //     })
-    //   })
-    // },
+    handle_icon2 (e) {
+      if (this.$refs.DropdownMenu2.contains(e.target)) {
+        return
+      } else {
+        this.isshows = false
+      }
+    },
     handleSchoolList (index) {
+
+
       if (index === '全部') {
         this.ststus_color = true
         this.index_color = null
-        taecherList_nologin().then(res => {
-          if (res.data.teacher_list.length > 8) {
-            this.teacherList = res.data.teacher_list.slice(0, 8)
-          } else {
-            this.teacherList = res.data.teacher_list
-          }
-          this.moreteacherList = res.data.teacher_list
-          this.teacherSelect = res.data.teacher_list
-        })
       } else {
         this.ststus_color = false
         this.index_color = index
+        console.log(this.DropdownItem_schoolList[index]);
+
+        if (this.DropdownItem_schoolList[index].id) {
+
+          this.id = this.DropdownItem_schoolList[index].id
+
+        }
+        else if (this.schoolList[index].id) {
+          this.id = this.schoolList[index].id
+        }
+        console.log(this.id);
         taecherList_nologin(
-          this.schoolList[index].id
+          this.id
         ).then(res => {
+          console.log(res);
+
+          if (res.data.teacher_list.length === 0) {
+            this.$Message.error('该专业暂时没有课程推荐...')
+          }
           if (res.data.teacher_list.length > 8) {
             this.teacherList = res.data.teacher_list.slice(0, 8)
           } else {
@@ -167,6 +161,8 @@ export default {
           }
           this.moreteacherList = res.data.teacher_list
           this.teacherSelect = res.data.teacher_list
+
+
         })
       }
 
@@ -228,12 +224,13 @@ export default {
           console.log(res);
 
           if (res.code === 200) {
-            if (res.data.list.length >= 8) {
-              this.schoolList = res.data.list.slice(0, 8)
+            this.DropdownItem_schoolList = res.data.list
+            if (res.data.list.length >= 6) {
+              this.schoolList = res.data.list.slice(0, 6)
             } else {
               this.schoolList = res.data.list
             }
-            this.DropdownItem_schoolList = res.data.list
+
           }
         })
     },
@@ -252,17 +249,25 @@ export default {
     }
   },
   mounted () {
+    document.addEventListener('click', this.handle_icon2)
     this.getMajor()
     this.getSchoolList()
     this.get_command_teacher()
+  },
+  destroyed () {
+
+    document.removeEventListener('click', this.handle_icon2)
   }
 }
 </script>
 
 <style lang="less" scoped>
-.colortaem {
-  background: #32b6ff;
-  color: #fff;
+// .colortaem {
+//   background: #32b6ff;
+//   color: #fff;
+// }
+.coloritem {
+  color: #32b6ff;
 }
 .colorIndex {
   color: #fff;
@@ -270,7 +275,7 @@ export default {
   align-items: center;
   justify-content: center;
   background: #32b6ff;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 .team {
   .Divider {
@@ -298,6 +303,41 @@ export default {
 
     display: flex;
     align-items: center;
+    .DropdownMenu {
+      // width: 1200px;
+      width: 100%;
+      background-color: #ffffff;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+      border-radius: 4px;
+      z-index: 1000;
+      position: absolute;
+      left: 10px;
+      top: 50px;
+      padding: 10px;
+      .DropdownMenu_item {
+        display: flex;
+        flex-wrap: wrap;
+        cursor: pointer;
+        span {
+          width: 20%;
+          padding: 5px 0;
+        }
+      }
+    }
+    .allschool_list {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      .allschool_listItem2 {
+        width: 16.6%;
+        height: 30px;
+        display: flex;
+        padding: 0 7px;
+        justify-content: center;
+        align-items: center;
+      }
+    }
     .team_school_list {
       display: flex;
       flex-wrap: wrap;

@@ -26,6 +26,7 @@
   </div>
 </template>
 <script>
+import log from 'video.js/es5/utils/log'
 export default {
   props: {
     student_task_id: '',
@@ -90,14 +91,35 @@ export default {
         }
       }).then(res => {
         if (res.code === 200) {
-          _this.$Message.success(res.message)
+          _this.$Message.success('提交成功')
           _this.$emit('success')
         }
       })
     },
     nextTask () {
       let i = this.taskIndex + 1
-      this.$emit('changeTask', i)
+      // this.submit()
+      let _this = this
+      let scores = {}
+      this.score_option.forEach(item => { // 处理获取后台需要的分数格式
+        scores[item.id] = item.score
+      })
+      this.axios.request({
+        method: 'post',
+        url: '/index.php/Teacher/Task/score_update',
+        data: {
+          student_task_id: this.student_task_id,
+          evaluation: this.evaluation,
+          scores: scores
+        }
+      }).then(res => {
+        if (res.message === "操作成功！") {
+          this.$emit('changeTask', i)
+
+        } else if (res.message === "请输入评价！") {
+
+        }
+      })
     },
     lastTask () {
       let i = this.taskIndex - 1

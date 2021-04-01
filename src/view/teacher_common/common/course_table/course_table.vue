@@ -6,8 +6,8 @@
       <Select v-model="semester" size="small" style="width:115px;" @on-change="getCourseTable()">
         <!-- <Option :value="2">上半年</Option>`
         <Option :value="1">下半年</Option>` -->
-        <Option :value="2">下学期(上半年)</Option>`
-        <Option :value="1">上学期(下半年)</Option>`
+        <Option :value="2">下学期</Option>`
+        <Option :value="1">上学期</Option>`
       </Select>
       课程选择:
       <Select v-model="teacher_course_id" style="width: 200px" size="small" clearable
@@ -37,12 +37,16 @@
           <Option :value="1">单周</Option>
           <Option :value="2">双周</Option>
         </Select>
+        <span>第</span>
         <InputNumber v-model="item.week_start" placeholder="开始周" @on-change="handlecourseTableChange" />
+        <span>(周) ~ </span>
+        <span>第</span>
         <InputNumber v-model="item.week_end" placeholder="截止周" @on-change="handlecourseTableChange" />
+        <span>(周)</span>
         <Select v-model="item.day" placeholder="周几" style="width:80px" @on-change="handlecourseTableChange">
           <Option v-for="w in 7" :key="w" :value="w">周{{w}}</Option>
         </Select>
-        <Select v-model="item.class_no" placeholder="第几节" multiple style="width:230px"
+        <Select v-model="item.class_no" placeholder="第几节" multiple style="width:200px"
           @on-change="handlecourseTableChange">
           <Option v-for="c_n in 12" :key="(c_n)" :value="c_n">第{{c_n}}节 </Option>
         </Select>
@@ -180,7 +184,7 @@ export default {
   },
   methods: {
     async gettable_time () {
-      console.log(this.semester);
+      // console.log(this.semester);
       let res = await this.axios.request({
         url: 'home/course/classtime_list',
         method: 'get',
@@ -213,14 +217,17 @@ export default {
       this.getData(this.formatData(this.course_table, this.timetable_data))
     },
     getCourseTable () {
+
       let _this = this
       _this.loading = true
       get_course_table(this.teacher_course_id, this.year, this.semester).then(res => {
         if (res.code === 200) {
           this.course_table = res.data.course_table
           this.timetable_data = res.data.timetable_data
+          // console.log(res.data);
+          this.$store.commit('settimetable_data', this.course_table[0])
           _this.getDateWeek(_this.semester).then(week => {
-
+            this.$store.commit('setweek_table', week)
             _this.week = week
             _this.getData(this.formatData(this.course_table, this.timetable_data))
             _this.loading = false
@@ -622,8 +629,8 @@ export default {
       }
       save_course_table(data).then(res => {
         console.log(res);
-
         if (res.code === 200) {
+          this.getCourseTable()
           this.$Message.success(res.message)
         }
       })

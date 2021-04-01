@@ -350,8 +350,8 @@ export default {
         data: {
         }
       }).then(res => {
-        let top_semester_9 = this.moment(res.data.list[0].term_begins * 1000).format('M')
-        let buttom_semester_3 = this.moment(res.data.list[1].term_begins * 1000).format('M')
+        let buttom_semester_3 = this.moment(res.data.list[0].term_begins * 1000).format('M')
+        let top_semester_9 = this.moment(res.data.list[1].term_begins * 1000).format('M')
         let now_time = this.moment(Date.parse(time)).format('M')
         if (now_time < buttom_semester_3 || now_time > top_semester_9) {
           this.semester = 1

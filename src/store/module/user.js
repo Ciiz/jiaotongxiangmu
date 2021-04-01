@@ -36,11 +36,20 @@ export default {
     teacher_id_task: "",
     teacher_id_exam: "",
     coursedatalist: {},
-    CoursewareTimetable: []
+    CoursewareTimetable: [],
+    timetable_data: '',
+    week_table: ''
 
   },
   // 同步操作
   mutations: {
+    setweek_table (state, data) {
+      state.week_table = data
+    },
+    settimetable_data (state, data) {
+      // console.log(data);
+      state.timetable_data = data
+    },
     setCoursewareTimetable (state, data) {
       state.CoursewareTimetable = data
     },

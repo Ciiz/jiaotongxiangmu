@@ -5,8 +5,8 @@
       <button @click="getData(true)" class="blue-btn" style="width:80px;transform: translate(-20px,2px);">搜索</button>
       <button @click="open('homework_edit','','添加作业')" class="blueC-btn" style="margin-left:15px;"
         v-if="editable">添加作业</button>
-      <button @click="open('homework_select','','选择作业', 400)" class="green-btn" style="margin-left:15px;width:104px"
-        v-if="editable">选择作业</button>
+      <!-- <button @click="open('homework_select','','选择作业', 400)" class="green-btn" style="margin-left:15px;width:104px"
+        v-if="editable">选择作业</button> -->
       <slot name="search-bar"></slot>
     </Row>
     <Table :loading="loading" ref="selection" class="homework_release_list_table" :columns="columns" :data="list"

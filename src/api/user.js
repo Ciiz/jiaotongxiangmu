@@ -139,3 +139,14 @@ export const loveMe = () => {
     method: 'post'
   })
 }
+// 获取直播工具获取上下课状态
+export const getLoginExe = ({ class_type, is_class }) => {
+  return axios.request({
+    url: '/index.php/Home/live/isClassExe',
+    method: 'post',
+    data: {
+      class_type,
+      is_class
+    }
+  })
+}

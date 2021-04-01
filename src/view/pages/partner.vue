@@ -9,18 +9,25 @@
         <div class="partner_lists_header">
           <div class="partner_lists_header_left">合作院校</div>
           <div class="partner_lists_header_right">
-            <div class="partner_lists_header_right1">综合排序</div>
+            <div class="partner_lists_header_right1" @click="handle_click" style="cursor:pointer">
+              <Button type="primary">综合排序</Button>
+
+            </div>
             <div class="partner_lists_header_right2">
-              教师数量
+              <span @click="handle_tnum">
+                <Button type="primary">教师数量</Button>
+              </span>
               <div class="partner_icon1">
-                <Icon type="md-arrow-dropup" color="red" size="8" @click="handledropup_teacher(3)" />
-                <Icon type="md-arrow-dropdown" size="8" @click="handledropup_teacher(4)" />
+                <Icon type="md-arrow-dropup" size="20" class="t_dropupcolor" @click="handledropup_teacher(3)" />
+                <Icon type="md-arrow-dropdown" size="20" class="t_dropdowncolor" @click="handledropup_teacher(4)" />
               </div>
             </div>
-            <div class="partner_lists_header_right3">课程数量
+            <div class="partner_lists_header_right3">
+              <span @click="handle_course">
+                <Button type="primary">课程数量</Button></span>
               <div class="partner_icon2">
-                <Icon type="md-arrow-dropup" color="red" size="8" @click="handledropup(1)" />
-                <Icon type="md-arrow-dropdown" size="8" @click="handledropup(2)" />
+                <Icon type="md-arrow-dropup" class="dropupcolor" size="20" @click="handledropup(1)" />
+                <Icon type="md-arrow-dropdown" class="dropdowncolor" size="20" @click="handledropup(2)" />
               </div>
             </div>
           </div>
@@ -61,21 +68,72 @@
 
 <script>
 import vPinyin from '@/view/mobile_page/components/m_index/vue-py2'
+import log from 'video.js/es5/utils/log'
 export default {
   name: 'partner',
 
   data () {
     return {
       schoolList: [],
-      value_type: 1
+      value_type: 1,
+      status: false,
+      teachernull_value: 4,
+      course_value: 2
     }
   },
 
   methods: {
+    handle_course () {
+      if (this.course_value === 1) {
+        this.handledropup(2)
+      } else if (this.course_value === 2) {
+        this.handledropup(1)
+      }
+    },
+    handle_tnum () {
+      if (this.teachernull_value === 3) {
+        this.handledropup_teacher(4)
+      }
+      else if (this.teachernull_value === 4) {
+        this.handledropup_teacher(3)
+      }
+
+    },
+    handle_click () {
+      document.querySelector('.t_dropupcolor').style.color = ''
+      document.querySelector('.t_dropdowncolor').style.color = ''
+      document.querySelector('.dropupcolor').style.color = ''
+      document.querySelector('.dropdowncolor').style.color = ''
+      this.getSchoolList()
+    },
     handledropup (value) {
+      document.querySelector('.t_dropupcolor').style.color = ''
+      document.querySelector('.t_dropdowncolor').style.color = ''
+      if (value === 1) {
+        this.course_value = 1
+        document.querySelector('.dropupcolor').style.color = 'red'
+        document.querySelector('.dropdowncolor').style.color = ''
+      } else if (value === 2) {
+        this.course_value = 2
+        document.querySelector('.dropupcolor').style.color = ''
+        document.querySelector('.dropdowncolor').style.color = 'red'
+      }
+
       this.getSchoolList(value)
     },
     handledropup_teacher (value) {
+      document.querySelector('.dropupcolor').style.color = ''
+      document.querySelector('.dropdowncolor').style.color = ''
+      if (value === 3) {
+        this.teachernull_value = 3
+        document.querySelector('.t_dropupcolor').style.color = 'red'
+        document.querySelector('.t_dropdowncolor').style.color = ''
+
+      } else if (value === 4) {
+        document.querySelector('.t_dropupcolor').style.color = ''
+        document.querySelector('.t_dropdowncolor').style.color = 'red'
+        this.teachernull_value = 4
+      }
       this.getSchoolList(value)
     },
     compare (property) {
@@ -112,7 +170,7 @@ export default {
       this.axios
         .request({
           method: 'get',
-          url: '/index.php/Home/Index/getSchoolList'
+          url: 'Home/Index/getCooperateSchool'
         })
         .then(res => {
           console.log(res);
@@ -121,8 +179,9 @@ export default {
             let blocks = [] // 新列表
             let p, c
             let d = {}
+            // 首字母排序
             res.data.list.forEach(item => {
-              p = vPinyin.chineseToPinYin(item.school_name)
+              p = vPinyin.chineseToPinYin(item.name)
               c = p.charCodeAt(0) // charCodeAt() 方法可返回指定位置的字符的 Unicode 编码。这个返回值是 0 - 65535 之间的整数。
               if (c > 97 && c < 123) {
                 if (!d[p]) {
@@ -141,7 +200,6 @@ export default {
             var course_num = res.data.list.map(v => {
               return v
             })
-
             if (value === 1) {
               this.value_type = 1
               this.schoolList = course_num.sort(this.compare('course_num')) // 排序
@@ -157,8 +215,6 @@ export default {
               this.value_type = 4
               this.schoolList = course_num.sort(this.compare('teacher_num')) // 排序
             }
-
-
           }
         })
     }
@@ -201,11 +257,12 @@ export default {
         line-height: 24px;
       }
       .partner_lists_header_right {
+        cursor: pointer;
         font-size: 14px;
         font-family: Microsoft YaHei;
         font-weight: 400;
         color: rgba(136, 136, 136, 1);
-        line-height: 19px;
+        // line-height: 19px;
         display: flex;
         justify-content: space-between;
         .partner_lists_header_right2 {
@@ -218,6 +275,8 @@ export default {
           .partner_icon2 {
             display: flex;
             flex-direction: column;
+            // align-items: center;
+            justify-content: center;
             .ivu-icon-md-arrow-dropup {
               line-height: 0.8;
               padding: 0;
