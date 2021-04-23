@@ -66,6 +66,7 @@ export default {
       }).then(res => {
         if (res.code === 200) {
           // console.log(res.message)
+          console.log(_this.group_chat_id);
           _this.group_chat_id && _this.joinGroup(_this.group_chat_id, user_id)// 加入群聊
         }
       })
@@ -89,17 +90,18 @@ export default {
       })
     },
     joinGroup (group_chat_id, uid) {
+      console.log(group_chat_id);
       let _this = this
       _this.axios.request({
         method: 'post',
         url: '/home/websocket/joinGroup',
         data: {
           group: group_chat_id,
+          // group: 'courseware_142_55',
           uid
         }
       }).then(res => {
         if (res.code === 200) {
-          // console.log(res.message)
         }
       })
     },

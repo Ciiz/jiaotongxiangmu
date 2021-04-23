@@ -132,12 +132,15 @@ export default {
       chapter_class_show(this.id).then(res => {
         if (res.code === 200) {
           this.chapter_class = res.data.chapter_class
+          console.log(this.chapter_class);
           this.userType === 2 && this.updateStudyProgress()
           this.t_id = res.data.chapter_class.id
         }
       })
     },
     updateStudyProgress () {
+      console.log(this.chapter_class.status);
+
       if (this.chapter_class.status) return
       this.chapter_class.content_type = getSuffix(this.chapter_class.file_url)
       // 处理进度
@@ -147,6 +150,7 @@ export default {
           _this.video = document.getElementById('video')
           if (_this.chapter_class.study_time) { // 跳转之前播放的位置
             _this.video.currentTime = _this.chapter_class.study_time
+            console.log(_this.video.currentTime);
           }
           _this.video.ontimeupdate = function () {
             _this.chapter_class.study_time = _this.video.currentTime.toFixed(0)
@@ -157,10 +161,10 @@ export default {
               _this.chapter_class.study_time = _this.chapter_class.video_time
               _this.chapter_class.status = 1
             }
-
             _this.video_timer && _this.updateProgress(_this.chapter_class)
           }, 5000)
         }, 500)
+
       } else { // 其他类型
         _this.chapter_class.video_time = 0
         _this.chapter_class.study_time = 0
@@ -170,7 +174,9 @@ export default {
     },
     updateProgress (item) {
       this.$emit('update_progress', item.status === 1 ? 100 : parseInt(item.study_time / item.video_time * 100))
-      update_study_progress({ chapter_class_id: item.id, video_time: item.video_time, study_time: item.study_time, status: item.status, teacher_course_id: this.teacher_course_id }).then(res => { })
+      update_study_progress({ chapter_class_id: item.id, video_time: item.video_time, study_time: item.study_time, status: item.status, teacher_course_id: this.teacher_course_id }).then(res => {
+        console.log(res);
+      })
     },
     getData () {
       if (this.$store.state.user.userInfo.userType === 1) {
@@ -192,7 +198,7 @@ export default {
             }
           })
         }
-      } else if (this.$store.state.user.userInfo.userType === 2) {
+      } else if (this.$store.state.user.userInfo.userType === 2) { //学生
         if (this.course_id !== '' && this.course_id !== undefined) {
           this.axios.request({
             method: 'get',
@@ -202,8 +208,10 @@ export default {
               teacher_course_id: this.teacher_course_id
             }
           }).then(res => {
+
             if (res.code === 200) {
               this.chapter_class_list = res.data.chapter_list
+
             }
           })
         }

@@ -169,9 +169,13 @@ export default {
       }
     },
     getInfo () {
+      console.log(777);
+
       chapter_class_show(this.id).then(res => {
         if (res.code === 200) {
           this.chapter_class = res.data.chapter_class
+          console.log(this.chapter_class);
+
           if (this.userType === 2) {
             this.updateStudyProgress()
           }

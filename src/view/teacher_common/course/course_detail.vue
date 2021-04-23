@@ -116,6 +116,7 @@ export default {
         this.loading = false
         console.log(res);
         if (res.code === 200) {
+
           this.course = res.data
           console.log(this.course.course_type);
 

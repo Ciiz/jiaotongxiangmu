@@ -238,7 +238,6 @@ export default {
         console.log(i);
         arr.push(this.online_data.students[0].student[i].id)
       }
-      console.log(arr);
       this.axios.request({
         method: 'post',
         url: 'index.php/Teacher/Quiz/save',
@@ -257,6 +256,8 @@ export default {
       }).then(res => {
         console.log(res);
         if (res.code === 200) {
+          this.$emit('handlestudent_name', res.data.student_names)
+          // this.student_names = res.data.student_names
           this.$emit('closeQList')
           this.$Message.success('提问成功')
         } else {

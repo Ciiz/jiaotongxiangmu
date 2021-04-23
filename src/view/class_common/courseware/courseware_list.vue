@@ -6,6 +6,17 @@
         >
       </Table>
     </div>
+    <Modal v-model="livemodel" width='230' footer-hide @on-cancel="cancel">
+      <div style="height:100px;display: flex;font-size: 14px;">
+        <span>
+          <Spin fix v-if="loading_live">
+            <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+            <div style="margin-top:5px">加载直播工具中...</div>
+          </Spin>
+        </span>
+      </div>
+
+    </Modal>
     <!-- <Modal class="liveT" v-model="modal" :title="title" :fullscreen="fullscreen" footer-hide :mask-closable='false'>
     <Evaluate :student_courseware_id="target_id" :mode="mode" v-if="target==='evaluate'" @success="handleSuccess"></Evaluate>
   </Modal> -->
@@ -26,7 +37,7 @@
 import modal_mixin from '@/view/mixins/modal_mixin'
 import Homework from '@/view/class_common/homework/homework'
 import coursewareVedio from '@/view/teacher_common/courseware/courseware_vedio.vue'
-
+import { getLoginExe } from '@/api/user'
 export default {
   components: {
     // Evaluate,
@@ -46,14 +57,17 @@ export default {
     return {
       // title: '',
       // target: '',
+      timer: null,
       upload_courseware_id: '',
       vedioName: '',
       vedioSrc: '',
       modal3: false,
       modal2: false,
+      livemodel: false,
       imgName: '', // 预览媒体的name
       mediaType: '', // 预览媒体的类型
       loading: false,
+      loading_live: false,
       keyword: '',
       homeworkList: [],
       exam_score_status: '',
@@ -197,17 +211,20 @@ export default {
           align: 'center',
           render: (h, params) => {
             let status = params.row.live_status
-            if (status === 1 || status === 3) {
+            console.log(status);
+
+            if (status === 1) {
               return (
                 <div>
                   <button class="blueText-btn"
+
                     onClick={() => { this.$router.push({ path: '/live_student', query: { student_courseware_id: params.row.student_courseware_id, mode: params.row.live_status === 3 ? 'live' : 'pdf' } }) }}
                   >
                     {'进入'}
                   </button>
                 </div>
               )
-            } else if (status !== 1) {
+            } else if (status == 0 || status == 2) {
               return (
                 <div>
                   <button style="margin-right:10px" class="blueText-btn"
@@ -223,7 +240,18 @@ export default {
                 // 评价
                 // </Button>
               )
+            } else if (status === 3) {
+              return (
+                <div>
+                  <button class="blueText-btn"
+                    onClick={() => { this.getloginexe(params) }}
+                  >
+                    {'进入'}
+                  </button>
+                </div>
+              )
             }
+
           }
         }
       ]
@@ -235,6 +263,43 @@ export default {
     }
   },
   methods: {
+    cancel () {
+      clearInterval(this.timer)
+    },
+    getloginexe (params) {
+      let id = this.$store.state.user.userInfo.schoolId
+      let userType = this.$store.state.user.userInfo.userType
+      let account = this.$store.state.user.userInfo.account
+      let data = {
+        class_type: '1',
+        is_class: account + '_' + userType + '_' + id
+      }
+      getLoginExe(data).then(res => {
+        console.log(res);
+        this.loading_live = true
+        if (res.data.login_status === false) {
+          this.$Message.success('需要开启直播工具才能进直播间！');
+          this.livemodel = true
+          this.timer = setInterval(() => {
+            getLoginExe(data).then(res => {
+              if (res.data.login_status === false) {
+              } else {
+                console.log(77);
+                this.$router.push({ path: '/live_student', query: { student_courseware_id: params.row.student_courseware_id, mode: params.row.live_status === 3 ? 'live' : 'pdf' } })
+                this.loading_live = false
+                clearInterval(this.timer)
+                // this.$router.push({ path: '/live_teacher', query: { courseware_id: this.courseware_id, class_id: this.class_id, live_status: this.live_status, course_status: this.course_status } })
+              }
+            })
+          }, 5000)
+        } else {
+          this.loading_live = false
+          clearInterval(this.timer)
+          this.$router.push({ path: '/live_student', query: { student_courseware_id: params.row.student_courseware_id, mode: params.row.live_status === 3 ? 'live' : 'pdf' } })
+        }
+      })
+
+    },
     getData (isSearch) {
       let _this = this
       _this.loading = true
@@ -293,11 +358,17 @@ export default {
   },
   mounted () {
     this.getData()
+  },
+  destroyed () {
+    clearInterval(this.timer)
   }
 }
 </script>
 
 <style lang="less">
+.demo-spin-icon-load {
+  animation: ani-demo-spin 1s linear infinite;
+}
 // .ivu-modal-body{
 //   border:15px solid rgb(255, 255, 255);
 //   background:  rgb(244, 245, 249)

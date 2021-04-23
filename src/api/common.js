@@ -216,7 +216,17 @@ export const video_index = (id) => {
   return axios.request({
     url: '/home/index/playVideo',
     data: {
-      id
+      id,
+    },
+    method: 'post'
+  })
+}
+export const playVideoTime = (id, study_time) => {
+  return axios.request({
+    url: 'home/index/playVideoTime',
+    data: {
+      id,
+      study_time
     },
     method: 'post'
   })

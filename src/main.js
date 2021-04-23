@@ -39,13 +39,13 @@ import { vueBaberrage } from 'vue-baberrage' // 弹幕插件
 import Video from 'video.js'
 import 'videojs-contrib-hls'
 import 'video.js/dist/video-js.css'
+
 import Router from 'vue-router'
 
 const routerPush = Router.prototype.push
 Router.prototype.push = function push (location) {
   return routerPush.call(this, location).catch(error => error)
 }
-
 Vue.use(vueBaberrage)
 require('vue-tour/dist/vue-tour.css')
 //注册全局

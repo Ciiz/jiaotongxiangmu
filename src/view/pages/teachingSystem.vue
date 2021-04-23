@@ -436,7 +436,9 @@
         <img src="@/assets/images/teachingSystem/packup.png" @click="closeSlider" class="packupImg" />
       </Sider>
       <Content class="ii-content" style="overflow:hidden;flex-direction:column;display:flex">
+
         <div style="background:#f2f2f2;height:100%;margin:4px 4px 4px 0;display:flex">
+
           <selectCourse v-if="showSelectCourse===true" @closeSelect="unshowSelectCourseModal" @bind-success="getData()"
             @changeNameT="changeNameT"></selectCourse>
           <addCourse v-if="showAddCourse===true" :course_id="changeCourseId" @success="getData()"
@@ -448,8 +450,8 @@
             style="padding:0 30px;height:100%;width:100%;flex-direction: column;display: flex;position:relative;z-index:1001">
             <h1 style="color:#666666；font-size:26px;margin:20px 0">{{course_namet}}</h1>
             <keep-alive>
-              <router-view @openSlider="openSlider" @showAddCourseModal='showAddCourseModal'
-                @showCourseDetail="showCourseDetail" @showAllCourseDetail="showAllCourseDetail"
+              <router-view @openSlider="openSlider" @showCourseDetail="showCourseDetail"
+                @showAddCourseModal='showAddCourseModal' @showAllCourseDetail="showAllCourseDetail"
                 @showAddCourseware='showAddCourseware' @closeAddCourseware='closeAddCourseware'
                 @refreshData="refreshData" @reback="reback" @bind-success="regetData()" :courdetail="courdetail"
                 v-if="$route.meta.keepAlive"></router-view>
@@ -525,7 +527,13 @@
     <Modal v-model="modal3" title="跳转" @on-ok="deleteSystem">
       <p>是否确定删除当前消息</p>
     </Modal>
-    <Modal v-model="isshowclass" title="上课" @on-ok="entryClass">
+    <Modal v-model="isshowclass" title="上课" @on-ok="entryClass" @on-cancel='entryClass_cencel' :loading="loadinging">
+      <span>
+        <Spin fix v-if="loading_live">
+          <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+          <div style="margin-top:5px">加载直播工具中...</div>
+        </Spin>
+      </span>
       <p>当前正在上课，是否进入直播间</p>
     </Modal>
     <Footer class="teachingSystem-footer">
@@ -548,6 +556,7 @@
   </div>
 </template>
 <script>
+import { getLoginExe } from '@/api/user'
 import modal_mixin from '@/view/mixins/modal_mixin'
 import live from '@/view/common/live'
 import { mapActions, mapMutations } from 'vuex'
@@ -689,6 +698,9 @@ export default {
   },
   data () {
     return {
+      loadinging: true,
+      loading_live: false,
+      timer_loginexe: null,
       timer: null,
       toCorrectType: '',
       toCorrectId: '',
@@ -888,12 +900,15 @@ export default {
         }
       })
     },
+    entryClass_cencel () {
+      clearInterval(this.timer_loginexe)
+    },
     unshowOpenImg () {
       document.getElementsByClassName('openSlider')[0].style.display = 'none'
     },
     getData () {
       if (this.userType === 1) {
-        this.loading = true
+        // this.loading = true
         this.axios.request({
           url: '/index.php/Teacher/Course/index',
           method: 'get',
@@ -913,7 +928,7 @@ export default {
             }
             this.total = res.data.pages * this.page_size
           }
-          this.loading = false
+          // this.loading = false
         })
       }
       if (this.userType === 2) {
@@ -954,6 +969,7 @@ export default {
       this.showAddCourse = false
     },
     showAddCourseModal (i) { // 显示添加课程框
+      console.log(i);
       document.getElementsByClassName('unshowModal')[0].style.display = 'block'
       this.showAddCourse = true
       this.changeCourseId = i
@@ -970,7 +986,6 @@ export default {
           this.$router.push({ path: '/teachingSystem/StudentCourse/course_coursewares' })
         }
         this.course_namet = item.course_name
-
         this.$store.commit('setcourseData', item)
       }
     },
@@ -999,7 +1014,6 @@ export default {
       this.infoTitle = ''
       this.answerList = []
       this.taskgroup = ''
-
       let itemText
       if (e.currentTarget.innerText === '前往批改>>') {
         itemText = '批改'
@@ -1972,8 +1986,44 @@ export default {
         }
       })
     },
+    getloginexe (params) {
+      let id = this.$store.state.user.userInfo.schoolId
+      let userType = this.$store.state.user.userInfo.userType
+      let account = this.$store.state.user.userInfo.account
+      let data = {
+        class_type: '1',
+        is_class: account + '_' + userType + '_' + id
+      }
+      getLoginExe(data).then(res => {
+        console.log(res);
+        if (res.data.login_status === false) {
+          this.$Message.success('需要开启直播工具才能进直播间！');
+          this.livemodel = true
+          this.timer_loginexe = setInterval(() => {
+            getLoginExe(data).then(res => {
+              if (res.data.login_status === false) {
+              } else {
+                this.$router.push({ path: '/live_student', query: { student_courseware_id: this.student_courseware_id, mode: this.live_status === 3 ? 'live' : 'pdf' } })
+                this.loadinging = false
+                this.loading_live = false
+                clearInterval(this.timer_loginexe)
+              }
+            })
+          }, 5000)
+        } else {
+          this.loadinging = false
+          this.loading_live = false
+          clearInterval(this.timer_loginexe)
+          this.$router.push({ path: '/live_student', query: { student_courseware_id: this.student_courseware_id, mode: this.live_status === 3 ? 'live' : 'pdf' } })
+        }
+      })
+
+    },
     entryClass () { // 进入直播间
-      this.$router.push({ path: '/live_student', query: { student_courseware_id: this.student_courseware_id, mode: this.live_status === 3 ? 'live' : 'pdf' } })
+      this.loadinging = true
+      this.loading_live = true
+      this.getloginexe()
+      // this.$router.push({ path: '/live_student', query: { student_courseware_id: this.student_courseware_id, mode: this.live_status === 3 ? 'live' : 'pdf' } })
     }
   },
   mounted () {
@@ -2044,7 +2094,11 @@ export default {
   beforeDestroy () {
     clearInterval(this.timer);
     this.timer = null;
+  },
+  destroyed () {
+    clearInterval(this.timer_loginexe)
   }
+
 }
 </script>
 <style lang="less" >

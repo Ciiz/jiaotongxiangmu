@@ -496,6 +496,47 @@
     padding:10px 10px 0 10px;
     border:1px solid #404040;
     border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .live_anwser{
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 99;
+    width: 200px;
+     min-height: 200px;
+      max-height: 100%;
+      background-color: #fff;
+      color: #000;
+      font-size: 18px;
+      padding: 8px;
+      ul{
+
+        li{
+            font-size: 14px;
+              display: flex;
+              align-items: center;
+             
+        }
+      }
+
+  }
+  .live_Cameras{
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 99;
+    .live_Cameras_big{
+      position: relative;
+      overflow: hidden;
+      .icon_close{
+           position: absolute;
+           top: 0;
+           right: 0;
+      }
+    }
+   
   }
   .pdfcard{
     overflow-y:scroll;

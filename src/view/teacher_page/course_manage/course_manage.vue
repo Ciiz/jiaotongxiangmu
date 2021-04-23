@@ -6,15 +6,18 @@
       <button class="grayBorder-btn" v-if="course.audit_status===1&&course.release_status===0">已审核</button>
       <button class="grayBorder-btn" v-if="course.audit_status===2">审核不通过</button>
       <button class="grayBorder-btn" v-if="course.audit_status===3">待审核</button>
-      <button class="grayBorder-btn" v-if="course.release_status===1&&course.audit_status===1">已发布</button>
+      <button class="grayBorder-btn" v-if="course.release_status===1">已发布</button>
       <button class="grayBorder-btn" v-if="course.release_status===0&&course.audit_status===1">未发布</button>
       <button class="greenBorder-btn" @click="action(course, 'release')"
         v-if="(course.audit_status === 1 || course.create_type === 1 || course.create_type === 4) && course.bind_type !== 0">{{course.release_status ? '撤回' : '发布'}}</button>
       <button class="redBorder-btn" @click="action(course, 'unbind')" v-if="course.bind_type === 2">删除</button>
       <button class="redBorder-btn" @click="action(course, 'remove')" v-if="course.bind_type === 3">删除</button>
-      <button class="blue-btn" v-if="course.bind_type === 3" @click="$emit('showAddCourseModal',course.id)">修改</button>
+      <button class="blue-btn" @click="handleadd(course.id)">修改</button>
+      <!-- <button class="blue-btn" v-if="course.bind_type === 3" @click="showAddCourse=true">修改</button> -->
       <button class="orangeBorder-btn" @click="action(course, 'audit')"
         v-if="course.bind_type === 3 && (course.audit_status === 0 || course.audit_status === 2)">提交审核</button>
+      <button class="orangeBorder-btn" @click="action(course, 'audit')"
+        v-if="course.bind_type === 3 && (course.audit_status === 4 )">重新审核</button>
       <Breadcrumb style="float:right;margin-top:6px">
         <BreadcrumbItem>我的课程</BreadcrumbItem>
         <BreadcrumbItem>课程列表</BreadcrumbItem>
@@ -23,9 +26,12 @@
     </div>
     <courseDetail @showAllCourseDetail="showAllCourseDetail" @showCourseDetail="showCourseDetail" ref="courseDetail">
     </courseDetail>
+    <!-- <addCourse v-if="showAddCourse===true"></addCourse> -->
   </div>
 </template>
+
 <script>
+// import addCourse from '@/view/teachingSystem_page/courseware_manage/addCourse.vue'
 import courseDetail from '@/view/teacher_common/course/course_detail.vue'
 import modal_mixin from '@/view/mixins/modal_mixin'
 import log from 'video.js/es5/utils/log'
@@ -37,7 +43,8 @@ export default {
   data () {
     return {
       tab: 'level1_1',
-      course_ids: []
+      course_ids: [],
+      // showAddCourse: false
     }
   },
   mixins: [modal_mixin],
@@ -45,6 +52,11 @@ export default {
 
   },
   methods: {
+    handleadd (id) {
+      console.log(id);
+      // this.showAddCourse = true
+      this.$emit('showAddCourseModal', id)
+    },
     showCourseDetail (i, t) {
       this.$emit('showCourseDetail', i, t)
     },
@@ -53,7 +65,6 @@ export default {
     },
     action (item, type) {
       console.log(item);
-
       let url = ''
       let title = ''
       switch (type) {
@@ -149,6 +160,7 @@ export default {
   },
   mounted () {
 
+    console.log(this.course);
 
   }
 }

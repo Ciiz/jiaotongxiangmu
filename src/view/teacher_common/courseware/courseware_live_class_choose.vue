@@ -25,6 +25,7 @@
 import { save_timetable } from '@/api/data'
 import { getLoginExe } from '@/api/user'
 import modal_mixin from '@/view/mixins/modal_mixin'
+import log from 'video.js/es5/utils/log'
 export default {
   mixins: [modal_mixin],
   components: {
@@ -61,8 +62,6 @@ export default {
       this.classList.forEach(v => {
         if (value.length !== 0) {
           value.forEach(item => {
-            // console.log(item);
-            // console.log(v.class_id);
             if (v.class_id === item) {
               arr.push(v.timetable_id)
 
@@ -71,36 +70,43 @@ export default {
         }
       })
       this.timetable_id_list = arr
-      console.log(this.timetable_id_list);
+
     },
     confirm () {
-      // console.log(this.class_id);
-      let timetable_data = this.$store.state.user.timetable_data
+      let daylist = []
+      let timetable_data_arr = this.$store.state.user.timetable_data
+      let timetable_data = timetable_data_arr[0]
       console.log(timetable_data);
-      this.cur_timetable_list.push({
-        year: timetable_data.year,
-        semester: timetable_data.semester,
-        week: this.$store.state.user.week_table,
-        day: timetable_data.day,
-        class: timetable_data.class_no,
-        timetable_id: this.timetable_id_list
-      })
-      console.log(this.cur_timetable_list);
-      save_timetable(
-        {
-          timetable_id: this.timetable_id_list,
-          timetable_time_list: this.cur_timetable_list
-        }
-      ).then(res2 => {
-        console.log(res2);
-      })
+      if (timetable_data !== undefined && timetable_data !== []) {
+        timetable_data_arr.forEach(v => {
+          daylist.push(v.day)
+        })
+        this.cur_timetable_list.push({
+          year: timetable_data.year,
+          semester: timetable_data.semester,
+          week: this.$store.state.user.week_table,
+          day: daylist,
+          class: timetable_data.class_no,
+          timetable_id: this.timetable_id_list
+        })
+        save_timetable(
+          {
+            timetable_id: this.timetable_id_list,
+            timetable_time_list: this.cur_timetable_list
+          }
+        ).then(res2 => {
+        })
+      }
+
       let id = this.$store.state.user.userInfo.schoolId
       let userType = this.$store.state.user.userInfo.userType
       let account = this.$store.state.user.userInfo.account
       let data = {
         class_type: '1',
         is_class: account + '_' + userType + '_' + id
+
       }
+      // this.$router.push({ path: '/live_teacher', query: { courseware_id: this.courseware_id, class_id: this.class_id, live_status: this.live_status, course_status: this.course_status } })
       if (this.live_status === 3) {
         getLoginExe(data).then(res => {
           console.log(res);
@@ -116,7 +122,7 @@ export default {
                   this.$router.push({ path: '/live_teacher', query: { courseware_id: this.courseware_id, class_id: this.class_id, live_status: this.live_status, course_status: this.course_status } })
                 }
               })
-            }, 5000)
+            }, 10000)
           } else {
             this.loading = false
             clearInterval(this.timer)
@@ -127,7 +133,6 @@ export default {
         this.$router.push({ path: '/live_teacher', query: { courseware_id: this.courseware_id, class_id: this.class_id, live_status: this.live_status, course_status: this.course_status } })
       }
     },
-
     handleVisiableChange (isShow) {
       if (!isShow) {
         this.target = ''

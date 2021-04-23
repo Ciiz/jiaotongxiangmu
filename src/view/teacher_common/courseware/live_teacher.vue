@@ -201,6 +201,38 @@
             <div class="live-box">
               <!-- pdf -->
               <div class="live-box-contain">
+                <div class="live_anwser" v-show="show_anwser">
+                  <span style="display:flex;align-items: center; justify-content: space-between;">
+                    <span>正在回答...</span>
+                    <span style="float:right;cursor:pointer" @click="handleclick_x">
+                      <Icon type="ios-close" size="38" color="#000" />
+                    </span>
+                  </span>
+                  <ul>
+                    <li v-for="(v,i) in student_namelist" :key="i">
+                      <span>
+                        <img :src="v.icon" alt=""
+                          style="width:25px;height:25px; border-radius: 50%; margin-right:20px;">
+                      </span>
+                      <span style="width:70px;display: flex;align-items: center;justify-content: center;"> {{v.name}}
+                      </span>
+                      <span v-for="(item,index) in problemAnswer_list " :key="index">
+                        <span v-if="item.student_id==v.id" style="margin-left:20px;">已提交</span>
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="live_Cameras" v-if="show_Cameras" style="width:400px;height:224px">
+                  <div class="live_Cameras_big">
+                    <!-- <video id="live_Cameras" style="width:100%;height:100%;" controls autoplay :src='rtmp_rul'>
+                    </video> -->
+                    <video id="my-player" class="video-js vjs-default-skin" preload="auto"
+                      data-setup="{&quot;html5&quot; : { &quot;nativeTextTracks&quot; : false }}">
+                    </video>
+                    <Icon type="ios-close" size="28" color="#FFFFFF" class="icon_close" style="cursor:pointer"
+                      @click="handle_show_Cameras" />
+                  </div>
+                </div>
                 <div class="pdfcard" ref="pdfcard" @mousedown="mou1" @mousemove="mou2" @mouseup="mou3"
                   @dblclick="fullScreen('pdf')">
                   <div id="pdf" v-if="unpdf" style="align-self:center">
@@ -262,6 +294,7 @@
                     <embed :src="src" width="100%" height="440px" autostart="false">
                   </div>
                 </div>
+
                 <Row class="pdfcard-bottom">
                   <Col :span="4">
                   <span>分享直播间</span>
@@ -377,8 +410,21 @@
                 </div>
                 <Collapse class="newtypeCollapse" v-model="collapseVal">
                   <Panel v-model="online_data" v-for="(item,index) in online_data.students" :key="index">
-                    {{item.class_name}}
-                    <ul slot="content">
+                    <span> {{item.class_name}}</span>
+                    <ul slot="content" style="padding: 0px 1px;" v-if="live_status==3">
+                      <li style="width:30%;height:69px;float:left;margin-right:10px;z-index:9999;"
+                        @click="handle_clickstudent(item2.id)" v-for="(item2,index2) in item.student" :key="index2">
+                        <div style="text-align:center;border:1px solid">
+                          <video :src="item2.student.rtmp" id="video_rtmp" autoplay style="height:62px;width:100%;">
+                          </video>
+                        </div>
+                        <div class="online-data-name" style="text-align:center">
+                          <span>{{item2.name}}</span>
+                        </div>
+                      </li>
+                      <div style="clear:both;"></div>
+                    </ul>
+                    <ul slot="content" v-else>
                       <li style="width:25%;float:left" v-for="(item2,index2) in item.student" :key="index2">
                         <div style="text-align:center">
                           <img v-if="item2.online_status === false" :src="item2.icon===''?default_icon:item2.icon"
@@ -524,8 +570,9 @@
           <!-- 添加问题 -->
           <Modal v-model="isshowAddquestion" :width="620" footer-hide>
             <coursewareQuestion :online_data='online_student' :onlinedatastudent='online_data_student'
-              :courseware_id='courseware_id' :group_chat_id='group_chat_id' :showTime="showTime" :add_type="'call'"
-              @changeTime='changeTime' @closeQList='closeQList' @closemodal='closemodal'></coursewareQuestion>
+              @handlestudent_name='handlestudent_name' :courseware_id='courseware_id' :group_chat_id='group_chat_id'
+              :showTime="showTime" :add_type="'call'" @changeTime='changeTime' @closeQList='closeQList'
+              @closemodal='closemodal'></coursewareQuestion>
           </Modal>
 
           <!-- 显示已有客观题 -->
@@ -626,7 +673,11 @@
   </div>
 </template>
 <script>
-import { getLoginExe } from '@/api/user'
+
+import videojs from "video.js";
+import "video.js/dist/video-js.css";
+
+import { getLoginExe, getrtmp_student } from '@/api/user'
 import pdf from 'vue-pdf'
 import modal_mixin from '@/view/mixins/modal_mixin'
 import { _debounce, fullScreen } from '@/libs/util'
@@ -647,9 +698,17 @@ import { MESSAGE_TYPE } from 'vue-baberrage'
 import QRCode from 'qrcodejs2'
 import { task_release } from '@/api/data'
 import { handle_ppt_option } from '@/api/common'
+import log from 'video.js/es5/utils/log'
+
 export default {
   data () {
     return {
+      show_Cameras: false,
+      rtmp_rul: '',
+      show_anwser: false,
+      student_namelist: [],
+      beforeUnloadTime: '',
+      gapTime: '',
       disabledGroup: '',
       teacher_course_id: '',
       pdfWidth: '',
@@ -698,6 +757,7 @@ export default {
       // course_status: this.$route.query.course_status,
       showdiscuss: true,
       problemAnswer: [],
+      problemAnswer_list: [],
       taskAnswer: {},
       mainQuestionContent: '',
       mainAnswer_num: '',
@@ -903,6 +963,8 @@ export default {
     }
     this.getInfo()
     // this.class_id = this.class_id.sort()
+    console.log(this.class_id);
+
     this.group_chat_id = `courseware_${this.courseware_id}_${this.class_id}`
     this.$nextTick(() => {
       this.chat_scrollTop()
@@ -913,6 +975,7 @@ export default {
     problemAnswer: {
       handler (newValue, oldValue) {
         this.problemAnswer = newValue
+        this.problemAnswer_list.push(this.problemAnswer)
         this.$Message.info({
           content: newValue.student_name + '回答了问题',
           duration: 5,
@@ -1002,6 +1065,38 @@ export default {
     }
   },
   methods: {
+    handle_show_Cameras () {
+      this.show_Cameras = false
+
+      if (this.videoPlayer != null) { //判断是否已经初始化视频
+        this.videoPlayer.dispose(); //销毁video
+      }
+      this.videoPlayer.reset(); //重置video
+    },
+    async handle_clickstudent (id) {
+      let res = await getrtmp_student(id)
+      this.rtmp_rul = res.data.rtmp
+      this.show_Cameras = true
+      this.videoPlayer = videojs("my-player");//关联video的id
+      this.videoPlayer.src({
+        type: "rtmp/flv",
+        // src: this.rtmp_rul//要播放的视频流url
+        src: 'rtmp://zjymooc.etomooc.com/live/2019003_2_2'
+      });
+      this.videoPlayer.play();//进行播放
+
+    },
+    handleclick_x () {
+      this.show_anwser = false
+      this.problemAnswer_list = []
+    },
+    handlestudent_name (e) {
+      this.student_namelist = e
+      if (e) {
+        this.show_anwser = true
+      }
+    },
+
     radiochange (e) {
 
       this.courseTimeList.forEach(v => {
@@ -1013,6 +1108,7 @@ export default {
       this.isshowAnswer = data
     },
     Addquestion () {
+      this.handleclick_x()
       this.isshowAddquestion = true
       this.axios.request({
         method: 'get',
@@ -1028,7 +1124,6 @@ export default {
           this.online_data_student.student_num2 = res.data.online_count
         }
       })
-
     },
     closemodal (data) {
       this.isshowAddquestion = data
@@ -1095,6 +1190,7 @@ export default {
       })
     },
     shouDetailQuestion (i) {
+      this.handleclick_x()
       this.topic_typeShow = this.alreadyQuestion[i].topic_type
       if (this.alreadyQuestion[i].topic_type === 1) {
         this.isshowSeclectquestion = true
@@ -1193,31 +1289,46 @@ export default {
       this.modal2 = true
     },
     random () {
-      this.modal2 = true
-      this.clear()
-      this.total = this.studentNumber
-      let o = 0
-      while (o < this.studentNumber) {
-        var a = 0
-        var num1 = Math.floor(Math.random() * this.online_data.students.length)
-        var num2 = Math.floor(Math.random() * this.online_data.students[num1].student.length)
-        if (this.students.length === 0) {
-          this.students.push(this.online_data.students[num1].student[num2].id)
-          this.$refs.className[num1].childNodes[1].childNodes[num2].style.borderColor = 'red'
-          o = 1
-        } else {
-          for (var i = 0; i < this.students.length; i++) {
-            if (this.online_data.students[num1].student[num2].id !== this.students[i]) {
-              a++
-            }
-          }
-          if (a === this.students.length) {
-            o++
-            this.$refs.className[num1].childNodes[1].childNodes[num2].style.borderColor = 'red'
-            this.students.push(this.online_data.students[num1].student[num2].id)
-          }
-        }
+      var arr = [];
+      var arrss = []
+      for (var i = 0; i < this.online_data.students[0].student.length; i++) {
+        console.log(this.online_data.students[0].student);
+        var arrss = this.online_data.students[0].student.filter(v => {
+          return v.online_status === true
+        })
+        // arr.push(this.online_data.students[0].student[i].id)
       }
+      console.log(arrss);
+      arrss.forEach(v => {
+        arr.push(v.id)
+      })
+      console.log(arr);
+      this.axios.request({
+        method: 'post',
+        url: 'index.php/Teacher/Quiz/save',
+        data: {
+          student_ids: arr,
+          rob: 2,
+          topic_type: 2,
+          reply_time: '',
+          quiz_id: '',
+          courseware_id: this.courseware_id,
+          group: this.group_chat_id,
+          content: this.mainQuestionContent,
+          answer_num: this.mainAnswer_num,
+          type: 0
+        }
+      }).then(res => {
+        console.log(res);
+        if (res.code === 200) {
+          this.$emit('closeQList')
+          this.$Message.success('提问成功')
+          this.handlestudent_name(res.data.student_names)
+          this.isshowMainquestion = false
+        } else {
+          this.$Message.error(res.message)
+        }
+      })
     },
     submitQuestion2 () {
       if (this.showTime !== '') {
@@ -1310,31 +1421,34 @@ export default {
       this.isshowaddclass1 = true
     },
     // 通过右上角关闭页面触发
-    finnishClass () {
-      this.end_live()
+    // finnishClass () {
+    //   this.end_live()
+    // },
+    async end_live_tool () {
+      console.log(666);
+      let id = this.$store.state.user.userInfo.schoolId
+      let userType = this.$store.state.user.userInfo.userType
+      let account = this.$store.state.user.userInfo.account
+      let data = {
+        class_type: '0',
+        is_class: account + '_' + userType + '_' + id
+      }
+      let res = await getLoginExe(data)
+      console.log(res);
     },
     // 结束直播
     end_live () {
+      // console.log(this.class_id);
       this.axios.request({
         method: 'post',
         url: '/index.php/Teacher/Courseware/live_end',
-        params: {
+        data: {
           id: this.courseware_id,
           class_id: this.class_id
         }
       }).then(res => {
         if (res.code === 200) {
-          let id = this.$store.state.user.userInfo.schoolId
-          let userType = this.$store.state.user.userInfo.userType
-          let account = this.$store.state.user.userInfo.account
-          let data = {
-            class_type: '0',
-            is_class: account + '_' + userType + '_' + id
-          }
-          getLoginExe(data).then(res2 => {
-            console.log(res2);
-          })
-
+          this.end_live_tool()
           this.$Message.success(res.message)
           setTimeout(() => {
             // window.location.href = '/user_center/teacher1/course_courseware#/user_center/teacher1/MyCourse'
@@ -1630,7 +1744,7 @@ export default {
           course_status: this.course_status
         }
       }).then(res => {
-        // console.log(res);
+        console.log(res);
         if (res.code === 200) {
           this.$store.commit('setcoursedatalist', res.data)
           this.teacher_course_id = res.data.courseware_info.teacher_course_id
@@ -1696,13 +1810,11 @@ export default {
           group: this.group_chat_id,
           status: m,
           group_s: this.group_chat_id + 's'
-
         }
       }).then(res => {
         console.log(res);
         if (res.code === 200) {
           this.online_data = res.data
-
         }
       })
     },
@@ -2167,16 +2279,36 @@ export default {
       })
       this.step = 0
       this.canvas = ''
-    }
+    },
+    // set () {
+    //   console.log('我是要调用的函数')
+
+    //   this.end_live_tool()
+    // }
     // showchangeattenStatusModal (e) { // 修改学生考勤状态
     //   e.target.parentNode.childNodes[2].style.display = 'block'
     // }
+    beforeunloadHandler () {
+      this.beforeUnloadTime = new Date().getTime();
+    },
+    unloadHandler (e) {
+      this.gapTime = new Date().getTime() - this.beforeUnloadTime;
+      // console.log('刷新3');
+      //判断是窗口关闭还是刷新
+      if (this.gapTime <= 5) {//浏览器关闭
+        console.log('浏览器关闭');
+        //自己的操作行为
+        // this.end_live_tool()
+        this.end_live()
+      } else {
+        console.log('刷新');
+      }
+    }
+
   },
   mounted () {
-    console.log(this.course_status);
-
-    // this.courseware_id = this.$route.query.courseware_id
-    // this.class_id = this.$route.query.class_id
+    window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
+    window.addEventListener('unload', e => this.unloadHandler(e))
     this.getonlineStudent()
     const that = this
     window.onresize = () => {
@@ -2191,7 +2323,6 @@ export default {
     let _pdf = document.querySelector('.pdfcard')
     _pdf.onscroll = function () {
       console.log(33);
-
       _this.handleScroll()
     }
     setTimeout(() => {
@@ -2200,7 +2331,13 @@ export default {
       this.getQuestionList()
       this.getLiveHeight()
     }, 1500)
-  }
+  },
+  destroyed () {
+    // this.end_live()
+    window.removeEventListener('beforeunload', e => this.beforeunloadHandler(e))
+    window.removeEventListener('unload', e => this.unloadHandler(e))
+  },
+
 }
 </script>
 <style>

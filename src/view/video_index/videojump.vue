@@ -42,30 +42,32 @@
             </div>
             <div class="video_end_footer">
               <ul>
-                <li v-for="(v,i) in recommend" :key="i" @click="handlelikeplay(v)">
+                <li v-for="(v,i) in recommend" :key="i" @click="handlelikeplay(v.id)">
                   <div class="video_end_footerIcon"><img :src="v.img" alt=""></div>
                   <span class="video_end_footerName">{{v.course_name}}</span>
                 </li>
               </ul>
             </div>
           </div>
-          <div class="videoCourse_video_img" v-if="videoUrl==''">
-            <span>暂无素材资源...</span>
-          </div>
-          <div v-else id="video_massege">
-            <video :src="videoUrl" controls autoplay class="video_item"
-              v-if="['mp4','ogg', 'avi', 'rmvb'].indexOf(content_type)!==-1" @ended="handleend"></video>
-            <div v-else-if="['mp3','pdf','swf'].indexOf(content_type)!==-1"
-              style="height:100%;width:100%;background:#000;" class="video_item">
-              <embed :src="chapter_class.file_url"></embed>
+          <div>
+            <div class="videoCourse_video_img" v-if="videoUrl==''">
+              <span>暂无素材资源...</span>
             </div>
-            <div v-else-if="['ppt','pptx','xlsx','xls','doc','docx'].indexOf(content_type)!==-1" class="video_item">
-              <iframe :src='`https://view.officeapps.live.com/op/view.aspx?src=${videoUrl}`' width='100%' height='100%'
-                frameborder='1'></iframe>
-            </div>
-            <div v-else class="embed-tips">
-              <span> 格式不支持！</span>
-              <!-- <a :href="file_url" target="blank">文件：{{chapter_firstUrl | filtFileName}}</a> -->
+            <div v-else id="video_massege">
+              <video :src="videoUrl" controls autoplay class="video_item" id="videoid"
+                v-if="['mp4','ogg', 'avi', 'rmvb'].indexOf(content_type)!==-1" @ended="handleend"></video>
+              <div v-else-if="['mp3','pdf','swf'].indexOf(content_type)!==-1"
+                style="height:100%;width:100%;background:#000;" class="video_item">
+                <embed :src="chapter_class.file_url"></embed>
+              </div>
+              <div v-else-if="['ppt','pptx','xlsx','xls','doc','docx'].indexOf(content_type)!==-1" class="video_item">
+                <iframe :src='`https://view.officeapps.live.com/op/view.aspx?src=${videoUrl}`' width='100%'
+                  height='100%' frameborder='1'></iframe>
+              </div>
+              <div v-else class="embed-tips">
+                <span> 格式不支持！</span>
+                <!-- <a :href="file_url" target="blank">文件：{{chapter_firstUrl | filtFileName}}</a> -->
+              </div>
             </div>
           </div>
         </div>
@@ -117,7 +119,7 @@
       <div class="video_likeTitle">guess what you like</div>
       <div class="video_likeList">
         <ul>
-          <li v-for="item in like_list" :key="item.id" @click="handlelikeplay(item)">
+          <li v-for="item in like_list" :key="item.id" @click="handlelikeplay(item.id)">
             <div class="jingxuan" v-if="item.is_charge"><img src="@/assets/images/public/jingxuan.png" alt=""></div>
             <div class="video_likeList_itemImg">
               <img :src="item.img" alt="">
@@ -141,7 +143,7 @@
 import LoginForm from '@/components/login-form/login-form'
 import { getSuffix } from '@/libs/util'
 import { Toast } from 'mint-ui'
-import { video_index, get_Course, get_follow, get_unfollow } from '@/api/common'
+import { video_index, get_Course, get_follow, get_unfollow, playVideoTime } from '@/api/common'
 import chapter from "@/view/video_index/components/pc_chapter"
 import message from "@/view/video_index/components/course_massgess"
 import { mapActions } from 'vuex'
@@ -155,14 +157,13 @@ export default {
     return {
       video_list: {
         chapter_list: [],
-
       },
       videoUrl: null,
       like_list: [],
       onend_stutas: false,
       recommend: [],
       loginststus: false,
-
+      timers: ''
 
     }
   },
@@ -203,51 +204,70 @@ export default {
       this.video_list = res.data.data
       if (res.data.data.chapter_list[0] && res.data.data.chapter_list[0].child) {
         this.videoUrl = res.data.data.chapter_list[0].child[0].file_url
-      }
-      else if (res.data.data.chapter_list.length === 0) {
+      } else {
+        console.log(888);
         this.videoUrl = ''
       }
-      else if (res.data.data.chapter_list) {
-        if (res.data.data.chapter_list[0].file_url) {
-          this.videoUrl = res.data.data.chapter_list[0].file_url
-        } else {
-          this.videoUrl = ''
-        }
-      }
+      // else if (res.data.data.chapter_list.length === 0) {
+      //   this.videoUrl = ''
+      // }
+      // else if (res.data.data.chapter_list) {
+      //   if (res.data.data.chapter_list[0].file_url) {
+      //     this.videoUrl = res.data.data.chapter_list[0].file_url
+      //   } else {
+      //     this.videoUrl = ''
+      //   }
+      // }
     },
     // 猜你喜欢的点击和相关推荐
     handlelikeplay (item) {
-      console.log(item);
       this.onend_stutas = false
-      video_index(item.id).then(res => {
-        console.log(res);
-        this.video_list.is_charge = res.data.data.is_charge
-        this.packaging(res)
-        console.log(res.data.data.is_charge);
-        if (res.data.data.is_charge === 1) {
-          this.$nextTick(() => {
-            document.querySelector('.isCharge_text').style.display = "block"
+      setTimeout(() => {
+        let _this = this
+        _this.myvideo = document.getElementById('videoid')
+        _this.myvideo.addEventListener("pause", function () {
+          var timers = Math.ceil(this.currentTime)//视频当前播放时长
+          playVideoTime({ id: item, study_time: timers }).then(res => {
+            _this.myvideo.currentTime = timers
           })
-        } else {
-          this.$nextTick(() => {
-            document.querySelector('.isCharge_text').style.display = "none"
-          })
-        }
-        if (this.videoUrl !== '') {
-          document.querySelector('#video_massege').style.display = "block"
-          document.querySelector('.videoCourse_video_img').style.display = "none"
-          if (this.videoUrl === this.videoUrl) {
-            document.querySelector('.video_item').play()
-          }
-
-        } else {
-          this.$nextTick(() => {
-            document.querySelector('.videoCourse_video_img').style.display = "block"
-          })
-
-        }
-      })
+        })
+      }, 1000)
+      this.playvideotime(item)
     },
+    async playvideotime (item) {
+      let _this = this
+      let res = await video_index(item)
+      setTimeout(() => {
+        _this.myvideo = document.getElementById('videoid')
+        _this.myvideo.currentTime = res.data.data.study_time
+      }, 1000)
+      _this.video_list.is_charge = res.data.data.is_charge
+      _this.packaging(res)
+      if (res.data.data.is_charge === 1) {
+        _this.$nextTick(() => {
+          document.querySelector('.isCharge_text').style.display = "block"
+        })
+      } else {
+        _this.$nextTick(() => {
+          document.querySelector('.isCharge_text').style.display = "none"
+        })
+      }
+      if (_this.videoUrl !== '') {
+        document.querySelector('#video_massege').style.display = "block"
+        document.querySelector('.videoCourse_video_img').style.display = "none"
+        if (_this.videoUrl === _this.videoUrl) {
+          document.querySelector('.video_item').play()
+        }
+
+      } else {
+        _this.$nextTick(() => {
+          document.querySelector('.videoCourse_video_img').style.display = "block"
+        })
+
+      }
+
+    },
+
     // 关注和取消关注
     hangleattention () {
       if (this.video_list.isfollow === 1) {
@@ -295,9 +315,7 @@ export default {
     },
     // 获取跳转的视频
     get_video () {
-      video_index(this.route).then(res => {
-        this.packaging(res)
-      })
+      this.handlelikeplay(this.route)
     },
     get_like () {
       get_Course().then(res => {
@@ -315,10 +333,15 @@ export default {
   },
 
   activated () {
-    this.get_video()
+
+
   },
   mounted () {
+    this.get_video()
     this.get_like()
+
+
+
   }
 }
 </script>

@@ -121,6 +121,8 @@ export default {
       state.coursework_step = count
     },
     setcourseData (state, count) {
+
+
       state.courseData = count
     },
     setbindType (state, count) {

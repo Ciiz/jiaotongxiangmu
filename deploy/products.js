@@ -48,8 +48,8 @@ const SERVER_LIST = [
     domain: 'etotest.com',
     host: '192.168.1.241',
     port: 22,
-    username: 'eto',
-    password: '123456',
+    username: 'root',
+    password: '00000000',
     path: '/opt/zjy_eto/Public/dist'
   },
   {

@@ -150,3 +150,13 @@ export const getLoginExe = ({ class_type, is_class }) => {
     }
   })
 }
+// 老师获取学生的摄像头
+export const getrtmp_student = (id) => {
+  return axios.request({
+    url: 'home/login/rtmp_student',
+    method: 'post',
+    data: {
+      id
+    }
+  })
+}

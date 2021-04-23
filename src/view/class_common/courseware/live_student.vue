@@ -352,7 +352,6 @@
         </Content>
       </Layout>
     </Layout>
-
     <Modal v-model="modal1" title="删除笔记" @on-ok="deleteNote">
       <p>你确定要删除该笔记吗？</p>
     </Modal>
@@ -400,6 +399,8 @@
   </div>
 </template>
 <script>
+
+import { getLoginExe } from '@/api/user'
 import pdf from 'vue-pdf'
 import { fullScreen, getSuffix } from '@/libs/util'
 import live from '@/view/common/live' // 直播群聊相关
@@ -418,6 +419,7 @@ export default {
   },
   data () {
     return {
+      show_Cameras: false,
       student_courseware_id: this.$route.query.student_courseware_id,
       mode: this.$route.query.mode,
       unpdf: true, // 判断src是否为pdf，true：是
@@ -767,10 +769,17 @@ export default {
     },
     closeLive () {
       history.go(-1)
+      let id = this.$store.state.user.userInfo.schoolId
+      let userType = this.$store.state.user.userInfo.userType
+      let account = this.$store.state.user.userInfo.account
+      let data = {
+        class_type: '0',
+        is_class: account + '_' + userType + '_' + id
+      }
+      getLoginExe(data).then(res => {
+        console.log(res);
+      })
     },
-
-
-
     showProblem () {
       if (this.topic_type === 2) {
         this.modal2 = true
@@ -993,12 +1002,11 @@ export default {
           group: this.group_chat_id
         }
       }).then(res => {
-        console.log(res.data.data.teacher.online_type);
-
+        console.log(res);
+        // console.log(res.data.data.teacher.online_type);
         if (res.data.data.teacher.online_type == 1) {
           this.teacher_staus = '离线'
           console.log('离线');
-
         } else if (res.data.data.teacher.online_type == 2) {
           this.teacher_staus = '在线'
           console.log('在线');
@@ -1190,7 +1198,7 @@ export default {
         if (res.code === 200) {
           this.student_courseware = res.data.student_courseware
           this.courseware_id = res.data.student_courseware.courseware.id
-          let id_str = res.data.live_class_ids.join(',')
+          let id_str = res.data.user_class
           this.group_chat_id = `courseware_${this.student_courseware.courseware.id}_${id_str}`
           this.live_url = res.data.live_url
           var u = navigator.userAgent
@@ -1247,8 +1255,7 @@ export default {
     this.getStudentCourseware()
   },
   mounted () {
-
-
+    // this.get_status_teacher()
     const that = this
     window.onresize = () => {
       return (() => {

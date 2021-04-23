@@ -189,7 +189,7 @@ const indexRouter = [
         name: 'videojump',
         meta: {
           title: '首页视频播放',
-          keepAlive: true,
+          keepAlive: false,
           hideInMenu: false
         },
         component: () => import('@/view/video_index/videojump.vue')
@@ -428,7 +428,7 @@ const indexRouter = [
         name: 'teacher_course',
         meta: {
           title: '课程管理',
-          keepAlive: false
+          keepAlive: true
         },
         component: () => import('@/view/teacher_page/course_manage/course_manage.vue')
       },

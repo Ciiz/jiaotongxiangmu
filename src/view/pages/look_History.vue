@@ -6,7 +6,7 @@
     </div>
     <div class="lookHistory_list">
       <ul>
-        <li v-for="(v,i) in lookHistory" :key="i">
+        <li v-for="(v,i) in lookHistory" :key="i" @click="$router.push({ path: `/videojump/${v.course_id}` })">
           <div class="lookHistory_list_l">
             <div class="lookHistory_list_lImg"><img :src="v.img" alt=""></div>
             <div class="lookHistory_list_lText">
@@ -15,7 +15,8 @@
                 <div class="lookHistory_list_lText_school">{{v.school_name}}</div>
                 <div class="lookHistory_list_lText_major">{{v.major_name}}</div>
                 <div class="lookHistory_list_lText_time" v-if="v.study_time===null">看到：0:00</div>
-                <div class="lookHistory_list_lText_time" v-else>看到：{{v.study_time}}%</div>
+                <div class="lookHistory_list_lText_time" v-else>
+                  看到：{{moment(v.study_time * 1000).format('mm:ss')}}</div>
               </div>
             </div>
           </div>
@@ -24,7 +25,6 @@
               <div class="lookHistory_list_rIcon"><img :src="v.icon" alt=""></div>
               <div class="lookHistory_list_rusername color">{{v.user_name}}</div>
             </div>
-
             <span
               class="lookHistory_list_rCreateTime color">{{moment(v.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}}</span>
           </div>
@@ -37,6 +37,7 @@
 
 <script>
 import { get_lookHistory } from "@/api/common"
+import log from 'video.js/es5/utils/log'
 export default {
   data () {
     return {
@@ -45,8 +46,10 @@ export default {
   },
   methods: {
 
+
   },
-  async mounted () {
+
+  async activated () {
     let res = await get_lookHistory()
     console.log(res);
     this.lookHistory = res.data.data
@@ -58,7 +61,7 @@ export default {
 <style lang='less' scoped>
 .lookHistory {
   width: 1200px;
-  height: 100vh;
+  height: 100%;
   margin: 0 auto;
   .lookHistory_header {
     display: flex;

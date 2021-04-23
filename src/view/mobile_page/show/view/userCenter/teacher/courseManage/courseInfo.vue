@@ -9,7 +9,7 @@
       <div class="m-courseInfo-contain-h">
         <div class="m-courseInfo-contain-h-info">
           <div>
-            <img :src="course.img"/>
+            <img :src="course.img" />
           </div>
           <div>
             <div class="m-courseInfo-title">{{course.course_name}}</div>
@@ -27,15 +27,19 @@
       </div>
       <div class="m-courseInfo-contain-b">
         <div style="color:#666666;font-size:0.32rem">章节列表</div>
-        <chapterInfo :course_id="course.course_id" :course_type="course.course_type" :course_name="course.course_name" :showProgress="showProgress"></chapterInfo>
+        <chapterInfo :course_id="course.course_id" :course_type="course.course_type" :course_name="course.course_name"
+          :showProgress="showProgress"></chapterInfo>
       </div>
     </div>
-    <div class="m-courseInfo-btn" v-if="(audit_statusB.toString() === '1' || course.create_type === 1 || course.create_type === 4) && bind_type.toString() !== '0'" @click="action('release')">
+    <div class="m-courseInfo-btn"
+      v-if="(audit_statusB.toString() === '1' || course.create_type === 1 || course.create_type === 4) && bind_type.toString() !== '0'"
+      @click="action('release')">
       <div class="m-courseInfo-btn-blue" v-if="release_statusB.toString()==='0'">发布</div>
       <div class="m-courseInfo-btn-red" v-if="release_statusB.toString()==='1'">撤回</div>
     </div>
     <div class="m-courseInfo-btn" v-if="bind_type.toString() === '3'">
-      <div class="m-courseInfo-btn-green" v-if="audit_statusB.toString() === '0' || audit_statusB.toString() === '2'" @click="action('audit')">提交审核</div>
+      <div class="m-courseInfo-btn-green" v-if="audit_statusB.toString() === '0' || audit_statusB.toString() === '2'"
+        @click="action('audit')">提交审核</div>
       <div class="m-courseInfo-btn-gray" v-if="audit_statusB.toString() === '3'">待审核</div>
     </div>
   </div>

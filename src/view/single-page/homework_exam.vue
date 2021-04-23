@@ -212,7 +212,6 @@ export default {
 
     },
     getData () {
-      console.log(this.tabS);
       if (this.tabS === 'homework') {
         this.getHomework()
       } else if (this.tabS === 'exam') {

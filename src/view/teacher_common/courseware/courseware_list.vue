@@ -10,9 +10,7 @@
         <Table :loading="loading" ref="selection" class="courseware_list_table" :columns="columns"
           :data="$store.state.user.CoursewareTimetable" stripe border></Table>
       </div>
-
     </div>
-
     <Modal v-model="modal" class="courseware_list_modal" class-name="vertical-center-modal" :title="title"
       :width="modal_width" :footer-hide="footerHide" :fullscreen="fullscreen" @on-cancel='visiblechange(target)'>
       <TaskReleaseList v-if="target === 'task_release_list' && modal" :type="target_id.type"
@@ -152,28 +150,28 @@ export default {
             )
           }
         },
-        {
-          title: '课时安排',
-          key: 'timetable',
-          className: 'my-table-cell',
-          align: 'center',
-          minWidth: 100,
-          render: (h, params) => {
-            let row = params.row
-            return (
-              <div class="table-item">
-                {
-                  row.class_list.map(item => {
-                    return <div class="item table-item-option">
-                      <span style="color:#3B9BFF" onClick={() => { this.open('courseware_timetable', { timetable_id: item.timetable_id, class_id: item.class_id }, `${row.courseware_name} - ${item.class_name} - 课时安排`, 1000, true, false, '0px') }}>{item.timetable_time_id == null ? '安排' : '修改'}</span>
-                    </div>
-                  })
-                }
-                <div v-show={this.editable} class="item">&nbsp;...</div>
-              </div>
-            )
-          }
-        },
+        // {
+        //   title: '课时安排',
+        //   key: 'timetable',
+        //   className: 'my-table-cell',
+        //   align: 'center',
+        //   minWidth: 100,
+        //   render: (h, params) => {
+        //     let row = params.row
+        //     return (
+        //       <div class="table-item">
+        //         {
+        //           row.class_list.map(item => {
+        //             return <div class="item table-item-option">
+        //               <span style="color:#3B9BFF" onClick={() => { this.open('courseware_timetable', { timetable_id: item.timetable_id, class_id: item.class_id }, `${row.courseware_name} - ${item.class_name} - 课时安排`, 1000, true, false, '0px') }}>{item.timetable_time_id == null ? '安排' : '修改'}</span>
+        //             </div>
+        //           })
+        //         }
+        //         <div v-show={this.editable} class="item">&nbsp;...</div>
+        //       </div>
+        //     )
+        //   }
+        // },
         {
           title: '课前',
           key: 'class_before',

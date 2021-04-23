@@ -225,7 +225,7 @@ export default {
           this.course_table = res.data.course_table
           this.timetable_data = res.data.timetable_data
           // console.log(res.data);
-          this.$store.commit('settimetable_data', this.course_table[0])
+          this.$store.commit('settimetable_data', this.course_table)
           _this.getDateWeek(_this.semester).then(week => {
             this.$store.commit('setweek_table', week)
             _this.week = week
