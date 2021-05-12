@@ -1,13 +1,13 @@
 import Score from '../score'
 import ImageUpload from '../image-upload'
 import FileUpload from '../file-upload'
-import Editor from '../editor'
+// import Editor from '../editor'
 
 const components = {
   Score,
   ImageUpload,
   FileUpload,
-  Editor
+  // Editor
 }
 
 const install = function (Vue, opts = {}) {

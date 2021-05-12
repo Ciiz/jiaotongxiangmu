@@ -31,22 +31,9 @@ export const logout = (token) => {
   })
 }
 
-export const getUnreadCount = () => {
-  return axios.request({
-    url: '/index.php/Student/User/getUnreadNoticeNum',
-    method: 'get'
-  })
-}
 
-export const getUnreadCount_teacher = () => {
-  return axios.request({
-    url: '/index.php/Teacher/notice/index',
-    method: 'post',
-    data: {
-      read: 0
-    }
-  })
-}
+
+
 
 export const getMessage = () => {
   return axios.request({

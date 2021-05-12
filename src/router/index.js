@@ -13,12 +13,10 @@ const router = new Router({
   mode: 'hash'
 })
 const LOGIN_PAGE_NAME = 'index'
-
 const turnTo = (to, access, next) => {
   if (canTurnTo(to.name, access, routes)) next() // 有权限，可访问
   else next({ replace: true, name: 'error_401' }) // 无权限，重定向到401页面
 }
-
 router.beforeEach((to, from, next) => {
   if (to.name === 'news' || to.path === '/news' ||
     to.name === 'schoolyard' || to.path === '/schoolyard' ||
@@ -28,24 +26,16 @@ router.beforeEach((to, from, next) => {
     to.name === 'partner' || to.path === '/partner' ||
     to.name === 'team' || to.path === '/team' ||
     to.name === 'index' || to.path === '/index' ||
-    to.name === 'live_public' || to.path === '/live_public' ||
-    to.name === 'live_online' || to.path === '/live_online' ||
-    to.name === 'online_qrcode' || to.path === '/online_qrcode' ||
-    to.name === 'entry' || to.path === '/entry' ||
-    to.name === 'showIndex' || to.path === '/showIndex' ||
-    to.name === 'mobileUserCenter' || to.path === '/mobileUserCenter' ||
-    to.name === 'usersetting' || to.path === '/usersetting' ||
-    to.name === 'mobileabout' || to.path === '/mobileabout' ||
-    to.name === 'aboutwe' || to.path === '/aboutwe' ||
-    to.name === 'agreement' || to.path === '/agreement' ||
-    to.name === 'feedback' || to.path === '/feedback' ||
-    to.name === 'studentLogins' || to.path === '/studentLogins' ||
-    to.name === 'mobileLogin' || to.path === '/mobileLogin') {
+    // to.name === 'entry' || to.path === '/entry' ||
+    to.name === 'system_index' || to.path === '/system_index' ||
+    to.name === 'course_adm' || to.path === '/course_adm' ||
+    to.name === 'training_adm' || to.path === '/training_adm'
+  ) {
     next()
   } else {
     iView.LoadingBar.start()
     const token = getToken()
-    if (to.name === 'bind' || to.name === 'regist' || to.name === 'studentLogins' || to.name === 'sucess_tip') {
+    if (to.name === 'bind' || to.name === 'regist') {
       next()
     } else if (!token && to.name !== LOGIN_PAGE_NAME) {
       // 未登录且要跳转的页面不是登录页(如果是正式环境，跳转到授权系统)

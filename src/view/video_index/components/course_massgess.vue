@@ -14,11 +14,8 @@
       <div class="pc_message_btn1">￥{{message.release_price}}</div>
       <div class="pc_message_btn2">购买</div>
     </div>
-
   </div>
-
 </template>
-
 <script>
 
 import { get_taechermassge } from '@/api/teacher'
@@ -48,7 +45,6 @@ export default {
   },
   methods: {
     paystatus () {
-
       console.log(this.loginstatus);
       // 未登录
       if (this.loginstatus === 0 || this.loginstatus === '') {

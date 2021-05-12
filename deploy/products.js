@@ -45,33 +45,33 @@ const SERVER_LIST = [
   {
     id: 0,
     name: '内网-测试环境',
-    domain: 'etotest.com',
-    host: '192.168.1.241',
+    domain: 'jt.com',
+    host: '192.168.1.242',
     port: 22,
     username: 'root',
-    password: '00000000',
-    path: '/opt/zjy_eto/Public/dist'
+    password: '12345678',
+    path: '/opt/jiaotong/Public/dist'
   },
-  {
-    id: 1,
-    name: '联通-生产环境',
-    domain: 'yuezhijiaoyun.uniin.cn', // 域名
-    host: '10.15.3.65', // ip
-    port: 22088, // 端口
-    username: 'root', // 登录服务器的账号
-    password: 'Etoadmin@123', // 登录服务器的账号
-    path: '/data/zjy/zeto/Public/dist'// 发布至静态服务器的项目路径
-  },
-  {
-    id: 2,
-    name: '英途-推广环境',
-    domain: 'zjy.etomooc.com', // 域名
-    host: '120.76.222.166', // ip
-    port: 22, // 端口
-    username: 'etophp', // 登录服务器的账号
-    password: '123', // 登录服务器的账号
-    path: '/opt/etoadmin/zjy/zjy/zjy_eto/Public/dist'// 发布至静态服务器的项目路径
-  }
+  // {
+  //   id: 1,
+  //   name: '联通-生产环境',
+  //   domain: 'yuezhijiaoyun.uniin.cn', // 域名
+  //   host: '10.15.3.65', // ip
+  //   port: 22088, // 端口
+  //   username: 'root', // 登录服务器的账号
+  //   password: 'Etoadmin@123', // 登录服务器的账号
+  //   path: '/data/zjy/zeto/Public/dist'// 发布至静态服务器的项目路径
+  // },
+  // {
+  //   id: 2,
+  //   name: '英途-推广环境',
+  //   domain: 'zjy.etomooc.com', // 域名
+  //   host: '120.76.222.166', // ip
+  //   port: 22, // 端口
+  //   username: 'etophp', // 登录服务器的账号
+  //   password: '123', // 登录服务器的账号
+  //   path: '/opt/etoadmin/zjy/zjy/zjy_eto/Public/dist'// 发布至静态服务器的项目路径
+  // }
 ]
 
 module.exports = SERVER_LIST[SERVER_ID]

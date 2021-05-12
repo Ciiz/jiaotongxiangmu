@@ -1,3 +1,8 @@
+/* eslint-disable no-return-assign */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-return-assign */
 <template>
   <div class="new-index">
     <div class="site">
@@ -238,7 +243,7 @@ export default {
       Select_list: [], // 本校课程的渲染数组
       comamnd_Select_list: [], // 推荐课程的渲染数组
       goodrideo: '全部',
-      myschool: '全部',
+      myschool: '全部'
     }
   },
   watch: {
@@ -320,9 +325,8 @@ export default {
     },
     // 选中select下拉列表和
     handle_select (value) {
-      console.log(this.courseList);
+      console.log(this.courseList)
       this.Select_list = this.courseList.filter(v => {
-
         return v.major_name === value
       })
     },
@@ -374,21 +378,20 @@ export default {
           }
         })
       }
-
     },
     // 获取推荐课程
     get_command_course () {
       courselist().then(res => {
         // 数据改造
         if (res.code === 200) {
-          console.log(res);
+          console.log(res)
           res.data.data.map(item => {
             if (item.is_charge === 1) return item.is_charge_name = '精选课程'
             else if (item.is_charge === 0) return item.is_charge_name = '免费课程'
           })
           this.commandCourseList = res.data.data
           this.comamnd_Select_list = res.data.data
-          console.log(this.comamnd_Select_list);
+          console.log(this.comamnd_Select_list)
           if (this.comamnd_Select_list.length > 10) {
             this.comamnd_Select_list.length = 10
           }
@@ -398,7 +401,7 @@ export default {
     // 获取推荐教师
     get_command_teacher () {
       teacher_recommend().then(res => {
-        console.log(res);
+        console.log(res)
         this.teacherList = res.data.data
       })
     },
@@ -468,9 +471,7 @@ export default {
         this.$emit('showLoginModal')
       } else {
         if (this.userType === 1) {
-          this.$router.push({
-            path: '/teachingSystem/MyCourse/course_courseware'
-          })
+          this.$router.push({ name: 'system_index' })
         } else {
           this.$router.push({
             path: '/teachingSystem/StudentCourse/course_coursewares'
@@ -494,35 +495,7 @@ export default {
         teacherlist.style.transform = 'translateX(-' + s + 'px)'
       }
     },
-    // showbanner () {
-    //   // 轮播图
-    //   var $ = function (el) {
-    //     try {
-    //       var item = document.querySelectorAll(el)
-    //       return item.length <= 1 ? item[0] : item
-    //     } catch (err) {
-    //       console.log(err)
-    //     }
-    //   }
-    //   var backdrop1 = new Backdrop($('.demo1>.container'), {
-    //     transition: {
-    //       value: '360ms',
-    //       waitForTransition: true
-    //     },
-    //     autoplay: {
-    //       enable: true,
-    //       delay: 4000
-    //     },
-    //     isClickSlide: true,
-    //     opacity: 0.8,
-    //     scale: 0.64,
-    //     navigation: {
-    //       nextEl: $('.demo1 .btn-right'),
-    //       prevEl: $('.demo1 .btn-left')
-    //     },
-    //     baseZIndex: 100 // 默认为10
-    //   })
-    // },
+
     getSchoolList () {
       // 获取学校列表
       this.schoolList = []
@@ -558,7 +531,6 @@ export default {
       this.userId !== ''
       // this.userType !== 3
     ) {
-
       this.getData()
     }
   }
@@ -574,10 +546,6 @@ export default {
 .slide-item {
   width: 100%;
   margin: 0 auto;
-  // height: 300px;
-  // overflow: hidden;
-  // cursor: pointer;
-  // position:relative;
   &:hover {
     // box-shadow: 1px 1px 9px #222;
   }

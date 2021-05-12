@@ -4,8 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-import MintUI from 'mint-ui'
-import 'mint-ui/lib/style.css'
 import iView from 'iview'
 import i18n from '@/locale'
 import config from '@/config'
@@ -13,7 +11,7 @@ import importDirective from '@/directive'
 import { directive as clickOutside } from 'v-click-outside-x'
 import installPlugin from '@/plugin'
 import './index.less'
-import '@/assets/icons/iconfont.css'
+import '@/assets/icons/style.css'
 import TreeTable from 'tree-table-vue'
 import VOrgTree from 'v-org-tree'
 import 'v-org-tree/dist/v-org-tree.css'
@@ -23,7 +21,7 @@ import vuescroll from 'vuescroll'// 引入vuescroll
 import 'vuescroll/dist/vuescroll.css'// 引入vuescroll样式
 import 'babel-polyfill'
 // const theme = localStorage.getItem('etoTheme') || 'default'
-require(`@/assets/theme/default.less`) // 课件直播样式
+require(`@/assets/theme/default.less`)
 // import VueDND from 'awe-dnd'
 // Vue.use(VueDND)
 
@@ -36,10 +34,9 @@ import moment from 'moment'
 import echarts from 'echarts'
 import VueTour from 'vue-tour' // 新手引导插件
 import { vueBaberrage } from 'vue-baberrage' // 弹幕插件
-import Video from 'video.js'
-import 'videojs-contrib-hls'
-import 'video.js/dist/video-js.css'
-
+// import Video from 'video.js'
+// import 'videojs-contrib-hls'
+// import 'video.js/dist/video-js.css'
 import Router from 'vue-router'
 
 const routerPush = Router.prototype.push
@@ -61,7 +58,7 @@ Vue.prototype.errorImg = errorImg
 Vue.prototype.errorImg01 = 'this.src="' + require('@/assets/images/u=3730772664,138405132&fm=26&gp=0.jpg') + '"'//处理文件的url
 moment.locale('zh-cn');
 Vue.prototype.moment = moment;
-Vue.prototype.$video = Video
+// Vue.prototype.$video = Video
 Vue.filter('time', function (value, formatString) {
   if (!value) return
   formatString = formatString || 'YYYY-MM-DD HH:mm';
@@ -74,7 +71,7 @@ Vue.filter('timeFrom', function (value) {
 Vue.use(iView, {
   i18n: (key, value) => i18n.t(key, value)
 })
-Vue.use(MintUI)
+// Vue.use(MintUI)
 Vue.use(VueTour)
 Vue.use(TreeTable)
 Vue.use(VOrgTree)

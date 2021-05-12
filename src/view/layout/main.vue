@@ -96,8 +96,8 @@
   </Layout>
 </template>
 <script>
-import { get_search, teacher_unread, myCourseList } from "@/api/common"
-import { student_unread } from "@/api/student"
+import { get_search, teacher_unread, myCourseList } from '@/api/common'
+import { student_unread } from '@/api/student'
 import maxLogo from '@/assets/images/new-index/logo.png'
 import LoginForm from '_c/login-form'
 import User from './components/user'
@@ -196,19 +196,15 @@ export default {
     ]),
     handleSubmit ({ userName, password, user_type, school }) {
       this.handleLogin({ userName, password, user_type, school }).then(res => {
-
         this.getUserInfo().then(res => {
-
           this.$store.commit('setpasswordUserId', res.userId)
           if (res.login_status === 1) {
-
             if (this.userType === 1) {
               this.get_unread()
             } else if (this.userType === 2) {
               this.student_unread()
             }
             this.$store.commit('setLoginstatus', res.login_status)
-
           } else {
             this.$store.commit('setLoginstatus', 0)
           }
@@ -218,13 +214,13 @@ export default {
     },
     handlesearch () {
       if (this.searchValue.trim() === '') {
-        this.$Message.info("内容不能为空哦...")
+        this.$Message.info('内容不能为空哦...')
         return
       }
       get_search(this.searchValue).then(res => {
-        console.log(res);
+        console.log(res)
         if (res.data.course_data.length === 0 && res.data.school_data.length === 0 && res.data.teaher_data.length === 0) {
-          this.$Message.info("暂无可搜的结果！")
+          this.$Message.info('暂无可搜的结果！')
         }
         this.$store.commit('setsearchResult', res.data)
         this.$router.push({ name: 'search_pages' })
@@ -241,12 +237,11 @@ export default {
           path: '/teachingSystem/StudentCourse/course_coursewares'
         })
       }
-
     },
     // 头部未读消息
     async get_unread () {
       let res = await teacher_unread()
-      console.log(res);
+      console.log(res)
       if (res.data.commission_unread === 0 && res.data.remind_unread === 0 && res.data.system_unread === 0) {
         this.message_total = 0
       } else {
@@ -255,7 +250,7 @@ export default {
     },
     async student_unread () {
       let res = await student_unread()
-      console.log(res);
+      console.log(res)
       if (res.data.commission_unread === 0 && res.data.remind_unread === 0 && res.data.system_unread === 0) {
         this.message_total = 0
       } else {
@@ -277,9 +272,7 @@ export default {
         this.get_unread()
       } else {
         this.student_unread()
-
       }
-
     }
     this.setHomeRoute(routers)
     // this.$store.state.user.userInfo.userType === 2 ? this.getUnreadMessageCount() : this.sendunread()

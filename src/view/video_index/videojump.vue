@@ -142,7 +142,6 @@
 <script>
 import LoginForm from '@/components/login-form/login-form'
 import { getSuffix } from '@/libs/util'
-import { Toast } from 'mint-ui'
 import { video_index, get_Course, get_follow, get_unfollow, playVideoTime } from '@/api/common'
 import chapter from "@/view/video_index/components/pc_chapter"
 import message from "@/view/video_index/components/course_massgess"
@@ -263,30 +262,21 @@ export default {
         _this.$nextTick(() => {
           document.querySelector('.videoCourse_video_img').style.display = "block"
         })
-
       }
-
     },
-
     // 关注和取消关注
     hangleattention () {
       if (this.video_list.isfollow === 1) {
         get_unfollow(this.video_list.teacher_id).then(res => {
           console.log(res);
-          Toast({
-            message: res.message,
-            duration: 2000
-          })
+          this.$Message.success(res.message);
         })
         this.video_list.isfollow = 0
       }
       else {
         get_follow(this.video_list.teacher_id).then(res => {
           console.log(res);
-          Toast({
-            message: res.message,
-            duration: 2000
-          })
+          this.$Message.success(res.message);
         })
         this.video_list.isfollow = 1
       }

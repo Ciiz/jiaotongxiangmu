@@ -67,11 +67,10 @@
 </template>
 
 <script>
-import vPinyin from '@/view/mobile_page/components/m_index/vue-py2'
+import vPinyin from '@/view/common/vue-py2.js'
 import log from 'video.js/es5/utils/log'
 export default {
   name: 'partner',
-
   data () {
     return {
       schoolList: [],

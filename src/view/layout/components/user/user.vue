@@ -75,7 +75,6 @@ export default {
     ]),
     logout () {
       this.handleLogOut().then(() => {
-
         // this.$store.commit('setUserInfo', '')
         this.$store.commit('setLoginstatus', 0)
         // 正式环境跳转到portal入口
@@ -125,18 +124,20 @@ export default {
     },
     // 我的关注页面跳转
     my_attention () {
-      if (this.userType === 1) {
-        this.$router.push({ path: '/personal/attention' })
-      } else {
-        this.$router.push({ path: '/personal/attention' })
-      }
+      this.$router.push({ path: '/personal/attention' })
+      // if (this.userType === 1) {
+      //   this.$router.push({ path: '/personal/attention' })
+      // } else {
+      //   this.$router.push({ path: '/personal/attention' })
+      // }
     },
     entrySystem () {
-      if (this.userType === 1) {
-        this.$router.push({ path: '/teachingSystem/MyCourse/course_courseware' })
-      } else {
-        this.$router.push({ path: '/teachingSystem/StudentCourse/course_coursewares' })
-      }
+      this.$router.push({ path: '/system_index' })
+      // if (this.userType === 1) {
+      //   this.$router.push({ path: '/view/inner_system/system_index' })
+      // } else {
+      //   this.$router.push({ path: '/teachingSystem/StudentCourse/course_coursewares' })
+      // }
     }
   }
 }

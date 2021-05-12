@@ -5,7 +5,7 @@
         <div class="courseChapter_title" @click="handleIsshow(index)">
           <div class="courseChapter_title1"> {{item.title}}</div>
           <div class="courseChapter_title2">
-            <img src="@/assets/images/mobile_teacher/top.png" alt=""></div>
+            <img src="@/assets/images/new_img/top.png" alt=""></div>
         </div>
         <div id="courseChapter_item" :class="`courseChapter_item ${active==v.id ? 'addcolor ' :''}` "
           ref="courseChapter_item" v-if="v.expand" v-for="(v,i) in item.child" :key="i" v-show="item.show_child"
@@ -23,8 +23,7 @@
                 <span class="video_length">{{moment(v.video_length * 1000).format('mm:ss')}}</span>
               </div>
               <span class="addcolor" v-if="active==v.id"> 播放中...</span>
-              <span class="courseChapter_item_rFooter3" v-else><img src="@/assets/images/mobile_teacher/ing.png"
-                  alt=""></span>
+              <span class="courseChapter_item_rFooter3" v-else><img src="@/assets/images/new_img/ing.png" alt=""></span>
             </div>
           </div>
         </div>

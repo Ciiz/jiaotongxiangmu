@@ -2,8 +2,8 @@ import {
   login,
   logout,
   getUserInfo,
-  getUnreadCount,
-  getUnreadCount_teacher
+
+
 } from '@/api/user'
 import { setToken, getToken } from '@/libs/util'
 
@@ -15,9 +15,6 @@ export default {
     token: getToken(),
     access: '',
     hasGetInfo: false,
-    unreadCount: 0,
-    unreadCount_teacher: 0, // 教师未读消息
-    coursework_step: true, // 教师->课件管理新手引导 true：首次进入显示, false：不显示
     userInfo: {
 
     },
@@ -32,40 +29,11 @@ export default {
     userMessagess: false, //信息中心的状态
     searchResult: '', //搜索结果
     passwordUserId: '', //游客登陆的id
-    examInfo: {}, //作业批改的测试信息
-    teacher_id_task: "",
-    teacher_id_exam: "",
-    coursedatalist: {},
-    CoursewareTimetable: [],
-    timetable_data: '',
-    week_table: ''
 
   },
   // 同步操作
   mutations: {
-    setweek_table (state, data) {
-      state.week_table = data
-    },
-    settimetable_data (state, data) {
-      // console.log(data);
-      state.timetable_data = data
-    },
-    setCoursewareTimetable (state, data) {
-      state.CoursewareTimetable = data
-    },
-    setcoursedatalist (state, data) {
-      state.coursedatalist = data
 
-    },
-    setteacher_id_exam (state, id) {
-      state.teacher_id_exam = id
-    },
-    setteacher_id_task (state, id) {
-      state.teacher_id_task = id
-    },
-    setexamInfo (state, obj) {
-      state.examInfo = obj
-    },
     setsearchResult (state, key) {
       state.searchResult = key
     },
@@ -111,18 +79,9 @@ export default {
     setHasGetInfo (state, status) {
       state.hasGetInfo = status
     },
-    setMessageCount (state, count) {
-      state.unreadCount = count
-    },
-    setUnreadMessage_Teacher (state, count) {
-      state.unreadCount_teacher = count
-    },
-    setcourseware_step (state, count) {
-      state.coursework_step = count
-    },
+
+
     setcourseData (state, count) {
-
-
       state.courseData = count
     },
     setbindType (state, count) {
@@ -195,20 +154,8 @@ export default {
         }
       })
     },
-    // 此方法用来获取未读消息条数，接口只返回数值，不返回消息列表
-    getUnreadMessageCount ({ state, commit }) {
-      getUnreadCount().then(res => {
-        const { data } = res
-        commit('setMessageCount', data.num)
-      })
-    },
-    // 教师unread
-    sendunread ({ state, commit }) {
-      getUnreadCount_teacher().then(res => {
-        const num = res.data.notice_list.length
-        commit('setUnreadMessage_Teacher', num)
-      })
-    },
+
+
     resetgetInfo ({ state, commit }) {
       getUserInfo().then(res => {
         commit('setUserInfo', res.data.userInfo)

@@ -4,7 +4,7 @@ module.exports = {
   deploy: {
     dev: {// 开发测试环境
       user: 'root',
-      host: '192.168.1.241',
+      host: '192.168.1.242',
       ref: 'origin/dev',
       repo: 'git@gitee.com:neohuan/zjy_student.git',
       path: '/opt/zjy_eto/Public/frontend',
