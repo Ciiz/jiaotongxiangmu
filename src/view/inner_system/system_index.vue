@@ -5,11 +5,17 @@
         <Menu mode="horizontal" theme="dark" active-name="1">
           <div class="layout-logo"></div>
           <div class="layout-nav">
-            <span style="width:37px;height:37px;border-radius: 50%;"><img src="@/assets/images/system_inter/xaioxi.png"
-                style="width:37px;height:37px;border-radius: 50%; background-color: red;" alt=""></span>
+            <Badge :count="3">
+              <!-- <a href="#" class="demo-badge"></a> -->
+              <span style="width:37px;height:37px;border-radius: 50%;">
+                <img src="@/assets/images/system_inter/xaioxi.png"
+                  style="width:37px;height:37px;border-radius: 50%; background-color:pink;" alt="">
+              </span>
+            </Badge>
             <span style="width:46px;height:46px;border-radius: 50%;"><img
                 style="width:46px;height:46px;border-radius: 50%;"
-                src="@/assets/images/u=3730772664,138405132&fm=26&gp=0.jpg" alt=""></span>
+                src="@/assets/images/u=3730772664,138405132&fm=26&gp=0.jpg" alt="">
+            </span>
           </div>
         </Menu>
       </Header>
@@ -28,6 +34,7 @@
             <Icon type="md-heart" />
             个人试题库
             </MenuItem>
+
             <MenuItem name="4" @click.native="routerTo(4)">
             <Icon type="md-leaf" />
             资源管理
@@ -128,6 +135,7 @@ export default {
   .layout-nav {
     width: 10%;
     height: 100%;
+    line-height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-around;

@@ -254,7 +254,7 @@ const indexRouter = [
     path: '/system_index',
     name: 'system_index',
     meta: {
-      title: '搜索页面'
+      title: '内部系统页面'
 
     },
     component: () => import('@/view/inner_system/system_index'),
@@ -285,11 +285,12 @@ const indexRouter = [
         path: 'person_test',
         name: 'person_test',
         meta: {
-          title: '查看考勤',
+          title: '个人试题库',
           keepAlive: true
         },
         component: () => import('@/view/inner_system/person_test.vue')
       },
+
       {
         path: 'resource_adm',
         name: 'resource_adm',

@@ -22,7 +22,6 @@ function parse (src) {
     if (keyValueArr != null) {
       const key = keyValueArr[1]
       let value = keyValueArr[2] || ''
-
       // expand newlines in quoted values
       const len = value ? value.length : 0
       if (len > 0 && value.charAt(0) === '"' && value.charAt(len - 1) === '"') {
@@ -37,7 +36,6 @@ function parse (src) {
   })
   return res
 }
-
 /*
  *定义多个服务器账号 及 根据 SERVER_ID 导出当前环境服务器账号
  */

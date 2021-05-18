@@ -11,7 +11,7 @@
             <Radio :label="item.value" v-for="item in typeList" :key="item.value">{{item.label}}</Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem label="热点名称" >
+        <FormItem label="热点名称">
           <Input v-model="hotspot.name"></Input>
         </FormItem>
         <FormItem label="水平坐标">
@@ -21,20 +21,14 @@
           <Input v-model="hotspot.atv"></Input>
         </FormItem>
         <FormItem label="热点图标地址">
-          <ImageUpload
-            v-model="hotspot.iconurl"
-            :extra="{type: 'pano',token:$store.state.user.token}"
-          >
+          <ImageUpload v-model="hotspot.iconurl" :extra="{type: 'pano',token:$store.state.user.token}">
           </ImageUpload>
         </FormItem>
         <FormItem label="热点地址" v-if="['url','image','video'].indexOf(hotspot.type)!==-1">
           <Input v-model="hotspot.type_url" v-if="hotspot.type === 'url'"></Input>
-          <FileUpload
-            :fileObj="{url: hotspot.type_url, name: ''}"
-            @on-change="(file)=>{hotspot.type_url = file.url;}"
+          <FileUpload :fileObj="{url: hotspot.type_url, name: ''}" @on-change="(file)=>{hotspot.type_url = file.url;}"
             :extra="{type: hotspot.type === 'video' ?'pano.video':'pano.hot_spot_img',token:$store.state.user.token}"
-            :format="hotspot.type === 'video' ? ['mp4','mp3']: ['jpg','jpeg','png','gif']"
-          >
+            :format="hotspot.type === 'video' ? ['mp4','mp3']: ['jpg','jpeg','png','gif']">
           </FileUpload>
         </FormItem>
         <FormItem label="场景名称" v-if="hotspot.type === 'switch'">
@@ -170,5 +164,4 @@ export default {
 }
 </script>
 <style lang="less">
-
 </style>

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
-import { Message } from 'iview'
+import { Message } from 'view-design'
 import qs from 'qs'
 // import config from '@/config'
 import Cookies from 'js-cookie'

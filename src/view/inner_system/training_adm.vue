@@ -1,7 +1,7 @@
 <template>
   <div class="traning_adm">
-    <Tabs value="name1">
-      <TabPane label="我的培训班" name="name1">
+    <Tabs value="name1" name='name1'>
+      <TabPane label="我的培训班" name="name1" tab='name1'>
         <div class="training_search">
           <Input placeholder="输入课程关键字" style="width: auto">
           <Icon type="ios-search" slot="suffix" />
@@ -13,10 +13,11 @@
             <Table :columns="columns1" :data="list" @on-row-click='handleselect' width='471' height='740'>
             </Table>
           </div>
+
           <div class="training_contentR">
-            <Tabs value="name_detail">
+            <Tabs value="name_detail" name='name_detai'>
               <!-- 培训班详情 -->
-              <TabPane label="培训班详情" name="name_detail">
+              <TabPane label="培训班详情" name="name_detail" tab='name_detai'>
                 <Form class="course-form">
                   <FormItem label="培训班名称：" class="course-form-item">
 
@@ -42,28 +43,19 @@
                 </Form>
               </TabPane>
               <!-- 培训班安排 -->
-              <TabPane label="培训班安排" name="name_content">
-
-                <Row class="training_arrange" :gutter="10">
-                  <Col span="14" class="training_arrangeL">
-                  <span>学习进度</span>
-                  <Button type="info">全部催学</Button>
-                  </Col>
-                  <Col span="8" class="training_arrangeR">
-                  6666
-                  </Col>
-                </Row>
-
+              <TabPane label="培训班安排" name="name_content" tab='name_detai'>
+                <progressLook @handle_back='handle_back' v-if="show_id"></progressLook>
+                <trainingArrange @handleclick='handleclick' v-else></trainingArrange>
               </TabPane>
               <!-- 查看考勤 -->
-              <TabPane label="查看考勤" name="name_check">
+              <TabPane label="查看考勤" name="name_check" tab='name_detai'>
                 <Row class="name_check" :gutter="10">
-                  <Col span="14" class="name_checkL">
+                  <Col span="12" class="name_checkL">
                   <div class="name_checkL_selct">
-                    <Cascader :data="data4" :load-data="loadData" placeholder='线下课程名称' style="width:300px"></Cascader>
-                    <Cascader :data="data4" :load-data="loadData" placeholder='签到名称查询' style="width:300px"></Cascader>
+                    <!-- :load-data="loadData" -->
+                    <Cascader :data="data4" placeholder='线下课程名称' style="width:300px"></Cascader>
+                    <Cascader :data="data4" placeholder='签到名称查询' style="width:300px"></Cascader>
                   </div>
-
                   <Row class="name_checkL_content">
                     <Col span="12" style="display:flex; flex-direction: column;">
                     <span>学生人数：0</span>
@@ -97,7 +89,7 @@
                 </div>
               </TabPane>
               <!-- 查看学生相册 -->
-              <TabPane label="查看学生相册" name="name_photo">
+              <TabPane label="查看学生相册" name="name_photo" tab='name_detai'>
 
               </TabPane>
 
@@ -105,7 +97,8 @@
           </div>
         </div>
       </TabPane>
-      <TabPane label="考核评价" name="name2">
+
+      <TabPane label="考核评价" name="name2" tab='name1'>
         <div>kaowqardswa</div>
         <div>kaowqardswa</div>
         <div>kaowqardswa</div>
@@ -131,12 +124,15 @@
 </template>
 
 <script>
+import trainingArrange from '@/view/components/training_arrange'
+import progressLook from '@/view/components/progress_look'
 // import log from 'video.js/es5/utils/log'
 export default {
   name: '',
-
+  components: { trainingArrange, progressLook },
   data () {
     return {
+      show_id: '',
       value: '8888',
       data4: [
         {
@@ -261,11 +257,15 @@ export default {
       ]
     }
   },
-
   methods: {
     handleselect (data) {
       console.log(data);
-
+    },
+    handleclick (id) {
+      this.show_id = id
+    },
+    handle_back (data) {
+      this.show_id = data
     }
   }
 }
@@ -325,7 +325,6 @@ export default {
         .training_arrangeL {
           display: flex;
           justify-content: space-between;
-
           span {
             font-size: 16px;
             font-family: Microsoft YaHei;
