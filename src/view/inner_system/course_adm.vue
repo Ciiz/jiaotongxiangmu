@@ -220,6 +220,8 @@ export default {
           align: 'center',
           render: (h, params) => {
 
+
+
             return (
               <div style='display: flex;flex-direction: column;'>
                 <span style='margin-bottom: 4px;'>《{params.row.course_name}》</span>
