@@ -120,12 +120,10 @@ export default {
   methods: {
 
     handleclick (id) {
-
       this.$emit('handleclick', id)
     }
   },
   async mounted () {
-
     setTimeout(() => {
       console.log(this.data);
     }, 2000)
