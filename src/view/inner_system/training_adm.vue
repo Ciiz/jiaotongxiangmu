@@ -110,7 +110,7 @@
             <!-- 培训班安排 -->
             <TabPane label="培训班安排" name="name_content" tab='name_detai'>
               <progressLook @handle_back='handle_back' v-if="show_id"></progressLook>
-              <trainingArrange @handleclick='handleclick' v-else></trainingArrange>
+              <trainingArrange @handleclick='handleclick' :data='trainingDetials' v-else></trainingArrange>
             </TabPane>
             <!-- 查看考勤 -->
             <TabPane label="查看考勤" name="name_check" tab='name_detai'>

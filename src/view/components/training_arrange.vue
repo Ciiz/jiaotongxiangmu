@@ -6,13 +6,8 @@
 import { get_arrange } from '@/api/system'
 export default {
   props: {
-    trainingDetials: {
+    data: Object
 
-
-
-
-
-    },
   },
   data () {
     return {
@@ -130,8 +125,12 @@ export default {
     }
   },
   async mounted () {
-    console.log(this.trainingDetials);
-    let res = await get_arrange({ class_id: this.trainingDetials.id, class_task_id: '' })
+
+    setTimeout(() => {
+      console.log(this.data);
+    }, 2000)
+
+    let res = await get_arrange({ class_id: this.data.id, class_task_id: '' })
     console.log(res);
     this.arrangeList = res.data
   },
