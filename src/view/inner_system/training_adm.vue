@@ -190,7 +190,7 @@
 </template>
 
 <script>
-import { get_Traininglist, get_arrange } from '@/api/system'
+import { get_Traininglist } from '@/api/system'
 import trainingArrange from '@/view/components/training_arrange'
 import progressLook from '@/view/components/progress_look'
 // import log from 'video.js/es5/utils/log'
@@ -348,10 +348,7 @@ export default {
       console.log(res);
       this.list = res.data
     },
-    async handleselect (data, index) {
-      let res = await get_arrange({ class_id: data.id, class_task_id: '' })
-      console.log(res);
-      this.arrangeList = res.data
+    handleselect (data, index) {
       this.index = index
       // console.log(data);
       this.trainingDetials = data

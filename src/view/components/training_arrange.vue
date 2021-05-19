@@ -3,8 +3,13 @@
 </template>
 <script>
 
-// import { get_Traininglist } from '@/api/system'
+import { get_arrange } from '@/api/system'
 export default {
+  props: {
+    trainingDetials: {
+
+    },
+  },
   data () {
     return {
       num: 1,
@@ -120,9 +125,11 @@ export default {
       this.$emit('handleclick', id)
     }
   },
-  mounted () {
-
-
+  async mounted () {
+    console.log(this.trainingDetials);
+    let res = await get_arrange({ class_id: this.trainingDetials.id, class_task_id: '' })
+    console.log(res);
+    this.arrangeList = res.data
   },
   created () {
     // 此处有效

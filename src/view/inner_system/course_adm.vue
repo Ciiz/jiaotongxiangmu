@@ -330,7 +330,6 @@ export default {
         }
       }, 1000)
     },
-
     async handleselect (data, index) {
       this.index = index
       clearInterval(this.TimeDown);
