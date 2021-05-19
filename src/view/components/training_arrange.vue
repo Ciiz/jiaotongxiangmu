@@ -8,6 +8,8 @@ export default {
   props: {
     trainingDetials: {
 
+
+
     },
   },
   data () {
