@@ -2,6 +2,8 @@
   <Table row-key="id" :columns="columns" :data="data12" border width='1084'></Table>
 </template>
 <script>
+
+// import { get_Traininglist } from '@/api/system'
 export default {
   data () {
     return {
@@ -110,11 +112,17 @@ export default {
       ]
     }
   },
+
   methods: {
+
     handleclick (id) {
 
       this.$emit('handleclick', id)
     }
+  },
+  mounted () {
+
+
   },
   created () {
     // 此处有效

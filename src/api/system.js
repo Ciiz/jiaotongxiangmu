@@ -29,3 +29,24 @@ export const get_Coursedetails = (course_id) => {
     method: 'post'
   })
 }
+// 培训班列表
+export const get_Traininglist = () => {
+  return axios.request({
+    url: '/teacher/class/myClass',
+    params: {
+
+    },
+    method: 'get'
+  })
+}
+// 培训班安排
+export const get_arrange = ({ class_id, class_task_id }) => {
+  return axios.request({
+    url: '/teacher/class/task_list',
+    data: {
+      class_id,
+      class_task_id
+    },
+    method: 'post'
+  })
+}

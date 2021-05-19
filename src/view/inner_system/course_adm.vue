@@ -10,7 +10,7 @@
         </div>
         <div class="training_content">
           <div class="training_contentL">
-            <Table :columns="columns1" :data="list" @on-row-click='handleselect'>
+            <Table :columns="columns1" :data="list" @on-row-click='handleselect' :row-class-name='rowName'>
             </Table>
           </div>
           <div class="training_contentR">
@@ -39,6 +39,7 @@
                     </FormItem>
                     <FormItem label="课程类型：" class="course-form-item">
                       <span style="color:#00AEFF;">{{getCourseDetial.course_type}}</span>
+
                     </FormItem>
                     <FormItem label="课程简介：" class="course-form-item">
                       <p> &nbsp</p>
@@ -50,29 +51,47 @@
                   </Col>
                   <Col span="12">
                   <div class="course_grade"
-                    style="height: 100%;width: 418px;background: #F7F7F7;border-radius: 6px;padding: 10px;">
+                    style="height: 100%;width: 518px;background: #F7F7F7;border-radius: 6px;padding: 10px;">
                     <span
-                      style="color: #5B5B5B;font-size: 13px;font-weight: 400;font-family: Microsoft YaHei;margin-bottom:20px">培训班评分</span>
+                      style="color: #5B5B5B;font-size: 13px;font-weight: 400;font-family: Microsoft YaHei;margin-bottom:20px">课程评分</span>
                     <div style="margin-top:10px;display: flex; ">
                       <div
                         style="font-size: 25px;font-weight: bold;color: #FEB922;display: flex ;align-items: center;width:40%"
                         v-if="getCourseDetial.course_grade==null">暂未评分！</div>
+
                       <div
                         style="font-size: 25px;font-weight: bold;color: #FEB922;display: flex ;align-items: center;width:40%"
                         v-else>
+
                         {{getCourseDetial.course_grade}}分</div>
-                      <div class="course_grade_img" style="width:60%;display: flex; flex-direction: column;">
-                        <Rate disabled allow-half value='5' />
-                        <Rate disabled allow-half value='4' />
-                        <Rate disabled allow-half value='3' />
-                        <Rate disabled allow-half value='2' />
-                        <Rate disabled allow-half value='1' />
+                      <div class="course_grade_img" style="display: flex;justify-content: space-between;width:70%;">
+                        <div style="display: flex; flex-direction: column;">
+
+                          <Rate disabled allow-half :value='5' />
+
+                          <Rate disabled allow-half :value='4' />
+
+                          <Rate disabled allow-half :value='3' />
+
+                          <Rate disabled allow-half :value='2' />
+
+                          <Rate disabled allow-half :value='1' />
+                        </div>
+                        <div class="course_grade_img2"
+                          style="width: 100%;display: flex;flex-direction: column;justify-content: space-between;padding: 5px 0;">
+
+                          <Progress :percent="precent.precent1" />
+                          <Progress :percent="precent.precent2" />
+                          <Progress :percent="precent.precent3" />
+                          <Progress :percent="precent.precent4" />
+                          <Progress :percent="precent.precent5" />
+
+                        </div>
                       </div>
                     </div>
                   </div>
                   </Col>
                 </Row>
-
               </TabPane>
               <!-- 课程内容 -->
               <TabPane label="课程内容" name="name_content" tab='name_child'>
@@ -118,7 +137,6 @@
                           </li>
                         </ul>
                       </div>
-
                     </div>
                   </div>
                   <div class="download_class">
@@ -165,10 +183,19 @@ import { getSuffix } from '@/libs/util'
 // import log from 'video.js/es5/utils/log'
 import { formateTimeStamp } from '@/view/inner_system/tools_time.js'
 import { getCourse, getCourseDetial, get_Coursedetails } from '@/api/system'
+import log from 'video.js/es5/utils/log'
 export default {
   name: '',
   data () {
     return {
+      index: '',
+      precent: {
+        precent1: 0,
+        precent2: 0,
+        precent3: 0,
+        precent4: 0,
+        precent5: 0
+      },
       live_time: '',
       chapterData: {
         chapter: [],
@@ -219,9 +246,6 @@ export default {
           key: 'course_name',
           align: 'center',
           render: (h, params) => {
-
-
-
             return (
               <div style='display: flex;flex-direction: column;'>
                 <span style='margin-bottom: 4px;'>《{params.row.course_name}》</span>
@@ -257,9 +281,16 @@ export default {
     },
   },
   methods: {
+
+    rowName (row, index) {
+      if (index == this.index) {
+
+        return 'table-select-row'
+      }
+    },
     handleclick (i) {
-      console.log(i);
       this.chapterData.chapter[i].expand = !this.chapterData.chapter[i].expand
+
     },
     async get_Coursedetails (id) {
       let res = await get_Coursedetails(id)
@@ -270,7 +301,6 @@ export default {
       this.chapterData.course_annex.map(v => {
         return v.Suffix = getSuffix(v.file_url)
       });
-
     },
     async getCourse () {
       let data = {
@@ -279,22 +309,18 @@ export default {
         pagesize: '1000'
       }
       let res = await getCourse(data)
-      console.log(res);
+      // console.log(res);
       this.list = res.data.course
     },
     // 获得距离活动开始还剩余的时间
     mistiming () {
-      // var timeStamp = this.infos.activity.end_at - this.infos.activity.start_at
       this.timeStamp = this.live_time
-      console.log(this.timeStamp);
       this.times = formateTimeStamp(this.timeStamp);
       // const str = `<span>${this.times.day}</span>天<span>${this.times.hour}</span>时<span>${this.times.min}</span>分<span>${this.times.seconds}</span>秒`
       // this.countTxt = str;
       this.TimeDown = setInterval(() => {
         if (this.timeStamp > 0) {
           this.timeStamp--;
-          console.log(this.timeStamp);
-
           const newTime = formateTimeStamp(this.timeStamp);
           const str = `<span >${newTime.day}</span> <span  >天 </span><span >${newTime.hour}</span > <span >时</span><span >${newTime.min}</span> <span >分</span><span >${newTime.seconds}</span> <span >秒</span>`
           this.countTxt = str;
@@ -305,20 +331,26 @@ export default {
       }, 1000)
     },
 
-    async handleselect (data) {
+    async handleselect (data, index) {
+      this.index = index
       clearInterval(this.TimeDown);
+      console.log(data);
       this.course_id = data.id
       let res = await getCourseDetial(this.course_id)
       this.getCourseDetial = res.data
+      this.precent.precent1 = this.getCourseDetial.student_rate[0].precent1 * 100
+      this.precent.precent2 = this.getCourseDetial.student_rate[0].precent2 * 100
+      this.precent.precent3 = this.getCourseDetial.student_rate[0].precent3 * 100
+      this.precent.precent4 = this.getCourseDetial.student_rate[0].precent4 * 100
+      this.precent.precent5 = this.getCourseDetial.student_rate[0].precent5 * 100
       if (this.getCourseDetial.course_grade !== null) this.getCourseDetial.course_grade = Math.round(this.getCourseDetial.course_grade * 100) / 100
       this.get_Coursedetails(this.course_id)
     }
   },
   mounted () {
-
     setTimeout(() => {
-      this.handleselect(this.list[0])
-    }, 500)
+      this.handleselect(this.list[0], 0)
+    }, 1500)
     this.getCourse()
 
   }
@@ -326,6 +358,21 @@ export default {
 </script>
 
 <style lang='less' scoped>
+/deep/.table-select-row td {
+  background-color: #bbe2ff !important;
+  color: #00aeff !important;
+}
+/deep/.ivu-progress-bg {
+  background-color: #ffbc2e;
+}
+/deep/.ivu-progress-inner {
+  background-color: #ffecc2;
+}
+/deep/.ivu-rate {
+  display: flex;
+  justify-content: flex-end;
+}
+
 /deep/.ivu-rate-star-zero {
   display: none;
 }
